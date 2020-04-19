@@ -1,0 +1,79 @@
+@import './element-variables.scss';
+
+.color-primary {
+  color: $--color-primary
+}
+.color-success {
+  color: $--color-success
+}
+.color-warning {
+  color: $--color-warning
+}
+.color-danger {
+  color: $--color-danger
+}
+.color-info{
+  color:$--color-info
+}
+.flex {
+  display: flex
+}
+.small-font-size{
+  font-size: 0.875rem;
+}
+.smaller-font-size{
+  font-size: 0.8125rem;
+}
+.large-font-size{
+  font-size: 1.125rem;
+}
+.huge-font-size{
+  font-size: 1.25rem;
+}
+.bold{
+  font-weight: bold;
+}
+.text-right{
+  text-align: right;
+}
+.text-left{
+  text-align: left;
+}
+.pointer{
+  cursor: pointer;
+}
+.justify-between-align-center{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+@for $i from 0 through 4 {
+  @if $i == 0{
+    .mt-#{$i} {margin-top: 0.25rem;}
+    .mb-#{$i} {margin-bottom: 0.25rem;}
+    .mr-#{$i} {margin-right: 0.25rem;}
+    .ml-#{$i} {margin-left: 0.25rem;}
+    .mx-#{$i} {margin-left: 0.25rem; margin-right: 0.25rem;}
+    .my-#{$i} {margin-top: 0.25rem; margin-bottom: 0.25rem;}
+    .m-#{$i} {margin: 0.25rem;}
+    .p-#{$i} {padding: 0.25rem;}
+    .py-#{$i} {padding-top: 0.25rem; padding-bottom: 0.25rem; }
+    .px-#{$i} {padding-right: 0.25rem; padding-left: 0.25rem;}
+  }
+  @else {
+    .mt-#{$i} {margin-top: 0.5rem * $i; }
+    .mb-#{$i} {margin-bottom: 0.5rem * $i;}
+    .mr-#{$i} {margin-right: 0.5rem * $i;}
+    .ml-#{$i} {margin-left: 0.5rem * $i;}
+    .mx-#{$i} {margin-left: 0.5rem * $i; margin-right: 0.5rem * $i;}
+    .my-#{$i} {margin-top: 0.5rem * $i; margin-bottom: 0.5rem * $i;}
+    .m-#{$i} {margin: 0.5rem * $i;}
+    .p-#{$i} {padding: 0.5rem * $i;}
+    .py-#{$i} { padding-top: 0.5rem * $i; padding-bottom: 0.5rem * $i; }
+    .px-#{$i} {padding-right: 0.5rem * $i; padding-left: 0.5rem * $i;}
+
+  }
+}
+.break-word{
+  word-break: break-word;
+}

@@ -23,7 +23,9 @@ export default {
   ** Global CSS
   */
   css: [
-    'element-ui/lib/theme-chalk/index.css'
+    'element-ui/lib/theme-chalk/index.css',
+    '@/assets/css/element-variables.scss',
+    '@/assets/css/index.scss'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -45,6 +47,7 @@ export default {
   ** Build configuration
   */
   build: {
+    
     transpile: [/^element-ui/],
     /*
     ** You can extend webpack config here
