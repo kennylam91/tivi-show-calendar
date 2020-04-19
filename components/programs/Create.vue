@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { programCollection } from '../../FireBase'
+import { firebase } from '../../FireBase'
 export default {
   props: {
     programProp: {
@@ -58,7 +58,8 @@ export default {
   methods: {
     onSubmit() {
       console.log('onSubmit')
-      programCollection.add(this.programData).then(ref => {
+
+      firebase.firestore().collection('programs').add(this.programData).then(ref => {
         console.log('add program success')
       }).catch(err => {
         console.log(err)

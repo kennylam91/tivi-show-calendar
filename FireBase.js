@@ -8,8 +8,8 @@ const config = {
   projectId: 'vipstay-637a2',
   storageBucket: 'YOUR_STORAGE_BUCKET'
 }
-firebase.initializeApp(config)
+if (!firebase.apps.length) {
+  firebase.initializeApp(config)
+}
 
-const programCollection = firebase.firestore().collection('programs')
-
-export { firebase, programCollection }
+export { firebase }
