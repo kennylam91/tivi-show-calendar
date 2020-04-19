@@ -8,7 +8,7 @@
         </el-breadcrumb>
       </div>
 
-      <Create :channel-prop="newChannel" />
+      <Create :channel-prop="newChannel" @saved="handleSaved" />
 
     </el-card>
 
@@ -25,6 +25,11 @@ export default {
         name: '',
         description: ''
       }
+    }
+  },
+  methods: {
+    handleSaved() {
+      this.$router.push({ path: '/dashboard' })
     }
   }
 }

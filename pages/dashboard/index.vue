@@ -9,7 +9,27 @@
         <span>Channel List</span>
         <el-button type="primary" size="small" plain @click="handleCreateChannelClick">Create Channel</el-button>
       </div>
-      <!-- card body -->
+      <el-table :data="channelList" border stripe>
+        <el-table-column
+          prop="name"
+          label="Name"
+        />
+        <el-table-column
+          prop="description"
+          label="Description"
+        />
+        <el-table-column
+          align="center"
+          label="Operations"
+          width="180"
+        >
+          <template slot-scope="scope">
+            <el-button type="primary" size="small" @click="handleChannelEditClick(scope.row)">Edit</el-button>
+            <el-button type="danger" size="small" @click="handleChannelDeleteClick(scope.row)">Delete</el-button>
+          </template>
+        </el-table-column>
+
+      </el-table>
     </el-card>
 
     <el-card class="my-2" :body-style="{ padding: '16px' }">
@@ -27,13 +47,13 @@
           label="Description"
         />
         <el-table-column
-          fixed="right"
+          align="center"
           label="Operations"
-          width="120"
+          width="180"
         >
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleProgramEditClick(scope.row)">Edit</el-button>
-            <el-button type="text" size="small" @click="handleProgramDeleteClick(scope.row)">Delete</el-button>
+            <el-button type="primary" size="small" @click="handleProgramEditClick(scope.row)">Edit</el-button>
+            <el-button type="danger" size="small" @click="handleProgramDeleteClick(scope.row)">Delete</el-button>
           </template>
         </el-table-column>
 
@@ -51,11 +71,12 @@ export default {
     return {
       channelList: [],
       programList: [],
-      ref: firebase.firestore().collection('programs')
+      programRef: firebase.firestore().collection('programs'),
+      channelRef: firebase.firestore().collection('channels')
     }
   },
   created() {
-    this.ref.onSnapshot((querySnapshot) => {
+    this.programRef.onSnapshot((querySnapshot) => {
       this.programList = []
       querySnapshot.forEach((program) => {
         this.programList.push({
@@ -63,6 +84,12 @@ export default {
           name: program.data().name,
           description: program.data().description
         })
+      })
+    })
+    this.channelRef.onSnapshot((querySnapshot) => {
+      this.channelList = []
+      querySnapshot.forEach((channel) => {
+        this.channelList.push({ ...channel.data(), id: channel.id })
       })
     })
   },
@@ -82,7 +109,7 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.ref.doc(row.id).delete().then(() => {
+        this.programRef.doc(row.id).delete().then(() => {
           this.$message({
             type: 'success',
             message: 'Delete completed'
@@ -93,6 +120,23 @@ export default {
     handleCreateChannelClick() {
       console.log('handleCreateChannelClick')
       this.$router.push({ path: '/channels/create' })
+    },
+    handleChannelEditClick(row) {
+      this.$router.push({ path: `/channels/edit/${row.id}` })
+    },
+    handleChannelDeleteClick(row) {
+      this.$confirm('Delete this channel?', 'Delete', {
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        this.channelRef.doc(row.id).delete().then(() => {
+          this.$message({
+            type: 'success',
+            message: 'Delete completed'
+          })
+        })
+      })
     }
   }
 }
