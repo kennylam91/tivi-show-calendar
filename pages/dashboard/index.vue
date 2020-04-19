@@ -9,9 +9,10 @@
 <script>
 export default {
   methods: {
-    handleCreateProgramClick(){
+    handleCreateProgramClick () {
       console.log('handleCreateProgramClick')
+      this.$router.push({ path: '/programs/create' })
     }
-  },
+  }
 }
 </script>

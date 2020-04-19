@@ -1,0 +1,23 @@
+<template>
+  <div class="p-4">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
+      <el-breadcrumb-item>Create Program</el-breadcrumb-item>
+    </el-breadcrumb>
+    <Create class="my-2" :program-prop="newProgram" />
+
+  </div>
+</template>
+<script>
+import Create from '@/components/programs/Create'
+export default {
+  components: { Create },
+  data() {
+    return {
+      newProgram: {
+        name: ''
+      }
+    }
+  }
+}
+</script>
