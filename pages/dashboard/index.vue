@@ -2,11 +2,20 @@
   <div class="p-4">
     <div class="justify-between-align-center">
       <span class="bold">DASHBOARD</span>
-      <el-button type="primary" plain @click="handleCreateProgramClick">Create Program</el-button>
     </div>
-    <el-card :body-style="{ padding: '16px' }">
-      <div slot="header">
+
+    <el-card class="my-2" :body-style="{ padding: '16px' }">
+      <div slot="header" class="justify-between-align-center">
+        <span>Channel List</span>
+        <el-button type="primary" size="small" plain @click="handleCreateChannelClick">Create Channel</el-button>
+      </div>
+      <!-- card body -->
+    </el-card>
+
+    <el-card class="my-2" :body-style="{ padding: '16px' }">
+      <div slot="header" class="justify-between-align-center">
         <span>Program List</span>
+        <el-button type="primary" size="small" plain @click="handleCreateProgramClick">Create Program</el-button>
       </div>
       <el-table :data="programList" border stripe>
         <el-table-column
@@ -40,6 +49,7 @@ import { firebase } from '../../FireBase'
 export default {
   data() {
     return {
+      channelList: [],
       programList: [],
       ref: firebase.firestore().collection('programs')
     }
@@ -79,6 +89,10 @@ export default {
           })
         })
       })
+    },
+    handleCreateChannelClick() {
+      console.log('handleCreateChannelClick')
+      this.$router.push({ path: '/channels/create' })
     }
   }
 }
