@@ -40,7 +40,7 @@
       :visible.sync="createScheduleDialogVisibleProp"
       width="60%"
     >
-      <CreateSchedule :schedule-prop="newSchedule" @saved="handleSaved" />
+      <CreateSchedule :schedule-prop="schedule" @saved="handleSaved" />
     </el-dialog>
 
   </div>
@@ -61,8 +61,8 @@ export default {
   data() {
     return {
       createScheduleDialogVisibleProp: false,
-      newSchedule: null,
-      newScheduleInit: {
+      schedule: null,
+      scheduleInit: {
         startTime: null,
         endTime: null,
         programId: null,
@@ -74,8 +74,8 @@ export default {
   computed: {
   },
   created() {
-    this.newScheduleInit.channelId = this.$route.params.id
-    this.newSchedule = { ...this.newScheduleInit }
+    this.scheduleInit.channelId = this.$route.params.id
+    this.schedule = { ...this.scheduleInit }
   },
   methods: {
     handleCreateSchedule() {
@@ -87,7 +87,25 @@ export default {
     },
     handleSaved() {
       this.createScheduleDialogVisibleProp = false
-      this.newSchedule = { ...this.newScheduleInit }
+      this.schedule = { ...this.scheduleInit }
+    },
+    handleScheduleEditClick(row) {
+      this.schedule = row
+      this.createScheduleDialogVisibleProp = true
+    },
+    handleScheduleDeleteClick(row) {
+      this.$confirm('Delete this schedule?', 'Delete', {
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+        type: 'error'
+      }).then(() => {
+        this.scheduleRef.doc(row.id).delete().then(() => {
+          this.$message({
+            type: 'success',
+            message: 'Delete completed'
+          })
+        })
+      })
     }
   }
 }
