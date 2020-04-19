@@ -32,12 +32,13 @@ export default {
   },
   data() {
     return {
-      programData: null
+      programData: null,
+      ref: firebase.firestore().collection('programs')
     }
   },
   computed: {
     title() {
-      if (this.programProp.programId) {
+      if (this.programProp.id) {
         return 'Update Program'
       } else {
         return 'Create Program'
@@ -58,12 +59,21 @@ export default {
   methods: {
     onSubmit() {
       console.log('onSubmit')
-
-      firebase.firestore().collection('programs').add(this.programData).then(ref => {
-        console.log('add program success')
-      }).catch(err => {
-        console.log(err)
-      })
+      if (!this.programData.id) {
+        this.ref.add(this.programData).then(ref => {
+          console.log('add program success')
+          this.$emit('saved')
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        this.ref.doc(this.programData.id).set(this.programData).then(() => {
+          console.log('update program ok')
+          this.$emit('saved')
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     }
   }
 }

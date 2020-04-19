@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
       <el-breadcrumb-item>Create Program</el-breadcrumb-item>
     </el-breadcrumb>
-    <Create class="my-2" :program-prop="newProgram" />
+    <Create class="my-2" :program-prop="newProgram" @saved="handleSavedAction" />
 
   </div>
 </template>
@@ -15,8 +15,15 @@ export default {
   data() {
     return {
       newProgram: {
-        name: ''
+        id: '',
+        name: '',
+        description: ''
       }
+    }
+  },
+  methods: {
+    handleSavedAction() {
+      this.$router.push({ path: '/dashboard' })
     }
   }
 }

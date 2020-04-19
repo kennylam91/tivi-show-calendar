@@ -17,6 +17,16 @@
           prop="description"
           label="Description"
         />
+        <el-table-column
+          fixed="right"
+          label="Operations"
+          width="120"
+        >
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="handleProgramEditClick(scope.row)">Edit</el-button>
+            <el-button type="text" size="small" @click="handleProgramDeleteClick(scope.row)">Delete</el-button>
+          </template>
+        </el-table-column>
 
       </el-table>
 
@@ -30,11 +40,13 @@ import { firebase } from '../../FireBase'
 export default {
   data() {
     return {
-      programList: []
+      programList: [],
+      ref: firebase.firestore().collection('programs')
     }
   },
   created() {
-    firebase.firestore().collection('programs').onSnapshot((querySnapshot) => {
+    this.ref.onSnapshot((querySnapshot) => {
+      this.programList = []
       querySnapshot.forEach((program) => {
         this.programList.push({
           id: program.id,
@@ -47,8 +59,26 @@ export default {
   methods: {
     handleCreateProgramClick() {
       console.log('handleCreateProgramClick')
-
       this.$router.push({ path: '/programs/create' })
+    },
+    handleProgramEditClick(row) {
+      console.log(row)
+      this.$router.push({ path: `/programs/edit/${row.id}` })
+    },
+    handleProgramDeleteClick(row) {
+      console.log(row)
+      this.$confirm('Delete this program?', 'Delete', {
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        this.ref.doc(row.id).delete().then(() => {
+          this.$message({
+            type: 'success',
+            message: 'Delete completed'
+          })
+        })
+      })
     }
   }
 }
