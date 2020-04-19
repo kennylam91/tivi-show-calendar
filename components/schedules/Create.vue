@@ -16,20 +16,7 @@
           placeholder="Select date and time"
         />
       </el-form-item>
-      <el-form-item label="Program">
-        <el-autocomplete
-          v-model="programName"
-          class="inline-input"
-          :fetch-suggestions="querySearch"
-          placeholder="Please Input"
-          @select="handleSelect"
-        >
-          <template slot-scope="{ item }">
-            <div class="value">{{ item.name }}</div>
-          </template>
-        </el-autocomplete>
-
-      </el-form-item>
+      <el-form-item label="Program" />
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
@@ -53,8 +40,7 @@ export default {
       scheduleRef: firebase.firestore().collection('schedules'),
       programRef: firebase.firestore().collection('programs'),
       programList: [],
-      channelId: null,
-      programName: null
+      channelId: null
     }
   },
   computed: {
@@ -104,22 +90,8 @@ export default {
           console.log(err)
         })
       }
-    },
-    querySearch(queryString, cb) {
-      var results = queryString ? this.programList.filter(this.createFilter(queryString)) : this.programList
-      // call callback function to return suggestions
-      cb(results)
-    },
-    createFilter(queryString) {
-      return (program) => {
-        return (program.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-      }
-    },
-    handleSelect(item) {
-      console.log(item)
-      this.scheduleData.programId = item.id
-      this.programName = item.name
     }
+
   }
 }
 </script>
