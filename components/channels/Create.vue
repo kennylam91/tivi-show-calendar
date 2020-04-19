@@ -15,14 +15,16 @@
 
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
-        <el-button>Cancel</el-button>
+        <el-button @click="cancelClick">Cancel</el-button>
       </el-form-item>
+
     </el-form>
 
   </div>
 </template>
 <script>
 import { firebase } from '../../FireBase'
+
 export default {
   props: {
     channelProp: {
@@ -33,7 +35,9 @@ export default {
   data() {
     return {
       channelData: null,
-      ref: firebase.firestore().collection('channels')
+      channelRef: firebase.firestore().collection('channels'),
+      scheduleRef: firebase.firestore().collection('schedule'),
+      scheduleList: []
     }
   },
   computed: {
@@ -60,20 +64,23 @@ export default {
     onSubmit() {
       console.log('onSubmit')
       if (!this.channelData.id) {
-        this.ref.add(this.channelData).then(ref => {
+        this.channelRef.add(this.channelData).then(ref => {
           console.log('add channel success')
           this.$emit('saved')
         }).catch(err => {
           console.log(err)
         })
       } else {
-        this.ref.doc(this.channelData.id).set(this.channelData).then(() => {
+        this.channelRef.doc(this.channelData.id).set(this.channelData).then(() => {
           console.log('update channel ok')
           this.$emit('saved')
         }).catch(err => {
           console.log(err)
         })
       }
+    },
+    cancelClick() {
+      this.$emit('cancel')
     }
   }
 }

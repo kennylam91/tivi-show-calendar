@@ -5,7 +5,7 @@
         <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
         <el-breadcrumb-item>Edit channel</el-breadcrumb-item>
       </el-breadcrumb>
-      <Create v-if="channel" class="my-2" :channel-prop="channel" @saved="handleSavedAction" />
+      <Create v-if="channel" class="my-2" :channel-prop="channel" @saved="handleSavedAction" @cancel="handleCancel" />
     </div>
   </div>
 </template>
@@ -19,7 +19,8 @@ export default {
     return {
       channelId: null,
       channel: null,
-      channelRef: firebase.firestore().collection('channels')
+      channelRef: firebase.firestore().collection('channels'),
+      scheduleRef: firebase.firestore().collection('schedules')
     }
   },
   created() {
@@ -29,11 +30,15 @@ export default {
       console.log()
       this.channel = { ...docSnapshot.data(), id: docSnapshot.id }
     })
+
     console.log(this.channelId)
   },
   methods: {
     handleSavedAction() {
       console.log('handleSavedAction')
+      this.$router.push({ path: '/dashboard' })
+    },
+    handleCancel() {
       this.$router.push({ path: '/dashboard' })
     }
   }

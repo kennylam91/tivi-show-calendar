@@ -21,10 +21,11 @@
         <el-table-column
           align="center"
           label="Operations"
-          width="180"
+          width="270"
         >
           <template slot-scope="scope">
-            <el-button type="primary" size="small" @click="handleChannelEditClick(scope.row)">Edit</el-button>
+            <el-button size="small" @click="handleChannelEditClick(scope.row)">Edit</el-button>
+            <el-button type="success" size="small" @click="handleScheduleManageClick(scope.row)">Schedule</el-button>
             <el-button type="danger" size="small" @click="handleChannelDeleteClick(scope.row)">Delete</el-button>
           </template>
         </el-table-column>
@@ -52,7 +53,7 @@
           width="180"
         >
           <template slot-scope="scope">
-            <el-button type="primary" size="small" @click="handleProgramEditClick(scope.row)">Edit</el-button>
+            <el-button size="small" @click="handleProgramEditClick(scope.row)">Edit</el-button>
             <el-button type="danger" size="small" @click="handleProgramDeleteClick(scope.row)">Delete</el-button>
           </template>
         </el-table-column>
@@ -137,6 +138,10 @@ export default {
           })
         })
       })
+    },
+    handleScheduleManageClick(row) {
+      console.log('handleScheduleManageClick')
+      this.$router.push({ path: `/channels/manage/${row.id}` })
     }
   }
 }
