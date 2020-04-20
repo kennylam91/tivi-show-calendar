@@ -16,7 +16,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="programId"
+        prop="programName"
         label="program"
       />
       <el-table-column
@@ -39,6 +39,7 @@
       title="Create Schedule"
       :visible.sync="createScheduleDialogVisibleProp"
       width="60%"
+      @close="handleDialogClose"
     >
       <CreateSchedule :schedule-prop="schedule" @saved="handleSaved" />
     </el-dialog>
@@ -106,6 +107,9 @@ export default {
           })
         })
       })
+    },
+    handleDialogClose() {
+      this.schedule = { ...this.scheduleInit }
     }
   }
 }

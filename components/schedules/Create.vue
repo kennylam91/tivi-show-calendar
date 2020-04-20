@@ -16,7 +16,25 @@
           placeholder="Select date and time"
         />
       </el-form-item>
-      <el-form-item label="Program" />
+      <el-form-item label="Program">
+        <el-select
+          v-model="programName"
+          filterable
+          remote
+          reserve-keyword
+          clearable
+          placeholder="Please enter a keyword"
+          :remote-method="remoteMethod"
+          :loading="loading"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
       </el-form-item>
@@ -40,7 +58,11 @@ export default {
       scheduleRef: firebase.firestore().collection('schedules'),
       programRef: firebase.firestore().collection('programs'),
       programList: [],
-      channelId: null
+      channelId: null,
+      options: [],
+      value: [],
+      loading: false,
+      programName: null
     }
   },
   computed: {
@@ -57,7 +79,17 @@ export default {
       immediate: true,
       handler() {
         this.scheduleData = { ...this.scheduleProp }
+        if (this.scheduleProp.startTime) {
+          this.scheduleData.startTime = new Date(this.scheduleProp.startTime.seconds * 1000)
+        }
+        if (this.scheduleProp.endTime) {
+          this.scheduleData.endTime = new Date(this.scheduleProp.endTime.seconds * 1000)
+        }
       }
+    },
+    programName() {
+      debugger
+      this.scheduleData.programId = this.programList.find(pro => pro.name === this.programName).id
     }
   },
   created() {
@@ -71,10 +103,27 @@ export default {
         })
       })
     })
+
+    this.programRef.onSnapshot((querySnapshot) => {
+      this.programList = []
+      querySnapshot.forEach((program) => {
+        this.programList.push({
+          id: program.id,
+          name: program.data().name,
+          description: program.data().description,
+          value: program.data().name,
+          label: program.data().name
+        })
+      })
+      if (this.scheduleData.programId) {
+        this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
+      }
+    })
   },
   methods: {
     onSubmit() {
       console.log('onSubmit')
+      this.removeProperty(this.scheduleData)
       if (!this.scheduleData.id) {
         this.scheduleRef.add(this.scheduleData).then(scheduleRef => {
           console.log('add schedule success')
@@ -89,6 +138,27 @@ export default {
         }).catch(err => {
           console.log(err)
         })
+      }
+    },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.options = this.programList.filter(item => {
+            return item.label.toLowerCase()
+              .indexOf(query.toLowerCase()) > -1
+          })
+        }, 200)
+      } else {
+        this.options = []
+      }
+    },
+    removeProperty(object) {
+      for (const key in object) {
+        if (!['startTime', 'endTime', 'channelId', 'programId'].includes(key)) {
+          delete object[key]
+        }
       }
     }
 

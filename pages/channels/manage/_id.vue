@@ -29,6 +29,7 @@ export default {
       channel: null,
       channelRef: firebase.firestore().collection('channels'),
       scheduleRef: firebase.firestore().collection('schedules'),
+      programRef: firebase.firestore().collection('programs'),
       scheduleList: []
     }
   },
@@ -42,8 +43,12 @@ export default {
     const scheduleQuery = this.scheduleRef.where('channelId', '==', this.channelId).orderBy('startTime')
     scheduleQuery.onSnapshot((querySnapshot) => {
       this.scheduleList = []
+
       querySnapshot.forEach((schedule) => {
-        this.scheduleList.push({ ...schedule.data(), id: schedule.id })
+        const programId = schedule.data().programId
+        this.programRef.doc(programId).onSnapshot(doc => {
+          this.scheduleList.push({ ...schedule.data(), id: schedule.id, programName: doc.data().name })
+        })
       })
       console.log(this.scheduleList)
     })
