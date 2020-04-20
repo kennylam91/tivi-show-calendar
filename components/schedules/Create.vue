@@ -22,7 +22,6 @@
           filterable
           remote
           reserve-keyword
-          clearable
           placeholder="Please enter a keyword"
           :remote-method="remoteMethod"
           :loading="loading"
@@ -123,8 +122,9 @@ export default {
   methods: {
     onSubmit() {
       console.log('onSubmit')
+      const id = this.scheduleData.id
       this.removeProperty(this.scheduleData)
-      if (!this.scheduleData.id) {
+      if (!id) {
         this.scheduleRef.add(this.scheduleData).then(scheduleRef => {
           console.log('add schedule success')
           this.$emit('saved')
@@ -132,7 +132,8 @@ export default {
           console.log(err)
         })
       } else {
-        this.scheduleRef.doc(this.scheduleData.id).set(this.scheduleData).then(() => {
+        debugger
+        this.scheduleRef.doc(id).set(this.scheduleData).then(() => {
           console.log('update schedule ok')
           this.$emit('saved')
         }).catch(err => {
