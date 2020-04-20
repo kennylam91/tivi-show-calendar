@@ -63,3 +63,8 @@ export function trimObject(source) {
   })
   return source
 }
+import { categoryMap } from '@/utils/constant'
+
+export function getCategory(category) {
+  return categoryMap.get(category)
+}

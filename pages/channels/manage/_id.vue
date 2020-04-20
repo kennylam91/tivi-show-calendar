@@ -46,7 +46,7 @@ export default {
       querySnapshot.forEach((schedule) => {
         const programId = schedule.data().programId
         this.programRef.doc(programId).onSnapshot(doc => {
-          this.scheduleList.push({ ...schedule.data(), id: schedule.id, programName: doc.data().name })
+          this.scheduleList.push({ ...schedule.data(), id: schedule.id, programName: doc.data().name, category: doc.data().category })
         })
       })
       console.log(this.scheduleList)

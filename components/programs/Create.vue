@@ -5,6 +5,18 @@
       <el-form-item label="Name">
         <el-input v-model="programData.name" />
       </el-form-item>
+      <el-form-item label="Category">
+        <el-select v-model="programData.category">
+          <el-option
+            v-for="item in CATEGORIES"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+
+      </el-form-item>
+
       <el-form-item label="Description">
         <el-input
           v-model="programData.description"
@@ -24,6 +36,7 @@
 <script>
 import { firebase } from '../../FireBase'
 import { trimObject } from '@/utils/index'
+import { CATEGORIES } from '@/utils/constant'
 
 export default {
   props: {
@@ -35,7 +48,9 @@ export default {
   data() {
     return {
       programData: null,
-      ref: firebase.firestore().collection('programs')
+      ref: firebase.firestore().collection('programs'),
+      CATEGORIES
+
     }
   },
   computed: {

@@ -12,8 +12,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "element-ui": "^2.13.1",
     "firebase": "^7.14.1",
+    "js-cookie": "^2.2.1",
+    "mockjs": "^1.1.0",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {

@@ -23,6 +23,13 @@
         </template>
       </el-table-column>
       <el-table-column
+        label="Category"
+      >
+        <template slot-scope="{row}">
+          <div>{{ row.category | getCategory }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column
         align="center"
         width="180"
       >
@@ -53,9 +60,11 @@
 import CreateSchedule from '@/components/schedules/Create'
 import { firebase } from '../../FireBase'
 import { parseVNTime } from '@/utils/index'
+import { getCategory } from '@/utils/index'
 
 export default {
   components: { CreateSchedule },
+  filters: { getCategory },
   props: {
     scheduleList: {
       required: true,

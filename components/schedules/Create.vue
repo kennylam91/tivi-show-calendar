@@ -1,10 +1,11 @@
 <template>
   <div>
     <div class="bold mb-2">{{ title }}</div>
-    <el-form schedule-ref="scheduleCreateForm" :model="scheduleData" label-width="100px">
+    <el-form schedule-ref="scheduleCreateForm" :model="scheduleData" label-width="100px" style="width: 100%;">
       <el-form-item label="Start time">
         <el-date-picker
           v-model="scheduleData.startTime"
+          style="width: 100%;"
           type="datetime"
           placeholder="Select date and time"
         />
@@ -12,6 +13,7 @@
       <el-form-item label="End time">
         <el-date-picker
           v-model="scheduleData.endTime"
+          style="width: 100%;"
           type="datetime"
           placeholder="Select date and time"
         />
@@ -19,6 +21,7 @@
       <el-form-item label="Program">
         <el-select
           v-model="programName"
+          style="width: 100%;"
           filterable
           remote
           reserve-keyword

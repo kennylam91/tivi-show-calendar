@@ -8,11 +8,19 @@
         </el-breadcrumb>
         <el-button type="primary" size="small" plain @click="handleCreateProgramClick">Create Program</el-button>
       </div>
-      <el-table :data="programList" border stripe>
+      <el-table id="programTable" :data="programList" border stripe>
         <el-table-column
           prop="name"
           label="Name"
+          class="break-word"
         />
+        <el-table-column
+          label="Category"
+        >
+          <template slot-scope="{row}">
+            <div>{{ row.category | getCategory }}</div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="description"
           label="Description"
@@ -35,8 +43,10 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
+import { getCategory } from '@/utils/index'
 
 export default {
+  filters: { getCategory },
   data() {
     return {
       programList: [],
@@ -47,11 +57,7 @@ export default {
     this.programRef.orderBy('name', 'asc').onSnapshot((querySnapshot) => {
       this.programList = []
       querySnapshot.forEach((program) => {
-        this.programList.push({
-          id: program.id,
-          name: program.data().name,
-          description: program.data().description
-        })
+        this.programList.push({ ...program.data(), id: program.id })
       })
     })
   },
@@ -79,6 +85,12 @@ export default {
         })
       })
     }
+
   }
 }
 </script>
+<style>
+#programTable .el-table .cell{
+  word-break: break-word;
+}
+</style>
