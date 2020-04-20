@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
       <el-breadcrumb-item>Create Program</el-breadcrumb-item>
     </el-breadcrumb>
-    <Create class="my-2" :program-prop="newProgram" @saved="handleSavedAction" />
+    <Create class="my-2" :program-prop="newProgram" @saved="handleSavedAction" @cancel="handleCancel" />
 
   </div>
 </template>
@@ -23,6 +23,10 @@ export default {
   },
   methods: {
     handleSavedAction() {
+      this.$router.push({ path: '/dashboard' })
+    },
+    handleCancel() {
+      console.log('handle cancel click')
       this.$router.push({ path: '/dashboard' })
     }
   }

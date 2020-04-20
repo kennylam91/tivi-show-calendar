@@ -15,7 +15,7 @@
 
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
-        <el-button>Cancel</el-button>
+        <el-button @click="handleCancelClick">Cancel</el-button>
       </el-form-item>
     </el-form>
 
@@ -74,6 +74,9 @@ export default {
           console.log(err)
         })
       }
+    },
+    handleCancelClick() {
+      this.$emit('cancel')
     }
   }
 }

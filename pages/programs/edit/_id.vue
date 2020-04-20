@@ -5,7 +5,7 @@
         <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
         <el-breadcrumb-item>Edit Program</el-breadcrumb-item>
       </el-breadcrumb>
-      <Create v-if="program" class="my-2" :program-prop="program" @saved="handleSavedAction" />
+      <Create v-if="program" class="my-2" :program-prop="program" @saved="handleSavedAction" @cancel="handleCancel" />
     </div>
   </div>
 </template>
@@ -34,6 +34,9 @@ export default {
   methods: {
     handleSavedAction() {
       console.log('handleSavedAction')
+      this.$router.push({ path: '/dashboard' })
+    },
+    handleCancel() {
       this.$router.push({ path: '/dashboard' })
     }
   }
