@@ -104,9 +104,11 @@ export default {
         type: 'error'
       }).then(() => {
         this.scheduleRef.doc(row.id).delete().then(() => {
-          this.$message({
+          this.$notify({
+            title: 'Schedule Deleted',
             type: 'success',
-            message: 'Delete completed'
+            duration: '4500',
+            position: 'top-right'
           })
         })
       })

@@ -3,7 +3,7 @@
     <div class="p-4">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
-        <el-breadcrumb-item>{{ channel.name }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: `/channels/edit/${channel.id}`}">{{ channel.name }}</el-breadcrumb-item>
         <el-breadcrumb-item>Manage channel</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -40,10 +40,9 @@ export default {
       console.log()
       this.channel = { ...docSnapshot.data(), id: docSnapshot.id }
     })
-    const scheduleQuery = this.scheduleRef.where('channelId', '==', this.channelId).orderBy('startTime')
+    const scheduleQuery = this.scheduleRef.where('channelId', '==', this.channelId).orderBy('startTime', 'asc')
     scheduleQuery.onSnapshot((querySnapshot) => {
       this.scheduleList = []
-
       querySnapshot.forEach((schedule) => {
         const programId = schedule.data().programId
         this.programRef.doc(programId).onSnapshot(doc => {

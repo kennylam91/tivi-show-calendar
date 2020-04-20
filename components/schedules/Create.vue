@@ -87,7 +87,6 @@ export default {
       }
     },
     programName() {
-      debugger
       this.scheduleData.programId = this.programList.find(pro => pro.name === this.programName).id
     }
   },
@@ -123,23 +122,43 @@ export default {
     onSubmit() {
       console.log('onSubmit')
       const id = this.scheduleData.id
-      this.removeProperty(this.scheduleData)
-      if (!id) {
-        this.scheduleRef.add(this.scheduleData).then(scheduleRef => {
-          console.log('add schedule success')
-          this.$emit('saved')
-        }).catch(err => {
-          console.log(err)
+      this.validateSchedule(this.scheduleData).then(() => {
+        this.removeProperty(this.scheduleData)
+        if (!id) {
+          this.scheduleRef.add(this.scheduleData).then(scheduleRef => {
+            console.log('add schedule success')
+            this.$notify({
+              title: 'Schedule Created',
+              type: 'success',
+              duration: '4500',
+              position: 'top-right'
+            })
+
+            this.$emit('saved')
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
+          this.scheduleRef.doc(id).set(this.scheduleData).then(() => {
+            console.log('update schedule ok')
+            this.$notify({
+              title: 'Schedule Updated',
+              type: 'success',
+              duration: '4500',
+              position: 'top-right'
+            })
+            this.$emit('saved')
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+      }).catch((err) => {
+        this.$message({
+          message: err,
+          type: 'error',
+          showClose: true
         })
-      } else {
-        debugger
-        this.scheduleRef.doc(id).set(this.scheduleData).then(() => {
-          console.log('update schedule ok')
-          this.$emit('saved')
-        }).catch(err => {
-          console.log(err)
-        })
-      }
+      })
     },
     remoteMethod(query) {
       if (query !== '') {
@@ -161,6 +180,37 @@ export default {
           delete object[key]
         }
       }
+    },
+    validateSchedule(schedule) {
+      return new Promise((resolve, reject) => {
+        if (schedule.endTime <= schedule.startTime) {
+          reject('EndTime must be after StartTime')
+        }
+
+        const previousScheduleQuery = this.scheduleRef.where('channelId', '==', schedule.channelId).where('startTime', '<', schedule.startTime).orderBy('startTime', 'desc').limit(1)
+        previousScheduleQuery.onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((foundSchedule) => {
+            console.log(foundSchedule)
+            console.log(foundSchedule.data())
+            // compare schedule startTime after foundSchedule endTime, if true: valid, else inValid
+            if (Date.parse(schedule.startTime) < foundSchedule.data().endTime.seconds * 1000) {
+              reject('Invalid StartTime')
+            } else {
+              const nextScheduleQuery = this.scheduleRef.where('channelId', '==', schedule.channelId).where('startTime', '>', schedule.startTime).orderBy('startTime').limit(1)
+              nextScheduleQuery.onSnapshot((querySnapshot) => {
+                querySnapshot.forEach((foundSchedule) => {
+                  console.log(foundSchedule.data())
+                  if (Date.parse(schedule.endTime) > foundSchedule.data().startTime.seconds * 1000) {
+                    reject('Invalid EndTime')
+                  } else {
+                    resolve()
+                  }
+                })
+              })
+            }
+          })
+        })
+      })
     }
 
   }
