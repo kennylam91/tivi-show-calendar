@@ -38,6 +38,7 @@
 import { firebase } from '../../FireBase'
 
 export default {
+  middleware: 'auth',
   data() {
     return {
       channelList: [],
