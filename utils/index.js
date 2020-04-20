@@ -52,3 +52,14 @@ export function parseVNTime(time, vformat, pad, isFourDigitYear) {
   })
   return time_str
 }
+
+/**
+ * Remove all space in object properties if that property is a string
+ * @param {object} source
+ */
+export function trimObject(source) {
+  Object.keys(source).forEach(function(key) {
+    source[key] = typeof source[key] === 'string' ? source[key].trim() : source[key]
+  })
+  return source
+}

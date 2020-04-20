@@ -23,6 +23,8 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
+import { trimObject } from '@/utils/index'
+
 export default {
   props: {
     programProp: {
@@ -60,15 +62,27 @@ export default {
     onSubmit() {
       console.log('onSubmit')
       if (!this.programData.id) {
-        this.ref.add(this.programData).then(ref => {
+        this.ref.add(trimObject(this.programData)).then(ref => {
           console.log('add program success')
+          this.$notify({
+            title: 'Program Created',
+            type: 'success',
+            duration: '4500',
+            position: 'top-right'
+          })
           this.$emit('saved')
         }).catch(err => {
           console.log(err)
         })
       } else {
-        this.ref.doc(this.programData.id).set(this.programData).then(() => {
+        this.ref.doc(this.programData.id).set(trimObject(this.programData)).then(() => {
           console.log('update program ok')
+          this.$notify({
+            title: 'Program Updated',
+            type: 'success',
+            duration: '4500',
+            position: 'top-right'
+          })
           this.$emit('saved')
         }).catch(err => {
           console.log(err)

@@ -23,11 +23,11 @@ export default {
   },
   methods: {
     handleSavedAction() {
-      this.$router.push({ path: '/dashboard' })
+      this.$router.push({ path: '/programs' })
     },
     handleCancel() {
       console.log('handle cancel click')
-      this.$router.push({ path: '/dashboard' })
+      this.$router.push({ path: '/programs' })
     }
   }
 }

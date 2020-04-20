@@ -24,6 +24,7 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
+import { trimObject } from '@/utils/index'
 
 export default {
   props: {
@@ -64,15 +65,27 @@ export default {
     onSubmit() {
       console.log('onSubmit')
       if (!this.channelData.id) {
-        this.channelRef.add(this.channelData).then(ref => {
+        this.channelRef.add(trimObject(this.channelData)).then(ref => {
           console.log('add channel success')
+          this.$notify({
+            title: 'Channel Created',
+            type: 'success',
+            duration: '4500',
+            position: 'top-right'
+          })
           this.$emit('saved')
         }).catch(err => {
           console.log(err)
         })
       } else {
-        this.channelRef.doc(this.channelData.id).set(this.channelData).then(() => {
+        this.channelRef.doc(this.channelData.id).set(trimObject(this.channelData)).then(() => {
           console.log('update channel ok')
+          this.$notify({
+            title: 'Channel Updated',
+            type: 'success',
+            duration: '4500',
+            position: 'top-right'
+          })
           this.$emit('saved')
         }).catch(err => {
           console.log(err)

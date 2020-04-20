@@ -44,6 +44,8 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
+import { trimObject } from '@/utils/index'
+
 export default {
   props: {
     scheduleProp: {
@@ -125,7 +127,7 @@ export default {
       this.validateSchedule(this.scheduleData).then(() => {
         this.removeProperty(this.scheduleData)
         if (!id) {
-          this.scheduleRef.add(this.scheduleData).then(scheduleRef => {
+          this.scheduleRef.add(trimObject(this.scheduleData)).then(scheduleRef => {
             console.log('add schedule success')
             this.$notify({
               title: 'Schedule Created',
@@ -139,7 +141,7 @@ export default {
             console.log(err)
           })
         } else {
-          this.scheduleRef.doc(id).set(this.scheduleData).then(() => {
+          this.scheduleRef.doc(id).set(trimObject(this.scheduleData)).then(() => {
             console.log('update schedule ok')
             this.$notify({
               title: 'Schedule Updated',
@@ -189,15 +191,35 @@ export default {
 
         const previousScheduleQuery = this.scheduleRef.where('channelId', '==', schedule.channelId).where('startTime', '<', schedule.startTime).orderBy('startTime', 'desc').limit(1)
         previousScheduleQuery.onSnapshot((querySnapshot) => {
-          querySnapshot.forEach((foundSchedule) => {
-            console.log(foundSchedule)
-            console.log(foundSchedule.data())
-            // compare schedule startTime after foundSchedule endTime, if true: valid, else inValid
-            if (Date.parse(schedule.startTime) < foundSchedule.data().endTime.seconds * 1000) {
-              reject('Invalid StartTime')
-            } else {
-              const nextScheduleQuery = this.scheduleRef.where('channelId', '==', schedule.channelId).where('startTime', '>', schedule.startTime).orderBy('startTime').limit(1)
-              nextScheduleQuery.onSnapshot((querySnapshot) => {
+          if (!querySnapshot.empty) {
+            querySnapshot.forEach((foundSchedule) => {
+              console.log(foundSchedule)
+              console.log(foundSchedule.data())
+              // compare schedule startTime after foundSchedule endTime, if true: valid, else inValid
+              if (Date.parse(schedule.startTime) < foundSchedule.data().endTime.seconds * 1000) {
+                reject('Invalid StartTime')
+              } else {
+                const nextScheduleQuery = this.scheduleRef.where('channelId', '==', schedule.channelId).where('startTime', '>', schedule.startTime).orderBy('startTime').limit(1)
+                nextScheduleQuery.onSnapshot((querySnapshot) => {
+                  if (!querySnapshot.empty) {
+                    querySnapshot.forEach((foundSchedule) => {
+                      console.log(foundSchedule.data())
+                      if (Date.parse(schedule.endTime) > foundSchedule.data().startTime.seconds * 1000) {
+                        reject('Invalid EndTime')
+                      } else {
+                        resolve()
+                      }
+                    })
+                  } else {
+                    resolve()
+                  }
+                })
+              }
+            })
+          } else {
+            const nextScheduleQuery = this.scheduleRef.where('channelId', '==', schedule.channelId).where('startTime', '>', schedule.startTime).orderBy('startTime').limit(1)
+            nextScheduleQuery.onSnapshot((querySnapshot) => {
+              if (!querySnapshot.empty) {
                 querySnapshot.forEach((foundSchedule) => {
                   console.log(foundSchedule.data())
                   if (Date.parse(schedule.endTime) > foundSchedule.data().startTime.seconds * 1000) {
@@ -206,9 +228,11 @@ export default {
                     resolve()
                   }
                 })
-              })
-            }
-          })
+              } else {
+                resolve()
+              }
+            })
+          }
         })
       })
     }

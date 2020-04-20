@@ -32,36 +32,6 @@
 
       </el-table>
     </el-card>
-
-    <el-card class="my-2" :body-style="{ padding: '16px' }">
-      <div slot="header" class="justify-between-align-center">
-        <span>Program List</span>
-        <el-button type="primary" size="small" plain @click="handleCreateProgramClick">Create Program</el-button>
-      </div>
-      <el-table :data="programList" border stripe>
-        <el-table-column
-          prop="name"
-          label="Name"
-        />
-        <el-table-column
-          prop="description"
-          label="Description"
-        />
-        <el-table-column
-          align="center"
-          label="Operations"
-          width="180"
-        >
-          <template slot-scope="scope">
-            <el-button size="small" @click="handleProgramEditClick(scope.row)">Edit</el-button>
-            <el-button type="danger" size="small" @click="handleProgramDeleteClick(scope.row)">Delete</el-button>
-          </template>
-        </el-table-column>
-
-      </el-table>
-
-    </el-card>
-
   </div>
 </template>
 <script>
@@ -77,7 +47,7 @@ export default {
     }
   },
   created() {
-    this.programRef.onSnapshot((querySnapshot) => {
+    this.programRef.orderBy('name', 'asc').onSnapshot((querySnapshot) => {
       this.programList = []
       querySnapshot.forEach((program) => {
         this.programList.push({
