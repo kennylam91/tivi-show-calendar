@@ -39,7 +39,7 @@ export default {
     })
   },
   created() {
-    this.$store.dispatch('channel/fetchChannelList')
+    this.$store.dispatch('app/fetchChannelList')
   },
   methods: {
     handleSelect(key, keyPath) {

@@ -11,10 +11,37 @@
       <div slot="header">
         <div class="bold">{{ channel.name }}</div>
       </div>
-      <el-table :data="scheduleList" border stripe style="width: 100%" size="small">
+      <div class="p-1 justify-between-align-center">
+        <div class="inline-block">
+          <span class="mr-1">{{ COMMON.DATE | uppercaseFirst }}: </span>
+          <el-date-picker
+            v-model="selectedDate"
+            format="dd/MM/yyyy"
+            size="small"
+            type="date"
+          />
+        </div>
+        <div class="inline-block">
+          <el-input
+            v-model="searchText"
+            :placeholder="COMMON.SEARCH"
+            size="small"
+            clearable
+            style="width: 500px;"
+            @change="searchProgram"
+          />
+        </div>
+
+      </div>
+      <el-table
+        :data="scheduleData"
+        border
+        stripe
+        style="width: 100%"
+      >
         <el-table-column
-          label="Start Time"
-          width="120"
+          :label="COMMON.START_TIME"
+          width="150"
           align="center"
         >
           <template slot-scope="{row}">
@@ -22,10 +49,10 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="Program"
+          :label="COMMON.PROGRAM_NAME"
         >
           <template slot-scope="{row}">
-            <el-link :underline="false" @click="moveToProgramDetail(row.programId)">{{ row.programName }}</el-link>
+            <el-link :underline="false" @click="viewProgramDetail(row.programId)">{{ row.programName }}</el-link>
           </template>
         </el-table-column>
         <el-table-column
@@ -39,17 +66,32 @@
       </el-table>
     </el-card>
 
+    <el-dialog
+      v-if="detailProgramDlgVisible"
+      :title="program.name"
+      :visible.sync="detailProgramDlgVisible"
+      width="50%"
+    >
+      <div v-if="program">
+        <p class="mb-2">{{ COMMON.CATEGORY }}: {{ program.category|getCategory }}</p>
+        <p>{{ COMMON.DESCRIPTION }}: {{ program.discription }}</p>
+      </div>
+      <span slot="footer">
+        <el-button type="primary" @click="handleCloseDialog">{{ COMMON.CLOSE }}</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 <script>
 import { firebase } from '@/FireBase'
 import { constantMixin } from '@/utils/constant'
-import { parseVNTime } from '@/utils/index'
-import { getCategory } from '@/utils/index'
+import { parseVNTime, getCategory } from '@/utils/index'
+import { uppercaseFirst } from '@/filters/index'
 
 export default {
   components: { },
-  filters: { getCategory },
+  filters: { getCategory, uppercaseFirst },
   mixins: [constantMixin],
   data() {
     return {
@@ -58,32 +100,57 @@ export default {
       channelRef: firebase.firestore().collection('channels'),
       scheduleRef: firebase.firestore().collection('schedules'),
       programRef: firebase.firestore().collection('programs'),
-      scheduleList: []
+      scheduleList: [],
+      program: null,
+      detailProgramDlgVisible: false,
+      selectedDate: new Date(),
+      searchText: '',
+      scheduleData: []
+    }
+  },
+  watch: {
+    selectedDate() {
+      this.getScheduleList()
     }
   },
   created() {
     this.channelId = this.$route.params.id
-    this.$store.dispatch('channel/fetchChannel', { channelId: this.channelId }).then(channel => {
+    this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
       this.channel = channel
     })
-    const start = new Date()
-    start.setHours(0, 0, 0, 0)
-    const startTimestamp = firebase.firestore.Timestamp.fromDate(start)
-
-    const end = new Date()
-    end.setHours(23, 59, 59, 999)
-    const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
-
-    this.$store.dispatch('channel/fetchScheduleList',
-      { channelId: this.channelId, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
-      this.scheduleList = scheduleList
-    })
-
-    console.log(this.channelId)
+    this.getScheduleList()
   },
   methods: {
     parseVNTime(time) {
       return parseVNTime(time, '{h}:{i} {a}', true, true)
+    },
+    viewProgramDetail(programId) {
+      console.log('viewProgramDetail')
+      this.$store.dispatch('app/fetchProgram', { programId }).then(program => {
+        this.program = program
+        this.detailProgramDlgVisible = true
+      })
+    },
+    getScheduleList() {
+      const start = this.selectedDate
+      start.setHours(0, 0, 0, 0)
+      const startTimestamp = firebase.firestore.Timestamp.fromDate(start)
+
+      const end = this.selectedDate
+      end.setHours(23, 59, 59, 999)
+      const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
+
+      this.$store.dispatch('app/fetchScheduleList',
+        { channelId: this.channelId, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
+        this.scheduleList = scheduleList
+        this.searchText = ''
+        this.scheduleData = this.scheduleList
+      })
+    },
+    searchProgram() {
+      this.scheduleData = this.searchText
+        ? this.scheduleList.filter(schedule => schedule.programName.toLowerCase().includes(this.searchText.toLowerCase()))
+        : this.scheduleList
     }
   }
 }

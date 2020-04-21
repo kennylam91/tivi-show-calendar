@@ -17,7 +17,13 @@ export const COMMON = {
   SATURDAY: 'Thứ bảy',
   SUNDAY: 'Chủ nhật',
   HOMEPAGE: 'Trang chủ',
-  CHANNEL_LIST: 'Danh sách kênh'
+  CHANNEL_LIST: 'Danh sách kênh',
+  CLOSE: 'Đóng',
+  CATEGORY: 'Thể loại',
+  DESCRIPTION: 'Chi tiết',
+  SEARCH: 'Tìm kiếm',
+  START_TIME: 'Thời gian bắt đầu',
+  PROGRAM_NAME: 'Tên chương trình'
 
 }
 import { firebase } from '@/FireBase'

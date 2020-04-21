@@ -71,6 +71,15 @@ export const actions = {
         resolve(channel)
       })
     })
+  },
+  fetchProgram({ commit }, request) {
+    const programQuery = FB.programRef.doc(request.programId)
+    return new Promise((resolve, reject) => {
+      programQuery.onSnapshot(doc => {
+        const program = { ...doc.data(), id: doc.id }
+        resolve(program)
+      })
+    })
   }
 
 }
