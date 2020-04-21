@@ -12,6 +12,10 @@
           :rows="4"
         />
       </el-form-item>
+      <el-form-item label="Logo">
+        <el-button type="text" @click="imagecropperShow = true">Upload</el-button>
+        <img class="ml-2" :src="channelData.logo" width="100">
+      </el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
@@ -19,14 +23,26 @@
       </el-form-item>
 
     </el-form>
+    <ImageChopper
+      v-show="imagecropperShow"
+      :key="imagecropperKey"
+      :width="100"
+      :height="40"
+      url=""
+      lang-type="vi"
+      @close="imagecropperShow = false"
+      @crop-success="handleCropSuccess"
+    />
 
   </div>
 </template>
 <script>
 import { firebase } from '../../FireBase'
 import { trimObject } from '@/utils/index'
+import ImageChopper from '@/components/ImageChopper'
 
 export default {
+  components: { ImageChopper },
   props: {
     channelProp: {
       required: true,
@@ -38,7 +54,9 @@ export default {
       channelData: null,
       channelRef: firebase.firestore().collection('channels'),
       scheduleRef: firebase.firestore().collection('schedule'),
-      scheduleList: []
+      scheduleList: [],
+      imagecropperShow: false,
+      imagecropperKey: 0
     }
   },
   computed: {
@@ -94,6 +112,10 @@ export default {
     },
     cancelClick() {
       this.$emit('cancel')
+    },
+    handleCropSuccess(imageDataUrl, field) {
+      this.channelData.logo = imageDataUrl
+      debugger
     }
   }
 }

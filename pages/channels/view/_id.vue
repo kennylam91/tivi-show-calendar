@@ -9,62 +9,69 @@
 
     <el-card class="p-1">
       <div slot="header">
-        <div class="bold">{{ channel.name }}</div>
-      </div>
-      <div class="p-1 justify-between-align-center">
-        <div class="inline-block">
-          <span class="mr-1">{{ COMMON.DATE | uppercaseFirst }}: </span>
-          <el-date-picker
-            v-model="selectedDate"
-            format="dd/MM/yyyy"
-            size="small"
-            type="date"
-          />
+        <div class="mb-2 justify-between-align-center">
+          <img class="mr-2" :src="channel.logo" width="100" height="50">
+          <p class="small-font-size">{{ channel.description }}</p>
         </div>
-        <div class="inline-block">
-          <el-input
-            v-model="searchText"
-            :placeholder="COMMON.SEARCH"
-            size="small"
-            clearable
-            style="width: 500px;"
-            @change="searchProgram"
-          />
-        </div>
+        <el-row>
+          <el-col :xs="24" :sm="10" :md="8" class="mb-2">
+            <span class="">{{ COMMON.DATE | uppercaseFirst }}: </span>
+            <el-date-picker
+              v-model="selectedDate"
+              format="dd/MM/yyyy"
+              size="small"
+              type="date"
+              class="w-100"
+            />
+          </el-col>
+          <el-col :span="16" :sm="14" :xs="24">
+            <el-input
+              v-model="searchText"
+              :placeholder="COMMON.SEARCH"
+              size="small"
+              clearable
+              class="w-100 mb-2"
+              @change="searchProgram"
+            />
+          </el-col>
+        </el-row>
 
-      </div>
-      <el-table
-        :data="scheduleData"
-        border
-        stripe
-        style="width: 100%"
-      >
-        <el-table-column
-          :label="COMMON.START_TIME"
-          width="150"
-          align="center"
+        <el-table
+          id="scheduleTable"
+          :data="scheduleData"
+          border
+          stripe
+          fit
+          style="width: 100%"
         >
-          <template slot-scope="{row}">
-            <div>{{ parseVNTime(row.startTime.seconds) }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="COMMON.PROGRAM_NAME"
-        >
-          <template slot-scope="{row}">
-            <el-link :underline="false" @click="viewProgramDetail(row.programId)">{{ row.programName }}</el-link>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="Category"
-        >
-          <template slot-scope="{row}">
-            <div>{{ row.category | getCategory }}</div>
-          </template>
-        </el-table-column>
+          <el-table-column
+            :label="COMMON.START_TIME"
+            align="center"
+            :min-width="25"
+          >
+            <template slot-scope="{row}">
+              <div>{{ parseVNTime(row.startTime.seconds) }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            :label="COMMON.PROGRAM_NAME"
+            :min-width="50"
+          >
+            <template slot-scope="{row}">
+              <el-link :underline="false" @click="viewProgramDetail(row.programId)">{{ row.programName }}</el-link>
+            </template>
+          </el-table-column>
+          <el-table-column
+            :label="COMMON.CATEGORY"
+            :min-width="25"
+          >
+            <template slot-scope="{row}">
+              <div>{{ row.category | getCategory }}</div>
+            </template>
+          </el-table-column>
 
-      </el-table>
-    </el-card>
+        </el-table>
+      </div></el-card>
 
     <el-dialog
       v-if="detailProgramDlgVisible"
@@ -155,3 +162,9 @@ export default {
   }
 }
 </script>
+<style>
+#scheduleTable .cell {
+  word-break: break-word;
+}
+</style>
+
