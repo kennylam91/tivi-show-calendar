@@ -12,6 +12,7 @@
 import Create from '@/components/programs/Create'
 export default {
   components: { Create },
+  middleware: 'auth',
   data() {
     return {
       newProgram: {

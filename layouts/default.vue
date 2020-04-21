@@ -1,9 +1,64 @@
 <template>
   <div>
+    <el-menu
+      :default-active="activeIndex"
+      class="el-menu-demo"
+      mode="horizontal"
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+      @select="handleSelect"
+    >
+      <el-menu-item index="1">{{ COMMON.HOMEPAGE }}</el-menu-item>
+      <el-submenu index="2">
+        <template slot="title">{{ COMMON.CHANNEL_LIST }}</template>
+        <el-menu-item
+          v-for="(item, index) in channelList"
+          :key="index"
+          :index="item.id"
+        >{{ item.name }}</el-menu-item>
+      </el-submenu>
+    </el-menu>
     <nuxt />
   </div>
 </template>
+<script>
+import { constantMixin } from '@/utils/constant'
+import { mapGetters } from 'vuex'
 
+export default {
+  mixins: [constantMixin],
+  data() {
+    return {
+      activeIndex: '1'
+    }
+  },
+  computed: {
+    ...mapGetters({
+      channelList: 'channelList'
+    })
+  },
+  created() {
+    this.$store.dispatch('channel/fetchChannelList')
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath)
+      // const routerMap = new Map([
+      //   [1, '/']
+      // ])
+      if (keyPath[0] === '1') {
+        this.$router.push({ path: '/' })
+      }
+      if (keyPath[0] === '2') {
+        this.$router.push({ path: `/channels/view/${key}` })
+      }
+      // this.$router.push({ path: routerMap.get(key) || '/' })
+    }
+  }
+
+}
+</script>
 <style>
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',

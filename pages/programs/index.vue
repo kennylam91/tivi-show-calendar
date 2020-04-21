@@ -12,7 +12,6 @@
         <el-table-column
           prop="name"
           label="Name"
-          class="break-word"
         />
         <el-table-column
           label="Category"
@@ -47,6 +46,7 @@ import { getCategory } from '@/utils/index'
 
 export default {
   filters: { getCategory },
+  middleware: 'auth',
   data() {
     return {
       programList: [],
@@ -90,7 +90,7 @@ export default {
 }
 </script>
 <style>
-#programTable .el-table .cell{
+#programTable .cell{
   word-break: break-word;
 }
 </style>

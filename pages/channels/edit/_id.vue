@@ -15,6 +15,7 @@ import { firebase } from '@/FireBase'
 
 export default {
   components: { Create },
+  middleware: 'auth',
   data() {
     return {
       channelId: null,

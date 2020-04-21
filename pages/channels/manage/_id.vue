@@ -23,6 +23,7 @@ import ScheduleTable from '@/components/schedules/ScheduleTable'
 
 export default {
   components: { ScheduleTable },
+  middleware: 'auth',
   data() {
     return {
       channelId: null,

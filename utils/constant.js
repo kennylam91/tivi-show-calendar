@@ -15,8 +15,24 @@ export const COMMON = {
   THURSDAY: 'Thứ năm',
   FRIDAY: 'Thứ sáu',
   SATURDAY: 'Thứ bảy',
-  SUNDAY: 'Chủ nhật'
+  SUNDAY: 'Chủ nhật',
+  HOMEPAGE: 'Trang chủ',
+  CHANNEL_LIST: 'Danh sách kênh'
 
+}
+import { firebase } from '@/FireBase'
+export const FB = {
+  channelRef: firebase.firestore().collection('channels'),
+  scheduleRef: firebase.firestore().collection('schedules'),
+  programRef: firebase.firestore().collection('programs')
+}
+
+export const constantMixin = {
+  data() {
+    return {
+      COMMON
+    }
+  }
 }
 
 export const categoryMap = new Map([

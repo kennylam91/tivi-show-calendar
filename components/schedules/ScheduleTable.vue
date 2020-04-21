@@ -16,7 +16,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="program"
+        label="Program"
       >
         <template slot-scope="{row}">
           <el-link :underline="false" @click="moveToProgramDetail(row.programId)">{{ row.programName }}</el-link>

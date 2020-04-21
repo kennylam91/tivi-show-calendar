@@ -18,6 +18,7 @@
 import Create from '@/components/channels/Create'
 export default {
   components: { Create },
+  middleware: 'auth',
   data() {
     return {
       newChannel: {

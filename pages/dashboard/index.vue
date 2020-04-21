@@ -2,6 +2,8 @@
   <div class="p-4">
     <div class="justify-between-align-center">
       <span class="bold">DASHBOARD</span>
+      <el-button type="text" @click="handleLogout">Log out</el-button>
+
     </div>
 
     <el-card class="my-2" :body-style="{ padding: '16px' }">
@@ -32,10 +34,19 @@
 
       </el-table>
     </el-card>
+    <el-card class="my-2" :body-style="{ padding: '16px' }">
+      <div slot="header">
+        <span>
+          <nuxt-link to="/programs">Programs</nuxt-link>
+        </span>
+      </div>
+      <!-- card body -->
+    </el-card>
+
   </div>
 </template>
 <script>
-import { firebase } from '../../FireBase'
+import { firebase } from '@/FireBase'
 
 export default {
   middleware: 'auth',
@@ -113,6 +124,11 @@ export default {
     handleScheduleManageClick(row) {
       console.log('handleScheduleManageClick')
       this.$router.push({ path: `/channels/manage/${row.id}` })
+    },
+    handleLogout() {
+      this.$store.dispatch('user/logout').then(() => {
+        this.$router.push({ path: this.redirect || '/' })
+      })
     }
   }
 }
