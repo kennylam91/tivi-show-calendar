@@ -13,9 +13,12 @@
       </div>
       <el-table :data="channelList" border stripe>
         <el-table-column
-          prop="name"
           :label="COMMON.NAME"
-        />
+        >
+          <template slot-scope="{row}">
+            <span :class="{'vip-channel': row.isVip}">{{ row.name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="description"
           :label="COMMON.DESCRIPTION"
@@ -103,3 +106,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.vip-channel{
+  font-weight: bold;
+  color: red;
+}
+</style>

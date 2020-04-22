@@ -2,10 +2,14 @@
   <div>
     <div class="bold mb-2">{{ title }}</div>
     <el-form ref="channelCreateForm" :model="channelData" label-width="100px">
-      <el-form-item label="Name">
+      <el-form-item :label="COMMON.NAME">
         <el-input v-model="channelData.name" />
       </el-form-item>
-      <el-form-item label="Description">
+      <el-form-item label="VIP">
+        <el-switch v-model="channelData.isVip" />
+        <span>{{ COMMON.VIP_CHANNEL_DESCRIPTION }}</span>
+      </el-form-item>
+      <el-form-item :label="COMMON.DESCRIPTION">
         <el-input
           v-model="channelData.description"
           type="textarea"

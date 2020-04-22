@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="p-4">
+    <div v-if="channel" class="p-4">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
-        <el-breadcrumb-item>Edit channel</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/dashboard' }">{{ COMMON.DASHBOARD }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ channel.name }}</el-breadcrumb-item>
       </el-breadcrumb>
-      <Create v-if="channel" class="my-2" :channel-prop="channel" @saved="handleSavedAction" @cancel="handleCancel" />
+      <CreateChannel v-if="channel" class="my-2" :channel-prop="channel" @saved="handleSavedAction" @cancel="handleCancel" />
     </div>
   </div>
 </template>
 <script>
-import Create from '@/components/channels/Create'
+import CreateChannel from '@/components/channels/CreateChannel'
 
 export default {
-  components: { Create },
+  components: { CreateChannel },
   middleware: 'auth',
   data() {
     return {

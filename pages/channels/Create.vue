@@ -8,16 +8,16 @@
         </el-breadcrumb>
       </div>
 
-      <Create :channel-prop="newChannel" @saved="handleSaved" />
+      <CreateChannel :channel-prop="newChannel" @saved="handleSaved" />
 
     </el-card>
 
   </div>
 </template>
 <script>
-import Create from '@/components/channels/Create'
+import CreateChannel from '@/components/channels/CreateChannel'
 export default {
-  components: { Create },
+  components: { CreateChannel },
   middleware: 'auth',
   data() {
     return {

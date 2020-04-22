@@ -33,7 +33,8 @@ export const COMMON = {
   CREATE_CHANNEL: 'Tạo kênh mới',
   ACTION: 'Thao tác',
   DASHBOARD: 'Trang quản lý',
-  LOG_OUT: 'Đăng xuất'
+  LOG_OUT: 'Đăng xuất',
+  VIP_CHANNEL_DESCRIPTION: 'Kênh VIP sẽ được xuất hiện trên trang chủ.'
 
 }
 import { firebase } from '@/FireBase'
