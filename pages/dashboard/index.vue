@@ -59,6 +59,8 @@ export default {
     this.$store.dispatch('app/fetchChannelList').then(list => {
       this.channelList = list
     })
+    // fetch all programs
+    this.$store.dispatch('app/fetchProgramList')
   },
   methods: {
     handleCreateProgramClick() {

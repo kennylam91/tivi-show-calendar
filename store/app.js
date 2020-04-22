@@ -3,7 +3,8 @@ import { trimObject } from '../assets/utils'
 
 export const state = () => ({
   channelList: [],
-  scheduleList: []
+  scheduleList: null,
+  programList: null
 })
 
 export const mutations = {
@@ -12,6 +13,9 @@ export const mutations = {
   },
   SET_SCHEDULE_LIST: (state, value) => {
     state.scheduleList = value
+  },
+  SET_PROGRAM_LIST: (state, value) => {
+    state.programList = value
   }
 
 }
@@ -36,10 +40,12 @@ export const actions = {
   setScheduleList({ commit }, value) {
     commit('SET_SCHEDULE_LIST', value)
   },
+  setProgramList({ commit }, value) {
+    commit('SET_PROGRAM_LIST', value)
+  },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {
       FB.channelRef.orderBy('name', 'asc').get().then(list => {
-        debugger
         const channelList = []
         list.forEach((channel) => {
           channelList.push({ ...channel.data(), id: channel.id })
@@ -50,7 +56,7 @@ export const actions = {
     })
   },
   // request: {channelId, startTime, endTime, orderBy:[field, order], limit}
-  fetchScheduleList({ dispatch }, request) {
+  fetchScheduleList({ state }, request) {
     let scheduleQuery = FB.scheduleRef
     scheduleQuery = scheduleQuery.where('channelId', '==', request.channelId)
     if (request.startTime) {
@@ -63,7 +69,6 @@ export const actions = {
       scheduleQuery = scheduleQuery.orderBy(request.orderBy[0], request.orderBy[1])
     } else {
       scheduleQuery = scheduleQuery.orderBy('startTime')
-      debugger
     }
     if (request.limit) {
       scheduleQuery = scheduleQuery.limit(request.limit)
@@ -74,11 +79,10 @@ export const actions = {
         list.forEach((doc) => {
           const programId = doc.data().programId
           const schedule = { ...doc.data(), id: doc.id }
+          const foundProgram = state.programList.find(program => program.id === programId)
+          schedule.programName = foundProgram.name
+          schedule.category = foundProgram.category
           scheduleList.push(schedule)
-          FB.programRef.doc(programId).get().then(doc => {
-            schedule.programName = doc.data().name
-            schedule.category = doc.data().category
-          })
         })
         resolve(scheduleList)
       })
@@ -147,6 +151,7 @@ export const actions = {
         doc.forEach(program => {
           programList.push({ ...program.data(), id: program.id })
         })
+        commit('SET_PROGRAM_LIST', programList)
         resolve(programList)
       })
     })

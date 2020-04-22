@@ -47,6 +47,7 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -74,7 +75,10 @@ export default {
       } else {
         return 'Create schedule'
       }
-    }
+    },
+    ...mapGetters({
+      programList: 'programList'
+    })
   },
   watch: {
     scheduleProp: {
@@ -94,12 +98,18 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('app/fetchProgramList').then(list => {
-      this.programList = list
+    if (this.programList) {
+      this.$store.dispatch('app/fetchProgramList').then(list => {
+        this.programList = list
+        if (this.scheduleData.programId) {
+          this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
+        }
+      })
+    } else {
       if (this.scheduleData.programId) {
         this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
       }
-    })
+    }
   },
   methods: {
     onSubmit() {

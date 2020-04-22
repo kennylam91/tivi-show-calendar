@@ -13,8 +13,7 @@
         />
       </el-form-item>
       <el-form-item label="Logo">
-        <el-button type="text" @click="imagecropperShow = true">Upload</el-button>
-        <img class="ml-2" :src="channelData.logo" width="100">
+        <Upload :picture-prop="channelData.logo" @uploaded="handleUploaded" />
       </el-form-item>
 
       <el-form-item>
@@ -27,9 +26,10 @@
   </div>
 </template>
 <script>
+import Upload from '@/components/upload/Upload'
 
 export default {
-  components: { },
+  components: { Upload },
   props: {
     channelProp: {
       required: true,
@@ -95,6 +95,9 @@ export default {
     },
     cancelClick() {
       this.$emit('cancel')
+    },
+    handleUploaded(picture) {
+      this.channelData.logo = picture
     }
 
   }

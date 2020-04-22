@@ -42,19 +42,24 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
+import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
   data() {
     return {
-      programList: [],
       programRef: firebase.firestore().collection('programs')
     }
   },
-  created() {
-    this.$store.dispatch('app/fetchProgramList').then(list => {
-      this.programList = list
+  computed: {
+    ...mapGetters({
+      programList: 'programList'
     })
+  },
+  created() {
+    if (!this.programList) {
+      this.$store.dispatch('app/fetchProgramList')
+    }
   },
   methods: {
     handleCreateProgramClick() {
