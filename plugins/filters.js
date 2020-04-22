@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { categoryMap } from '@/utils/constant'
+import { categoryMap } from '@/assets/utils/constant'
 
 Vue.filter('uppercaseAll', val => val.toUpperCase())
 Vue.filter('uppercaseFirst', string => string.charAt(0).toUpperCase() + string.slice(1))

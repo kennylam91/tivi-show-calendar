@@ -50,7 +50,7 @@
             :min-width="25"
           >
             <template slot-scope="{row}">
-              <div>{{ parseVNTime(row.startTime.seconds) }}</div>
+              <div>{{ parseTime(row.startTime.seconds) }}</div>
             </template>
           </el-table-column>
           <el-table-column
@@ -84,7 +84,7 @@
         <p>{{ COMMON.DESCRIPTION }}: {{ program.discription }}</p>
       </div>
       <span slot="footer">
-        <el-button type="primary" @click="handleCloseDialog">{{ COMMON.CLOSE }}</el-button>
+        <el-button type="primary" @click="detailProgramDlgVisible= false">{{ COMMON.CLOSE }}</el-button>
       </span>
     </el-dialog>
 
@@ -92,20 +92,14 @@
 </template>
 <script>
 import { firebase } from '@/FireBase'
-import { constantMixin } from '@/utils/constant'
-import { parseVNTime } from '@/utils/index'
-// import { uppercaseFirst } from '@/filters/index'
+import { parseVNTime } from '@/assets/utils/index'
 
 export default {
   components: { },
-  mixins: [constantMixin],
   data() {
     return {
       channelId: null,
       channel: null,
-      channelRef: firebase.firestore().collection('channels'),
-      scheduleRef: firebase.firestore().collection('schedules'),
-      programRef: firebase.firestore().collection('programs'),
       scheduleList: [],
       program: null,
       detailProgramDlgVisible: false,
@@ -127,7 +121,7 @@ export default {
     this.getScheduleList()
   },
   methods: {
-    parseVNTime(time) {
+    parseTime(time) {
       return parseVNTime(time, '{h}:{i} {a}', true, true)
     },
     viewProgramDetail(programId) {

@@ -47,7 +47,7 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
-import { trimObject } from '@/utils/index'
+import { trimObject } from '@/assets/utils/index'
 
 export default {
   props: {

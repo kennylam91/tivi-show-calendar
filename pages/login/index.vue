@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validUsername } from '@/assets/utils/validate'
 
 export default {
   name: 'Login',

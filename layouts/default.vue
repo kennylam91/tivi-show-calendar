@@ -23,11 +23,9 @@
   </div>
 </template>
 <script>
-import { constantMixin } from '@/utils/constant'
 import { mapGetters } from 'vuex'
 
 export default {
-  mixins: [constantMixin],
   data() {
     return {
       activeIndex: '1'

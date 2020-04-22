@@ -1,4 +1,4 @@
-import { FB } from '@/utils/constant'
+import { FB } from '@/assets/utils/constant'
 
 export const state = () => ({
   channelList: [],

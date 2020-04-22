@@ -35,9 +35,8 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
-import { trimObject } from '@/utils/index'
-import { CATEGORIES } from '@/utils/constant'
-
+import { trimObject } from '@/assets/utils/index'
+import { CATEGORIES } from '@/assets/utils/constant'
 export default {
   props: {
     programProp: {

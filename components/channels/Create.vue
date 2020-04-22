@@ -23,26 +23,15 @@
       </el-form-item>
 
     </el-form>
-    <ImageChopper
-      v-show="imagecropperShow"
-      :key="imagecropperKey"
-      :width="100"
-      :height="40"
-      url=""
-      lang-type="vi"
-      @close="imagecropperShow = false"
-      @crop-success="handleCropSuccess"
-    />
 
   </div>
 </template>
 <script>
 import { firebase } from '../../FireBase'
-import { trimObject } from '@/utils/index'
-import ImageChopper from '@/components/ImageChopper'
+import { trimObject } from '@/assets/utils/index'
 
 export default {
-  components: { ImageChopper },
+  components: { },
   props: {
     channelProp: {
       required: true,
@@ -54,9 +43,7 @@ export default {
       channelData: null,
       channelRef: firebase.firestore().collection('channels'),
       scheduleRef: firebase.firestore().collection('schedule'),
-      scheduleList: [],
-      imagecropperShow: false,
-      imagecropperKey: 0
+      scheduleList: []
     }
   },
   computed: {
@@ -112,11 +99,8 @@ export default {
     },
     cancelClick() {
       this.$emit('cancel')
-    },
-    handleCropSuccess(imageDataUrl, field) {
-      this.channelData.logo = imageDataUrl
-      debugger
     }
+
   }
 }
 </script>

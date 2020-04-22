@@ -32,7 +32,8 @@ export default {
   */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/filters'
+    '@/plugins/filters',
+    '@/plugins/mixins'
   ],
   /*
   ** Nuxt.js dev-modules

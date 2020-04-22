@@ -33,14 +33,6 @@ export const FB = {
   programRef: firebase.firestore().collection('programs')
 }
 
-export const constantMixin = {
-  data() {
-    return {
-      COMMON
-    }
-  }
-}
-
 export const categoryMap = new Map([
   [1, 'Phim truyện'],
   [2, 'Game show truyền hình'],

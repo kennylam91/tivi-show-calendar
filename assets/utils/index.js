@@ -1,4 +1,13 @@
 import { COMMON } from './constant.js'
+
+/**
+ * Parse Time to any format
+ * @param time : (Object, string, number)
+ * @param vformat(String) :{d}/{m}/{y} {h}:{i}{a}
+ * @param pad(Boo) : 1 -> 01
+ * @param isFourDigitYear(Boo)
+ * @returns time string
+ */
 export function parseVNTime(time, vformat, pad, isFourDigitYear) {
   if (arguments.length === 0 || !time) {
     return null

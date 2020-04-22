@@ -59,7 +59,7 @@
 <script>
 import CreateSchedule from '@/components/schedules/Create'
 import { firebase } from '../../FireBase'
-import { parseVNTime } from '@/utils/index'
+import { parseVNTime } from '@/assets/utils/index'
 
 export default {
   components: { CreateSchedule },
