@@ -1,44 +1,52 @@
 <template>
   <div>
-    aaa
+
+    <div class="row mt-2">
+      <el-divider content-position="left">
+        <h4>{{ COMMON.VIP_CHANNEL }}</h4>
+      </el-divider>
+      <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-6 col-xs-12 col-lg-3 my-2">
+        <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
+          <el-image
+            v-if="channel.logo"
+            style="width: 100%;"
+            :src="channel.logo"
+            fit="fill"
+            @click="handleViewSchedule(channel)"
+          />
+          <el-button class="my-2" plain type="text" @click="handleViewSchedule(channel)">{{ COMMON.SCHEDULE }}</el-button>
+
+        </el-card>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
+  },
+  computed: {
+    ...mapGetters({
+      channelList: 'channelList'
+    }),
+    vipChannels() {
+      return this.channelList.filter(item => item.isVip)
+    }
+  },
+  methods: {
+    handleViewSchedule(channel) {
+      console.log('handleViewSchedule')
+      this.$router.push({ path: `/channels/view/${channel.id}` })
+    }
   }
 }
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
 
 .links {
   padding-top: 15px;

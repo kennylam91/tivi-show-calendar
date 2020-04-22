@@ -19,7 +19,7 @@
         >{{ item.name }}</el-menu-item>
       </el-submenu>
     </el-menu>
-    <nuxt />
+    <nuxt class="container" />
   </div>
 </template>
 <script>

@@ -28,13 +28,14 @@ export const COMMON = {
   PROGRAM_DETAIL: 'Chi tiết chương trình',
   NAME: 'Tên',
   EDIT: 'Sửa',
-  SCHEDULE: 'Lịch chiếu',
+  SCHEDULE: 'Lịch phát sóng',
   DELETE: 'Xóa',
   CREATE_CHANNEL: 'Tạo kênh mới',
   ACTION: 'Thao tác',
   DASHBOARD: 'Trang quản lý',
   LOG_OUT: 'Đăng xuất',
-  VIP_CHANNEL_DESCRIPTION: 'Kênh VIP sẽ được xuất hiện trên trang chủ.'
+  VIP_CHANNEL_DESCRIPTION: 'Kênh VIP sẽ được xuất hiện trên trang chủ.',
+  VIP_CHANNEL: 'Kênh nổi bật'
 
 }
 import { firebase } from '@/FireBase'
