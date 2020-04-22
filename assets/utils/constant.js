@@ -23,7 +23,9 @@ export const COMMON = {
   DESCRIPTION: 'Chi tiết',
   SEARCH: 'Tìm kiếm',
   START_TIME: 'Thời gian bắt đầu',
-  PROGRAM_NAME: 'Tên chương trình'
+  TIME: 'Thời gian',
+  PROGRAM_NAME: 'Tên chương trình',
+  PROGRAM_DETAIL: 'Chi tiết chương trình'
 
 }
 import { firebase } from '@/FireBase'

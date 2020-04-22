@@ -9,8 +9,8 @@
 
     <el-card class="p-1">
       <div slot="header">
-        <div class="mb-2 justify-between-align-center">
-          <img class="mr-2" :src="channel.logo" width="100" height="50">
+        <div class="mb-2 flex" style="">
+          <img class="mr-2" :src="channel.logo" height="50">
           <p class="small-font-size">{{ channel.description }}</p>
         </div>
         <el-row>
@@ -45,7 +45,7 @@
           style="width: 100%"
         >
           <el-table-column
-            :label="COMMON.START_TIME"
+            :label="COMMON.TIME"
             align="center"
             :min-width="25"
           >
@@ -58,7 +58,9 @@
             :min-width="50"
           >
             <template slot-scope="{row}">
-              <el-link :underline="false" @click="viewProgramDetail(row.programId)">{{ row.programName }}</el-link>
+              <el-link :underline="false" @click="viewProgramDetail(row.programId)">
+                <span class="color-primary">{{ row.programName }}</span>
+              </el-link>
             </template>
           </el-table-column>
           <el-table-column
@@ -73,20 +75,28 @@
         </el-table>
       </div></el-card>
 
-    <el-dialog
+    <!-- <el-dialog
       v-if="detailProgramDlgVisible"
-      :title="program.name"
+      :title="COMMON.PROGRAM_DETAIL"
       :visible.sync="detailProgramDlgVisible"
-      width="50%"
+      width="70%"
     >
       <div v-if="program">
-        <p class="mb-2">{{ COMMON.CATEGORY }}: {{ program.category|getCategory }}</p>
-        <p>{{ COMMON.DESCRIPTION }}: {{ program.discription }}</p>
+        <div class="flex" style="justify-content: space-between">
+          <div>
+            <p class="mb-2">{{ COMMON.PROGRAM_NAME }}: {{ program.name }}</p>
+            <p class="mb-2">{{ COMMON.CATEGORY }}: {{ program.category|getCategory }}</p>
+            <p>{{ COMMON.DESCRIPTION }}: {{ program.discription }}</p>
+          </div>
+          <div>
+            <img width="150" :src="program.logo" alt="logo">
+          </div>
+        </div>
       </div>
       <span slot="footer">
-        <el-button type="primary" @click="detailProgramDlgVisible= false">{{ COMMON.CLOSE }}</el-button>
+        <el-button type="primary" size="small" @click="detailProgramDlgVisible= false">{{ COMMON.CLOSE }}</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
 
   </div>
 </template>
@@ -126,10 +136,10 @@ export default {
     },
     viewProgramDetail(programId) {
       console.log('viewProgramDetail')
-      this.$store.dispatch('app/fetchProgram', { programId }).then(program => {
-        this.program = program
-        this.detailProgramDlgVisible = true
-      })
+      // this.$store.dispatch('app/fetchProgram', { programId }).then(program => {
+      //   this.program = program
+      //   this.detailProgramDlgVisible = true
+      // })
     },
     getScheduleList() {
       const start = this.selectedDate

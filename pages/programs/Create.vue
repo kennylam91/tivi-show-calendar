@@ -18,12 +18,14 @@ export default {
       newProgram: {
         id: '',
         name: '',
-        description: ''
+        description: '',
+        logo: ''
       }
     }
   },
   methods: {
     handleSavedAction() {
+      this.$store.dispatch('app/fetchProgramList')
       this.$router.push({ path: '/programs' })
     },
     handleCancel() {

@@ -24,6 +24,9 @@
           :rows="4"
         />
       </el-form-item>
+      <el-form-item label="Logo">
+        <Upload :picture-prop="programData.logo" @uploaded="handleUploaded" />
+      </el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Submit</el-button>
@@ -37,7 +40,9 @@
 import { firebase } from '../../FireBase'
 import { trimObject } from '@/assets/utils/index'
 import { CATEGORIES } from '@/assets/utils/constant'
+import Upload from '@/components/upload/Upload'
 export default {
+  components: { Upload },
   props: {
     programProp: {
       required: true,
@@ -76,7 +81,7 @@ export default {
     onSubmit() {
       console.log('onSubmit')
       if (!this.programData.id) {
-        this.ref.add(trimObject(this.programData)).then(ref => {
+        this.$store.dispatch('app/createProgram', this.programData).then(() => {
           console.log('add program success')
           this.$notify({
             title: 'Program Created',
@@ -105,6 +110,9 @@ export default {
     },
     handleCancelClick() {
       this.$emit('cancel')
+    },
+    handleUploaded(picture) {
+      this.programData.logo = picture
     }
   }
 }

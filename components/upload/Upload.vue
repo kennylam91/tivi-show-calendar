@@ -2,18 +2,15 @@
   <div>
     <div>
       <p>Upload an image to Firebase:</p>
-      <input type="file" accept="image/*" @change="previewImage">
-    </div>
-    <div>
+      <input type="file" accept="image/*" @change="previewImage"></div>
+    <div v-if="uploading">
       <p>Progress: {{ uploadValue.toFixed()+"%" }}
         <progress id="progress" :value="uploadValue" max="100" />  </p>
     </div>
-    <div>
-      <img class="preview" :src="picture">
-      <br>
-      <el-button type="text" @click="onUpload">Upload</el-button>
-
+    <div v-if="picture">
+      <img height="200" :src="picture">
     </div>
+    <el-button type="danger" size="mini" plain @click="onUpload">Upload</el-button>
 
   </div>
 </template>
@@ -31,7 +28,8 @@ export default {
     return {
       imageData: null,
       picture: null,
-      uploadValue: 0
+      uploadValue: 0,
+      uploading: false
     }
   },
   watch: {
@@ -46,6 +44,7 @@ export default {
       this.imageData = event.target.files[0]
     },
     onUpload() {
+      this.uploading = true
       this.picture = null
       var metadata = {
         contentType: 'image/jpeg'

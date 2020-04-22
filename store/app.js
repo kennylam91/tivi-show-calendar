@@ -56,7 +56,7 @@ export const actions = {
     })
   },
   // request: {channelId, startTime, endTime, orderBy:[field, order], limit}
-  fetchScheduleList({ state }, request) {
+  fetchScheduleList({ state, dispatch }, request) {
     let scheduleQuery = FB.scheduleRef
     scheduleQuery = scheduleQuery.where('channelId', '==', request.channelId)
     if (request.startTime) {
@@ -79,10 +79,20 @@ export const actions = {
         list.forEach((doc) => {
           const programId = doc.data().programId
           const schedule = { ...doc.data(), id: doc.id }
-          const foundProgram = state.programList.find(program => program.id === programId)
-          schedule.programName = foundProgram.name
-          schedule.category = foundProgram.category
-          scheduleList.push(schedule)
+          let foundProgram
+          if (state.programList) {
+            foundProgram = state.programList.find(program => program.id === programId)
+            schedule.programName = foundProgram.name
+            schedule.category = foundProgram.category
+            scheduleList.push(schedule)
+          } else {
+            dispatch('fetchProgramList').then(() => {
+              foundProgram = state.programList.find(program => program.id === programId)
+              schedule.programName = foundProgram.name
+              schedule.category = foundProgram.category
+              scheduleList.push(schedule)
+            })
+          }
         })
         resolve(scheduleList)
       })
@@ -144,7 +154,7 @@ export const actions = {
       }).catch(err => reject(err))
     })
   },
-  fetchProgramList({ commit }, request) {
+  fetchProgramList({ commit }) {
     return new Promise((resolve, reject) => {
       FB.programRef.orderBy('name', 'asc').get().then(doc => {
         const programList = []
@@ -181,6 +191,16 @@ export const actions = {
       query.then(() => {
         resolve()
       }).catch(err => reject(err))
+    })
+  },
+  createProgram({ commit }, program) {
+    const query = FB.programRef.add(trimObject(program))
+    return new Promise((resolve, reject) => {
+      query.then(() => {
+        resolve()
+      }).catch(err => {
+        reject(err)
+      })
     })
   }
 
