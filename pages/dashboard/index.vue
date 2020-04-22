@@ -1,34 +1,34 @@
 <template>
   <div class="p-4">
     <div class="justify-between-align-center">
-      <span class="bold">DASHBOARD</span>
+      <span class="bold">{{ COMMON.DASHBOARD }}</span>
       <el-button type="text" @click="handleLogout">Log out</el-button>
 
     </div>
 
     <el-card class="my-2" :body-style="{ padding: '16px' }">
       <div slot="header" class="justify-between-align-center">
-        <span>Channel List</span>
-        <el-button type="primary" size="small" plain @click="handleCreateChannelClick">Create Channel</el-button>
+        <span>{{ COMMON.CHANNEL_LIST }}</span>
+        <el-button type="primary" size="small" plain @click="handleCreateChannelClick">{{ COMMON.CREATE_CHANNEL }}</el-button>
       </div>
       <el-table :data="channelList" border stripe>
         <el-table-column
           prop="name"
-          label="Name"
+          :label="COMMON.NAME"
         />
         <el-table-column
           prop="description"
-          label="Description"
+          :label="COMMON.DESCRIPTION"
         />
         <el-table-column
           align="center"
-          label="Operations"
+          :label="COMMON.ACTION"
           width="270"
         >
           <template slot-scope="scope">
-            <el-button size="small" @click="handleChannelEditClick(scope.row)">Edit</el-button>
-            <el-button type="success" size="small" @click="handleScheduleManageClick(scope.row)">Schedule</el-button>
-            <el-button type="danger" size="small" @click="handleChannelDeleteClick(scope.row)">Delete</el-button>
+            <el-button size="small" @click="handleChannelEditClick(scope.row)">{{ COMMON.EDIT }}</el-button>
+            <el-button type="success" size="small" @click="handleScheduleManageClick(scope.row)">{{ COMMON.SCHEDULE }}</el-button>
+            <el-button type="danger" size="small" @click="handleChannelDeleteClick(scope.row)">{{ COMMON.DELETE }}</el-button>
           </template>
         </el-table-column>
 

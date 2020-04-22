@@ -25,7 +25,15 @@ export const COMMON = {
   START_TIME: 'Thời gian bắt đầu',
   TIME: 'Thời gian',
   PROGRAM_NAME: 'Tên chương trình',
-  PROGRAM_DETAIL: 'Chi tiết chương trình'
+  PROGRAM_DETAIL: 'Chi tiết chương trình',
+  NAME: 'Tên',
+  EDIT: 'Sửa',
+  SCHEDULE: 'Lịch chiếu',
+  DELETE: 'Xóa',
+  CREATE_CHANNEL: 'Tạo kênh mới',
+  ACTION: 'Thao tác',
+  DASHBOARD: 'Trang quản lý',
+  LOG_OUT: 'Đăng xuất'
 
 }
 import { firebase } from '@/FireBase'
