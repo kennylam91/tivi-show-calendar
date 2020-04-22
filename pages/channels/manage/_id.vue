@@ -12,13 +12,12 @@
       <div slot="header">
         <div class="bold">{{ channel.name }}</div>
       </div>
-      <ScheduleTable :schedule-list="scheduleList" />
+      <ScheduleTable :schedule-list="scheduleList" @changed="handleChanged" />
     </el-card>
 
   </div>
 </template>
 <script>
-import { firebase } from '@/FireBase'
 import ScheduleTable from '@/components/schedules/ScheduleTable'
 
 export default {
@@ -28,32 +27,25 @@ export default {
     return {
       channelId: null,
       channel: null,
-      channelRef: firebase.firestore().collection('channels'),
-      scheduleRef: firebase.firestore().collection('schedules'),
-      programRef: firebase.firestore().collection('programs'),
       scheduleList: []
     }
   },
   created() {
     this.channelId = this.$route.params.id
-    this.channelRef.doc(this.channelId).onSnapshot(docSnapshot => {
-      console.log(docSnapshot)
-      console.log()
-      this.channel = { ...docSnapshot.data(), id: docSnapshot.id }
-    })
-    const scheduleQuery = this.scheduleRef.where('channelId', '==', this.channelId).orderBy('startTime', 'asc')
-    scheduleQuery.onSnapshot((querySnapshot) => {
-      this.scheduleList = []
-      querySnapshot.forEach((schedule) => {
-        const programId = schedule.data().programId
-        this.programRef.doc(programId).onSnapshot(doc => {
-          this.scheduleList.push({ ...schedule.data(), id: schedule.id, programName: doc.data().name, category: doc.data().category })
-        })
+    this.$store.dispatch('app/fetchChannel', { channelId: this.channelId })
+      .then(channel => {
+        this.channel = channel
       })
-      console.log(this.scheduleList)
+    this.$store.dispatch('app/fetchScheduleList', { channelId: this.channelId }).then(scheduleList => {
+      this.scheduleList = scheduleList
     })
-
-    console.log(this.channelId)
+  },
+  methods: {
+    handleChanged() {
+      this.$store.dispatch('app/fetchScheduleList', { channelId: this.channelId }).then(scheduleList => {
+        this.scheduleList = scheduleList
+      })
+    }
   }
 }
 </script>

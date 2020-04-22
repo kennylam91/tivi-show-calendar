@@ -99,6 +99,7 @@ export default {
     handleSaved() {
       this.createScheduleDialogVisibleProp = false
       this.schedule = { ...this.scheduleInit }
+      this.$emit('changed')
     },
     handleScheduleEditClick(row) {
       this.schedule = row
@@ -110,13 +111,14 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'error'
       }).then(() => {
-        this.scheduleRef.doc(row.id).delete().then(() => {
+        this.$store.dispatch('app/deleteSchedule', { scheduleId: row.id }).then(() => {
           this.$notify({
             title: 'Schedule Deleted',
             type: 'success',
             duration: '4500',
             position: 'top-right'
           })
+          this.$emit('changed')
         })
       })
     },

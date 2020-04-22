@@ -52,11 +52,8 @@ export default {
     }
   },
   created() {
-    this.programRef.orderBy('name', 'asc').onSnapshot((querySnapshot) => {
-      this.programList = []
-      querySnapshot.forEach((program) => {
-        this.programList.push({ ...program.data(), id: program.id })
-      })
+    this.$store.dispatch('app/fetchProgramList').then(list => {
+      this.programList = list
     })
   },
   methods: {
@@ -75,10 +72,13 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.programRef.doc(row.id).delete().then(() => {
+        this.$store.dispatch('app/deleteProgram', { programId: row.id }).then(() => {
           this.$message({
             type: 'success',
             message: 'Delete completed'
+          })
+          this.$store.dispatch('app/fetchProgramList').then(list => {
+            this.programList = list
           })
         })
       })

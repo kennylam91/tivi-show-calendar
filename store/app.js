@@ -1,4 +1,5 @@
 import { FB } from '@/assets/utils/constant'
+import { trimObject } from '../assets/utils'
 
 export const state = () => ({
   channelList: [],
@@ -37,9 +38,10 @@ export const actions = {
   },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {
-      FB.channelRef.orderBy('name', 'asc').onSnapshot((snapshot) => {
+      FB.channelRef.orderBy('name', 'asc').get().then(list => {
+        debugger
         const channelList = []
-        snapshot.forEach((channel) => {
+        list.forEach((channel) => {
           channelList.push({ ...channel.data(), id: channel.id })
         })
         commit('SET_CHANNEL_LIST', channelList)
@@ -47,38 +49,133 @@ export const actions = {
       })
     })
   },
+  // request: {channelId, startTime, endTime, orderBy:[field, order], limit}
   fetchScheduleList({ dispatch }, request) {
-    const scheduleQuery = FB.scheduleRef.where('channelId', '==', request.channelId).where('startTime', '>=', request.startTime).where('startTime', '<', request.endTime).orderBy('startTime', 'asc')
+    let scheduleQuery = FB.scheduleRef
+    scheduleQuery = scheduleQuery.where('channelId', '==', request.channelId)
+    if (request.startTime) {
+      scheduleQuery = scheduleQuery.where('startTime', '>=', request.startTime)
+    }
+    if (request.endTime) {
+      scheduleQuery = scheduleQuery.where('startTime', '<', request.endTime)
+    }
+    if (request.orderBy) {
+      scheduleQuery = scheduleQuery.orderBy(request.orderBy[0], request.orderBy[1])
+    } else {
+      scheduleQuery = scheduleQuery.orderBy('startTime')
+      debugger
+    }
+    if (request.limit) {
+      scheduleQuery = scheduleQuery.limit(request.limit)
+    }
     return new Promise((resolve, reject) => {
-      scheduleQuery.onSnapshot((querySnapshot) => {
+      scheduleQuery.get().then((list) => {
         const scheduleList = []
-        querySnapshot.forEach((schedule) => {
-          const programId = schedule.data().programId
-          FB.programRef.doc(programId).onSnapshot(doc => {
-            scheduleList.push({ ...schedule.data(), id: schedule.id, programName: doc.data().name, category: doc.data().category })
+        list.forEach((doc) => {
+          const programId = doc.data().programId
+          const schedule = { ...doc.data(), id: doc.id }
+          scheduleList.push(schedule)
+          FB.programRef.doc(programId).get().then(doc => {
+            schedule.programName = doc.data().name
+            schedule.category = doc.data().category
           })
         })
-        console.log(scheduleList)
         resolve(scheduleList)
       })
     })
   },
+  createSchedule({ commit }, schedule) {
+    const query = FB.scheduleRef.add(trimObject(schedule))
+    return new Promise((resolve, reject) => {
+      query.then(() => {
+        resolve()
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+  updateSchedule({ commit }, schedule) {
+    const query = FB.scheduleRef.doc(schedule.id).set(trimObject(schedule))
+    return new Promise((resolve, reject) => {
+      query.then(() => {
+        resolve()
+      }).catch(err => reject(err))
+    })
+  },
+  // request={channelId: }
   fetchChannel({ commit }, request) {
     return new Promise((resolve, reject) => {
       let channel = null
-      FB.channelRef.doc(request.channelId).onSnapshot(docSnapshot => {
-        channel = { ...docSnapshot.data(), id: docSnapshot.id }
+      FB.channelRef.doc(request.channelId).get().then(doc => {
+        channel = { ...doc.data(), id: doc.id }
         resolve(channel)
       })
     })
   },
+  // request={channelId: }
+  deleteChannel({ commit }, request) {
+    return new Promise((resolve, reject) => {
+      const query = FB.channelRef.doc(request.channelId).delete()
+      query.then(() => {
+        resolve()
+      }).catch(err => reject(err))
+    })
+  },
+  // request = {programId}
   fetchProgram({ commit }, request) {
     const programQuery = FB.programRef.doc(request.programId)
     return new Promise((resolve, reject) => {
-      programQuery.onSnapshot(doc => {
+      programQuery.get().then(doc => {
         const program = { ...doc.data(), id: doc.id }
         resolve(program)
       })
+    })
+  },
+  // request ={programId}
+  deleteProgram({ commit }, request) {
+    return new Promise((resolve, reject) => {
+      const query = FB.programRef.doc(request.programId).delete()
+      query.then(() => {
+        resolve()
+      }).catch(err => reject(err))
+    })
+  },
+  fetchProgramList({ commit }, request) {
+    return new Promise((resolve, reject) => {
+      FB.programRef.orderBy('name', 'asc').get().then(doc => {
+        const programList = []
+        doc.forEach(program => {
+          programList.push({ ...program.data(), id: program.id })
+        })
+        resolve(programList)
+      })
+    })
+  },
+  createChannel({ commit }, channel) {
+    const query = FB.channelRef.add(trimObject(channel))
+    return new Promise((resolve, reject) => {
+      query.then(() => {
+        resolve()
+      }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+  updateChannel({ commit }, channel) {
+    const query = FB.channelRef.doc(channel.id).set(trimObject(channel))
+    return new Promise((resolve, reject) => {
+      query.then(() => {
+        resolve()
+      }).catch(err => reject(err))
+    })
+  },
+  // request: {scheduleId}
+  deleteSchedule({ commit }, request) {
+    return new Promise((resolve, reject) => {
+      const query = FB.scheduleRef.doc(request.scheduleId).delete()
+      query.then(() => {
+        resolve()
+      }).catch(err => reject(err))
     })
   }
 

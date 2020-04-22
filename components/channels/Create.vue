@@ -27,8 +27,6 @@
   </div>
 </template>
 <script>
-import { firebase } from '../../FireBase'
-import { trimObject } from '@/assets/utils/index'
 
 export default {
   components: { },
@@ -41,8 +39,6 @@ export default {
   data() {
     return {
       channelData: null,
-      channelRef: firebase.firestore().collection('channels'),
-      scheduleRef: firebase.firestore().collection('schedule'),
       scheduleList: []
     }
   },
@@ -70,7 +66,7 @@ export default {
     onSubmit() {
       console.log('onSubmit')
       if (!this.channelData.id) {
-        this.channelRef.add(trimObject(this.channelData)).then(ref => {
+        this.$store.dispatch('app/createChannel', this.channelData).then(() => {
           console.log('add channel success')
           this.$notify({
             title: 'Channel Created',
@@ -83,7 +79,7 @@ export default {
           console.log(err)
         })
       } else {
-        this.channelRef.doc(this.channelData.id).set(trimObject(this.channelData)).then(() => {
+        this.$store.dispatch('app/updateChannel', this.channelData).then(() => {
           console.log('update channel ok')
           this.$notify({
             title: 'Channel Updated',

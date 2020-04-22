@@ -11,7 +11,6 @@
 </template>
 <script>
 import Create from '@/components/channels/Create'
-import { firebase } from '@/FireBase'
 
 export default {
   components: { Create },
@@ -19,20 +18,15 @@ export default {
   data() {
     return {
       channelId: null,
-      channel: null,
-      channelRef: firebase.firestore().collection('channels'),
-      scheduleRef: firebase.firestore().collection('schedules')
+      channel: null
     }
   },
   created() {
     this.channelId = this.$route.params.id
-    this.channelRef.doc(this.channelId).onSnapshot(docSnapshot => {
-      console.log(docSnapshot)
-      console.log()
-      this.channel = { ...docSnapshot.data(), id: docSnapshot.id }
-    })
-
-    console.log(this.channelId)
+    this.$store.dispatch('app/fetchChannel', { channelId: this.channelId })
+      .then(channel => {
+        this.channel = channel
+      })
   },
   methods: {
     handleSavedAction() {

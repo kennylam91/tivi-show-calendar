@@ -46,59 +46,24 @@
   </div>
 </template>
 <script>
-import { firebase } from '@/FireBase'
 
 export default {
   middleware: 'auth',
   data() {
     return {
-      channelList: [],
-      programList: [],
-      programRef: firebase.firestore().collection('programs'),
-      channelRef: firebase.firestore().collection('channels')
+      channelList: []
     }
   },
   created() {
-    this.programRef.orderBy('name', 'asc').onSnapshot((querySnapshot) => {
-      this.programList = []
-      querySnapshot.forEach((program) => {
-        this.programList.push({
-          id: program.id,
-          name: program.data().name,
-          description: program.data().description
-        })
-      })
-    })
-    this.channelRef.onSnapshot((querySnapshot) => {
-      this.channelList = []
-      querySnapshot.forEach((channel) => {
-        this.channelList.push({ ...channel.data(), id: channel.id })
-      })
+    // fetch all channel
+    this.$store.dispatch('app/fetchChannelList').then(list => {
+      this.channelList = list
     })
   },
   methods: {
     handleCreateProgramClick() {
       console.log('handleCreateProgramClick')
       this.$router.push({ path: '/programs/create' })
-    },
-    handleProgramEditClick(row) {
-      console.log(row)
-      this.$router.push({ path: `/programs/edit/${row.id}` })
-    },
-    handleProgramDeleteClick(row) {
-      console.log(row)
-      this.$confirm('Delete this program?', 'Delete', {
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      }).then(() => {
-        this.programRef.doc(row.id).delete().then(() => {
-          this.$message({
-            type: 'success',
-            message: 'Delete completed'
-          })
-        })
-      })
     },
     handleCreateChannelClick() {
       console.log('handleCreateChannelClick')
@@ -113,10 +78,13 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.channelRef.doc(row.id).delete().then(() => {
+        this.$store.dispatch('app/deleteChannel', { channelId: row.id }).then(() => {
           this.$message({
             type: 'success',
             message: 'Delete completed'
+          })
+          this.$store.dispatch('app/fetchChannelList').then(list => {
+            this.channelList = list
           })
         })
       })

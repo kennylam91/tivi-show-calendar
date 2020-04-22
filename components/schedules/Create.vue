@@ -31,9 +31,9 @@
         >
           <el-option
             v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.name"
+            :value="item.name"
           />
         </el-select>
       </el-form-item>
@@ -47,7 +47,6 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
-import { trimObject } from '@/assets/utils/index'
 
 export default {
   props: {
@@ -60,7 +59,6 @@ export default {
     return {
       scheduleData: null,
       scheduleRef: firebase.firestore().collection('schedules'),
-      programRef: firebase.firestore().collection('programs'),
       programList: [],
       channelId: null,
       options: [],
@@ -96,28 +94,8 @@ export default {
     }
   },
   created() {
-    this.programRef.onSnapshot((querySnapshot) => {
-      this.programList = []
-      querySnapshot.forEach((program) => {
-        this.programList.push({
-          id: program.id,
-          name: program.data().name,
-          description: program.data().description
-        })
-      })
-    })
-
-    this.programRef.onSnapshot((querySnapshot) => {
-      this.programList = []
-      querySnapshot.forEach((program) => {
-        this.programList.push({
-          id: program.id,
-          name: program.data().name,
-          description: program.data().description,
-          value: program.data().name,
-          label: program.data().name
-        })
-      })
+    this.$store.dispatch('app/fetchProgramList').then(list => {
+      this.programList = list
       if (this.scheduleData.programId) {
         this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
       }
@@ -130,7 +108,7 @@ export default {
       this.validateSchedule(this.scheduleData).then(() => {
         this.removeProperty(this.scheduleData)
         if (!id) {
-          this.scheduleRef.add(trimObject(this.scheduleData)).then(scheduleRef => {
+          this.$store.dispatch('app/createSchedule', this.scheduleData).then(() => {
             console.log('add schedule success')
             this.$notify({
               title: 'Schedule Created',
@@ -144,7 +122,7 @@ export default {
             console.log(err)
           })
         } else {
-          this.scheduleRef.doc(id).set(trimObject(this.scheduleData)).then(() => {
+          this.$store.dispatch('app/updateSchedule', this.scheduleData).then(() => {
             console.log('update schedule ok')
             this.$notify({
               title: 'Schedule Updated',
@@ -171,7 +149,7 @@ export default {
         setTimeout(() => {
           this.loading = false
           this.options = this.programList.filter(item => {
-            return item.label.toLowerCase()
+            return item.name.toLowerCase()
               .indexOf(query.toLowerCase()) > -1
           })
         }, 200)
