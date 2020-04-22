@@ -31,7 +31,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui'
+    '@/plugins/element-ui',
+    '@/plugins/filters'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -44,15 +45,15 @@ export default {
   modules: [
   ],
   /*
-  ** Build configuration
+  ** Build configuon
   */
   build: {
-    
+
     transpile: [/^element-ui/],
     /*
-    ** You can extend webpack config here
+    ** You can extend webpack confi here
     */
-    extend (config, ctx) {
+    extend(config, ctx) {
     }
   }
 }

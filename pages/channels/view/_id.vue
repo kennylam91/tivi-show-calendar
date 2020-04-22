@@ -93,12 +93,11 @@
 <script>
 import { firebase } from '@/FireBase'
 import { constantMixin } from '@/utils/constant'
-import { parseVNTime, getCategory } from '@/utils/index'
-import { uppercaseFirst } from '@/filters/index'
+import { parseVNTime } from '@/utils/index'
+// import { uppercaseFirst } from '@/filters/index'
 
 export default {
   components: { },
-  filters: { getCategory, uppercaseFirst },
   mixins: [constantMixin],
   data() {
     return {

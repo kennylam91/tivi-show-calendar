@@ -42,10 +42,8 @@
 </template>
 <script>
 import { firebase } from '../../FireBase'
-import { getCategory } from '@/utils/index'
 
 export default {
-  filters: { getCategory },
   middleware: 'auth',
   data() {
     return {
