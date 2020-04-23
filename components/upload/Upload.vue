@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import { firebase } from '@/FireBase'
+import { firebase } from '@/MyFireBase'
 export default {
   props: {
     pictureProp: {

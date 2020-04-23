@@ -12,7 +12,7 @@
 </template>
 <script>
 import CreateProgram from '@/components/programs/CreateProgram'
-import { firebase } from '@/FireBase'
+import { firebase } from '@/MyFireBase'
 
 export default {
   components: { CreateProgram },

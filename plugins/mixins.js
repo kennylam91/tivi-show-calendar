@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { COMMON } from '@/assets/utils/constant'
-import { firebase } from '@/FireBase'
+import { firebase } from '@/MyFireBase'
 
 Vue.mixin({
   data() {

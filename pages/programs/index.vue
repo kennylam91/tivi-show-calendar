@@ -45,7 +45,7 @@
   </div>
 </template>
 <script>
-import { firebase } from '../../FireBase'
+import { firebase } from '../../MyFireBase'
 import { mapGetters } from 'vuex'
 
 export default {
