@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <p>Upload an image to Firebase:</p>
-      <input type="file" accept="image/*" @change="previewImage"></div>
+      <input style="line-height: 1rem;" type="file" accept="image/*" @change="previewImage">
+    </div>
     <div v-if="uploading">
       <p>Progress: {{ uploadValue.toFixed()+"%" }}
         <progress id="progress" :value="uploadValue" max="100" />  </p>
@@ -10,7 +10,7 @@
     <div v-if="picture">
       <img height="200" :src="picture">
     </div>
-    <el-button type="danger" size="mini" plain @click="onUpload">Upload</el-button>
+    <el-button type="primary" size="mini" plain @click="onUpload">Upload</el-button>
 
   </div>
 </template>

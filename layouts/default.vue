@@ -42,16 +42,12 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath)
-      // const routerMap = new Map([
-      //   [1, '/']
-      // ])
       if (keyPath[0] === '1') {
         this.$router.push({ path: '/' })
       }
       if (keyPath[0] === '2') {
-        this.$router.push({ path: `/channels/view/${key}` })
+        this.viewChannelDetail(key)
       }
-      // this.$router.push({ path: routerMap.get(key) || '/' })
     }
   }
 

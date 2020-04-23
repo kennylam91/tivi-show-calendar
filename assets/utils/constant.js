@@ -35,7 +35,11 @@ export const COMMON = {
   DASHBOARD: 'Trang quản lý',
   LOG_OUT: 'Đăng xuất',
   VIP_CHANNEL_DESCRIPTION: 'Kênh VIP sẽ được xuất hiện trên trang chủ.',
-  VIP_CHANNEL: 'Kênh nổi bật'
+  VIP_CHANNEL: 'Kênh nổi bật',
+  VIP_TODAY_PROGRAM: 'Chương trình nổi bật hôm nay',
+  TODAY_PROGRAM: 'Chương trình hôm nay',
+  HIDE: 'Ẩn',
+  SHOW: 'Hiện'
 
 }
 import { firebase } from '@/FireBase'
@@ -51,8 +55,8 @@ export const categoryMap = new Map([
   [3, 'Chương trình thực tế'],
   [4, 'Chương trình trực tiếp'],
   [5, 'Phóng sự - tài liệu'],
-  [6, 'Tin tức'],
-  [7, 'Khoa học']
+  [6, 'Thời sự - Tin tức'],
+  [7, 'Khoa học - Khám phá']
 ])
 
 export const CATEGORIES = [

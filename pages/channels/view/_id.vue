@@ -101,7 +101,7 @@
   </div>
 </template>
 <script>
-import { firebase } from '@/FireBase'
+// import { firebase } from '@/FireBase'
 import { parseVNTime } from '@/assets/utils/index'
 
 export default {
@@ -142,16 +142,7 @@ export default {
       // })
     },
     getScheduleList() {
-      const start = this.selectedDate
-      start.setHours(0, 0, 0, 0)
-      const startTimestamp = firebase.firestore.Timestamp.fromDate(start)
-
-      const end = this.selectedDate
-      end.setHours(23, 59, 59, 999)
-      const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
-
-      this.$store.dispatch('app/fetchScheduleList',
-        { channelId: this.channelId, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
+      this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
         this.scheduleList = scheduleList
         this.searchText = ''
         this.scheduleData = this.scheduleList

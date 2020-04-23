@@ -58,7 +58,9 @@ export const actions = {
   // request: {channelId, startTime, endTime, orderBy:[field, order], limit}
   fetchScheduleList({ state, dispatch }, request) {
     let scheduleQuery = FB.scheduleRef
-    scheduleQuery = scheduleQuery.where('channelId', '==', request.channelId)
+    if (request.channelId) {
+      scheduleQuery = scheduleQuery.where('channelId', '==', request.channelId)
+    }
     if (request.startTime) {
       scheduleQuery = scheduleQuery.where('startTime', '>=', request.startTime)
     }
@@ -82,15 +84,19 @@ export const actions = {
           let foundProgram
           if (state.programList) {
             foundProgram = state.programList.find(program => program.id === programId)
-            schedule.programName = foundProgram.name
-            schedule.category = foundProgram.category
-            scheduleList.push(schedule)
-          } else {
-            dispatch('fetchProgramList').then(() => {
-              foundProgram = state.programList.find(program => program.id === programId)
+            if (foundProgram) {
               schedule.programName = foundProgram.name
               schedule.category = foundProgram.category
               scheduleList.push(schedule)
+            }
+          } else {
+            dispatch('fetchProgramList').then(() => {
+              foundProgram = state.programList.find(program => program.id === programId)
+              if (foundProgram) {
+                schedule.programName = foundProgram.name
+                schedule.category = foundProgram.category
+                scheduleList.push(schedule)
+              }
             })
           }
         })

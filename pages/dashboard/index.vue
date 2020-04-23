@@ -1,14 +1,18 @@
 <template>
   <div class="p-4">
     <div class="justify-between-align-center">
-      <span class="bold">{{ COMMON.DASHBOARD }}</span>
+      <div class="p-4">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item><span class="bold">{{ COMMON.DASHBOARD }}</span></el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
       <el-button type="text" @click="handleLogout">Log out</el-button>
 
     </div>
 
     <el-card class="my-2" :body-style="{ padding: '16px' }">
       <div slot="header" class="justify-between-align-center">
-        <span>{{ COMMON.CHANNEL_LIST }}</span>
+        <span class="bold">{{ COMMON.CHANNEL_LIST }}</span>
         <el-button type="primary" size="small" plain @click="handleCreateChannelClick">{{ COMMON.CREATE_CHANNEL }}</el-button>
       </div>
       <el-table :data="channelList" border stripe>
@@ -40,30 +44,69 @@
     <el-card class="my-2" :body-style="{ padding: '16px' }">
       <div slot="header">
         <span>
-          <nuxt-link to="/programs">Programs</nuxt-link>
+          <span class="bold">{{ COMMON.TODAY_PROGRAM }}</span>
+          <nuxt-link style="float:right;" to="/programs">All Programs</nuxt-link>
         </span>
       </div>
-      <!-- card body -->
+      <el-table v-if="todayProgramList" :data="todayProgramList" border stripe>
+        <el-table-column
+          prop="name"
+          label="Name"
+        />
+        <el-table-column
+          label="Category"
+          width="150"
+        >
+          <template slot-scope="{row}">
+            <div>
+              <el-tag effect="dark" type="success">{{ row.category | getCategory }}</el-tag>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          width="180"
+        >
+          <template slot-scope="{row}">
+            <el-switch
+              v-model="row.isTodayShow"
+              :active-text="COMMON.SHOW"
+              :inactive-text="COMMON.HIDE"
+            />
+          </template>
+        </el-table-column>
+
+      </el-table>
+
     </el-card>
 
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
   data() {
     return {
-      channelList: []
+      todayProgramList: null
     }
+  },
+  computed: {
+    ...mapGetters({
+      programList: 'programList',
+      channelList: 'channelList'
+    })
   },
   created() {
     // fetch all channel
-    this.$store.dispatch('app/fetchChannelList').then(list => {
-      this.channelList = list
-    })
+    this.$store.dispatch('app/fetchChannelList')
     // fetch all programs
-    this.$store.dispatch('app/fetchProgramList')
+    this.$store.dispatch('app/fetchProgramList').then(() => {
+      this.fetchAllProgramByDate(new Date()).then(list => {
+        this.todayProgramList = list
+      })
+    })
   },
   methods: {
     handleCreateProgramClick() {
@@ -88,9 +131,7 @@ export default {
             type: 'success',
             message: 'Delete completed'
           })
-          this.$store.dispatch('app/fetchChannelList').then(list => {
-            this.channelList = list
-          })
+          this.$store.dispatch('app/fetchChannelList')
         })
       })
     },
