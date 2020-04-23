@@ -19,7 +19,8 @@ export default {
         id: '',
         name: '',
         description: '',
-        logo: ''
+        logo: '',
+        isTodayShow: false
       }
     }
   },

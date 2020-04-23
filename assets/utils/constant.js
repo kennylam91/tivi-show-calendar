@@ -38,6 +38,7 @@ export const COMMON = {
   VIP_CHANNEL: 'Kênh nổi bật',
   VIP_TODAY_PROGRAM: 'Chương trình nổi bật hôm nay',
   TODAY_PROGRAM: 'Chương trình hôm nay',
+  NEXT_THREE_DAY_PROGRAM: 'Chương trình trong 3 ngày tới',
   HIDE: 'Ẩn',
   SHOW: 'Hiện',
   UPLOAD: 'Tải lên',

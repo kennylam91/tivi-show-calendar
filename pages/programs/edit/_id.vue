@@ -36,6 +36,7 @@ export default {
   methods: {
     handleSavedAction() {
       console.log('handleSavedAction')
+      this.$store.dispatch('app/fetchProgramList', {})
       this.$router.push({ path: '/programs' })
     },
     handleCancel() {

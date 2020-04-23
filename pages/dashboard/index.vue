@@ -41,6 +41,7 @@
 
       </el-table>
     </el-card>
+
     <el-card class="my-2" :body-style="{ padding: '16px' }">
       <div slot="header">
         <span>
@@ -72,12 +73,48 @@
               v-model="row.isTodayShow"
               :active-text="COMMON.SHOW"
               :inactive-text="COMMON.HIDE"
+              @change="handleTodayShowChange(row)"
             />
           </template>
         </el-table-column>
-
       </el-table>
+    </el-card>
 
+    <el-card class="my-2" :body-style="{ padding: '16px' }">
+      <div slot="header">
+        <span>
+          <span class="bold">{{ COMMON.NEXT_THREE_DAY_PROGRAM }}</span>
+          <nuxt-link style="float:right;" to="/programs">All Programs</nuxt-link>
+        </span>
+      </div>
+      <el-table v-if="nextSomeDayProgramList" :data="nextSomeDayProgramList" border stripe>
+        <el-table-column
+          prop="name"
+          label="Name"
+        />
+        <el-table-column
+          label="Category"
+          width="170"
+        >
+          <template slot-scope="{row}">
+            <div>
+              <el-tag effect="dark" type="success">{{ row.category | getCategory }}</el-tag>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          width="180"
+        >
+          <template slot-scope="{row}">
+            <el-switch
+              v-model="row.isTodayShow"
+              :active-text="COMMON.SHOW"
+              :inactive-text="COMMON.HIDE"
+            />
+          </template>
+        </el-table-column>
+      </el-table>
     </el-card>
 
   </div>
@@ -89,7 +126,9 @@ export default {
   middleware: 'auth',
   data() {
     return {
-      todayProgramList: null
+      todayProgramList: null,
+      nextSomeDayProgramList: null,
+      days: 3
     }
   },
   computed: {
@@ -105,6 +144,9 @@ export default {
     this.$store.dispatch('app/fetchProgramList', {}).then(() => {
       this.fetchAllProgramByDate(new Date()).then(list => {
         this.todayProgramList = list
+      })
+      this.fetchAllProgramNextDays(this.days).then(list => {
+        this.nextSomeDayProgramList = list
       })
     })
   },
@@ -142,6 +184,15 @@ export default {
     handleLogout() {
       this.$store.dispatch('user/logout').then(() => {
         this.$router.push({ path: this.redirect || '/' })
+      })
+    },
+    handleTodayShowChange(program) {
+      this.$store.dispatch('app/updateProgram', program).then(() => {
+        this.$store.dispatch('app/fetchProgramList', {}).then(() => {
+          this.fetchAllProgramByDate(new Date()).then(list => {
+            this.todayProgramList = list
+          })
+        })
       })
     }
   }

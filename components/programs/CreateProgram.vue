@@ -24,13 +24,6 @@
           :rows="4"
         />
       </el-form-item>
-      <el-form-item :label="COMMON.TODAY_PROGRAM">
-        <el-switch
-          v-model="programData.isTodayShow"
-          :active-text="COMMON.SHOW"
-          :inactive-text="COMMON.HIDE"
-        />
-      </el-form-item>
       <el-form-item label="Logo">
         <Upload :picture-prop="programData.logo" @uploaded="handleUploaded" />
       </el-form-item>
@@ -101,7 +94,7 @@ export default {
           console.log(err)
         })
       } else {
-        this.ref.doc(this.programData.id).set(trimObject(this.programData)).then(() => {
+        this.$store.dispatch('app/updateProgram', this.programData).then(() => {
           console.log('update program ok')
           this.$notify({
             title: 'Program Updated',

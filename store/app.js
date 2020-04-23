@@ -212,6 +212,14 @@ export const actions = {
         reject(err)
       })
     })
+  },
+  updateProgram({ commit }, program) {
+    const query = FB.programRef.doc(program.id).set(trimObject(program))
+    return new Promise((resolve, reject) => {
+      query.then(() => {
+        resolve()
+      }).catch(err => reject(err))
+    })
   }
 
 }
