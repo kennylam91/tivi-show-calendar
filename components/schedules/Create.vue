@@ -99,7 +99,7 @@ export default {
   },
   created() {
     if (this.programList) {
-      this.$store.dispatch('app/fetchProgramList').then(list => {
+      this.$store.dispatch('app/fetchProgramList', {}).then(list => {
         this.programList = list
         if (this.scheduleData.programId) {
           this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name

@@ -12,6 +12,9 @@ Vue.mixin({
     viewChannelDetail(channelId) {
       this.$router.push({ path: `/channels/view/${channelId}` })
     },
+    viewProgramDetail(programId) {
+      this.$router.push({ path: `programs/view/${programId}` })
+    },
     fetchScheduleList(channelId, date) {
       return new Promise((resolve, reject) => {
         const start = date
@@ -34,7 +37,7 @@ Vue.mixin({
         this.$store.dispatch('app/fetchChannelList')
       }
       if (!this.programList) {
-        this.$store.dispatch('app/fetchProgramList')
+        this.$store.dispatch('app/fetchProgramList', {})
       }
       return new Promise((resolve, reject) => {
         this.fetchScheduleList(null, date).then(scheduleList => {

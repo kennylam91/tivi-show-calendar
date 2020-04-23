@@ -160,9 +160,13 @@ export const actions = {
       }).catch(err => reject(err))
     })
   },
-  fetchProgramList({ commit }) {
+  fetchProgramList({ commit }, request) {
     return new Promise((resolve, reject) => {
-      FB.programRef.orderBy('name', 'asc').get().then(doc => {
+      let programQuery = FB.programRef
+      if (request.isTodayShow) {
+        programQuery = programQuery.where('isTodayShow', '==', true)
+      }
+      programQuery.orderBy('name', 'asc').get().then(doc => {
         const programList = []
         doc.forEach(program => {
           programList.push({ ...program.data(), id: program.id })

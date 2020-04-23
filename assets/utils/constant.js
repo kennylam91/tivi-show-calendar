@@ -43,7 +43,8 @@ export const COMMON = {
   UPLOAD: 'Tải lên',
   SUBMIT: 'Xác nhận',
   CANCEL: 'Hủy bỏ',
-  SELECT: 'Chọn'
+  SELECT: 'Chọn',
+  VIP_INCOMING_PROGRAM: 'Chương trình nổi bật sắp chiếu'
 
 }
 import { firebase } from '@/FireBase'
@@ -69,6 +70,6 @@ export const CATEGORIES = [
   { value: 3, label: 'Chương trình thực tế' },
   { value: 4, label: 'Chương trình trực tiếp' },
   { value: 5, label: 'Phóng sự - tài liệu' },
-  { value: 6, label: 'Tin tức' },
-  { value: 7, label: 'Khoa học' }
+  { value: 6, label: 'Thời sự - Tin tức' },
+  { value: 7, label: 'Khoa học - Khám phá' }
 ]

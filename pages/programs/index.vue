@@ -15,9 +15,13 @@
         />
         <el-table-column
           label="Category"
+          width="170"
+          align="center"
         >
           <template slot-scope="{row}">
-            <div>{{ row.category | getCategory }}</div>
+            <div>
+              <el-tag effect="dark" type="success">{{ row.category | getCategory }}</el-tag>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -58,7 +62,7 @@ export default {
   },
   created() {
     if (!this.programList) {
-      this.$store.dispatch('app/fetchProgramList')
+      this.$store.dispatch('app/fetchProgramList', {})
     }
   },
   methods: {
@@ -82,7 +86,7 @@ export default {
             type: 'success',
             message: 'Delete completed'
           })
-          this.$store.dispatch('app/fetchProgramList').then(list => {
+          this.$store.dispatch('app/fetchProgramList', {}).then(list => {
             this.programList = list
           })
         })

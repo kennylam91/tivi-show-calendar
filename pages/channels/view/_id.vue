@@ -10,31 +10,29 @@
     <el-card class="p-1">
       <div slot="header">
         <div class="mb-2 flex" style="">
-          <img class="mr-2" :src="channel.logo" height="50">
+          <img class="mr-2" :src="channel.logo" height="60">
           <p class="small-font-size">{{ channel.description }}</p>
         </div>
-        <el-row>
-          <el-col :xs="24" :sm="10" :md="8" class="mb-2">
+        <div class="row">
+          <div class="my-2 col-xs-12 col-sm-8 col-md-6">
             <span class="">{{ COMMON.DATE | uppercaseFirst }}: </span>
             <el-date-picker
               v-model="selectedDate"
               format="dd/MM/yyyy"
               size="small"
               type="date"
-              class="w-100"
             />
-          </el-col>
-          <el-col :span="16" :sm="14" :xs="24">
+          </div>
+          <div class="my-2 col-xs-12 col-sm-4 col-md-6">
             <el-input
               v-model="searchText"
               :placeholder="COMMON.SEARCH"
               size="small"
               clearable
-              class="w-100 mb-2"
               @change="searchProgram"
             />
-          </el-col>
-        </el-row>
+          </div>
+        </div>
 
         <el-table
           id="scheduleTable"
@@ -74,29 +72,6 @@
 
         </el-table>
       </div></el-card>
-
-    <!-- <el-dialog
-      v-if="detailProgramDlgVisible"
-      :title="COMMON.PROGRAM_DETAIL"
-      :visible.sync="detailProgramDlgVisible"
-      width="70%"
-    >
-      <div v-if="program">
-        <div class="flex" style="justify-content: space-between">
-          <div>
-            <p class="mb-2">{{ COMMON.PROGRAM_NAME }}: {{ program.name }}</p>
-            <p class="mb-2">{{ COMMON.CATEGORY }}: {{ program.category|getCategory }}</p>
-            <p>{{ COMMON.DESCRIPTION }}: {{ program.discription }}</p>
-          </div>
-          <div>
-            <img width="150" :src="program.logo" alt="logo">
-          </div>
-        </div>
-      </div>
-      <span slot="footer">
-        <el-button type="primary" size="small" @click="detailProgramDlgVisible= false">{{ COMMON.CLOSE }}</el-button>
-      </span>
-    </el-dialog> -->
 
   </div>
 </template>

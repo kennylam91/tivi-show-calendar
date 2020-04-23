@@ -55,7 +55,7 @@
         />
         <el-table-column
           label="Category"
-          width="150"
+          width="170"
         >
           <template slot-scope="{row}">
             <div>
@@ -102,7 +102,7 @@ export default {
     // fetch all channel
     this.$store.dispatch('app/fetchChannelList')
     // fetch all programs
-    this.$store.dispatch('app/fetchProgramList').then(() => {
+    this.$store.dispatch('app/fetchProgramList', {}).then(() => {
       this.fetchAllProgramByDate(new Date()).then(list => {
         this.todayProgramList = list
       })
