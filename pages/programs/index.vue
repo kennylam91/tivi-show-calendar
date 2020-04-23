@@ -45,14 +45,12 @@
   </div>
 </template>
 <script>
-import { firebase } from '../../FireBase'
 import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
   data() {
     return {
-      programRef: firebase.firestore().collection('programs')
     }
   },
   computed: {

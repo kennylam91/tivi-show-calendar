@@ -76,7 +76,6 @@
   </div>
 </template>
 <script>
-// import { firebase } from '@/FireBase'
 import { parseVNTime } from '@/assets/utils/index'
 
 export default {

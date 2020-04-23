@@ -48,7 +48,7 @@ export const COMMON = {
   VIP_INCOMING_PROGRAM: 'Chương trình nổi bật sắp chiếu'
 
 }
-import { firebase } from '@/FireBase'
+import { firebase } from '@/MyFireBase'
 export const FB = {
   channelRef: firebase.firestore().collection('channels'),
   scheduleRef: firebase.firestore().collection('schedules'),

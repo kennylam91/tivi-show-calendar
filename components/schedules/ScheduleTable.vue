@@ -58,7 +58,6 @@
 </template>
 <script>
 import CreateSchedule from '@/components/schedules/CreateSchedule'
-import { firebase } from '../../FireBase'
 import { parseVNTime } from '@/assets/utils/index'
 
 export default {
@@ -78,8 +77,7 @@ export default {
         endTime: null,
         programId: null,
         channelId: null
-      },
-      scheduleRef: firebase.firestore().collection('schedules')
+      }
     }
   },
   computed: {

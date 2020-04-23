@@ -37,8 +37,6 @@
   </div>
 </template>
 <script>
-import { firebase } from '../../FireBase'
-import { trimObject } from '@/assets/utils/index'
 import { CATEGORIES } from '@/assets/utils/constant'
 import Upload from '@/components/upload/Upload'
 export default {
@@ -52,7 +50,6 @@ export default {
   data() {
     return {
       programData: null,
-      ref: firebase.firestore().collection('programs'),
       CATEGORIES
 
     }
