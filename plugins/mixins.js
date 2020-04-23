@@ -67,7 +67,7 @@ Vue.mixin({
           for (const schedule of scheduleList) {
             const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
             if (foundProgram) {
-              programList.push(foundProgram)
+              programList.push({ ...foundProgram })
             }
           }
           resolve(programList)

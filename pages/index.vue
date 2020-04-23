@@ -49,10 +49,14 @@
             plain
             type="text"
             @click="handleViewProgramDetail(program)"
-          ><div
-            class="shorten-text"
-          >{{ program.name }}
-          </div></el-link>
+          >
+            <el-tooltip :content="program.name | getVNTranslateName" placement="bottom" effect="dark">
+              <div class="shorten-text color-success">
+                {{ program.name | shortenName }}
+              </div>
+            </el-tooltip>
+          </el-link>
+          <el-tag class="w-100" effect="dark" type="success">{{ program.category | getCategory }}</el-tag>
 
         </el-card>
       </div>
@@ -62,7 +66,7 @@
       <el-divider content-position="left">
         <h4>{{ COMMON.VIP_INCOMING_PROGRAM }}</h4>
       </el-divider>
-      <div v-for="program in weekVipPrograms" :key="program.id" class="col-md-6 col-xs-12 col-lg-3 my-2">
+      <div v-for="program in nextDaysVipPrograms" :key="program.id" class="col-md-6 col-xs-12 col-lg-3 my-2">
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
           <el-link
             v-if="program.logo"
@@ -83,10 +87,14 @@
             plain
             type="text"
             @click="handleViewProgramDetail(program)"
-          ><div
-            class="shorten-text"
-          >{{ program.name }}
-          </div></el-link>
+          >
+            <el-tooltip :content="program.name | getVNTranslateName" placement="bottom" effect="dark">
+              <div class="shorten-text color-success">
+                {{ program.name | shortenName }}
+              </div>
+            </el-tooltip>
+          </el-link>
+          <el-tag class="w-100" effect="dark" type="success">{{ program.category | getCategory }}</el-tag>
 
         </el-card>
       </div>
@@ -104,7 +112,7 @@ export default {
   data() {
     return {
       todayVipPrograms: null,
-      weekVipPrograms: null
+      nextDaysVipPrograms: null
     }
   },
   computed: {
@@ -118,6 +126,9 @@ export default {
   created() {
     this.$store.dispatch('app/fetchProgramList', { isTodayShow: true }).then(list => {
       this.todayVipPrograms = list
+    })
+    this.$store.dispatch('app/fetchProgramList', { isNextDaysShow: true }).then(list => {
+      this.nextDaysVipPrograms = list
     })
   },
   methods: {

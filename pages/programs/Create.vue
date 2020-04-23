@@ -20,7 +20,8 @@ export default {
         name: '',
         description: '',
         logo: '',
-        isTodayShow: false
+        isTodayShow: false,
+        isNextDaysShow: false
       }
     }
   },

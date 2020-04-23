@@ -46,7 +46,7 @@
     </el-table>
     <el-dialog
       v-if="createScheduleDialogVisibleProp"
-      title="Create Schedule"
+      :title="schedule.id? 'Update Schedule': 'Create Schedule'"
       :visible.sync="createScheduleDialogVisibleProp"
       width="60%"
       @close="handleDialogClose"
@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import CreateSchedule from '@/components/schedules/Create'
+import CreateSchedule from '@/components/schedules/CreateSchedule'
 import { firebase } from '../../FireBase'
 import { parseVNTime } from '@/assets/utils/index'
 

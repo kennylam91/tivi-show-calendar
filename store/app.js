@@ -90,7 +90,7 @@ export const actions = {
               scheduleList.push(schedule)
             }
           } else {
-            dispatch('fetchProgramList').then(() => {
+            dispatch('fetchProgramList', {}).then(() => {
               foundProgram = state.programList.find(program => program.id === programId)
               if (foundProgram) {
                 schedule.programName = foundProgram.name
@@ -165,6 +165,9 @@ export const actions = {
       let programQuery = FB.programRef
       if (request.isTodayShow) {
         programQuery = programQuery.where('isTodayShow', '==', true)
+      }
+      if (request.isNextDaysShow) {
+        programQuery = programQuery.where('isNextDaysShow', '==', true)
       }
       programQuery.orderBy('name', 'asc').get().then(doc => {
         const programList = []

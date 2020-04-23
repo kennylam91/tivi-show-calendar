@@ -108,9 +108,10 @@
         >
           <template slot-scope="{row}">
             <el-switch
-              v-model="row.isTodayShow"
+              v-model="row.isNextDaysShow"
               :active-text="COMMON.SHOW"
               :inactive-text="COMMON.HIDE"
+              @change="handleNextDaysShowChange(row)"
             />
           </template>
         </el-table-column>
@@ -191,6 +192,15 @@ export default {
         this.$store.dispatch('app/fetchProgramList', {}).then(() => {
           this.fetchAllProgramByDate(new Date()).then(list => {
             this.todayProgramList = list
+          })
+        })
+      })
+    },
+    handleNextDaysShowChange(program) {
+      this.$store.dispatch('app/updateProgram', program).then(() => {
+        this.$store.dispatch('app/fetchProgramList', {}).then(() => {
+          this.fetchAllProgramNextDays(this.days).then(list => {
+            this.nextSomeDayProgramList = list
           })
         })
       })
