@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="bold mb-2">{{ title }}</div>
-    <el-form ref="programCreateForm" :model="programData" label-width="100px">
-      <el-form-item label="Name">
+    <el-form ref="programCreateForm" :model="programData" label-width="170px">
+      <el-form-item :label="COMMON.NAME">
         <el-input v-model="programData.name" />
       </el-form-item>
-      <el-form-item label="Category">
-        <el-select v-model="programData.category">
+      <el-form-item :label="COMMON.CATEGORY">
+        <el-select v-model="programData.category" :placeholder="COMMON.SELECT">
           <el-option
             v-for="item in CATEGORIES"
             :key="item.value"
@@ -17,11 +17,18 @@
 
       </el-form-item>
 
-      <el-form-item label="Description">
+      <el-form-item :label="COMMON.DESCRIPTION">
         <el-input
           v-model="programData.description"
           type="textarea"
           :rows="4"
+        />
+      </el-form-item>
+      <el-form-item :label="COMMON.TODAY_PROGRAM">
+        <el-switch
+          v-model="programData.isTodayShow"
+          :active-text="COMMON.SHOW"
+          :inactive-text="COMMON.HIDE"
         />
       </el-form-item>
       <el-form-item label="Logo">
@@ -29,8 +36,8 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
-        <el-button @click="handleCancelClick">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">{{ COMMON.SUBMIT }}</el-button>
+        <el-button type="info" @click="handleCancelClick">{{ COMMON.CANCEL }}</el-button>
       </el-form-item>
     </el-form>
 

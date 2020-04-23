@@ -4,14 +4,14 @@
       <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
       <el-breadcrumb-item>Create Program</el-breadcrumb-item>
     </el-breadcrumb>
-    <Create class="my-2" :program-prop="newProgram" @saved="handleSavedAction" @cancel="handleCancel" />
+    <CreateProgram class="my-2" :program-prop="newProgram" @saved="handleSavedAction" @cancel="handleCancel" />
 
   </div>
 </template>
 <script>
-import Create from '@/components/programs/Create'
+import CreateProgram from '@/components/programs/CreateProgram'
 export default {
-  components: { Create },
+  components: { CreateProgram },
   middleware: 'auth',
   data() {
     return {

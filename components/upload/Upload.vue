@@ -10,7 +10,7 @@
     <div v-if="picture">
       <img height="200" :src="picture">
     </div>
-    <el-button type="primary" size="mini" plain @click="onUpload">Upload</el-button>
+    <el-button type="primary" size="mini" plain @click="onUpload">{{ COMMON.UPLOAD }}</el-button>
 
   </div>
 </template>

@@ -6,16 +6,16 @@
         <el-breadcrumb-item :to="{ path: '/programs' }">Programs</el-breadcrumb-item>
         <el-breadcrumb-item>Edit Program</el-breadcrumb-item>
       </el-breadcrumb>
-      <Create v-if="program" class="my-2" :program-prop="program" @saved="handleSavedAction" @cancel="handleCancel" />
+      <CreateProgram v-if="program" class="my-2" :program-prop="program" @saved="handleSavedAction" @cancel="handleCancel" />
     </div>
   </div>
 </template>
 <script>
-import Create from '@/components/programs/Create'
+import CreateProgram from '@/components/programs/CreateProgram'
 import { firebase } from '@/FireBase'
 
 export default {
-  components: { Create },
+  components: { CreateProgram },
   middleware: 'auth',
   data() {
     return {

@@ -39,7 +39,11 @@ export const COMMON = {
   VIP_TODAY_PROGRAM: 'Chương trình nổi bật hôm nay',
   TODAY_PROGRAM: 'Chương trình hôm nay',
   HIDE: 'Ẩn',
-  SHOW: 'Hiện'
+  SHOW: 'Hiện',
+  UPLOAD: 'Tải lên',
+  SUBMIT: 'Xác nhận',
+  CANCEL: 'Hủy bỏ',
+  SELECT: 'Chọn'
 
 }
 import { firebase } from '@/FireBase'
