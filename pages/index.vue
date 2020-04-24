@@ -3,9 +3,9 @@
 
     <div class="row mt-2">
       <el-divider content-position="left">
-        <h4>{{ COMMON.VIP_CHANNEL }}</h4>
+        <h5>{{ COMMON.VIP_CHANNEL }}</h5>
       </el-divider>
-      <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-6 col-xs-12 col-lg-3 my-2">
+      <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-xs-6 my-2 px-2">
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
           <el-link
             v-if="channel.logo"
@@ -20,17 +20,25 @@
             />
           </el-link>
           <div v-else>{{ channel.name }}</div>
-          <!-- <el-link class="my-2" plain @click="handleViewChannelDetail(channel)">{{ COMMON.SCHEDULE }}</el-link> -->
-          <el-button class="my-2 w-100" type="primary" size="small" @click="handleViewChannelDetail(channel)">{{ COMMON.SCHEDULE }}</el-button>
+          <el-button
+            class="my-2 w-100"
+            type="primary"
+            size="small"
+            @click="handleViewChannelDetail(channel)"
+          >{{ COMMON.SCHEDULE }}</el-button>
 
         </el-card>
       </div>
     </div>
     <div class="row mt-2">
       <el-divider content-position="left">
-        <h4>{{ COMMON.VIP_TODAY_PROGRAM }}</h4>
+        <h5>{{ COMMON.VIP_TODAY_PROGRAM }}</h5>
       </el-divider>
-      <div v-for="program in todayVipPrograms" :key="program.id" class="col-md-6 col-xs-12 col-lg-3 my-2">
+      <div
+        v-for="program in todayVipPrograms"
+        :key="program.id"
+        class="col-md-3 col-xs-6 my-2 px-2"
+      >
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
           <el-link
             v-if="program.logo"
@@ -51,13 +59,24 @@
             type="success"
             @click="handleViewProgramDetail(program)"
           >
-            <el-tooltip :content="program.name | getVNTranslateName" placement="bottom" effect="dark">
+            <el-tooltip
+              :content="program.name | getVNTranslateName"
+              placement="bottom"
+              effect="dark"
+            >
               <div class="shorten-text color-primary bold">
                 {{ program.name | shortenName }}
               </div>
             </el-tooltip>
           </el-link>
-          <el-tag v-for="(item, index) in program.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+          <el-tag
+            v-for="(item, index) in program.categories"
+            :key="index"
+            size="small"
+            effect="dark"
+            type="info"
+            style="margin: 2px;"
+          >
             {{ item | getCategory }}
           </el-tag>
         </el-card>
@@ -66,9 +85,13 @@
 
     <div class="row mt-2">
       <el-divider content-position="left">
-        <h4>{{ COMMON.VIP_INCOMING_PROGRAM }}</h4>
+        <h5>{{ COMMON.VIP_INCOMING_PROGRAM }}</h5>
       </el-divider>
-      <div v-for="program in nextDaysVipPrograms" :key="program.id" class="col-md-6 col-xs-12 col-lg-3 my-2">
+      <div
+        v-for="program in nextDaysVipPrograms"
+        :key="program.id"
+        class="col-md-3 col-xs-6 px-2 my-2"
+      >
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
           <el-link
             v-if="program.logo"
@@ -95,7 +118,14 @@
               </div>
             </el-tooltip>
           </el-link>
-          <el-tag v-for="(item, index) in program.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+          <el-tag
+            v-for="(item, index) in program.categories"
+            :key="index"
+            size="small"
+            effect="dark"
+            type="info"
+            style="margin: 2px;"
+          >
             {{ item | getCategory }}
           </el-tag>
         </el-card>
