@@ -7,79 +7,78 @@
       </el-breadcrumb>
     </div>
 
-    <el-card class="p-1">
-      <div slot="header">
-        <div class="row">
-          <div class="col-sm-4 text-center">
-            <img class="img-fluid" :src="channel.logo">
-          </div>
-          <div class="col-sm-8">
-            <p class="bold">{{ channel.name }}</p>
-            <p class="small-font-size">{{ channel.description }}</p>
-          </div>
+    <el-card :body-style="{ padding: '10px' }">
+      <div class="row">
+        <div class="col-sm-4 col-4 text-center" style="padding-left: 15px;padding-right: 5px; ">
+          <img class="img-fluid" :src="channel.logo">
         </div>
-        <div class="row">
-          <div class="my-2 col-xs-12 col-sm-8 col-md-6">
-            <span class="">{{ COMMON.DATE | uppercaseFirst }}: </span>
-            <el-date-picker
-              v-model="selectedDate"
-              format="dd/MM/yyyy"
-              size="small"
-              type="date"
-            />
-          </div>
-          <div class="my-2 col-xs-12 col-sm-4 col-md-6">
-            <el-input
-              v-model="searchText"
-              :placeholder="COMMON.SEARCH"
-              size="small"
-              clearable
-              @change="searchProgram"
-            />
-          </div>
+        <div class="col-sm-6 col-8" style="padding-left: 5px;padding-right: 15px; ">
+          <span class="bold">{{ channel.name }}</span>
+          <p class="smaller-font-size">{{ channel.description }}</p>
         </div>
+      </div>
+      <div class="row">
+        <div class="my-2 col-6 col-sm-6 col-md-6" style="padding-right: 5px; padding-left: 15px;">
+          <el-date-picker
+            v-model="selectedDate"
+            format="dd/MM/yyyy"
+            size="small"
+            type="date"
+            class="w-100"
+          />
+        </div>
+        <div class="my-2 col-6 col-sm-4 col-md-6" style="padding-right: 15px; padding-left: 5px;">
+          <el-input
+            v-model="searchText"
+            :placeholder="COMMON.SEARCH"
+            size="small"
+            clearable
+            @change="searchProgram"
+          />
+        </div>
+      </div>
 
-        <el-table
-          id="scheduleTable"
-          :data="scheduleData"
-          size="small"
-          border
-          stripe
-          fit
-          style="width: 100%"
+      <el-table
+        id="scheduleTable"
+        :data="scheduleData"
+        size="small"
+        border
+        stripe
+        fit
+        style="width: 100%"
+      >
+        <el-table-column
+          :label="COMMON.TIME"
+          align="center"
+          :min-width="16"
         >
-          <el-table-column
-            :label="COMMON.TIME"
-            align="center"
-            :min-width="27"
-          >
-            <template slot-scope="{row}">
-              <div>{{ parseTime(row.startTime.seconds) }}</div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            :label="COMMON.PROGRAM_NAME"
-            :min-width="43"
-          >
-            <template slot-scope="{row}">
-              <el-link :underline="false" @click="viewProgramDetail(row.programId)">
-                <span class="color-primary">{{ row.programName }}</span>
-              </el-link>
-            </template>
-          </el-table-column>
-          <el-table-column
-            :label="COMMON.CATEGORY"
-            :min-width="30"
-          >
-            <template slot-scope="{row}">
-              <el-tag v-for="(item, index) in row.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
-                {{ item | getCategory }}
-              </el-tag>
-            </template>
-          </el-table-column>
+          <template slot-scope="{row}">
+            <div>{{ parseTime(row.startTime.seconds) }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="COMMON.PROGRAM_NAME"
+          :min-width="52"
+        >
+          <template slot-scope="{row}">
+            <el-link :underline="false" @click="viewProgramDetail(row.programId)">
+              <span class="color-primary">{{ row.programName | uppercaseFirst }}</span>
+            </el-link>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="COMMON.CATEGORY"
+          :min-width="32"
+        >
+          <template slot-scope="{row}">
+            <el-tag v-for="(item, index) in row.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+              {{ item | getCategory }}
+            </el-tag>
+          </template>
+        </el-table-column>
 
-        </el-table>
-      </div></el-card>
+      </el-table>
+    </el-card>
 
   </div>
 </template>

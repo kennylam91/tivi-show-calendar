@@ -5,7 +5,7 @@
       <el-divider content-position="left">
         <h5>{{ COMMON.VIP_CHANNEL }}</h5>
       </el-divider>
-      <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-xs-6 my-2 px-2">
+      <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-2">
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
           <el-link
             v-if="channel.logo"
@@ -37,7 +37,7 @@
       <div
         v-for="program in todayVipProgramList"
         :key="program.id"
-        class="col-md-3 col-xs-6 my-2 px-2"
+        class="col-md-3 col-6 my-2 px-2"
       >
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
           <el-link
@@ -90,7 +90,7 @@
       <div
         v-for="program in nextDaysVipProgramList"
         :key="program.id"
-        class="col-md-3 col-xs-6 px-2 my-2"
+        class="col-md-3 col-6 px-2 my-2"
       >
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
           <el-link
