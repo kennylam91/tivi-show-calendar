@@ -37,6 +37,7 @@
   </div>
 </template>
 <script>
+import { firebase } from '../../MyFireBase'
 import { CATEGORIES } from '@/assets/utils/constant'
 import Upload from '@/components/upload/Upload'
 export default {
