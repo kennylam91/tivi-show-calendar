@@ -52,7 +52,8 @@ export const COMMON = {
   VIP_CHANNEL_MAX_NUM: 8,
   TODAY_VIP_PROGRAM_MAX_NUM: 8,
   NEXT_DAY_VIP_PROGRAM_MAX_NUM: 8,
-  NEXT_DAYS_SHOW_NUM: 3
+  NEXT_DAYS_SHOW_NUM: 3,
+  PAGE_TITLE: 'Truyền hình 24h'
 
 }
 import { firebase } from '@/MyFireBase'
