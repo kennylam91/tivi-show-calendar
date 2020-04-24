@@ -16,7 +16,6 @@
         <el-table-column
           label="Category"
           width="270"
-          align="center"
         >
           <template slot-scope="{row}">
             <div v-if="row.categories">

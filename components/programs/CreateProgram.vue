@@ -14,6 +14,7 @@
             :value="item.value"
           />
         </el-select>
+        <span class="color-danger">{{ COMMON.NO_MORE_THAN_TWO }}</span>
 
       </el-form-item>
 
@@ -76,33 +77,42 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log('onSubmit')
-      if (!this.programData.id) {
-        this.$store.dispatch('app/createProgram', this.programData).then(() => {
-          console.log('add program success')
-          this.$notify({
-            title: 'Program Created',
-            type: 'success',
-            duration: '4500',
-            position: 'top-right'
+      // check is program valid: no more than 2 categories
+      if (this.programData.categories) {
+        if (this.programData.categories.length > 2) {
+          this.$message({
+            message: this.COMMON.NO_MORE_THAN_TWO,
+            type: 'error'
           })
-          this.$emit('saved')
-        }).catch(err => {
-          console.log(err)
-        })
-      } else {
-        this.$store.dispatch('app/updateProgram', this.programData).then(() => {
-          console.log('update program ok')
-          this.$notify({
-            title: 'Program Updated',
-            type: 'success',
-            duration: '4500',
-            position: 'top-right'
-          })
-          this.$emit('saved')
-        }).catch(err => {
-          console.log(err)
-        })
+        } else {
+          if (!this.programData.id) {
+            this.$store.dispatch('app/createProgram', this.programData).then(() => {
+              console.log('add program success')
+              this.$notify({
+                title: 'Program Created',
+                type: 'success',
+                duration: '4500',
+                position: 'top-right'
+              })
+              this.$emit('saved')
+            }).catch(err => {
+              console.log(err)
+            })
+          } else {
+            this.$store.dispatch('app/updateProgram', this.programData).then(() => {
+              console.log('update program ok')
+              this.$notify({
+                title: 'Program Updated',
+                type: 'success',
+                duration: '4500',
+                position: 'top-right'
+              })
+              this.$emit('saved')
+            }).catch(err => {
+              console.log(err)
+            })
+          }
+        }
       }
     },
     handleCancelClick() {

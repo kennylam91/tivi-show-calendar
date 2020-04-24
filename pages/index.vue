@@ -153,7 +153,7 @@ export default {
     }),
     vipChannels() {
       if (this.channelList) {
-        return this.channelList.filter(item => item.isVip)
+        return this.channelList.filter(item => item.isVip).slice(0, this.COMMON.VIP_CHANNEL_MAX_NUM)
       } else {
         return null
       }
@@ -161,10 +161,10 @@ export default {
   },
   created() {
     this.$store.dispatch('app/fetchProgramList', { isTodayShow: true }).then(list => {
-      this.todayVipPrograms = list
+      this.todayVipPrograms = list.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
     })
     this.$store.dispatch('app/fetchProgramList', { isNextDaysShow: true }).then(list => {
-      this.nextDaysVipPrograms = list
+      this.nextDaysVipPrograms = list.slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
     })
   },
   methods: {
