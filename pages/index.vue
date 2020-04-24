@@ -149,7 +149,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      channelList: 'channelList'
+      channelList: 'channelList',
+      programList: 'programList'
     }),
     vipChannels() {
       if (this.channelList) {
@@ -160,12 +161,23 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('app/fetchProgramList', { isTodayShow: true }).then(list => {
-      this.todayVipPrograms = list.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+    this.$store.dispatch('app/fetchProgramList', {}).then(() => {
+      this.fetchAllProgramByDate(new Date()).then(list => {
+        this.todayVipPrograms = list.filter(item => item.isTodayShow)
+          .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+      })
+      this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
+        this.nextDaysVipPrograms = list.filter(item => item.isNextDaysShow)
+          .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
+      })
     })
-    this.$store.dispatch('app/fetchProgramList', { isNextDaysShow: true }).then(list => {
-      this.nextDaysVipPrograms = list.slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
-    })
+
+    // this.$store.dispatch('app/fetchProgramList', { isTodayShow: true }).then(list => {
+    //   this.todayVipPrograms = list.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+    // })
+    // this.$store.dispatch('app/fetchProgramList', { isNextDaysShow: true }).then(list => {
+    //   this.nextDaysVipPrograms = list.slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
+    // })
   },
   methods: {
     handleViewChannelDetail(channel) {

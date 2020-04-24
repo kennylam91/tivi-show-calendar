@@ -44,7 +44,6 @@ Vue.mixin({
       })
     },
     fetchAllProgramByDate(date) {
-      debugger
       const programList = []
       if (!this.channelList) {
         this.$store.dispatch('app/fetchChannelList')

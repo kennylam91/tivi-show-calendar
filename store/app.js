@@ -82,7 +82,6 @@ export const actions = {
           const programId = doc.data().programId
           const schedule = { ...doc.data(), id: doc.id }
           let foundProgram
-          debugger
           if (state.programList) {
             foundProgram = state.programList.find(program => program.id === programId)
             if (foundProgram) {

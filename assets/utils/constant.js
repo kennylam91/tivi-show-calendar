@@ -51,7 +51,8 @@ export const COMMON = {
   NO_MORE_THAN_TWO: 'Không chọn nhiều hơn 2 thể loại',
   VIP_CHANNEL_MAX_NUM: 8,
   TODAY_VIP_PROGRAM_MAX_NUM: 8,
-  NEXT_DAY_VIP_PROGRAM_MAX_NUM: 8
+  NEXT_DAY_VIP_PROGRAM_MAX_NUM: 8,
+  NEXT_DAYS_SHOW_NUM: 3
 
 }
 import { firebase } from '@/MyFireBase'

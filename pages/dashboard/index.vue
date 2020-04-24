@@ -148,8 +148,7 @@ export default {
   data() {
     return {
       todayProgramList: null,
-      nextSomeDayProgramList: null,
-      days: 3
+      nextSomeDayProgramList: null
     }
   },
   computed: {
@@ -178,7 +177,7 @@ export default {
       this.fetchAllProgramByDate(new Date()).then(list => {
         this.todayProgramList = list
       })
-      this.fetchAllProgramNextDays(this.days).then(list => {
+      this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
         this.nextSomeDayProgramList = list
       })
     })
