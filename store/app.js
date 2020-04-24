@@ -4,7 +4,9 @@ import { trimObject } from '../assets/utils'
 export const state = () => ({
   channelList: null,
   scheduleList: null,
-  programList: null
+  programList: null,
+  todayVipProgramList: null,
+  nextDaysVipProgramList: null
 })
 
 export const mutations = {
@@ -16,6 +18,12 @@ export const mutations = {
   },
   SET_PROGRAM_LIST: (state, value) => {
     state.programList = value
+  },
+  SET_TODAY_VIP_PROGRAM_LIST: (state, value) => {
+    state.todayVipProgramList = value
+  },
+  SET_NEXT_DAYS_VIP_PROGRAM_LIST: (state, value) => {
+    state.nextDaysVipProgramList = value
   }
 
 }
@@ -42,6 +50,12 @@ export const actions = {
   },
   setProgramList({ commit }, value) {
     commit('SET_PROGRAM_LIST', value)
+  },
+  setTodayVipProgramList({ commit }, value) {
+    commit('SET_TODAY_VIP_PROGRAM_LIST', value)
+  },
+  setNextDaysVipProgramList({ commit }, value) {
+    commit('SET_NEXT_DAYS_VIP_PROGRAM_LIST', value)
   },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {

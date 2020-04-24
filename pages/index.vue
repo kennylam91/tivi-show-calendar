@@ -35,7 +35,7 @@
         <h5>{{ COMMON.VIP_TODAY_PROGRAM }}</h5>
       </el-divider>
       <div
-        v-for="program in todayVipPrograms"
+        v-for="program in todayVipProgramList"
         :key="program.id"
         class="col-md-3 col-xs-6 my-2 px-2"
       >
@@ -88,7 +88,7 @@
         <h5>{{ COMMON.VIP_INCOMING_PROGRAM }}</h5>
       </el-divider>
       <div
-        v-for="program in nextDaysVipPrograms"
+        v-for="program in nextDaysVipProgramList"
         :key="program.id"
         class="col-md-3 col-xs-6 px-2 my-2"
       >
@@ -143,14 +143,14 @@ export default {
   },
   data() {
     return {
-      todayVipPrograms: null,
-      nextDaysVipPrograms: null
     }
   },
   computed: {
     ...mapGetters({
       channelList: 'channelList',
-      programList: 'programList'
+      programList: 'programList',
+      todayVipProgramList: 'todayVipProgramList',
+      nextDaysVipProgramList: 'nextDaysVipProgramList'
     }),
     vipChannels() {
       if (this.channelList) {
@@ -159,25 +159,35 @@ export default {
         return null
       }
     }
+
+  },
+  watch: {
+    programList: {
+      immediate: true,
+      deep: true,
+      handler() {
+        if (!this.programList) {
+          this.$store.dispatch('app/fetchProgramList', {})
+        } else {
+          if (!this.todayVipProgramList) {
+            this.fetchAllProgramByDate(new Date()).then(list => {
+              const todayVipProgramList = list.filter(item => item.isTodayShow)
+                .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+              this.$store.dispatch('app/setTodayVipProgramList', todayVipProgramList)
+            })
+          }
+          if (!this.nextDaysVipProgramList) {
+            this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
+              const newList = list.filter(item => item.isNextDaysShow)
+                .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
+              this.$store.dispatch('app/setNextDaysVipProgramList', newList)
+            })
+          }
+        }
+      }
+    }
   },
   created() {
-    this.$store.dispatch('app/fetchProgramList', {}).then(() => {
-      this.fetchAllProgramByDate(new Date()).then(list => {
-        this.todayVipPrograms = list.filter(item => item.isTodayShow)
-          .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
-      })
-      this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
-        this.nextDaysVipPrograms = list.filter(item => item.isNextDaysShow)
-          .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
-      })
-    })
-
-    // this.$store.dispatch('app/fetchProgramList', { isTodayShow: true }).then(list => {
-    //   this.todayVipPrograms = list.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
-    // })
-    // this.$store.dispatch('app/fetchProgramList', { isNextDaysShow: true }).then(list => {
-    //   this.nextDaysVipPrograms = list.slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
-    // })
   },
   methods: {
     handleViewChannelDetail(channel) {
