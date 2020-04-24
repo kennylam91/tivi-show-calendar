@@ -136,7 +136,7 @@ export default {
       this.viewChannelDetail(channel)
     },
     handleViewProgramDetail(program) {
-      this.viewProgramDetail(program.id)
+      this.viewProgramDetail(program)
     }
   }
 }

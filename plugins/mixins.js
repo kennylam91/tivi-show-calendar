@@ -10,11 +10,12 @@ Vue.mixin({
   },
   methods: {
     viewChannelDetail(channel) {
-      const name = channel.name.split(' ').join('-')
+      const name = channel.name.split(' ').join('-').trim()
       this.$router.push({ path: `/lich-chieu/${name}-${channel.id}` })
     },
-    viewProgramDetail(programId) {
-      this.$router.push({ path: `programs/view/${programId}` })
+    viewProgramDetail(program) {
+      const name = program.name.split(' ').join('-').trim()
+      this.$router.push({ path: `/chuong-trinh/${name}-${program.id}` })
     },
     fetchScheduleList(channelId, date) {
       return new Promise((resolve, reject) => {
