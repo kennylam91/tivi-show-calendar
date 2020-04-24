@@ -2,6 +2,16 @@ import Vue from 'vue'
 import { COMMON } from '@/assets/utils/constant'
 import { firebase } from '@/MyFireBase'
 
+const sortByName = (a, b) => {
+  if (a.name > b.name) {
+    return 1
+  } else if (a.name < b.name) {
+    return -1
+  } else {
+    return 0
+  }
+}
+
 Vue.mixin({
   data() {
     return {
@@ -35,7 +45,7 @@ Vue.mixin({
     },
     fetchAllProgramByDate(date) {
       debugger
-      const todayPrograms = []
+      const programList = []
       if (!this.channelList) {
         this.$store.dispatch('app/fetchChannelList')
       }
@@ -47,10 +57,11 @@ Vue.mixin({
           for (const schedule of scheduleList) {
             const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
             if (foundProgram) {
-              todayPrograms.push({ ...foundProgram })
+              programList.push({ ...foundProgram })
             }
           }
-          resolve(todayPrograms)
+          programList.sort(sortByName)
+          resolve(programList)
         })
       })
     },
@@ -73,6 +84,7 @@ Vue.mixin({
               programList.push({ ...foundProgram })
             }
           }
+          programList.sort(sortByName)
           resolve(programList)
         })
       })
