@@ -26,6 +26,7 @@ export const COMMON = {
   TIME: 'Thời gian',
   PROGRAM_NAME: 'Tên chương trình',
   PROGRAM_DETAIL: 'Chi tiết chương trình',
+  PROGRAM: 'Chương trình',
   NAME: 'Tên',
   EDIT: 'Sửa',
   SCHEDULE: 'Lịch phát sóng',
