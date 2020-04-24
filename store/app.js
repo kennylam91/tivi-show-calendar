@@ -83,11 +83,14 @@ export const actions = {
       })
     })
   },
-  // request: {channelId, startTime, endTime, orderBy:[field, order], limit}
+  // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
   fetchScheduleList({ state, dispatch }, request) {
     let scheduleQuery = FB.scheduleRef
     if (request.channelId) {
       scheduleQuery = scheduleQuery.where('channelId', '==', request.channelId)
+    }
+    if (request.programId) {
+      scheduleQuery = scheduleQuery.where('programId', '==', request.programId)
     }
     if (request.startTime) {
       scheduleQuery = scheduleQuery.where('startTime', '>=', request.startTime)

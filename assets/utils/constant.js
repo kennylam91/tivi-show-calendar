@@ -18,11 +18,15 @@ export const COMMON = {
   SUNDAY: 'Chủ nhật',
   HOMEPAGE: 'Trang chủ',
   CHANNEL_LIST: 'Danh sách kênh',
+  CHANNEL: 'Kênh',
   CLOSE: 'Đóng',
   CATEGORY: 'Thể loại',
   DESCRIPTION: 'Chi tiết',
   SEARCH: 'Tìm kiếm',
   START_TIME: 'Thời gian bắt đầu',
+  START: 'Bắt đầu',
+  END: 'Kết thúc',
+  END_TIME: 'Thời gian kết thúc',
   TIME: 'Thời gian',
   PROGRAM_NAME: 'Tên chương trình',
   PROGRAM_DETAIL: 'Chi tiết chương trình',
@@ -53,7 +57,8 @@ export const COMMON = {
   TODAY_VIP_PROGRAM_MAX_NUM: 8,
   NEXT_DAY_VIP_PROGRAM_MAX_NUM: 8,
   NEXT_DAYS_SHOW_NUM: 3,
-  PAGE_TITLE: 'Truyền hình 24h'
+  PAGE_TITLE: 'Truyền hình 24h',
+  PROGRAM_SCHEDULE_NEXT_DAYS: 'Lịch phát sóng thời gian tới'
 
 }
 import { firebase } from '@/MyFireBase'

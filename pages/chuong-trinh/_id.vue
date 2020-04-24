@@ -1,5 +1,5 @@
 <template>
-  <div v-if="program.id">
+  <div v-if="program">
     <div class="py-4 w-100">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">{{ COMMON.HOMEPAGE }}</el-breadcrumb-item>
@@ -15,7 +15,7 @@
             <img class="img-fluid " :src="program.logo" :alt="program.name">
           </div>
           <div class="col-sm-8">
-            <span class="color-primary bold block">{{ program.name }}</span>
+            <div class="color-primary bold mt-1">{{ program.name }}</div>
             <div>
               <span>{{ COMMON.CATEGORY }}: </span><el-tag v-for="(item, index) in program.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
                 {{ item | getCategory }}
@@ -25,6 +25,40 @@
           </div>
         </div>
       </div>
+      <h5>{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
+      <el-table :data="scheduleList" size="small" border stripe fit style="width: 100%">
+        <el-table-column
+          :label="COMMON.CHANNEL"
+          :min-width="44"
+        >
+          <template slot-scope="{row}">
+            <el-link
+              class="break-word"
+              @click="viewChannelDetail(row.channel)"
+            >{{ row.channel.name }}</el-link>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="COMMON.START"
+          align="center"
+          :min-width="28"
+        >
+          <template slot-scope="{row}">
+            <span class="break-word">{{ row.startTime.seconds | parseTime }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="COMMON.END"
+          align="center"
+          :min-width="28"
+        >
+          <template slot-scope="{row}">
+            <span class="break-word">{{ row.endTime.seconds | parseTime }}</span>
+          </template>
+        </el-table-column>
+
+      </el-table>
+
     </el-card>
   </div>
 
@@ -32,17 +66,25 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { parseVNTime } from '@/assets/utils/index'
 
 export default {
+  filters: {
+    parseTime(time) {
+      return parseVNTime(time, '{d}/{m}/{y} {h}:{i}{a}', true, true)
+    }
+  },
   data() {
     return {
       program: null,
-      programId: null
+      programId: null,
+      scheduleList: null
     }
   },
   computed: {
     ...mapGetters({
-      programList: 'programList'
+      programList: 'programList',
+      channelList: 'channelList'
     })
   },
   watch: {
@@ -53,16 +95,31 @@ export default {
         this.programId = this.$route.params.id.split('-').pop()
         if (this.programList) {
           this.program = this.programList.find(item => item.id === this.programId)
+          this.fetchScheduleList()
         } else {
-          this.$store.dispatch('app/fetchProgram', { programId: this.program.id }).then(data => {
+          this.$store.dispatch('app/fetchProgram', { programId: this.programId }).then(data => {
             this.program = data
+            this.$store.dispatch('app/setProgramList', [this.program])
+            this.fetchScheduleList()
           })
         }
       }
     }
   },
   created() {
+    // fetch schedule list of this program from now
 
+  },
+  methods: {
+    fetchScheduleList() {
+      const now = new Date()
+      this.$store.dispatch('app/fetchScheduleList', { programId: this.programId, startTime: now, orderBy: ['startTime', 'asc'] }).then(list => {
+        list.forEach(schedule => {
+          schedule.channel = this.channelList.find(item => item.id === schedule.channelId)
+        })
+        this.scheduleList = list
+      })
+    }
   }
 }
 </script>
