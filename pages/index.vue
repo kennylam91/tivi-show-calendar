@@ -20,7 +20,9 @@
             />
           </el-link>
           <div v-else>{{ channel.name }}</div>
-          <el-link class="my-2" plain @click="handleViewChannelDetail(channel)">{{ COMMON.SCHEDULE }}</el-link>
+          <!-- <el-link class="my-2" plain @click="handleViewChannelDetail(channel)">{{ COMMON.SCHEDULE }}</el-link> -->
+          <el-button class="my-2 w-100" type="primary" size="small" @click="handleViewChannelDetail(channel)">{{ COMMON.SCHEDULE }}</el-button>
+
         </el-card>
       </div>
     </div>
@@ -46,17 +48,16 @@
           <el-link
             id="programName"
             class="my-2 w-100"
-            plain
-            type="text"
+            type="success"
             @click="handleViewProgramDetail(program)"
           >
             <el-tooltip :content="program.name | getVNTranslateName" placement="bottom" effect="dark">
-              <div class="shorten-text color-success">
+              <div class="shorten-text color-primary bold">
                 {{ program.name | shortenName }}
               </div>
             </el-tooltip>
           </el-link>
-          <el-tag class="w-100" effect="dark" type="success">{{ program.category | getCategory }}</el-tag>
+          <el-tag class="w-100" type="info">{{ program.category | getCategory }}</el-tag>
 
         </el-card>
       </div>
@@ -84,17 +85,16 @@
           <el-link
             id="programName"
             class="my-2 w-100"
-            plain
-            type="text"
+            type="success"
             @click="handleViewProgramDetail(program)"
           >
             <el-tooltip :content="program.name | getVNTranslateName" placement="bottom" effect="dark">
-              <div class="shorten-text color-success">
+              <div class="shorten-text color-primary bold">
                 {{ program.name | shortenName }}
               </div>
             </el-tooltip>
           </el-link>
-          <el-tag class="w-100" effect="dark" type="success">{{ program.category | getCategory }}</el-tag>
+          <el-tag class="w-100" type="info">{{ program.category | getCategory }}</el-tag>
 
         </el-card>
       </div>
