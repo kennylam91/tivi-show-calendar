@@ -85,6 +85,7 @@
 </template>
 <script>
 import { parseVNTime } from '@/assets/utils/index'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { },
@@ -100,16 +101,31 @@ export default {
       scheduleData: []
     }
   },
+  computed: {
+    ...mapGetters({
+      channelList: 'channelList'
+    })
+  },
   watch: {
     selectedDate() {
       this.getScheduleList()
+    },
+    channelList: {
+      immediate: true,
+      deep: true,
+      handler() {
+        this.channelId = this.$route.params.id.split('-').pop()
+        if (this.channelList) {
+          this.channel = this.channelList.find(item => item.id === this.channelId)
+        } else {
+          this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
+            this.channel = channel
+          })
+        }
+      }
     }
   },
   created() {
-    this.channelId = this.$route.params.id.split('-').pop()
-    this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
-      this.channel = channel
-    })
     this.getScheduleList()
   },
   methods: {

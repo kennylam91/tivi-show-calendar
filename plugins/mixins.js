@@ -55,7 +55,7 @@ Vue.mixin({
         this.fetchScheduleList(null, date).then(scheduleList => {
           for (const schedule of scheduleList) {
             const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
-            if (foundProgram) {
+            if (foundProgram && !programList.includes(foundProgram)) {
               programList.push({ ...foundProgram })
             }
           }
@@ -79,13 +79,23 @@ Vue.mixin({
           { channelId: null, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
           for (const schedule of scheduleList) {
             const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
-            if (foundProgram) {
+            if (foundProgram && !programList.includes(foundProgram)) {
               programList.push({ ...foundProgram })
             }
           }
           programList.sort(sortByName)
           resolve(programList)
         })
+      })
+    },
+    updateTodayProgramList() {
+      this.fetchAllProgramByDate(new Date()).then(list => {
+        this.$store.dispatch('app/setTodayProgramList', list)
+      })
+    },
+    updateNextDaysProgramList() {
+      this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
+        this.$store.dispatch('app/setNextDaysProgramList', list)
       })
     }
   }

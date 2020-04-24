@@ -5,6 +5,8 @@ const getters = {
   channelList: state => state.app.channelList,
   programList: state => state.app.programList,
   todayVipProgramList: state => state.app.todayVipProgramList,
-  nextDaysVipProgramList: state => state.app.nextDaysVipProgramList
+  nextDaysVipProgramList: state => state.app.nextDaysVipProgramList,
+  todayProgramList: state => state.app.todayProgramList,
+  nextDaysProgramList: state => state.app.nextDaysProgramList
 }
 export default getters

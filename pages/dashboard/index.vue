@@ -105,7 +105,7 @@
           <nuxt-link style="float:right;" to="/programs">All Programs</nuxt-link>
         </span>
       </div>
-      <el-table v-if="nextSomeDayProgramList" :data="nextSomeDayProgramList" border stripe>
+      <el-table v-if="nextDaysProgramList" :data="nextDaysProgramList" border stripe>
         <el-table-column
           prop="name"
           label="Name"
@@ -147,13 +147,14 @@ export default {
   middleware: 'auth',
   data() {
     return {
-      todayProgramList: null,
-      nextSomeDayProgramList: null
     }
   },
   computed: {
     ...mapGetters({
-      programList: 'programList'
+      programList: 'programList',
+      todayProgramList: 'todayProgramList',
+      nextDaysProgramList: 'nextDaysProgramList',
+      channelList: 'channelList'
     }),
     // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
     channelList() {
@@ -169,18 +170,32 @@ export default {
       }
     }
   },
+  watch: {
+    channelList: {
+      immediate: true,
+      handler() {
+        if (!this.channelList) {
+          this.$store.dispatch('app/fetchChannelList')
+        }
+      }
+    },
+    programList: {
+      immediate: true,
+      handler() {
+        if (!this.programList) {
+          this.$store.dispatch('app/fetchProgramList', {})
+        } else {
+          if (!this.todayProgramList) {
+            this.updateTodayProgramList()
+          }
+          if (!this.nextDaysProgramList) {
+            this.updateNextDaysProgramList()
+          }
+        }
+      }
+    }
+  },
   created() {
-    // fetch all channel
-    this.$store.dispatch('app/fetchChannelList')
-    // fetch all programs
-    this.$store.dispatch('app/fetchProgramList', {}).then(() => {
-      this.fetchAllProgramByDate(new Date()).then(list => {
-        this.todayProgramList = list
-      })
-      this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
-        this.nextSomeDayProgramList = list
-      })
-    })
   },
   methods: {
     handleCreateProgramClick() {
@@ -231,7 +246,7 @@ export default {
       this.$store.dispatch('app/updateProgram', program).then(() => {
         this.$store.dispatch('app/fetchProgramList', {}).then(() => {
           this.fetchAllProgramNextDays(this.days).then(list => {
-            this.nextSomeDayProgramList = list
+            this.$store.dispatch('app/setNextDaysProgramList', list)
           })
         })
       })

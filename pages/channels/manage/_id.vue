@@ -42,7 +42,7 @@
 </template>
 <script>
 import ScheduleTable from '@/components/schedules/ScheduleTable'
-
+import { mapGetters } from 'vuex'
 export default {
   components: { ScheduleTable },
   middleware: 'auth',
@@ -56,24 +56,47 @@ export default {
       scheduleData: []
     }
   },
+  computed: {
+    ...mapGetters({
+      programList: 'programList',
+      todayProgramList: 'todayProgramList',
+      nextDaysProgramList: 'nextDaysProgramList',
+      channelList: 'channelList'
+    })
+  },
   watch: {
     selectedDate() {
       this.getScheduleList()
+    },
+    channelList: {
+      immediate: true,
+      handler() {
+        this.channelId = this.$route.params.id
+        if (this.channelList) {
+          this.channel = this.channelList.find(item => item.id === this.channelId)
+        } else {
+          this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
+            this.channel = channel
+          })
+        }
+      }
     }
+
   },
   created() {
-    this.channelId = this.$route.params.id
-    this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
-      this.channel = channel
-    })
     this.getScheduleList()
   },
   methods: {
-    handleChanged() {
-      this.getScheduleList()
+    // handle when schedule list change
+    async handleChanged() {
+      this.getScheduleList().then(() => {
+        // need to wait to execute
+        this.updateTodayProgramList()
+        this.updateNextDaysProgramList()
+      })
     },
-    getScheduleList() {
-      this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
+    async getScheduleList() {
+      await this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
         this.scheduleList = scheduleList
         this.searchText = ''
         this.scheduleData = this.scheduleList

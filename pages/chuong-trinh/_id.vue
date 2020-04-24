@@ -31,19 +31,38 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
-      program: {
-        id: null
+      program: null,
+      programId: null
+    }
+  },
+  computed: {
+    ...mapGetters({
+      programList: 'programList'
+    })
+  },
+  watch: {
+    programList: {
+      immediate: true,
+      deep: true,
+      handler() {
+        this.programId = this.$route.params.id.split('-').pop()
+        if (this.programList) {
+          this.program = this.programList.find(item => item.id === this.programId)
+        } else {
+          this.$store.dispatch('app/fetchProgram', { programId: this.program.id }).then(data => {
+            this.program = data
+          })
+        }
       }
     }
   },
   created() {
-    this.program.id = this.$route.params.id.split('-').pop()
-    this.$store.dispatch('app/fetchProgram', { programId: this.program.id }).then(data => {
-      this.program = data
-    })
+
   }
 }
 </script>

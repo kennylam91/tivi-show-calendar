@@ -11,6 +11,7 @@
 </template>
 <script>
 import CreateChannel from '@/components/channels/CreateChannel'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { CreateChannel },
@@ -21,12 +22,28 @@ export default {
       channel: null
     }
   },
+  computed: {
+    ...mapGetters({
+      channelList: 'channelList'
+    })
+  },
+  watch: {
+    channelList: {
+      immediate: true,
+      handler() {
+        this.channelId = this.$route.params.id
+        if (this.channelList) {
+          this.channel = this.channelList.find(item => item.id === this.channelId)
+        } else {
+          this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
+            this.channel = channel
+          })
+        }
+      }
+    }
+  },
   created() {
-    this.channelId = this.$route.params.id
-    this.$store.dispatch('app/fetchChannel', { channelId: this.channelId })
-      .then(channel => {
-        this.channel = channel
-      })
+
   },
   methods: {
     handleSavedAction() {

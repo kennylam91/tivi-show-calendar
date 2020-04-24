@@ -6,7 +6,9 @@ export const state = () => ({
   scheduleList: null,
   programList: null,
   todayVipProgramList: null,
-  nextDaysVipProgramList: null
+  todayProgramList: null,
+  nextDaysVipProgramList: null,
+  nextDaysProgramList: null
 })
 
 export const mutations = {
@@ -24,6 +26,12 @@ export const mutations = {
   },
   SET_NEXT_DAYS_VIP_PROGRAM_LIST: (state, value) => {
     state.nextDaysVipProgramList = value
+  },
+  SET_TODAY_PROGRAM_LIST: (state, value) => {
+    state.todayProgramList = value
+  },
+  SET_NEXT_DAYS_PROGRAM_LIST: (state, value) => {
+    state.nextDaysProgramList = value
   }
 
 }
@@ -56,6 +64,12 @@ export const actions = {
   },
   setNextDaysVipProgramList({ commit }, value) {
     commit('SET_NEXT_DAYS_VIP_PROGRAM_LIST', value)
+  },
+  setTodayProgramList({ commit }, value) {
+    commit('SET_TODAY_PROGRAM_LIST', value)
+  },
+  setNextDaysProgramList({ commit }, value) {
+    commit('SET_NEXT_DAYS_PROGRAM_LIST', value)
   },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {

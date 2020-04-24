@@ -12,7 +12,7 @@
 </template>
 <script>
 import CreateProgram from '@/components/programs/CreateProgram'
-import { firebase } from '@/MyFireBase'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { CreateProgram },
@@ -20,18 +20,31 @@ export default {
   data() {
     return {
       programId: null,
-      program: null,
-      ref: firebase.firestore().collection('programs')
+      program: null
+    }
+  },
+  computed: {
+    ...mapGetters({
+      programList: 'programList'
+    })
+  },
+  watch: {
+    programList: {
+      immediate: true,
+      handler() {
+        this.programId = this.$route.params.id
+        if (this.programList) {
+          this.program = this.programList.find(item => item.id === this.programId)
+        } else {
+          this.$store.dispatch('app/fetchProgram', { programId: this.programId }).then(data => {
+            this.program = data
+          })
+        }
+      }
     }
   },
   created() {
-    this.programId = this.$route.params.id
-    this.ref.doc(this.programId).onSnapshot(docSnapshot => {
-      console.log(docSnapshot)
-      console.log()
-      this.program = { ...docSnapshot.data(), id: docSnapshot.id }
-    })
-    console.log(this.programId)
+
   },
   methods: {
     handleSavedAction() {
