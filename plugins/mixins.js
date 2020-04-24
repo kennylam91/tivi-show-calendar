@@ -9,8 +9,9 @@ Vue.mixin({
     }
   },
   methods: {
-    viewChannelDetail(channelId) {
-      this.$router.push({ path: `/channels/view/${channelId}` })
+    viewChannelDetail(channel) {
+      const name = channel.name.split(' ').join('-')
+      this.$router.push({ path: `/lich-chieu/${name}-${channel.id}` })
     },
     viewProgramDetail(programId) {
       this.$router.push({ path: `programs/view/${programId}` })

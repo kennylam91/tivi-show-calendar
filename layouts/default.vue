@@ -46,7 +46,8 @@ export default {
         this.$router.push({ path: '/' })
       }
       if (keyPath[0] === '2') {
-        this.viewChannelDetail(key)
+        const channel = this.channelList.find(item => item.id === key)
+        this.viewChannelDetail(channel)
       }
     }
   }
