@@ -152,7 +152,11 @@ export default {
       channelList: 'channelList'
     }),
     vipChannels() {
-      return this.channelList.filter(item => item.isVip)
+      if (this.channelList) {
+        return this.channelList.filter(item => item.isVip)
+      } else {
+        return null
+      }
     }
   },
   created() {

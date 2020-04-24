@@ -45,7 +45,8 @@ export const COMMON = {
   SUBMIT: 'Xác nhận',
   CANCEL: 'Hủy bỏ',
   SELECT: 'Chọn',
-  VIP_INCOMING_PROGRAM: 'Chương trình nổi bật sắp chiếu'
+  VIP_INCOMING_PROGRAM: 'Chương trình nổi bật sắp chiếu',
+  SHOW_ON_HOMEPAGE: 'Hiển thị trên trang chủ'
 
 }
 import { firebase } from '@/MyFireBase'

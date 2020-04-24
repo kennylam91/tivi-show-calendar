@@ -2,7 +2,7 @@ import { FB } from '@/assets/utils/constant'
 import { trimObject } from '../assets/utils'
 
 export const state = () => ({
-  channelList: [],
+  channelList: null,
   scheduleList: null,
   programList: null
 })

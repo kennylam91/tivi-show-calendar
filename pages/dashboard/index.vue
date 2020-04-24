@@ -15,9 +15,10 @@
         <span class="bold">{{ COMMON.CHANNEL_LIST }}</span>
         <el-button type="primary" size="small" plain @click="handleCreateChannelClick">{{ COMMON.CREATE_CHANNEL }}</el-button>
       </div>
-      <el-table :data="channelList" border stripe>
+      <el-table v-if="channelList" :data="channelList" border stripe>
         <el-table-column
           :label="COMMON.NAME"
+          width="150"
         >
           <template slot-scope="{row}">
             <span :class="{'vip-channel': row.isVip}">{{ row.name }}</span>
@@ -27,6 +28,20 @@
           prop="description"
           :label="COMMON.DESCRIPTION"
         />
+        <el-table-column
+          align="center"
+          width="180"
+          :label="COMMON.SHOW_ON_HOMEPAGE"
+        >
+          <template slot-scope="{row}">
+            <el-switch
+              v-model="row.isVip"
+              :active-text="COMMON.SHOW"
+              :inactive-text="COMMON.HIDE"
+              @change="handleVipChange(row)"
+            />
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
           :label="COMMON.ACTION"
@@ -56,7 +71,7 @@
         />
         <el-table-column
           label="Category"
-          width="170"
+          width="300"
         >
           <template slot-scope="{row}">
             <div>
@@ -69,6 +84,7 @@
         <el-table-column
           align="center"
           width="180"
+          :label="COMMON.SHOW_ON_HOMEPAGE"
         >
           <template slot-scope="{row}">
             <el-switch
@@ -138,9 +154,21 @@ export default {
   },
   computed: {
     ...mapGetters({
-      programList: 'programList',
-      channelList: 'channelList'
-    })
+      programList: 'programList'
+    }),
+    // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
+    channelList() {
+      const list = this.$store.state.app.channelList
+      const result = []
+      if (list) {
+        list.forEach(item => {
+          result.push({ ...item })
+        })
+        return result
+      } else {
+        return null
+      }
+    }
   },
   created() {
     // fetch all channel
@@ -207,6 +235,11 @@ export default {
             this.nextSomeDayProgramList = list
           })
         })
+      })
+    },
+    handleVipChange(channel) {
+      this.$store.dispatch('app/updateChannel', channel).then(() => {
+        this.$store.dispatch('app/fetchChannelList')
       })
     }
   }
