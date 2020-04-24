@@ -9,9 +9,14 @@
 
     <el-card class="p-1">
       <div slot="header">
-        <div class="mb-2 flex" style="">
-          <img class="mr-2" :src="channel.logo" height="60">
-          <p class="small-font-size">{{ channel.description }}</p>
+        <div class="row">
+          <div class="col-sm-4 text-center">
+            <img class="img-fluid" :src="channel.logo">
+          </div>
+          <div class="col-sm-8">
+            <p class="bold">{{ channel.name }}</p>
+            <p class="small-font-size">{{ channel.description }}</p>
+          </div>
         </div>
         <div class="row">
           <div class="my-2 col-xs-12 col-sm-8 col-md-6">
@@ -37,6 +42,7 @@
         <el-table
           id="scheduleTable"
           :data="scheduleData"
+          size="small"
           border
           stripe
           fit
@@ -45,7 +51,7 @@
           <el-table-column
             :label="COMMON.TIME"
             align="center"
-            :min-width="25"
+            :min-width="27"
           >
             <template slot-scope="{row}">
               <div>{{ parseTime(row.startTime.seconds) }}</div>
@@ -53,7 +59,7 @@
           </el-table-column>
           <el-table-column
             :label="COMMON.PROGRAM_NAME"
-            :min-width="50"
+            :min-width="43"
           >
             <template slot-scope="{row}">
               <el-link :underline="false" @click="viewProgramDetail(row.programId)">
@@ -63,7 +69,7 @@
           </el-table-column>
           <el-table-column
             :label="COMMON.CATEGORY"
-            :min-width="25"
+            :min-width="30"
           >
             <template slot-scope="{row}">
               <el-tag v-for="(item, index) in row.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
