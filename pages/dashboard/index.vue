@@ -60,7 +60,9 @@
         >
           <template slot-scope="{row}">
             <div>
-              <el-tag effect="dark" type="success">{{ row.category | getCategory }}</el-tag>
+              <el-tag v-for="(item, index) in row.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+                {{ item | getCategory }}
+              </el-tag>
             </div>
           </template>
         </el-table-column>
@@ -98,7 +100,9 @@
         >
           <template slot-scope="{row}">
             <div>
-              <el-tag effect="dark" type="success">{{ row.category | getCategory }}</el-tag>
+              <el-tag v-for="(item, index) in row.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+                {{ item | getCategory }}
+              </el-tag>
             </div>
           </template>
         </el-table-column>

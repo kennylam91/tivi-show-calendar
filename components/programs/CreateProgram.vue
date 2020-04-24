@@ -6,7 +6,7 @@
         <el-input v-model="programData.name" />
       </el-form-item>
       <el-form-item :label="COMMON.CATEGORY">
-        <el-select v-model="programData.category" :placeholder="COMMON.SELECT">
+        <el-select v-model="programData.categories" multiple class="w-100" :placeholder="COMMON.SELECT">
           <el-option
             v-for="item in CATEGORIES"
             :key="item.value"
@@ -37,7 +37,6 @@
   </div>
 </template>
 <script>
-import { firebase } from '../../MyFireBase'
 import { CATEGORIES } from '@/assets/utils/constant'
 import Upload from '@/components/upload/Upload'
 export default {

@@ -57,20 +57,26 @@ export const FB = {
 
 export const categoryMap = new Map([
   [1, 'Phim truyện'],
-  [2, 'Game show truyền hình'],
-  [3, 'Chương trình thực tế'],
-  [4, 'Chương trình trực tiếp'],
-  [5, 'Phóng sự - tài liệu'],
-  [6, 'Thời sự - Tin tức'],
-  [7, 'Khoa học - Khám phá']
+  [2, 'Game show'],
+  [3, 'Thực tế'],
+  [4, 'Trực tiếp'],
+  [5, 'Phóng sự'],
+  [6, 'Tin tức'],
+  [7, 'Khoa học'],
+  [8, 'Tài liệu'],
+  [9, 'Khám phá'],
+  [10, 'Ca nhạc']
 ])
 
 export const CATEGORIES = [
   { value: 1, label: 'Phim truyện' },
-  { value: 2, label: 'Game show truyền hình' },
-  { value: 3, label: 'Chương trình thực tế' },
-  { value: 4, label: 'Chương trình trực tiếp' },
-  { value: 5, label: 'Phóng sự - tài liệu' },
-  { value: 6, label: 'Thời sự - Tin tức' },
-  { value: 7, label: 'Khoa học - Khám phá' }
+  { value: 2, label: 'Game show' },
+  { value: 3, label: 'Thực tế' },
+  { value: 4, label: 'Trực tiếp' },
+  { value: 5, label: 'Phóng sự' },
+  { value: 6, label: 'Tin tức' },
+  { value: 7, label: 'Khoa học' },
+  { value: 8, label: 'Tài liệu' },
+  { value: 9, label: 'Khám phá' },
+  { value: 10, label: 'Ca nhạc' }
 ]

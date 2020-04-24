@@ -15,12 +15,18 @@
         />
         <el-table-column
           label="Category"
-          width="170"
+          width="270"
           align="center"
         >
           <template slot-scope="{row}">
-            <div>
-              <el-tag effect="dark" type="success">{{ row.category | getCategory }}</el-tag>
+            <div v-if="row.categories">
+              <el-tag
+                v-for="(item, index) in row.categories"
+                :key="index"
+                class="m-1"
+                effect="dark"
+                type="info"
+              >{{ item | getCategory }}</el-tag>
             </div>
           </template>
         </el-table-column>

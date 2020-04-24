@@ -82,11 +82,12 @@ export const actions = {
           const programId = doc.data().programId
           const schedule = { ...doc.data(), id: doc.id }
           let foundProgram
+          debugger
           if (state.programList) {
             foundProgram = state.programList.find(program => program.id === programId)
             if (foundProgram) {
               schedule.programName = foundProgram.name
-              schedule.category = foundProgram.category
+              schedule.categories = foundProgram.categories
               scheduleList.push(schedule)
             }
           } else {
@@ -94,7 +95,7 @@ export const actions = {
               foundProgram = state.programList.find(program => program.id === programId)
               if (foundProgram) {
                 schedule.programName = foundProgram.name
-                schedule.category = foundProgram.category
+                schedule.categories = foundProgram.categories
                 scheduleList.push(schedule)
               }
             })

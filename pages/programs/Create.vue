@@ -21,7 +21,8 @@ export default {
         description: '',
         logo: '',
         isTodayShow: false,
-        isNextDaysShow: false
+        isNextDaysShow: false,
+        categories: null
       }
     }
   },

@@ -57,8 +57,9 @@
               </div>
             </el-tooltip>
           </el-link>
-          <el-tag class="w-100" type="info">{{ program.category | getCategory }}</el-tag>
-
+          <el-tag v-for="(item, index) in program.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+            {{ item | getCategory }}
+          </el-tag>
         </el-card>
       </div>
     </div>
@@ -94,8 +95,9 @@
               </div>
             </el-tooltip>
           </el-link>
-          <el-tag class="w-100" type="info">{{ program.category | getCategory }}</el-tag>
-
+          <el-tag v-for="(item, index) in program.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+            {{ item | getCategory }}
+          </el-tag>
         </el-card>
       </div>
     </div>

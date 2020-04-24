@@ -23,10 +23,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="Category"
+        label="Categories"
       >
         <template slot-scope="{row}">
-          <div>{{ row.category | getCategory }}</div>
+          <el-tag v-for="(item, index) in row.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+            {{ item | getCategory }}
+          </el-tag>
+
         </template>
       </el-table-column>
       <el-table-column
