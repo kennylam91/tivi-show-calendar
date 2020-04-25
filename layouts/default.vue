@@ -2,16 +2,18 @@
   <div>
     <el-menu
       :default-active="activeIndex"
-      class="el-menu-demo"
       mode="horizontal"
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
+      menu-trigger="hover"
       @select="handleSelect"
     >
-      <el-menu-item index="1">{{ COMMON.HOMEPAGE }}</el-menu-item>
+      <el-menu-item index="1">
+        <i class="el-icon-s-home" />
+      </el-menu-item>
       <el-submenu index="2">
-        <template slot="title">{{ COMMON.CHANNEL_LIST }}</template>
+        <template slot="title">{{ COMMON.SCHEDULE }}</template>
         <el-menu-item
           v-for="(item, index) in channelList"
           :key="index"
@@ -40,8 +42,8 @@ export default {
     return {
       activeIndex: '1',
       programMenu: [
-        { label: COMMON.TODAY_PROGRAM, value: '3-1' },
-        { label: COMMON.NEXT_THREE_DAY_PROGRAM, value: '3-2' }
+        { label: COMMON.TODAY, value: '3-1' },
+        { label: COMMON.NEXT_DAY, value: '3-2' }
       ]
     }
   },
@@ -64,8 +66,11 @@ export default {
         this.viewChannelDetail(channel)
       }
       if (keyPath[0] === '3') {
-        if (key === COMMON.TODAY_PROGRAM) {
+        if (key === this.programMenu[0].label) {
           this.getTodayProgramView()
+        }
+        if (key === this.programMenu[1].label) {
+          this.getNextDayProgramView()
         }
       }
     }
@@ -121,4 +126,9 @@ html {
   color: #fff;
   background-color: #35495e;
 }
+
+.el-menu--collapse .el-menu .el-submenu, .el-menu--popup{
+  min-width: 140px;
+}
+
 </style>

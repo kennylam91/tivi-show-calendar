@@ -78,6 +78,7 @@ Vue.mixin({
       return new Promise((resolve, reject) => {
         this.$store.dispatch('app/fetchScheduleList',
           { channelId: null, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
+          this.$store.dispatch('app/setNextDaysScheduleList', scheduleList)
           for (const schedule of scheduleList) {
             const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
             if (foundProgram && !programList.includes(foundProgram)) {
@@ -101,6 +102,9 @@ Vue.mixin({
     },
     getTodayProgramView() {
       this.$router.push({ path: `/chuong-trinh-hom-nay` })
+    },
+    getNextDayProgramView() {
+      this.$router.push({ path: `/chuong-trinh-sap-chieu` })
     }
   }
 })
