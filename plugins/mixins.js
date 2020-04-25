@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { COMMON } from '@/assets/utils/constant'
+import { COMMON, CATEGORIES } from '@/assets/utils/constant'
 import { firebase } from '@/MyFireBase'
 
 const sortByName = (a, b) => {
@@ -15,7 +15,8 @@ const sortByName = (a, b) => {
 Vue.mixin({
   data() {
     return {
-      COMMON
+      COMMON,
+      CATEGORIES
     }
   },
   methods: {
@@ -53,9 +54,10 @@ Vue.mixin({
       }
       return new Promise((resolve, reject) => {
         this.fetchScheduleList(null, date).then(scheduleList => {
+          this.$store.dispatch('app/setTodayScheduleList', scheduleList)
           for (const schedule of scheduleList) {
             const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
-            if (foundProgram && !programList.includes(foundProgram)) {
+            if (foundProgram && !programList.some(item => item.id === foundProgram.id)) {
               programList.push({ ...foundProgram })
             }
           }

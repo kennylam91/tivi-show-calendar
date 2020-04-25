@@ -10,7 +10,7 @@
           <el-link
             v-if="channel.logo"
             :underline="false"
-            @click="handleViewChannelDetail(channel)"
+            @click="viewChannelDetail(channel)"
           >
             <el-image
               style="width: 100%;"
@@ -24,7 +24,7 @@
             class="my-2 w-100"
             type="primary"
             size="small"
-            @click="handleViewChannelDetail(channel)"
+            @click="viewChannelDetail(channel)"
           >{{ COMMON.SCHEDULE }}</el-button>
 
         </el-card>
@@ -39,47 +39,7 @@
         :key="program.id"
         class="col-md-3 col-6 my-2 px-2"
       >
-        <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
-          <el-link
-            v-if="program.logo"
-            :underline="false"
-            @click="handleViewProgramDetail(program)"
-          >
-            <el-image
-              style="width: 100%;"
-              :src="program.logo"
-              :alt="program.name"
-              fit="fill"
-            />
-          </el-link>
-          <div v-else>{{ program.name }}</div>
-          <el-link
-            id="programName"
-            class="my-2 w-100"
-            type="success"
-            @click="handleViewProgramDetail(program)"
-          >
-            <el-tooltip
-              :content="program.name | getVNTranslateName"
-              placement="bottom"
-              effect="dark"
-            >
-              <div class="shorten-text color-primary bold">
-                {{ program.name | shortenName }}
-              </div>
-            </el-tooltip>
-          </el-link>
-          <el-tag
-            v-for="(item, index) in program.categories"
-            :key="index"
-            size="small"
-            effect="dark"
-            type="info"
-            style="margin: 2px;"
-          >
-            {{ item | getCategory }}
-          </el-tag>
-        </el-card>
+        <Program :program="program" />
       </div>
     </div>
 
@@ -92,43 +52,7 @@
         :key="program.id"
         class="col-md-3 col-6 px-2 my-2"
       >
-        <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
-          <el-link
-            v-if="program.logo"
-            :underline="false"
-            @click="handleViewProgramDetail(program)"
-          >
-            <el-image
-              style="width: 100%;"
-              :src="program.logo"
-              :alt="program.name"
-              fit="fill"
-            />
-          </el-link>
-          <div v-else>{{ program.name }}</div>
-          <el-link
-            id="programName"
-            class="my-2 w-100"
-            type="success"
-            @click="handleViewProgramDetail(program)"
-          >
-            <el-tooltip :content="program.name | getVNTranslateName" placement="bottom" effect="dark">
-              <div class="shorten-text color-primary bold">
-                {{ program.name | shortenName }}
-              </div>
-            </el-tooltip>
-          </el-link>
-          <el-tag
-            v-for="(item, index) in program.categories"
-            :key="index"
-            size="small"
-            effect="dark"
-            type="info"
-            style="margin: 2px;"
-          >
-            {{ item | getCategory }}
-          </el-tag>
-        </el-card>
+        <Program :program="program" />
       </div>
     </div>
 
@@ -137,9 +61,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Program from '@/components/programs/Program'
 
 export default {
-  components: {
+  components: { Program
   },
   data() {
     return {
@@ -190,12 +115,7 @@ export default {
   created() {
   },
   methods: {
-    handleViewChannelDetail(channel) {
-      this.viewChannelDetail(channel)
-    },
-    handleViewProgramDetail(program) {
-      this.viewProgramDetail(program)
-    }
+
   }
 }
 </script>
@@ -204,8 +124,5 @@ export default {
 
 .links {
   padding-top: 15px;
-}
-#programName .el-link--inner {
-  width: 100%;
 }
 </style>

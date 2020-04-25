@@ -8,55 +8,67 @@
     </div>
     <el-card v-if="todayProgramList" :body-style="{ padding: '0px' }">
       <div slot="header">
-        <span>{{ COMMON.TODAY_PROGRAM }}</span>
+        <span class="bold color-primary">{{ COMMON.TODAY_PROGRAM }}</span>
       </div>
-      <div class="row">
+      <el-form
+        ref="programSearchForm"
+        size="small"
+        :inline="true"
+        :model="programSearchForm"
+        class="m-2"
+        label-width="80px"
+      >
+        <el-form-item :label="COMMON.SEARCH">
+          <el-input
+            v-model="programSearchForm.name"
+            :placeholder="COMMON.INPUT_PROGRAM_NAME"
+            style="width: 200px;"
+          />
+        </el-form-item>
+        <el-form-item :label="COMMON.CHANNEL">
+          <el-select
+            v-model="programSearchForm.channels"
+            multiple
+            size="small"
+            :placeholder="COMMON.SELECT_CHANNEL"
+            style="width: 200px"
+            @change="searchProgram"
+          >
+            <el-option
+              v-for="channel in channelList"
+              :key="channel.id"
+              :label="channel.name"
+              :value="channel.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="COMMON.CATEGORY">
+          <el-select
+            v-model="programSearchForm.categories"
+            multiple
+            size="small"
+            :placeholder="COMMON.SELECT_CATEGORY"
+            style="width: 200px"
+            @change="searchProgram"
+          >
+            <el-option
+              v-for="item in CATEGORIES"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+
+      </el-form>
+
+      <div class="row" style="margin: 0">
         <div
-          v-for="program in todayProgramList"
+          v-for="program in programData"
           :key="program.id"
-          class="col-md-3 col-6 my-2 px-2"
+          class="col-sm-4 col-md-3 col-lg-2 col-6 my-2 px-1"
         >
-          <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
-            <el-link
-              v-if="program.logo"
-              :underline="false"
-              @click="handleViewProgramDetail(program)"
-            >
-              <el-image
-                style="width: 100%;"
-                :src="program.logo"
-                :alt="program.name"
-                fit="fill"
-              />
-            </el-link>
-            <div v-else>{{ program.name }}</div>
-            <el-link
-              id="programName"
-              class="my-2 w-100"
-              type="success"
-              @click="handleViewProgramDetail(program)"
-            >
-              <el-tooltip
-                :content="program.name | getVNTranslateName"
-                placement="bottom"
-                effect="dark"
-              >
-                <div class="shorten-text color-primary bold">
-                  {{ program.name | shortenName }}
-                </div>
-              </el-tooltip>
-            </el-link>
-            <el-tag
-              v-for="(item, index) in program.categories"
-              :key="index"
-              size="small"
-              effect="dark"
-              type="info"
-              style="margin: 2px;"
-            >
-              {{ item | getCategory }}
-            </el-tag>
-          </el-card>
+          <Program :program="program" />
         </div></div>
     </el-card>
   </div>
@@ -64,17 +76,26 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Program from '@/components/programs/Program'
 
 export default {
+  components: { Program },
   data() {
     return {
+      programSearchForm: {
+        name: '',
+        channels: [],
+        categories: []
+      },
+      programData: null
     }
   },
   computed: {
     ...mapGetters({
       programList: 'programList',
       todayProgramList: 'todayProgramList',
-      channelList: 'channelList'
+      channelList: 'channelList',
+      todayScheduleList: 'todayScheduleList'
     })
   },
   watch: {
@@ -87,6 +108,66 @@ export default {
           if (!this.todayProgramList) {
             this.updateTodayProgramList()
           }
+        }
+      }
+    },
+    todayProgramList: {
+      immediate: true,
+      handler() {
+        if (this.todayProgramList) {
+          this.searchProgram()
+        }
+      }
+    }
+  },
+  created() {
+  },
+  methods: {
+    searchProgram() {
+      this.programData = []
+      if (this.programSearchForm.categories.length > 0) {
+        this.programData = this.todayProgramList.filter(this.filterByCategory)
+      }
+      if (this.programSearchForm.channels.length > 0) {
+        // get channels of program in todayProgramList
+        for (const program of this.todayProgramList) {
+          program.channels = []
+          for (const schedule of this.todayScheduleList) {
+            if (schedule.programId === program.id && !program.channels.includes(schedule.channelId)) {
+              program.channels.push(schedule.channelId)
+            }
+          }
+        }
+
+        this.programData = this.programData.filter(this.filterByChannel)
+      } else {
+        this.programData = this.todayProgramList
+      }
+    },
+    filterByCategory(program) {
+      if (this.programSearchForm.categories.length > 0) {
+        return this.isTwoArrayHaveSameElement(program.categories, this.programSearchForm.categories)
+      }
+      return true
+    },
+    filterByChannel(program) {
+      return this.isTwoArrayHaveSameElement(program.channels, this.programSearchForm.channels)
+    },
+    isTwoArrayHaveSameElement(first, second) {
+      if (!first || !second) {
+        return false
+      } else {
+        if (!first.length || !second.length) {
+          return false
+        } else {
+          for (const i of first) {
+            for (const j of second) {
+              if (i === j) {
+                return true
+              }
+            }
+          }
+          return false
         }
       }
     }

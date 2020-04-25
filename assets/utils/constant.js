@@ -50,6 +50,9 @@ export const COMMON = {
   SUBMIT: 'Xác nhận',
   CANCEL: 'Hủy bỏ',
   SELECT: 'Chọn',
+  SELECT_CATEGORY: 'Chọn thể loại',
+  SELECT_CHANNEL: 'Chọn kênh',
+  INPUT_PROGRAM_NAME: 'Nhập tên chương trình',
   VIP_INCOMING_PROGRAM: 'Chương trình nổi bật sắp chiếu',
   SHOW_ON_HOMEPAGE: 'Hiển thị trên trang chủ',
   NO_MORE_THAN_TWO: 'Không chọn nhiều hơn 2 thể loại',
@@ -59,7 +62,6 @@ export const COMMON = {
   NEXT_DAYS_SHOW_NUM: 3,
   PAGE_TITLE: 'Truyền hình 24h',
   PROGRAM_SCHEDULE_NEXT_DAYS: 'Lịch phát sóng thời gian tới'
-
 }
 import { firebase } from '@/MyFireBase'
 export const FB = {
@@ -69,7 +71,7 @@ export const FB = {
 }
 
 export const categoryMap = new Map([
-  [1, 'Phim truyện'],
+  [1, 'Phim'],
   [2, 'Game show'],
   [3, 'Thực tế'],
   [4, 'Trực tiếp'],
@@ -82,7 +84,7 @@ export const categoryMap = new Map([
 ])
 
 export const CATEGORIES = [
-  { value: 1, label: 'Phim truyện' },
+  { value: 1, label: 'Phim' },
   { value: 2, label: 'Game show' },
   { value: 3, label: 'Thực tế' },
   { value: 4, label: 'Trực tiếp' },

@@ -7,6 +7,7 @@ const getters = {
   todayVipProgramList: state => state.app.todayVipProgramList,
   nextDaysVipProgramList: state => state.app.nextDaysVipProgramList,
   todayProgramList: state => state.app.todayProgramList,
-  nextDaysProgramList: state => state.app.nextDaysProgramList
+  nextDaysProgramList: state => state.app.nextDaysProgramList,
+  todayScheduleList: state => state.app.todayScheduleList
 }
 export default getters
