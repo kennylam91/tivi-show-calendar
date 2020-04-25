@@ -88,7 +88,7 @@ Vue.mixin({
           this.$store.dispatch('app/setNextDaysScheduleList', scheduleList)
           for (const schedule of scheduleList) {
             const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
-            if (foundProgram && !programList.includes(foundProgram)) {
+            if (foundProgram && !programList.some(item => item.id === foundProgram.id)) {
               programList.push({ ...foundProgram })
             }
           }

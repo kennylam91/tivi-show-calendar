@@ -27,7 +27,7 @@
         <el-input
           v-model="programData.description"
           type="textarea"
-          :rows="4"
+          :rows="6"
         />
       </el-form-item>
       <el-form-item label="Logo">

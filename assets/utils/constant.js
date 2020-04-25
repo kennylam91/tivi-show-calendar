@@ -84,7 +84,18 @@ export const categoryMap = new Map([
   [7, 'Khoa học'],
   [8, 'Tài liệu'],
   [9, 'Khám phá'],
-  [10, 'Ca nhạc']
+  [10, 'Ca nhạc'],
+  [11, 'Kinh dị'],
+  [12, 'Hài'],
+  [13, 'Hành động'],
+  [14, 'Viễn tưởng'],
+  [15, 'Thần thoại'],
+  [16, 'Hình sự'],
+  [17, 'Phiên lưu'],
+  [18, 'Cổ trang'],
+  [19, 'Chiến tranh'],
+  [20, 'Hoạt hình'],
+  [21, 'Tình cảm']
 ])
 
 export const CATEGORIES = [
@@ -97,5 +108,24 @@ export const CATEGORIES = [
   { value: 7, label: 'Khoa học', text: 'Khoa học' },
   { value: 8, label: 'Tài liệu', text: 'Tài liệu' },
   { value: 9, label: 'Khám phá', text: 'Khám phá' },
-  { value: 10, label: 'Ca nhạc', text: 'Ca nhạc' }
-]
+  { value: 10, label: 'Ca nhạc', text: 'Ca nhạc' },
+  { value: 11, label: 'Kinh dị', text: 'Kinh dị' },
+  { value: 12, label: 'Hài', text: 'Hài' },
+  { value: 13, label: 'Hành động', text: 'Hành động' },
+  { value: 14, label: 'Viễn tưởng', text: 'Viễn tưởng' },
+  { value: 15, label: 'Thần thoại', text: 'Thần thoại' },
+  { value: 16, label: 'Hình sự', text: 'Hình sự' },
+  { value: 17, label: 'Phiên lưu', text: 'Phiên lưu' },
+  { value: 18, label: 'Cổ trang', text: 'Cổ trang' },
+  { value: 19, label: 'Chiến tranh', text: 'Chiến tranh' },
+  { value: 20, label: 'Hoạt hình', text: 'Hoạt hình' },
+  { value: 21, label: 'Tình cảm', text: 'Tình cảm' }
+].sort((a, b) => {
+  if (a.label > b.label) {
+    return 1
+  } else if (a.label < b.label) {
+    return -1
+  } else {
+    return 0
+  }
+})

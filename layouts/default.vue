@@ -6,7 +6,7 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
-      menu-trigger="hover"
+      menu-trigger="click"
       @select="handleSelect"
     >
       <el-menu-item index="1">
