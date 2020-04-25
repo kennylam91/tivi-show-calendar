@@ -22,7 +22,8 @@
           <el-input
             v-model="programSearchForm.name"
             :placeholder="COMMON.INPUT_PROGRAM_NAME"
-            style="width: 200px;"
+            style="width: 180px;"
+            @change="searchProgram"
           />
         </el-form-item>
         <el-form-item :label="COMMON.CHANNEL">
@@ -31,7 +32,7 @@
             multiple
             size="small"
             :placeholder="COMMON.SELECT_CHANNEL"
-            style="width: 200px"
+            style="width: 180px"
             @change="searchProgram"
           >
             <el-option
@@ -48,7 +49,7 @@
             multiple
             size="small"
             :placeholder="COMMON.SELECT_CATEGORY"
-            style="width: 200px"
+            style="width: 180px"
             @change="searchProgram"
           >
             <el-option
@@ -58,6 +59,12 @@
               :value="item.value"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item v-if="isSearching">
+          <el-tooltip :content="COMMON.CLEAR_SEARCH" placement="top" effect="dark">
+            <el-button size="small" icon="el-icon-close" type="danger" @click="clearSearchingForm" />
+          </el-tooltip>
+
         </el-form-item>
 
       </el-form>
@@ -96,7 +103,11 @@ export default {
       todayProgramList: 'todayProgramList',
       channelList: 'channelList',
       todayScheduleList: 'todayScheduleList'
-    })
+    }),
+    isSearching() {
+      return this.programSearchForm.name || this.programSearchForm.channels.length > 0 ||
+      this.programSearchForm.categories.length > 0
+    }
   },
   watch: {
     programList: {
@@ -125,9 +136,6 @@ export default {
   methods: {
     searchProgram() {
       this.programData = []
-      if (this.programSearchForm.categories.length > 0) {
-        this.programData = this.todayProgramList.filter(this.filterByCategory)
-      }
       if (this.programSearchForm.channels.length > 0) {
         // get channels of program in todayProgramList
         for (const program of this.todayProgramList) {
@@ -138,11 +146,10 @@ export default {
             }
           }
         }
-
-        this.programData = this.programData.filter(this.filterByChannel)
-      } else {
-        this.programData = this.todayProgramList
       }
+      this.programData = this.todayProgramList.filter(program => {
+        return this.filterByCategory(program) && this.filterByChannel(program) && this.filterByName(program)
+      })
     },
     filterByCategory(program) {
       if (this.programSearchForm.categories.length > 0) {
@@ -151,7 +158,16 @@ export default {
       return true
     },
     filterByChannel(program) {
-      return this.isTwoArrayHaveSameElement(program.channels, this.programSearchForm.channels)
+      if (this.programSearchForm.channels.length > 0) {
+        return this.isTwoArrayHaveSameElement(program.channels, this.programSearchForm.channels)
+      }
+      return true
+    },
+    filterByName(program) {
+      if (this.programSearchForm.name) {
+        return program.name.toLowerCase().includes(this.programSearchForm.name.toLowerCase())
+      }
+      return true
     },
     isTwoArrayHaveSameElement(first, second) {
       if (!first || !second) {
@@ -170,6 +186,12 @@ export default {
           return false
         }
       }
+    },
+    clearSearchingForm() {
+      this.programSearchForm.name = ''
+      this.programSearchForm.channels = []
+      this.programSearchForm.categories = []
+      this.programData = this.todayProgramList
     }
   }
 
