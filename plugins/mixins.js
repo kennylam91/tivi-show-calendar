@@ -97,6 +97,9 @@ Vue.mixin({
       this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
         this.$store.dispatch('app/setNextDaysProgramList', list)
       })
+    },
+    getTodayProgramView() {
+      this.$router.push({ path: `/chuong-trinh-hom-nay` })
     }
   }
 })

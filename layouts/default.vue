@@ -18,17 +18,31 @@
           :index="item.id"
         >{{ item.name }}</el-menu-item>
       </el-submenu>
+
+      <el-submenu index="3">
+        <template slot="title">{{ COMMON.PROGRAM }}</template>
+        <el-menu-item
+          v-for="(item) in programMenu"
+          :key="item.label"
+          :index="item.label"
+        >{{ item.label }}</el-menu-item>
+      </el-submenu>
     </el-menu>
     <nuxt class="container" />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { COMMON } from '@/assets/utils/constant'
 
 export default {
   data() {
     return {
-      activeIndex: '1'
+      activeIndex: '1',
+      programMenu: [
+        { label: COMMON.TODAY_PROGRAM, value: '3-1' },
+        { label: COMMON.NEXT_THREE_DAY_PROGRAM, value: '3-2' }
+      ]
     }
   },
   computed: {
@@ -48,6 +62,11 @@ export default {
       if (keyPath[0] === '2') {
         const channel = this.channelList.find(item => item.id === key)
         this.viewChannelDetail(channel)
+      }
+      if (keyPath[0] === '3') {
+        if (key === COMMON.TODAY_PROGRAM) {
+          this.getTodayProgramView()
+        }
       }
     }
   }
