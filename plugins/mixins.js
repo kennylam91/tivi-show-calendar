@@ -25,8 +25,15 @@ Vue.mixin({
       this.$router.push({ path: `/lich-chieu/${name}-${channel.id}` })
     },
     viewProgramDetail(program) {
+      let id
+      if (!program.name) {
+        program.name = program.programName
+        id = program.programId
+      } else {
+        id = program.id
+      }
       const name = program.name.split(' ').join('-').trim()
-      this.$router.push({ path: `/chuong-trinh/${name}-${program.id}` })
+      this.$router.push({ path: `/chi-tiet-chuong-trinh/${name}-${id}` })
     },
     fetchScheduleList(channelId, date) {
       return new Promise((resolve, reject) => {
