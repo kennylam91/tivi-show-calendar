@@ -27,7 +27,12 @@
         <el-table-column
           prop="description"
           :label="COMMON.DESCRIPTION"
-        />
+        >
+          <template slot-scope="{row}">
+            <div class="break-word">{{ row.description }}</div>
+          </template>
+
+        </el-table-column>
         <el-table-column
           align="center"
           width="180"

@@ -11,10 +11,10 @@
     <el-card>
       <div slot="header">
         <div class="row mb-2">
-          <div class="col-sm-4 text-center">
+          <div class="col-sm-4 col-md-3 text-center">
             <img class="img-fluid " :src="program.logo" :alt="program.name">
           </div>
-          <div class="col-sm-8">
+          <div class="col-sm-8 col-md-9">
             <div class="color-primary bold mt-1">{{ program.name }}</div>
             <div>
               <span>{{ COMMON.CATEGORY }}: </span><el-tag v-for="(item, index) in program.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
@@ -92,7 +92,7 @@ export default {
       immediate: true,
       deep: true,
       handler() {
-        this.programId = this.$route.params.id.split('-').pop()
+        this.programId = this.$route.params.id.split('-').pop().trim()
         if (this.programList) {
           this.program = this.programList.find(item => item.id === this.programId)
           this.fetchScheduleList()

@@ -9,16 +9,24 @@
 
     <el-card :body-style="{ padding: '10px' }">
       <div class="row">
-        <div class="col-sm-4 col-4 text-center" style="padding-left: 15px;padding-right: 5px; ">
+        <div
+          class="col-sm-4 col-md-2 text-center"
+          style="padding-left: 15px;padding-right: 15px; "
+        >
           <img class="img-fluid" :src="channel.logo">
         </div>
-        <div class="col-sm-6 col-8" style="padding-left: 5px;padding-right: 15px; ">
-          <span class="bold">{{ channel.name }}</span>
+        <div
+          class="col-sm-8 col-md-10 flex"
+          style="padding-left: 15px;padding-right: 15px; align-items: center "
+        >
           <p class="smaller-font-size">{{ channel.description }}</p>
         </div>
       </div>
       <div class="row">
-        <div class="my-2 col-6 col-sm-6 col-md-6" style="padding-right: 5px; padding-left: 15px;">
+        <div
+          class="my-2 col-6 col-sm-6 col-md-4"
+          style="padding-right: 5px; padding-left: 15px;"
+        >
           <el-date-picker
             v-model="selectedDate"
             format="dd/MM/yyyy"
@@ -27,7 +35,10 @@
             class="w-100"
           />
         </div>
-        <div class="my-2 col-6 col-sm-4 col-md-6" style="padding-right: 15px; padding-left: 5px;">
+        <div
+          class="my-2 col-6 col-sm-4 offset-md-4 col-md-4"
+          style="padding-right: 15px; padding-left: 5px;"
+        >
           <el-input
             v-model="searchText"
             :placeholder="COMMON.SEARCH"
@@ -61,7 +72,7 @@
           :min-width="52"
         >
           <template slot-scope="{row}">
-            <el-link :underline="false" @click="viewProgramDetail(row.programId)">
+            <el-link :underline="false" @click="viewProgramDetail(row)">
               <span class="color-primary">{{ row.programName | uppercaseFirst }}</span>
             </el-link>
           </template>
@@ -69,9 +80,22 @@
         <el-table-column
           :label="COMMON.CATEGORY"
           :min-width="32"
+          :filters="CATEGORIES"
+          :filter-method="filterCategory"
+          :filter-multiple="true"
+          filter-placement="bottom"
+          prop="categories"
         >
+          >
           <template slot-scope="{row}">
-            <el-tag v-for="(item, index) in row.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+            <el-tag
+              v-for="(item, index) in row.categories"
+              :key="index"
+              size="small"
+              effect="dark"
+              type="info"
+              style="margin: 2px;"
+            >
               {{ item | getCategory }}
             </el-tag>
           </template>
@@ -131,13 +155,6 @@ export default {
     parseTime(time) {
       return parseVNTime(time, '{h}:{i} {a}', true, true)
     },
-    viewProgramDetail(programId) {
-      console.log('viewProgramDetail')
-      // this.$store.dispatch('app/fetchProgram', { programId }).then(program => {
-      //   this.program = program
-      //   this.detailProgramDlgVisible = true
-      // })
-    },
     getScheduleList() {
       this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
         this.scheduleList = scheduleList
@@ -149,6 +166,10 @@ export default {
       this.scheduleData = this.searchText
         ? this.scheduleList.filter(schedule => schedule.programName.toLowerCase().includes(this.searchText.toLowerCase()))
         : this.scheduleList
+    },
+    filterCategory(value, row, column) {
+      debugger
+      return row.categories.includes(value)
     }
   }
 }

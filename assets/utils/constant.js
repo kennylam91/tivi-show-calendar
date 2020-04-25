@@ -88,14 +88,14 @@ export const categoryMap = new Map([
 ])
 
 export const CATEGORIES = [
-  { value: 1, label: 'Phim' },
-  { value: 2, label: 'Game show' },
-  { value: 3, label: 'Thực tế' },
-  { value: 4, label: 'Trực tiếp' },
-  { value: 5, label: 'Phóng sự' },
-  { value: 6, label: 'Tin tức' },
-  { value: 7, label: 'Khoa học' },
-  { value: 8, label: 'Tài liệu' },
-  { value: 9, label: 'Khám phá' },
-  { value: 10, label: 'Ca nhạc' }
+  { value: 1, label: 'Phim', text: 'Phim' },
+  { value: 2, label: 'Game show', text: 'Game show' },
+  { value: 3, label: 'Thực tế', text: 'Thực tế' },
+  { value: 4, label: 'Trực tiếp', text: 'Trực tiếp' },
+  { value: 5, label: 'Phóng sự', text: 'Phóng sự' },
+  { value: 6, label: 'Tin tức', text: 'Tin tức' },
+  { value: 7, label: 'Khoa học', text: 'Khoa học' },
+  { value: 8, label: 'Tài liệu', text: 'Tài liệu' },
+  { value: 9, label: 'Khám phá', text: 'Khám phá' },
+  { value: 10, label: 'Ca nhạc', text: 'Ca nhạc' }
 ]
