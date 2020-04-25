@@ -60,7 +60,6 @@ export default {
     return {
       scheduleData: null,
       scheduleRef: firebase.firestore().collection('schedules'),
-      programList: [],
       channelId: null,
       options: [],
       value: [],
@@ -95,21 +94,27 @@ export default {
     },
     programName() {
       this.scheduleData.programId = this.programList.find(pro => pro.name === this.programName).id
+    },
+    programList: {
+      immediate: true,
+      deep: true,
+      handler() {
+        if (!this.programList) {
+          this.$store.dispatch('app/fetchProgramList', {}).then(list => {
+            if (this.scheduleData.programId) {
+              this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
+            }
+          })
+        } else {
+          if (this.scheduleData.programId) {
+            this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
+          }
+        }
+      }
     }
   },
   created() {
-    if (this.programList) {
-      this.$store.dispatch('app/fetchProgramList', {}).then(list => {
-        this.programList = list
-        if (this.scheduleData.programId) {
-          this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
-        }
-      })
-    } else {
-      if (this.scheduleData.programId) {
-        this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
-      }
-    }
+
   },
   methods: {
     onSubmit() {
@@ -169,7 +174,7 @@ export default {
     },
     removeProperty(object) {
       for (const key in object) {
-        if (!['startTime', 'endTime', 'channelId', 'programId'].includes(key)) {
+        if (!['startTime', 'endTime', 'channelId', 'programId', 'id'].includes(key)) {
           delete object[key]
         }
       }

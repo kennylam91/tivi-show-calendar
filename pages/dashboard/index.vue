@@ -151,14 +151,35 @@ export default {
   },
   computed: {
     ...mapGetters({
-      programList: 'programList',
-      todayProgramList: 'todayProgramList',
-      nextDaysProgramList: 'nextDaysProgramList',
-      channelList: 'channelList'
+      programList: 'programList'
     }),
     // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
     channelList() {
       const list = this.$store.state.app.channelList
+      const result = []
+      if (list) {
+        list.forEach(item => {
+          result.push({ ...item })
+        })
+        return result
+      } else {
+        return null
+      }
+    },
+    todayProgramList() {
+      const list = this.$store.state.app.todayProgramList
+      const result = []
+      if (list) {
+        list.forEach(item => {
+          result.push({ ...item })
+        })
+        return result
+      } else {
+        return null
+      }
+    },
+    nextDaysProgramList() {
+      const list = this.$store.state.app.nextDaysProgramList
       const result = []
       if (list) {
         list.forEach(item => {
@@ -237,7 +258,7 @@ export default {
       this.$store.dispatch('app/updateProgram', program).then(() => {
         this.$store.dispatch('app/fetchProgramList', {}).then(() => {
           this.fetchAllProgramByDate(new Date()).then(list => {
-            this.todayProgramList = list
+            this.$store.dispatch('app/setTodayProgramList', list)
           })
         })
       })
@@ -245,7 +266,7 @@ export default {
     handleNextDaysShowChange(program) {
       this.$store.dispatch('app/updateProgram', program).then(() => {
         this.$store.dispatch('app/fetchProgramList', {}).then(() => {
-          this.fetchAllProgramNextDays(this.days).then(list => {
+          this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
             this.$store.dispatch('app/setNextDaysProgramList', list)
           })
         })

@@ -19,7 +19,11 @@
         label="Program"
       >
         <template slot-scope="{row}">
-          <el-link :underline="false" @click="moveToProgramDetail(row.programId)">{{ row.programName }}</el-link>
+          <el-link
+            :underline="false"
+            class="break-word"
+            @click="moveToProgramDetail(row.programId)"
+          >{{ row.programName }}</el-link>
         </template>
       </el-table-column>
       <el-table-column

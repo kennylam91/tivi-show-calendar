@@ -88,18 +88,21 @@ export default {
   },
   methods: {
     // handle when schedule list change
-    async handleChanged() {
+    handleChanged() {
       this.getScheduleList().then(() => {
         // need to wait to execute
         this.updateTodayProgramList()
         this.updateNextDaysProgramList()
       })
     },
-    async getScheduleList() {
-      await this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
-        this.scheduleList = scheduleList
-        this.searchText = ''
-        this.scheduleData = this.scheduleList
+    getScheduleList() {
+      return new Promise((resolve, reject) => {
+        this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
+          this.scheduleList = scheduleList
+          this.searchText = ''
+          this.scheduleData = this.scheduleList
+          resolve()
+        })
       })
     },
     searchProgram() {

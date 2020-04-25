@@ -69,8 +69,7 @@ Vue.mixin({
       const start = new Date(now.setHours(23, 59, 59, 0))
       const programList = []
       const startTimestamp = firebase.firestore.Timestamp.fromDate(start)
-
-      const period = Date.parse(now) + Number(nextDays) * 24 * 60 * 60 * 1000
+      const period = Number(nextDays) * 24 * 60 * 60 * 1000
       const end = new Date(Date.parse(start) + period)
       const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
 
