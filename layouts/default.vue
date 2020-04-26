@@ -1,41 +1,109 @@
 <template>
   <div>
-    <el-menu
-      ref="mainMenu"
-      :default-active="activeIndex"
-      mode="horizontal"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-      menu-trigger="click"
-      @select="handleSelect"
-    >
-      <el-menu-item index="1">
-        <i class="el-icon-s-home" />
-      </el-menu-item>
-      <el-submenu index="2">
-        <template slot="title">{{ COMMON.SCHEDULE }}</template>
-        <el-menu-item index="2-1">
-          {{ COMMON.CHANNEL_LIST }}
+    <div id="defaultLayout">
+      <div class="navWrapper">
+        <div id="menu" :class="{active: isActive}">
+          <el-menu
+            ref="mainMenu"
+            :default-active="activeIndex"
+            mode="horizontal"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+            menu-trigger="click"
+            @select="handleSelect"
+          >
+            <el-menu-item index="1">
+              <span><i class="el-icon-s-home" />{{ COMMON.HOMEPAGE }}</span>
+            </el-menu-item>
+            <el-submenu index="2">
+              <template slot="title">{{ COMMON.SCHEDULE }}</template>
+              <el-menu-item index="2-1">
+                {{ COMMON.CHANNEL_LIST }}
+              </el-menu-item>
+              <el-menu-item
+                v-for="(item, index) in channelList"
+                :key="index"
+                :index="item.id"
+              >{{ item.name }}</el-menu-item>
+
+            </el-submenu>
+
+            <el-submenu index="3">
+              <template slot="title">{{ COMMON.PROGRAM }}</template>
+              <el-menu-item
+                v-for="(item) in programMenu"
+                :key="item.value"
+                :index="item.value"
+              >{{ item.label }}</el-menu-item>
+            </el-submenu>
+            <div id="searchInput">
+              <el-popover
+                v-model="visible"
+                placement="bottom"
+                title="Title"
+                width="200"
+                trigger="manual"
+                content="this is content, this is content, this is content"
+              >
+                <el-input
+                  slot="reference"
+                  v-model="searchText"
+                  :placeholder="COMMON.SEARCH_CHANNEL_PROGRAM"
+                  @keydown.enter.native="handlSearchAll"
+                  @blur="visible = false"
+                />
+              </el-popover>
+
+            </div>
+          </el-menu>
+        </div>
+        <div id="toggle" @click="select">
+          <div id="top" class="span" :class="{ active: isActive }" />
+          <div id="middle" class="span" :class="{ active: isActive }" />
+          <div id="bottom" class="span" :class="{ active: isActive }" />
+        </div>
+
+      </div>
+    </div>
+    <div>
+      <el-menu
+        v-if="isShowVerticalMenu"
+        id="verticalMenu"
+        ref="mainMenu"
+        style="position:fixed; top: 65px; z-index: 99999; width: 100%;"
+        :default-active="activeIndex"
+        mode="vertical"
+        menu-trigger="click"
+        @select="handleVerticalSelect"
+      >
+        <el-menu-item index="1">
+          <i class="el-icon-s-home" />{{ COMMON.HOMEPAGE }}
         </el-menu-item>
-        <el-menu-item
-          v-for="(item, index) in channelList"
-          :key="index"
-          :index="item.id"
-        >{{ item.name }}</el-menu-item>
+        <el-submenu index="2">
+          <template slot="title">{{ COMMON.SCHEDULE }}</template>
+          <el-menu-item index="2-1">
+            {{ COMMON.CHANNEL_LIST }}
+          </el-menu-item>
+          <el-menu-item
+            v-for="(item, index) in channelList"
+            :key="index"
+            :index="item.id"
+          >{{ item.name }}</el-menu-item>
 
-      </el-submenu>
+        </el-submenu>
 
-      <el-submenu index="3">
-        <template slot="title">{{ COMMON.PROGRAM }}</template>
-        <el-menu-item
-          v-for="(item) in programMenu"
-          :key="item.value"
-          :index="item.value"
-        >{{ item.label }}</el-menu-item>
-      </el-submenu>
-    </el-menu>
-    <nuxt class="container" />
+        <el-submenu index="3">
+          <template slot="title">{{ COMMON.PROGRAM }}</template>
+          <el-menu-item
+            v-for="(item) in programMenu"
+            :key="item.value"
+            :index="item.value"
+          >{{ item.label }}</el-menu-item>
+        </el-submenu>
+      </el-menu>
+    </div>
+    <nuxt class="container" style="margin-top: 60px;" />
   </div>
 </template>
 <script>
@@ -54,7 +122,11 @@ export default {
         ['/danh-sach-kenh', '2-1'],
         ['/chuong-trinh-hom-nay', '3-1'],
         ['/chuong-trinh-sap-chieu', '3-2']],
-      pathIndexMap: null
+      pathIndexMap: null,
+      isActive: false,
+      isShowVerticalMenu: false,
+      searchText: '',
+      visible: false
     }
   },
   computed: {
@@ -107,6 +179,18 @@ export default {
           this.getNextDayProgramView()
         }
       }
+    },
+    select() {
+      this.isActive = !this.isActive
+      this.isShowVerticalMenu = !this.isShowVerticalMenu
+    },
+    handleVerticalSelect(key, keyPath) {
+      this.select()
+      this.handleSelect(key, keyPath)
+    },
+    handlSearchAll() {
+      console.log('handlSearchAll')
+      this.visible = true
     }
   }
 
@@ -132,37 +216,14 @@ html {
   margin: 0;
 }
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
-
 .el-menu--collapse .el-menu .el-submenu, .el-menu--popup{
   min-width: 140px;
+}
+#searchInput{
+  position: absolute;
+  width: 300px;
+  right: 10px;
+  top: 10px;
 }
 
 </style>

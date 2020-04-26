@@ -70,7 +70,8 @@ export const COMMON = {
   ALL_CHANNEL: 'Tất cả kênh',
   ALL: 'Tất cả',
   SEARCH_PROGRAM: 'Tìm kiếm chương trình',
-  TOTAL: 'Tổng số'
+  TOTAL: 'Tổng số',
+  SEARCH_CHANNEL_PROGRAM: 'Tìm kiếm các kênh, chương trình,...'
 }
 import { firebase } from '@/MyFireBase'
 export const FB = {

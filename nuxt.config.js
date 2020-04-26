@@ -25,7 +25,8 @@ export default {
   css: [
     'element-ui/lib/theme-chalk/index.css',
     '@/assets/css/element-variables.scss',
-    '@/assets/css/index.scss'
+    '@/assets/css/index.scss',
+    '@/assets/css/navbar.scss'
   ],
   /*
   ** Plugins to load before mounting the App
