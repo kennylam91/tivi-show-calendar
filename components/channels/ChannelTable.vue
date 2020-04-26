@@ -38,7 +38,7 @@
             />
           </div>
           <div>
-            <el-button type="success" size="small" @click="handleScheduleManageClick(row)">{{ COMMON.SCHEDULE }}</el-button>
+            <el-button type="success" size="small" @click="moveToChannelManageView(row)">{{ COMMON.SCHEDULE }}</el-button>
             <el-button type="danger" size="small" @click="handleChannelDeleteClick(row)">{{ COMMON.DELETE }}</el-button>
           </div>
         </template>
@@ -94,13 +94,9 @@ export default {
         this.$store.dispatch('app/fetchChannelList')
       })
     },
-    handleScheduleManageClick(row) {
-      console.log('handleScheduleManageClick')
-      this.$router.push({ path: `/channels/manage/${row.id}` })
-    },
     handleNameClick(channel) {
       if (this.isAdmin) {
-        console.log('move to channel manage')
+        this.moveToChannelManageView(channel)
       } else {
         this.viewChannelDetail(channel)
       }

@@ -5,16 +5,16 @@
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/dashboard' }">{{ COMMON.DASHBOARD }}</el-breadcrumb-item>
           <el-breadcrumb-item :to="{path: '/programs'}">{{ COMMON.PROGRAM_LIST }}</el-breadcrumb-item>
-          <el-breadcrumb-item>{{ COMMON.TODAY }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ COMMON.NEXT_DAY_PROGRAM }}</el-breadcrumb-item>
         </el-breadcrumb>
         <el-button type="primary" size="small" plain @click="handleCreateProgramClick">Create Program</el-button>
       </div>
       <el-card :body-style="{ padding: '0px' }">
         <div slot="header">
-          <div>{{ `${COMMON.TODAY_PROGRAM} (${todayProgramList.length})` }}</div>
-          <div>{{ `${COMMON.SHOW_ON_HOMEPAGE}: ${todayShowNum}` }}</div>
+          <div v-if="nextDaysProgramList">{{ `${COMMON.TODAY_PROGRAM} (${nextDaysProgramList.length})` }}</div>
+          <div>{{ `${COMMON.SHOW_ON_HOMEPAGE}: ${nextDaysShowNum}` }}</div>
         </div>
-        <el-table v-if="todayProgramList" height="700" :data="todayProgramList" border stripe>
+        <el-table v-if="nextDaysProgramList" height="700" :data="nextDaysProgramList" border stripe>
           <el-table-column
             prop="name"
             label="Name"
@@ -42,10 +42,10 @@
           >
             <template slot-scope="{row}">
               <el-switch
-                v-model="row.isTodayShow"
+                v-model="row.isNextDaysShow"
                 :active-text="COMMON.SHOW"
                 :inactive-text="COMMON.HIDE"
-                @change="handleTodayShowChange(row)"
+                @change="handleNextDaysShowChange(row)"
               />
             </template>
           </el-table-column>
@@ -70,8 +70,8 @@ export default {
     }),
     // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
 
-    todayProgramList() {
-      const list = this.$store.state.app.todayProgramList
+    nextDaysProgramList() {
+      const list = this.$store.state.app.nextDaysProgramList
       const result = []
       if (list) {
         list.forEach(item => {
@@ -82,8 +82,9 @@ export default {
         return null
       }
     },
-    todayShowNum() {
-      return this.todayProgramList.filter(item => item.isTodayShow).length
+    nextDaysShowNum() {
+      // return this.nextDaysProgramList.filter(item => item.isNextDaysShow).length
+      return 0
     }
   },
   watch: {
@@ -93,8 +94,8 @@ export default {
         if (!this.programList) {
           this.$store.dispatch('app/fetchProgramList', {})
         } else {
-          if (!this.todayProgramList) {
-            this.updateTodayProgramList()
+          if (!this.nextDaysProgramList) {
+            this.updateNextDaysProgramList()
           }
         }
       }
@@ -108,11 +109,11 @@ export default {
       this.$router.push({ path: '/programs/create' })
     },
 
-    handleTodayShowChange(program) {
+    handleNextDaysShowChange(program) {
       this.$store.dispatch('app/updateProgram', program).then(() => {
         this.$store.dispatch('app/fetchProgramList', {}).then(() => {
-          this.fetchAllProgramByDate(new Date()).then(list => {
-            this.$store.dispatch('app/setTodayProgramList', list)
+          this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
+            this.$store.dispatch('app/setNextDaysProgramList', list)
           })
         })
       })

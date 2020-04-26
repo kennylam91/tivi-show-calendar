@@ -118,6 +118,14 @@ Vue.mixin({
     },
     filterCategory(value, row, column) {
       return row.categories.includes(value)
+    },
+    handleLogout() {
+      this.$store.dispatch('user/logout').then(() => {
+        this.$router.push({ path: this.redirect || '/' })
+      })
+    },
+    moveToChannelManageView(channel) {
+      this.$router.push({ path: `/channels/manage/${channel.id}` })
     }
   }
 })
