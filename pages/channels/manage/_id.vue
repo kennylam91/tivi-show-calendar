@@ -2,7 +2,8 @@
   <div v-if="channel">
     <div class="p-4">
       <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/dashboard' }">{{ COMMON.DASHBOARD }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/channels' }">{{ COMMON.CHANNEL_LIST }}</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: `/channels/edit/${channel.id}`}">{{ channel.name }}</el-breadcrumb-item>
         <el-breadcrumb-item>Manage channel</el-breadcrumb-item>
       </el-breadcrumb>

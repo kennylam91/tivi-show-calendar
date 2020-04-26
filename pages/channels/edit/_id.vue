@@ -49,10 +49,10 @@ export default {
     handleSavedAction() {
       console.log('handleSavedAction')
       this.$store.dispatch('app/fetchChannelList')
-      this.$router.push({ path: '/dashboard' })
+      this.$router.push({ path: '/channels' })
     },
     handleCancel() {
-      this.$router.push({ path: '/dashboard' })
+      this.$router.push({ path: '/channels' })
     }
   }
 }

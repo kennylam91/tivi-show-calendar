@@ -30,10 +30,10 @@ export default {
   },
   methods: {
     handleSaved() {
-      this.$router.push({ path: '/dashboard' })
+      this.$router.push({ path: '/channels' })
     },
     handleCancel() {
-      this.$router.push({ path: '/dashboard' })
+      this.$router.push({ path: '/channels' })
     }
   }
 }
