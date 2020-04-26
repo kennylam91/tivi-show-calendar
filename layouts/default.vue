@@ -68,7 +68,9 @@ export default {
   watch: {
     path: {
       handler() {
-        this.activeIndex = this.pathIndexMap.get(this.path)
+        if (this.pathIndexMap) {
+          this.activeIndex = this.pathIndexMap.get(this.path)
+        }
       }
     }
   },

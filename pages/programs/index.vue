@@ -8,14 +8,29 @@
         </el-breadcrumb>
         <el-button type="primary" size="small" plain @click="handleCreateProgramClick">Create Program</el-button>
       </div>
-      <el-table id="programTable" :data="programList" border stripe>
+      <el-table id="programTable" :data="programListData" border stripe>
         <el-table-column
           prop="name"
           label="Name"
-        />
+        >
+          <template slot="header" slot-scope="{row}">
+            <span>{{ COMMON.TOTAL }}: {{ programsNumber }}</span>
+            <el-input
+              v-model="programNameSearch"
+              size="mini"
+              style="width: 60%; float: right;"
+              :placeholder="COMMON.SEARCH_PROGRAM"
+              @change="handleProgramSearch(row)"
+            />
+          </template>
+        </el-table-column>
         <el-table-column
           label="Category"
-          width="270"
+          width="300"
+          :filters="CATEGORIES"
+          :filter-method="filterCategory"
+          :filter-multiple="true"
+          filter-placement="bottom"
         >
           <template slot-scope="{row}">
             <div v-if="row.categories">
@@ -29,14 +44,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="description"
-          label="Description"
-        />
+
         <el-table-column
           align="center"
           label="Operations"
-          width="180"
+          width="170"
         >
           <template slot-scope="scope">
             <el-button size="small" @click="handleProgramEditClick(scope.row)">Edit</el-button>
@@ -56,12 +68,27 @@ export default {
   middleware: 'auth',
   data() {
     return {
+      programNameSearch: ''
     }
   },
   computed: {
     ...mapGetters({
       programList: 'programList'
-    })
+    }),
+    programListData() {
+      if (this.programList) {
+        if (this.programNameSearch) {
+          return this.programList.filter(item => item.name.toLowerCase().includes(this.programNameSearch.toLowerCase()))
+        } else {
+          return this.programList
+        }
+      } else {
+        return []
+      }
+    },
+    programsNumber() {
+      return this.programListData.length
+    }
   },
   created() {
     if (!this.programList) {
@@ -94,6 +121,9 @@ export default {
           })
         })
       })
+    },
+    handleProgramSearch() {
+
     }
 
   }
