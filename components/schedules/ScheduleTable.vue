@@ -3,6 +3,7 @@
     <el-table :data="scheduleList" border stripe style="width: 100%" size="small">
       <el-table-column
         label="Start Time"
+        width="100"
       >
         <template slot-scope="{row}">
           <div>{{ parseVNTime(row.startTime.seconds) }}</div>
@@ -10,6 +11,7 @@
       </el-table-column>
       <el-table-column
         label="End Time"
+        width="100"
       >
         <template slot-scope="{row}">
           <div>{{ parseVNTime(row.endTime.seconds) }}</div>
@@ -28,9 +30,17 @@
       </el-table-column>
       <el-table-column
         label="Categories"
+        width="170"
       >
         <template slot-scope="{row}">
-          <el-tag v-for="(item, index) in row.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+          <el-tag
+            v-for="(item, index) in row.categories"
+            :key="index"
+            size="small"
+            effect="dark"
+            type="info"
+            style="margin: 2px;"
+          >
             {{ item | getCategory }}
           </el-tag>
 
@@ -38,11 +48,10 @@
       </el-table-column>
       <el-table-column
         align="center"
-        width="180"
+        width="160"
       >
         <template slot="header">
           <el-button type="primary" plain size="small" @click="handleCreateSchedule">Create Schedule</el-button>
-
         </template>
         <template slot-scope="scope">
           <el-button size="small" @click="handleScheduleEditClick(scope.row)">Edit</el-button>
@@ -99,7 +108,7 @@ export default {
       this.createScheduleDialogVisibleProp = true
     },
     parseVNTime(time) {
-      return parseVNTime(time, '{d}/{m}/{y} {h}:{i}{a}', true, true)
+      return parseVNTime(time, '{h}:{i}{a}', true, true)
     },
     handleSaved() {
       this.createScheduleDialogVisibleProp = false

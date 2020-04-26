@@ -167,11 +167,8 @@ export default {
       this.scheduleData = this.searchText
         ? this.scheduleList.filter(schedule => schedule.programName.toLowerCase().includes(this.searchText.toLowerCase()))
         : this.scheduleList
-    },
-    filterCategory(value, row, column) {
-      debugger
-      return row.categories.includes(value)
     }
+
   }
 }
 </script>

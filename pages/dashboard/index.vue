@@ -10,51 +10,15 @@
 
     </div>
     <el-card :body-style="{ padding: '16px' }">
-      <div slot="header">
-        <nuxt-link to="/channels">{{ COMMON.CHANNEL_LIST }}</nuxt-link>
-      </div>
-      <!-- card body -->
+      <nuxt-link to="/channels">{{ COMMON.CHANNEL_LIST }}</nuxt-link>
+
     </el-card>
 
     <el-card class="my-2" :body-style="{ padding: '16px' }">
-      <div slot="header">
-        <span>
-          <span class="bold">{{ COMMON.TODAY_PROGRAM }}</span>
-          <nuxt-link style="float:right;" to="/programs">All Programs</nuxt-link>
-        </span>
-      </div>
-      <el-table v-if="todayProgramList" :data="todayProgramList" border stripe>
-        <el-table-column
-          prop="name"
-          label="Name"
-        />
-        <el-table-column
-          label="Category"
-          width="300"
-        >
-          <template slot-scope="{row}">
-            <div>
-              <el-tag v-for="(item, index) in row.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
-                {{ item | getCategory }}
-              </el-tag>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          align="center"
-          width="180"
-          :label="COMMON.SHOW_ON_HOMEPAGE"
-        >
-          <template slot-scope="{row}">
-            <el-switch
-              v-model="row.isTodayShow"
-              :active-text="COMMON.SHOW"
-              :inactive-text="COMMON.HIDE"
-              @change="handleTodayShowChange(row)"
-            />
-          </template>
-        </el-table-column>
-      </el-table>
+
+      <nuxt-link to="/programs">
+        <div class="mb-2">{{ COMMON.PROGRAM_LIST }}</div></nuxt-link>
+      <nuxt-link to="/programs/today">{{ COMMON.TODAY_PROGRAM }}</nuxt-link>
     </el-card>
 
     <el-card class="my-2" :body-style="{ padding: '16px' }">

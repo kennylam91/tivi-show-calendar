@@ -65,7 +65,8 @@ export const COMMON = {
   NEXT_DAYS_SHOW_NUM: 3,
   PAGE_TITLE: 'Truyền hình 24h',
   PROGRAM_SCHEDULE_NEXT_DAYS: 'Lịch phát sóng thời gian tới',
-  CLEAR_SEARCH: 'Xóa tìm kiếm'
+  CLEAR_SEARCH: 'Xóa tìm kiếm',
+  PROGRAM_LIST: 'Danh sách chương trình'
 }
 import { firebase } from '@/MyFireBase'
 export const FB = {

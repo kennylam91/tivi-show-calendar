@@ -115,6 +115,9 @@ Vue.mixin({
     },
     moveToChannelListView() {
       this.$router.push({ path: '/danh-sach-kenh' })
+    },
+    filterCategory(value, row, column) {
+      return row.categories.includes(value)
     }
   }
 })

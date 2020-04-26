@@ -36,7 +36,7 @@
         size="small"
         effect="dark"
         type="info"
-        style="margin: 2px; padding: 0 5px;"
+        style="margin: 2px; padding: 0 4px;"
       >
         {{ item | getCategory }}
       </el-tag>
