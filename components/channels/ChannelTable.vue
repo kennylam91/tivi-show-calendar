@@ -7,7 +7,9 @@
         width="150"
       >
         <template slot-scope="{row}">
-          <span :class="{'vip-channel': row.isVip}">{{ row.name }}</span>
+          <el-link @click="handleNameClick(row)">
+            <span>{{ row.name }}</span>
+          </el-link>
         </template>
       </el-table-column>
       <el-table-column
@@ -20,6 +22,7 @@
 
       </el-table-column>
       <el-table-column
+        v-if="isAdmin"
         align="center"
         :label="COMMON.ACTION"
         width="230"
@@ -51,7 +54,12 @@ export default {
   props: {
     channelList: {
       required: true,
-      type: Object
+      type: Array
+    },
+    isAdmin: {
+      required: false,
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -89,6 +97,13 @@ export default {
     handleScheduleManageClick(row) {
       console.log('handleScheduleManageClick')
       this.$router.push({ path: `/channels/manage/${row.id}` })
+    },
+    handleNameClick(channel) {
+      if (this.isAdmin) {
+        console.log('move to channel manage')
+      } else {
+        this.viewChannelDetail(channel)
+      }
     }
   }
 }

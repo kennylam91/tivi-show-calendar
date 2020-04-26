@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-menu
+      ref="mainMenu"
       :default-active="activeIndex"
       mode="horizontal"
       background-color="#545c64"
@@ -14,19 +15,23 @@
       </el-menu-item>
       <el-submenu index="2">
         <template slot="title">{{ COMMON.SCHEDULE }}</template>
+        <el-menu-item index="2-1">
+          {{ COMMON.CHANNEL_LIST }}
+        </el-menu-item>
         <el-menu-item
           v-for="(item, index) in channelList"
           :key="index"
           :index="item.id"
         >{{ item.name }}</el-menu-item>
+
       </el-submenu>
 
       <el-submenu index="3">
         <template slot="title">{{ COMMON.PROGRAM }}</template>
         <el-menu-item
           v-for="(item) in programMenu"
-          :key="item.label"
-          :index="item.label"
+          :key="item.value"
+          :index="item.value"
         >{{ item.label }}</el-menu-item>
       </el-submenu>
     </el-menu>
@@ -36,24 +41,47 @@
 <script>
 import { mapGetters } from 'vuex'
 import { COMMON } from '@/assets/utils/constant'
-
 export default {
+
   data() {
     return {
       activeIndex: '1',
       programMenu: [
         { label: COMMON.TODAY, value: '3-1' },
         { label: COMMON.NEXT_DAY, value: '3-2' }
-      ]
+      ],
+      pathIndexMatrix: [['/', '1'],
+        ['/danh-sach-kenh', '2-1'],
+        ['/chuong-trinh-hom-nay', '3-1'],
+        ['/chuong-trinh-sap-chieu', '3-2']],
+      pathIndexMap: null
     }
   },
   computed: {
     ...mapGetters({
       channelList: 'channelList'
-    })
+    }),
+    path() {
+      return this.$route.path
+    }
+  },
+  watch: {
+    path: {
+      handler() {
+        this.activeIndex = this.pathIndexMap.get(this.path)
+      }
+    }
   },
   created() {
-    this.$store.dispatch('app/fetchChannelList')
+    this.$store.dispatch('app/fetchChannelList').then(channelList => {
+      for (const channel of channelList) {
+        const name = channel.name.split(' ').join('-').trim()
+        const channelPath = `/lich-chieu/${name}-${channel.id}`
+        const index = channel.id
+        this.pathIndexMatrix.push([channelPath, index])
+      }
+      this.pathIndexMap = new Map(this.pathIndexMatrix)
+    })
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -62,14 +90,18 @@ export default {
         this.$router.push({ path: '/' })
       }
       if (keyPath[0] === '2') {
-        const channel = this.channelList.find(item => item.id === key)
-        this.viewChannelDetail(channel)
+        if (keyPath[1] === '2-1') {
+          this.moveToChannelListView()
+        } else {
+          const channel = this.channelList.find(item => item.id === key)
+          this.viewChannelDetail(channel)
+        }
       }
       if (keyPath[0] === '3') {
-        if (key === this.programMenu[0].label) {
+        if (key === '3-1') {
           this.getTodayProgramView()
         }
-        if (key === this.programMenu[1].label) {
+        if (key === '3-2') {
           this.getNextDayProgramView()
         }
       }

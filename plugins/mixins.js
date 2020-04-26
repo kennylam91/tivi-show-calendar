@@ -112,6 +112,9 @@ Vue.mixin({
     },
     getNextDayProgramView() {
       this.$router.push({ path: `/chuong-trinh-sap-chieu` })
+    },
+    moveToChannelListView() {
+      this.$router.push({ path: '/danh-sach-kenh' })
     }
   }
 })

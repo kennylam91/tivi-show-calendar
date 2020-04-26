@@ -3,6 +3,7 @@
     <div class="p-4">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">{{ COMMON.HOMEPAGE }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/danh-sach-kenh' }">{{ COMMON.CHANNEL_LIST }}</el-breadcrumb-item>
         <el-breadcrumb-item>{{ channel.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
