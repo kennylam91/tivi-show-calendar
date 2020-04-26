@@ -83,7 +83,9 @@ export default {
       }
     },
     nextDaysShowNum() {
-      // return this.nextDaysProgramList.filter(item => item.isNextDaysShow).length
+      if (this.nextDaysProgramList) {
+        return this.nextDaysProgramList.filter(item => item.isNextDaysShow).length
+      }
       return 0
     }
   },

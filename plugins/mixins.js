@@ -60,7 +60,13 @@ Vue.mixin({
         this.$store.dispatch('app/fetchProgramList', {})
       }
       return new Promise((resolve, reject) => {
-        this.fetchScheduleList(null, date).then(scheduleList => {
+        const startTimestamp = firebase.firestore.Timestamp.fromDate(date)
+        const end = date
+        end.setHours(23, 59, 59, 999)
+        const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
+
+        this.$store.dispatch('app/fetchScheduleList',
+          { channelId: null, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
           this.$store.dispatch('app/setTodayScheduleList', scheduleList)
           for (const schedule of scheduleList) {
             const foundProgram = this.programList.find(pro => pro.id === schedule.programId)

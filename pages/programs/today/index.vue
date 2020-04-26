@@ -11,7 +11,7 @@
       </div>
       <el-card :body-style="{ padding: '0px' }">
         <div slot="header">
-          <div>{{ `${COMMON.TODAY_PROGRAM} (${todayProgramList.length})` }}</div>
+          <div v-if="todayProgramList">{{ `${COMMON.TODAY_PROGRAM} (${todayProgramList.length})` }}</div>
           <div>{{ `${COMMON.SHOW_ON_HOMEPAGE}: ${todayShowNum}` }}</div>
         </div>
         <el-table v-if="todayProgramList" height="700" :data="todayProgramList" border stripe>
@@ -83,7 +83,10 @@ export default {
       }
     },
     todayShowNum() {
-      return this.todayProgramList.filter(item => item.isTodayShow).length
+      if (this.todayProgramList) {
+        return this.todayProgramList.filter(item => item.isTodayShow).length
+      }
+      return 0
     }
   },
   watch: {
