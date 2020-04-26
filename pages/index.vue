@@ -3,7 +3,10 @@
 
     <div class="row mt-2">
       <el-divider content-position="left">
-        <h5>{{ COMMON.VIP_CHANNEL }}</h5>
+        <h5 class="d-inline">{{ COMMON.VIP_CHANNEL }}</h5>
+        <p class="d-inline">
+          <nuxt-link to="/danh-sach-kenh">{{ `(${COMMON.ALL_CHANNEL})` }}</nuxt-link>
+        </p>
       </el-divider>
       <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-2">
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
@@ -32,7 +35,10 @@
     </div>
     <div class="row mt-2">
       <el-divider content-position="left">
-        <h5>{{ COMMON.VIP_TODAY_PROGRAM }}</h5>
+        <h5 class="d-inline">{{ COMMON.VIP_TODAY_PROGRAM }}</h5>
+        <p class="d-inline">
+          <nuxt-link to="/chuong-trinh-hom-nay">{{ `(${COMMON.ALL})` }}</nuxt-link>
+        </p>
       </el-divider>
       <div
         v-for="program in todayVipProgramList"
@@ -45,7 +51,10 @@
 
     <div class="row mt-2">
       <el-divider content-position="left">
-        <h5>{{ COMMON.VIP_INCOMING_PROGRAM }}</h5>
+        <h5 class="d-inline">{{ COMMON.VIP_INCOMING_PROGRAM }}</h5>
+        <p class="d-inline">
+          <nuxt-link to="/chuong-trinh-sap-chieu">{{ `(${COMMON.ALL})` }}</nuxt-link>
+        </p>
       </el-divider>
       <div
         v-for="program in nextDaysVipProgramList"
