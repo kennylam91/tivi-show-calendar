@@ -72,7 +72,8 @@ export const COMMON = {
   SEARCH_PROGRAM: 'Tìm kiếm chương trình',
   TOTAL: 'Tổng số',
   SEARCH_CHANNEL_PROGRAM: 'Tìm kiếm các kênh, chương trình,...',
-  TYPE_2_CHAR_AT_LEAST: 'Nhập tối thiểu 2 kí tự'
+  TYPE_2_CHAR_AT_LEAST: 'Nhập tối thiểu 2 kí tự',
+  RANK: 'Xếp loại'
 }
 import { firebase } from '@/MyFireBase'
 export const FB = {
@@ -80,6 +81,12 @@ export const FB = {
   scheduleRef: firebase.firestore().collection('schedules'),
   programRef: firebase.firestore().collection('programs')
 }
+
+export const programRankOptions = [
+  { label: 'Đặc biệt', value: 3 },
+  { label: 'Tốt', value: 2 },
+  { label: 'Bình thường', value: 1 }
+]
 
 export const categoryMap = new Map([
   [1, 'Phim'],
@@ -93,7 +100,7 @@ export const categoryMap = new Map([
   [9, 'Khám phá'],
   [10, 'Ca nhạc'],
   [11, 'Kinh dị'],
-  [12, 'Hài'],
+  [12, 'Hài hước'],
   [13, 'Hành động'],
   [14, 'Viễn tưởng'],
   [15, 'Thần thoại'],
@@ -102,7 +109,8 @@ export const categoryMap = new Map([
   [18, 'Cổ trang'],
   [19, 'Chiến tranh'],
   [20, 'Hoạt hình'],
-  [21, 'Tình cảm']
+  [21, 'Tình cảm'],
+  [22, 'Tâm lý']
 ])
 
 export const CATEGORIES = [
@@ -117,7 +125,7 @@ export const CATEGORIES = [
   { value: 9, label: 'Khám phá', text: 'Khám phá' },
   { value: 10, label: 'Ca nhạc', text: 'Ca nhạc' },
   { value: 11, label: 'Kinh dị', text: 'Kinh dị' },
-  { value: 12, label: 'Hài', text: 'Hài' },
+  { value: 12, label: 'Hài hước', text: 'Hài hước' },
   { value: 13, label: 'Hành động', text: 'Hành động' },
   { value: 14, label: 'Viễn tưởng', text: 'Viễn tưởng' },
   { value: 15, label: 'Thần thoại', text: 'Thần thoại' },
@@ -126,7 +134,8 @@ export const CATEGORIES = [
   { value: 18, label: 'Cổ trang', text: 'Cổ trang' },
   { value: 19, label: 'Chiến tranh', text: 'Chiến tranh' },
   { value: 20, label: 'Hoạt hình', text: 'Hoạt hình' },
-  { value: 21, label: 'Tình cảm', text: 'Tình cảm' }
+  { value: 21, label: 'Tình cảm', text: 'Tình cảm' },
+  { value: 22, label: 'Tâm lý', text: 'Tâm lý' }
 ].sort((a, b) => {
   if (a.label > b.label) {
     return 1

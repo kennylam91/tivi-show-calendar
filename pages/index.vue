@@ -71,6 +71,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
+import { sortByRankDesc } from '@/assets/utils/index'
 
 export default {
   components: { Program
@@ -112,7 +113,7 @@ export default {
           }
           if (!this.nextDaysVipProgramList) {
             this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
-              const newList = list.filter(item => item.isNextDaysShow)
+              const newList = list.filter(item => item.isNextDaysShow).sort(sortByRankDesc)
                 .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
               this.$store.dispatch('app/setNextDaysVipProgramList', newList)
             })

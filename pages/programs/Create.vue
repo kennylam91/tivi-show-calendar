@@ -20,9 +20,10 @@ export default {
         name: '',
         description: '',
         logo: '',
-        isTodayShow: false,
-        isNextDaysShow: false,
-        categories: null
+        isTodayShow: true,
+        isNextDaysShow: true,
+        categories: null,
+        rank: 1
       }
     }
   },

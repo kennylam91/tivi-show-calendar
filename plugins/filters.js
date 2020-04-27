@@ -7,20 +7,16 @@ Vue.filter('lowercaseAll', val => val.toLowerCase())
 Vue.filter('getCategory', val => categoryMap.get(Number(val)))
 Vue.filter('shortenName', val => {
   if (val) {
-    const array = val.split('(')
+    const array = val.split('-')
     return array[0].trim()
   }
   return ''
 })
-Vue.filter('getVNTranslateName', name => {
-  if (name) {
-    const start = name.indexOf('(')
-    const end = name.indexOf(')')
-    if (start >= 0 && end >= 0) {
-      return name.substring(start + 1, end).trim()
-    } else {
-      return name
-    }
+Vue.filter('getVNTranslateName', val => {
+  if (val) {
+    const array = val.split('-')
+    return array[1] ? array[1].trim() : ''
   }
+  return ''
 })
 

@@ -17,7 +17,6 @@
             <span>{{ COMMON.TOTAL }}: {{ programsNumber }}</span>
             <el-input
               v-model="programNameSearch"
-              size="mini"
               style="width: 60%; float: right;"
               :placeholder="COMMON.SEARCH_PROGRAM"
               @change="handleProgramSearch(row)"

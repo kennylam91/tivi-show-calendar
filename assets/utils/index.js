@@ -73,3 +73,21 @@ export function trimObject(source) {
   return source
 }
 
+export const sortByStartTime = (a, b) => {
+  if (a.startTime.seconds > b.startTime.seconds) {
+    return 1
+  } else if (a.startTime.seconds < b.name.seconds) {
+    return -1
+  } else {
+    return 0
+  }
+}
+export const sortByRankDesc = (a, b) => {
+  if (a.rank < b.rank) {
+    return 1
+  } else if (a.rank > b.rank) {
+    return -1
+  } else {
+    return 0
+  }
+}

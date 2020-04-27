@@ -197,7 +197,7 @@ export default {
     handlSearchAll() {
       console.log('handlSearchAll')
 
-      const lowerCaseSearchText = this.searchText.toLowerCase()
+      const lowerCaseSearchText = this.searchText.trim().toLowerCase()
       if (lowerCaseSearchText.length < 2) {
         this.$message({
           message: this.COMMON.TYPE_2_CHAR_AT_LEAST,

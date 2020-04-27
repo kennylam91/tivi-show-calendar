@@ -19,15 +19,27 @@
             :value="item.value"
           />
         </el-select>
-        <span class="color-danger">{{ COMMON.NO_MORE_THAN_TWO }}</span>
+      </el-form-item>
+      <el-form-item :label="COMMON.RANK">
+        <el-select
+          v-model="programData.rank"
+          class="w-100"
+        >
+          <el-option
+            v-for="item in programRankOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
 
+        </el-select>
       </el-form-item>
 
       <el-form-item :label="COMMON.DESCRIPTION">
         <el-input
           v-model="programData.description"
           type="textarea"
-          :rows="6"
+          :rows="4"
         />
       </el-form-item>
       <el-form-item label="Logo">
@@ -45,6 +57,8 @@
 <script>
 import { CATEGORIES } from '@/assets/utils/constant'
 import Upload from '@/components/upload/Upload'
+import { programRankOptions } from '@/assets/utils/constant'
+
 export default {
   components: { Upload },
   props: {
@@ -56,7 +70,8 @@ export default {
   data() {
     return {
       programData: null,
-      CATEGORIES
+      CATEGORIES,
+      programRankOptions
 
     }
   },
@@ -82,42 +97,32 @@ export default {
   },
   methods: {
     onSubmit() {
-      // check is program valid: no more than 2 categories
-      if (this.programData.categories) {
-        if (this.programData.categories.length > 2) {
-          this.$message({
-            message: this.COMMON.NO_MORE_THAN_TWO,
-            type: 'error'
+      if (!this.programData.id) {
+        this.$store.dispatch('app/createProgram', this.programData).then(() => {
+          console.log('add program success')
+          this.$notify({
+            title: 'Program Created',
+            type: 'success',
+            duration: '4500',
+            position: 'top-right'
           })
-        } else {
-          if (!this.programData.id) {
-            this.$store.dispatch('app/createProgram', this.programData).then(() => {
-              console.log('add program success')
-              this.$notify({
-                title: 'Program Created',
-                type: 'success',
-                duration: '4500',
-                position: 'top-right'
-              })
-              this.$emit('saved')
-            }).catch(err => {
-              console.log(err)
-            })
-          } else {
-            this.$store.dispatch('app/updateProgram', this.programData).then(() => {
-              console.log('update program ok')
-              this.$notify({
-                title: 'Program Updated',
-                type: 'success',
-                duration: '4500',
-                position: 'top-right'
-              })
-              this.$emit('saved')
-            }).catch(err => {
-              console.log(err)
-            })
-          }
-        }
+          this.$emit('saved')
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        this.$store.dispatch('app/updateProgram', this.programData).then(() => {
+          console.log('update program ok')
+          this.$notify({
+            title: 'Program Updated',
+            type: 'success',
+            duration: '4500',
+            position: 'top-right'
+          })
+          this.$emit('saved')
+        }).catch(err => {
+          console.log(err)
+        })
       }
     },
     handleCancelClick() {

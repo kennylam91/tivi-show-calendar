@@ -14,8 +14,8 @@
         />
       </el-link>
       <div v-else>{{ program.name }}</div>
-      <div class="shorten-text color-info smaller-font-size mb-2">
-        {{ program.name | getVNTranslateName }}
+      <div class="shorten-text color-info smaller-font-size my-2">
+        {{ program.name | shortenName }}
       </div>
       <el-link
         id="programName"
@@ -24,18 +24,18 @@
         @click="viewProgramDetail(program)"
       >
         <el-tooltip
-          :content="program.name | shortenName"
+          :content="program.name | getVNTranslateName"
           placement="bottom"
           effect="dark"
         >
-          <div class="shorten-text color-primary bold small-font-size">
-            {{ program.name | shortenName }}
+          <div class="shorten-text color-primary bold smaller-font-size">
+            {{ program.name | getVNTranslateName }}
           </div>
         </el-tooltip>
       </el-link>
 
       <el-tag
-        v-for="(item, index) in program.categories"
+        v-for="(item, index) in program.categories.slice(0,2)"
         :key="index"
         size="small"
         effect="dark"
