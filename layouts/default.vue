@@ -40,12 +40,16 @@
             <div id="searchInput">
               <el-popover
                 v-model="visible"
-                placement="bottom"
-                title="Title"
-                width="200"
+                placement="bottom-start"
+                :title="Title"
+                width="250"
                 trigger="manual"
                 content="this is content, this is content, this is content"
               >
+                <div v-for="(result, index) in searchAllResults" :key="index" class="my-1 w-100">
+                  <SearchResult :result="result" :width="50" />
+                </div>
+
                 <el-input
                   slot="reference"
                   v-model="searchText"
@@ -109,8 +113,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import { COMMON } from '@/assets/utils/constant'
-export default {
+import SearchResult from '@/components/search/SearchResult'
 
+export default {
+  components: { SearchResult },
   data() {
     return {
       activeIndex: '1',
@@ -126,7 +132,8 @@ export default {
       isActive: false,
       isShowVerticalMenu: false,
       searchText: '',
-      visible: false
+      visible: false,
+      searchAllResults: null
     }
   },
   computed: {
@@ -191,6 +198,7 @@ export default {
     handlSearchAll() {
       console.log('handlSearchAll')
       this.visible = true
+      this.searchAllResults = this.channelList
     }
   }
 
@@ -221,7 +229,7 @@ html {
 }
 #searchInput{
   position: absolute;
-  width: 300px;
+  width: 270px;
   right: 10px;
   top: 10px;
 }

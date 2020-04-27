@@ -3,7 +3,7 @@
 
     <div class="row mt-2">
       <el-divider content-position="left">
-        <h5 class="d-inline">{{ COMMON.VIP_CHANNEL }}</h5>
+        <h6 class="d-inline">{{ COMMON.VIP_CHANNEL }}</h6>
         <p class="d-inline">
           <nuxt-link to="/danh-sach-kenh">{{ `(${COMMON.ALL_CHANNEL})` }}</nuxt-link>
         </p>
@@ -35,7 +35,7 @@
     </div>
     <div class="row mt-2">
       <el-divider content-position="left">
-        <h5 class="d-inline">{{ COMMON.VIP_TODAY_PROGRAM }}</h5>
+        <h6 class="d-inline">{{ COMMON.VIP_TODAY_PROGRAM }}</h6>
         <p class="d-inline">
           <nuxt-link to="/chuong-trinh-hom-nay">{{ `(${COMMON.ALL})` }}</nuxt-link>
         </p>
@@ -51,7 +51,7 @@
 
     <div class="row mt-2">
       <el-divider content-position="left">
-        <h5 class="d-inline">{{ COMMON.VIP_INCOMING_PROGRAM }}</h5>
+        <h6 class="d-inline">{{ COMMON.VIP_INCOMING_PROGRAM }}</h6>
         <p class="d-inline">
           <nuxt-link to="/chuong-trinh-sap-chieu">{{ `(${COMMON.ALL})` }}</nuxt-link>
         </p>
