@@ -16,20 +16,23 @@
       <div v-else>{{ program.name }}</div>
       <el-link
         id="programName"
-        class="my-2 w-100"
+        class="my-1 w-100"
         type="primary"
         @click="viewProgramDetail(program)"
       >
         <el-tooltip
-          :content="program.name | getVNTranslateName"
+          :content="program.name | shortenName"
           placement="bottom"
           effect="dark"
         >
-          <div class="shorten-text color-primary bold">
+          <div class="shorten-text color-primary bold small-font-size">
             {{ program.name | shortenName }}
           </div>
         </el-tooltip>
       </el-link>
+      <div class="shorten-text color-info smaller-font-size mb-2">
+        {{ program.name | getVNTranslateName }}
+      </div>
       <el-tag
         v-for="(item, index) in program.categories"
         :key="index"

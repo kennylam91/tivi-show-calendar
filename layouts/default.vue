@@ -41,11 +41,15 @@
               <el-popover
                 v-model="visible"
                 placement="bottom"
-                title="Title"
-                width="200"
+                :title="Title"
+                width="300"
                 trigger="manual"
                 content="this is content, this is content, this is content"
               >
+                <div v-for="(result, index) in searchAllResults" :key="index">
+                  <SearchResult :result="result" />
+                </div>
+
                 <el-input
                   slot="reference"
                   v-model="searchText"
@@ -109,7 +113,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import { COMMON } from '@/assets/utils/constant'
+import SearchResult from '@/components/search/SearchResult'
+
 export default {
+  components: { SearchResult },
 
   data() {
     return {
@@ -126,7 +133,8 @@ export default {
       isActive: false,
       isShowVerticalMenu: false,
       searchText: '',
-      visible: false
+      visible: false,
+      searchAllResults: null
     }
   },
   computed: {
@@ -191,6 +199,7 @@ export default {
     handlSearchAll() {
       console.log('handlSearchAll')
       this.visible = true
+      this.searchAllResults = this.channelList
     }
   }
 
