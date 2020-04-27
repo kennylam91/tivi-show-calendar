@@ -1,8 +1,8 @@
 <template>
-  <el-link id="searchResult" class=" w-100" :underline="false">
+  <el-link id="searchResult" class=" w-100" :underline="false" @click="handleLinkClick">
     <div class="flex w-100 " style="align-items: center;">
       <img class="img-fluid " :src="result.logo" :alt="result.name" :width="width">
-      <div class="ml-2">
+      <div class="ml-2 break-word smaller-font-size">
         {{ result.name }}
       </div>
     </div>
@@ -20,6 +20,16 @@ export default {
       required: false,
       type: Number,
       default: 100
+    }
+  },
+  methods: {
+    handleLinkClick() {
+      // program has categories
+      if (this.result.categories !== undefined) {
+        this.viewProgramDetail(this.result)
+      } else {
+        this.viewChannelDetail(this.result)
+      }
     }
   }
 }

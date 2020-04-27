@@ -71,7 +71,8 @@ export const COMMON = {
   ALL: 'Tất cả',
   SEARCH_PROGRAM: 'Tìm kiếm chương trình',
   TOTAL: 'Tổng số',
-  SEARCH_CHANNEL_PROGRAM: 'Tìm kiếm các kênh, chương trình,...'
+  SEARCH_CHANNEL_PROGRAM: 'Tìm kiếm các kênh, chương trình,...',
+  TYPE_2_CHAR_AT_LEAST: 'Nhập tối thiểu 2 kí tự'
 }
 import { firebase } from '@/MyFireBase'
 export const FB = {

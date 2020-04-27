@@ -14,7 +14,7 @@
             @select="handleSelect"
           >
             <el-menu-item index="1">
-              <span><i class="el-icon-s-home" />{{ COMMON.HOMEPAGE }}</span>
+              <span><i class="el-icon-s-home" /><span>{{ COMMON.HOMEPAGE }}</span></span>
             </el-menu-item>
             <el-submenu index="2">
               <template slot="title">{{ COMMON.SCHEDULE }}</template>
@@ -41,19 +41,18 @@
               <el-popover
                 v-model="visible"
                 placement="bottom-start"
-                :title="Title"
-                width="250"
+                width="270"
                 trigger="manual"
-                content="this is content, this is content, this is content"
               >
                 <div v-for="(result, index) in searchAllResults" :key="index" class="my-1 w-100">
-                  <SearchResult :result="result" :width="50" />
+                  <SearchResult :result="result" :width="60" />
                 </div>
 
                 <el-input
                   slot="reference"
                   v-model="searchText"
                   :placeholder="COMMON.SEARCH_CHANNEL_PROGRAM"
+                  clearable
                   @keydown.enter.native="handlSearchAll"
                   @blur="visible = false"
                 />
@@ -197,8 +196,31 @@ export default {
     },
     handlSearchAll() {
       console.log('handlSearchAll')
-      this.visible = true
-      this.searchAllResults = this.channelList
+
+      const lowerCaseSearchText = this.searchText.toLowerCase()
+      if (lowerCaseSearchText.length < 2) {
+        this.$message({
+          message: this.COMMON.TYPE_2_CHAR_AT_LEAST,
+          type: 'error',
+          showClose: true,
+          offset: 100
+        })
+      } else {
+        this.searchAllResults = []
+        const channelSearchResult = this.channelList.filter(channel => {
+          return channel.name.toLowerCase().includes(lowerCaseSearchText)
+        })
+
+        this.searchAllResults = this.searchAllResults.concat(channelSearchResult)
+        this.$store.dispatch('app/fetchProgramList', {}).then(list => {
+          const programSearchResult = list.filter(program => {
+            return program.name.toLowerCase().includes(lowerCaseSearchText) ||
+          program.description.toLowerCase().includes(lowerCaseSearchText)
+          })
+          this.searchAllResults = this.searchAllResults.concat(programSearchResult)
+        })
+        this.visible = true
+      }
     }
   }
 
