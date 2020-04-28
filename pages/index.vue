@@ -84,14 +84,30 @@ export default {
     ...mapGetters({
       channelList: 'channelList',
       programList: 'programList',
-      todayVipProgramList: 'todayVipProgramList',
-      nextDaysVipProgramList: 'nextDaysVipProgramList'
+      todayProgramList: 'todayProgramList',
+      nextDaysProgramList: 'nextDaysProgramList'
     }),
     vipChannels() {
       if (this.channelList) {
         return this.channelList.filter(item => item.isVip).slice(0, this.COMMON.VIP_CHANNEL_MAX_NUM)
       } else {
         return null
+      }
+    },
+    todayVipProgramList() {
+      if (this.todayProgramList) {
+        const clonedList = [...this.todayProgramList]
+        return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+      } else {
+        return []
+      }
+    },
+    nextDaysVipProgramList() {
+      if (this.nextDaysProgramList) {
+        const clonedList = [...this.nextDaysProgramList]
+        return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.NEXT_DAYS_VIP_PROGRAM_MAX_NUM)
+      } else {
+        return []
       }
     }
 
@@ -101,24 +117,14 @@ export default {
       immediate: true,
       deep: true,
       handler() {
-        if (!this.programList) {
-          this.$store.dispatch('app/fetchProgramList', {})
-        } else {
-          if (!this.todayVipProgramList) {
-            this.fetchAllProgramByDate(new Date()).then(list => {
-              const todayVipProgramList = list.filter(item => item.isTodayShow)
-                .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
-              this.$store.dispatch('app/setTodayVipProgramList', todayVipProgramList)
-            })
-          }
-          if (!this.nextDaysVipProgramList) {
-            this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
-              const newList = list.filter(item => item.isNextDaysShow).sort(sortByRankDesc)
-                .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
-              this.$store.dispatch('app/setNextDaysVipProgramList', newList)
-            })
-          }
-        }
+        this.fetchAllProgramByDate(new Date()).then(list => {
+          const todayProgramList = list.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+          this.$store.dispatch('app/setTodayProgramList', todayProgramList)
+        })
+        this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
+          const newList = list.slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
+          this.$store.dispatch('app/setNextDaysProgramList', newList)
+        })
       }
     }
   },

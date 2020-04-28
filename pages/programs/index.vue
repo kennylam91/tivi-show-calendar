@@ -8,7 +8,7 @@
         </el-breadcrumb>
         <el-button type="primary" size="small" plain @click="handleCreateProgramClick">Create Program</el-button>
       </div>
-      <el-table id="programTable" :data="programListData" border stripe>
+      <el-table id="programTable" :data="tableData" border stripe>
         <el-table-column
           prop="name"
           label="Name"
@@ -56,43 +56,78 @@
         </el-table-column>
 
       </el-table>
+      <div>
+        <el-pagination
+          :current-page.sync="pagination.page"
+          :page-sizes="[20, 50, 100]"
+          :page-size.sync="pagination.limit"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="programsNumber"
+        />
+      </div>
 
     </el-card>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { FB } from '@/assets/utils/constant'
 
 export default {
   middleware: 'auth',
   data() {
     return {
-      programNameSearch: ''
+      programNameSearch: '',
+      pagination: {
+        page: 1,
+        limit: 20
+      },
+      tableData: null,
+      programListData: []
+
     }
   },
   computed: {
     ...mapGetters({
       programList: 'programList'
     }),
-    programListData() {
-      if (this.programList) {
-        if (this.programNameSearch) {
-          return this.programList.filter(item => item.name.toLowerCase().includes(this.programNameSearch.toLowerCase()))
-        } else {
-          return this.programList
-        }
-      } else {
-        return []
-      }
-    },
+    // programListData() {
+    //   if (this.programList) {
+    //     if (this.programNameSearch) {
+    //       return this.programList.filter(item => item.name.toLowerCase().includes(this.programNameSearch.toLowerCase()))
+    //     } else {
+    //       return this.programList
+    //     }
+    //   } else {
+    //     return []
+    //   }
+    // },
     programsNumber() {
       return this.programListData.length
     }
   },
-  created() {
-    if (!this.programList) {
-      this.$store.dispatch('app/fetchProgramList', {})
+  watch: {
+    pagination: {
+      deep: true,
+      handler() {
+        this.handlePaginationChange()
+      }
+    },
+    programList: {
+      deep: true,
+      handler() {
+        this.handleProgramSearch()
+      }
     }
+  },
+  created() {
+    this.fetchAllProgram({})
+    // this.$store.dispatch('app/fetchProgramList', {}).onSnapshot(docSnapshot => {
+    //   debugger
+    //   this.$store.dispatch('app/setProgramList', docSnapshot)
+    //   this.programListData = docSnapshot
+    //   this.handlePaginationChange()
+    // })
   },
   methods: {
     handleCreateProgramClick() {
@@ -122,7 +157,35 @@ export default {
       })
     },
     handleProgramSearch() {
-
+      if (this.programNameSearch) {
+        this.programListData = this.programList.filter(item => item.name.toLowerCase().includes(this.programNameSearch.toLowerCase()))
+      } else {
+        this.programListData = this.programList
+      }
+      this.handlePaginationChange()
+    },
+    handlePaginationChange() {
+      const start = (this.pagination.page - 1) * this.pagination.limit
+      const end = this.pagination.page * this.pagination.limit
+      this.tableData = this.programListData.slice(start, end)
+    },
+    fetchAllProgram(request) {
+      let programQuery = FB.programRef
+      if (request.channelId) {
+        programQuery = programQuery.where('channels', 'array-contains', request.channelId)
+      }
+      if (request.schedules) {
+        programQuery = programQuery.where('schedules', 'array-contains-any', request.schedules)
+      }
+      const list = []
+      return programQuery.orderBy('name', 'asc').onSnapshot(snapShot => {
+        snapShot.forEach(doc => {
+          const program = { ...doc.data(), id: doc.id }
+          list.push(program)
+        })
+        this.$store.dispatch('app/setProgramList', list)
+        debugger
+      })
     }
 
   }

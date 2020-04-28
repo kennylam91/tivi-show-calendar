@@ -120,29 +120,23 @@ export const actions = {
     if (request.limit) {
       scheduleQuery = scheduleQuery.limit(request.limit)
     }
+    // fetch program list of this channel
+    let programList = []
+    dispatch('fetchProgramList', { channelId: request.channelId }).then(list => {
+      programList = list
+    })
+    debugger
     return new Promise((resolve, reject) => {
       scheduleQuery.get().then((list) => {
         const scheduleList = []
         list.forEach((doc) => {
           const programId = doc.data().programId
           const schedule = { ...doc.data(), id: doc.id }
-          let foundProgram
-          if (state.programList) {
-            foundProgram = state.programList.find(program => program.id === programId)
-            if (foundProgram) {
-              schedule.programName = foundProgram.name
-              schedule.categories = foundProgram.categories
-              scheduleList.push(schedule)
-            }
-          } else {
-            dispatch('fetchProgramList', {}).then(() => {
-              foundProgram = state.programList.find(program => program.id === programId)
-              if (foundProgram) {
-                schedule.programName = foundProgram.name
-                schedule.categories = foundProgram.categories
-                scheduleList.push(schedule)
-              }
-            })
+          const foundProgram = programList.find(program => program.id === programId)
+          if (foundProgram) {
+            schedule.programName = foundProgram.name
+            schedule.categories = foundProgram.categories
+            scheduleList.push(schedule)
           }
         })
         resolve(scheduleList)
@@ -218,7 +212,6 @@ export const actions = {
       if (request.channelId) {
         programQuery = programQuery.where('channels', 'array-contains', request.channelId)
       }
-      debugger
       if (request.schedules) {
         programQuery = programQuery.where('schedules', 'array-contains-any', request.schedules)
       }
@@ -273,9 +266,11 @@ export const actions = {
     // check if program.schedules has any value before now => remove it
     const now = Date.parse(new Date()) - 60
     const newArr = []
-    for (const time of program.schedules) {
-      if (time >= now) {
-        newArr.push(time)
+    if (program.schedules) {
+      for (const time of program.schedules) {
+        if (time >= now) {
+          newArr.push(time)
+        }
       }
     }
     program.schedules = newArr

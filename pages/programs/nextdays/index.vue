@@ -90,20 +90,21 @@ export default {
     }
   },
   watch: {
-    programList: {
-      immediate: true,
-      handler() {
-        if (!this.programList) {
-          this.$store.dispatch('app/fetchProgramList', {})
-        } else {
-          if (!this.nextDaysProgramList) {
-            this.updateNextDaysProgramList()
-          }
-        }
-      }
-    }
+    // programList: {
+    //   immediate: true,
+    //   handler() {
+    //     if (!this.programList) {
+    //       this.$store.dispatch('app/fetchProgramList', {})
+    //     } else {
+    //       if (!this.nextDaysProgramList) {
+    //         this.updateNextDaysProgramList()
+    //       }
+    //     }
+    //   }
+    // }
   },
   created() {
+    this.updateNextDaysProgramList()
   },
   methods: {
     handleCreateProgramClick() {

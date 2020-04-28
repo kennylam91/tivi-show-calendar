@@ -63,47 +63,20 @@ Vue.mixin({
         this.$store.dispatch('app/fetchProgramList', { schedules: [startOfDateInSeconds] }).then(list => {
           resolve(list)
         })
-
-        // const startTimestamp = firebase.firestore.Timestamp.fromDate(date)
-        // const end = date
-        // end.setHours(23, 59, 59, 999)
-        // const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
-
-        // this.$store.dispatch('app/fetchScheduleList',
-        //   { channelId: null, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
-        //   this.$store.dispatch('app/setTodayScheduleList', scheduleList)
-        //   for (const schedule of scheduleList) {
-        //     const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
-        //     if (foundProgram && !programList.some(item => item.id === foundProgram.id)) {
-        //       programList.push({ ...foundProgram })
-        //     }
-        //   }
-        //   programList.sort(sortByName)
-        //   resolve(programList)
-        // })
       })
     },
     fetchAllProgramNextDays(nextDays) {
       const now = new Date()
-      const start = new Date(now.setHours(23, 59, 59, 0))
-      const programList = []
-      const startTimestamp = firebase.firestore.Timestamp.fromDate(start)
-      const period = Number(nextDays) * 24 * 60 * 60 * 1000
-      const end = new Date(Date.parse(start) + period)
-      const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
+      const todayStart = new Date(now.setHours(0, 0, 0, 0))
+      const milliSecondsOneDay = 24 * 60 * 60 * 1000
+      const nextDayArr = []
+      for (let i = 1; i <= nextDays; i++) {
+        nextDayArr.push(Date.parse(todayStart) + milliSecondsOneDay * i)
+      }
 
       return new Promise((resolve, reject) => {
-        this.$store.dispatch('app/fetchScheduleList',
-          { channelId: null, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
-          this.$store.dispatch('app/setNextDaysScheduleList', scheduleList)
-          for (const schedule of scheduleList) {
-            const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
-            if (foundProgram && !programList.some(item => item.id === foundProgram.id)) {
-              programList.push({ ...foundProgram })
-            }
-          }
-          programList.sort(sortByName)
-          resolve(programList)
+        this.$store.dispatch('app/fetchProgramList', { schedules: nextDayArr }).then(list => {
+          resolve(list)
         })
       })
     },
