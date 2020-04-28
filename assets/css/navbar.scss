@@ -99,7 +99,7 @@ $screen-xl-min: 1200px;
     transform: rotate(-45deg) translateX(8px) translateY(-10px);
   }
 
-  @media only screen and (max-width: $screen-md-min) {
+  @media only screen and (max-width: $screen-sm-min) {
 
     .logo-header {
       padding: 0;

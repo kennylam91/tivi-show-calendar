@@ -56,7 +56,6 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
@@ -65,9 +64,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      programList: 'programList'
-    }),
     // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
 
     todayProgramList() {
@@ -90,20 +86,10 @@ export default {
     }
   },
   watch: {
-    programList: {
-      immediate: true,
-      handler() {
-        if (!this.programList) {
-          this.$store.dispatch('app/fetchProgramList', {})
-        } else {
-          if (!this.todayProgramList) {
-            this.updateTodayProgramList()
-          }
-        }
-      }
-    }
+
   },
   created() {
+    this.updateTodayProgramList()
   },
   methods: {
     handleCreateProgramClick() {

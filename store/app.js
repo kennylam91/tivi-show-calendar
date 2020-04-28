@@ -205,6 +205,7 @@ export const actions = {
       }).catch(err => reject(err))
     })
   },
+  // request = {isTodayShow, isNextDaysShow, channelId}
   fetchProgramList({ commit }, request) {
     return new Promise((resolve, reject) => {
       let programQuery = FB.programRef
@@ -214,12 +215,19 @@ export const actions = {
       if (request.isNextDaysShow) {
         programQuery = programQuery.where('isNextDaysShow', '==', true)
       }
+      if (request.channelId) {
+        programQuery = programQuery.where('channels', 'array-contains', request.channelId)
+      }
+      debugger
+      if (request.schedules) {
+        programQuery = programQuery.where('schedules', 'array-contains-any', request.schedules)
+      }
       programQuery.orderBy('name', 'asc').get().then(doc => {
         const programList = []
         doc.forEach(program => {
           programList.push({ ...program.data(), id: program.id })
         })
-        commit('SET_PROGRAM_LIST', programList)
+        // commit('SET_PROGRAM_LIST', programList)
         resolve(programList)
       })
     })
@@ -262,6 +270,15 @@ export const actions = {
     })
   },
   updateProgram({ commit }, program) {
+    // check if program.schedules has any value before now => remove it
+    const now = Date.parse(new Date()) - 60
+    const newArr = []
+    for (const time of program.schedules) {
+      if (time >= now) {
+        newArr.push(time)
+      }
+    }
+    program.schedules = newArr
     const query = FB.programRef.doc(program.id).set(trimObject(program))
     return new Promise((resolve, reject) => {
       query.then(() => {

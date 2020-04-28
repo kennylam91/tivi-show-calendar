@@ -5,6 +5,21 @@
       <el-form-item :label="COMMON.NAME">
         <el-input v-model="programData.name" />
       </el-form-item>
+      <el-form-item :label="COMMON.CHANNEL">
+        <el-select
+          v-model="programData.channels"
+          multiple
+          class="w-100"
+        >
+          <el-option
+            v-for="item in channelList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+
+        </el-select>
+      </el-form-item>
       <el-form-item :label="COMMON.CATEGORY">
         <el-select
           v-model="programData.categories"
@@ -58,6 +73,7 @@
 import { CATEGORIES } from '@/assets/utils/constant'
 import Upload from '@/components/upload/Upload'
 import { programRankOptions } from '@/assets/utils/constant'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { Upload },
@@ -82,7 +98,10 @@ export default {
       } else {
         return 'Create Program'
       }
-    }
+    },
+    ...mapGetters({
+      channelList: 'channelList'
+    })
   },
   watch: {
     programProp: {

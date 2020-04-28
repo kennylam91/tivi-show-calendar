@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { COMMON, CATEGORIES } from '@/assets/utils/constant'
+import { COMMON, FB, CATEGORIES } from '@/assets/utils/constant'
 import { firebase } from '@/MyFireBase'
 
 const sortByName = (a, b) => {
@@ -39,11 +39,11 @@ Vue.mixin({
       return new Promise((resolve, reject) => {
         const start = date
         start.setHours(0, 0, 0, 0)
-        const startTimestamp = firebase.firestore.Timestamp.fromDate(start)
+        const startTimestamp = FB.timestamp.fromDate(start)
 
         const end = date
         end.setHours(23, 59, 59, 999)
-        const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
+        const endTimestamp = FB.timestamp.fromDate(end)
 
         this.$store.dispatch('app/fetchScheduleList',
           { channelId: channelId, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
@@ -52,31 +52,35 @@ Vue.mixin({
       })
     },
     fetchAllProgramByDate(date) {
-      const programList = []
       if (!this.channelList) {
         this.$store.dispatch('app/fetchChannelList')
       }
-      if (!this.programList) {
-        this.$store.dispatch('app/fetchProgramList', {})
-      }
       return new Promise((resolve, reject) => {
-        const startTimestamp = firebase.firestore.Timestamp.fromDate(date)
-        const end = date
-        end.setHours(23, 59, 59, 999)
-        const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
-
-        this.$store.dispatch('app/fetchScheduleList',
-          { channelId: null, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
-          this.$store.dispatch('app/setTodayScheduleList', scheduleList)
-          for (const schedule of scheduleList) {
-            const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
-            if (foundProgram && !programList.some(item => item.id === foundProgram.id)) {
-              programList.push({ ...foundProgram })
-            }
-          }
-          programList.sort(sortByName)
-          resolve(programList)
+        const startOfDate = date
+        startOfDate.setHours(0, 0, 0, 0)
+        debugger
+        const startOfDateInSeconds = Date.parse(startOfDate)
+        this.$store.dispatch('app/fetchProgramList', { schedules: [startOfDateInSeconds] }).then(list => {
+          resolve(list)
         })
+
+        // const startTimestamp = firebase.firestore.Timestamp.fromDate(date)
+        // const end = date
+        // end.setHours(23, 59, 59, 999)
+        // const endTimestamp = firebase.firestore.Timestamp.fromDate(end)
+
+        // this.$store.dispatch('app/fetchScheduleList',
+        //   { channelId: null, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
+        //   this.$store.dispatch('app/setTodayScheduleList', scheduleList)
+        //   for (const schedule of scheduleList) {
+        //     const foundProgram = this.programList.find(pro => pro.id === schedule.programId)
+        //     if (foundProgram && !programList.some(item => item.id === foundProgram.id)) {
+        //       programList.push({ ...foundProgram })
+        //     }
+        //   }
+        //   programList.sort(sortByName)
+        //   resolve(programList)
+        // })
       })
     },
     fetchAllProgramNextDays(nextDays) {

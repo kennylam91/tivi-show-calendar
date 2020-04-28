@@ -47,7 +47,7 @@
 </template>
 <script>
 import { firebase } from '@/MyFireBase'
-import { mapGetters } from 'vuex'
+import { FB } from '@/assets/utils/constant'
 
 export default {
   props: {
@@ -64,7 +64,9 @@ export default {
       options: [],
       value: [],
       loading: false,
-      programName: null
+      programName: null,
+      programList: null,
+      selectedProgram: null
     }
   },
   computed: {
@@ -74,10 +76,7 @@ export default {
       } else {
         return 'Create schedule'
       }
-    },
-    ...mapGetters({
-      programList: 'programList'
-    })
+    }
   },
   watch: {
     scheduleProp: {
@@ -93,14 +92,15 @@ export default {
       }
     },
     programName() {
-      this.scheduleData.programId = this.programList.find(pro => pro.name === this.programName).id
+      this.selectedProgram = this.programList.find(pro => pro.name === this.programName)
+      this.scheduleData.programId = this.selectedProgram.id
     },
     programList: {
       immediate: true,
       deep: true,
       handler() {
         if (!this.programList) {
-          this.$store.dispatch('app/fetchProgramList', {}).then(list => {
+          this.$store.dispatch('app/fetchProgramList', { channelId: this.scheduleData.channelId }).then(list => {
             if (this.scheduleData.programId) {
               this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
             }
@@ -114,7 +114,9 @@ export default {
     }
   },
   created() {
-
+    this.$store.dispatch('app/fetchProgramList', { channelId: this.scheduleData.channelId }).then(list => {
+      this.programList = list
+    })
   },
   methods: {
     onSubmit() {
@@ -124,12 +126,18 @@ export default {
         this.removeProperty(this.scheduleData)
         if (!id) {
           this.$store.dispatch('app/createSchedule', this.scheduleData).then(() => {
+            const startTime = this.scheduleData.startTime
+            startTime.setHours(0, 0, 0, 0)
+            FB.programRef.doc(this.selectedProgram.id).update({
+              schedules: firebase.firestore.FieldValue.arrayUnion(Date.parse(startTime))
+            })
             console.log('add schedule success')
             this.$notify({
               title: 'Schedule Created',
               type: 'success',
               duration: '4500',
-              position: 'top-right'
+              position: 'top-right',
+              top: '100'
             })
 
             this.$emit('saved')
@@ -138,6 +146,10 @@ export default {
           })
         } else {
           this.$store.dispatch('app/updateSchedule', this.scheduleData).then(() => {
+            const schedules = this.selectedProgram.schedules || []
+            schedules.push(Date.parse(this.scheduleData.startTime))
+            const updatedProgram = { ...this.selectedProgram, schedules: schedules }
+            this.$store.dispatch('app/updateProgram', updatedProgram)
             console.log('update schedule ok')
             this.$notify({
               title: 'Schedule Updated',
@@ -154,7 +166,8 @@ export default {
         this.$message({
           message: err,
           type: 'error',
-          showClose: true
+          showClose: true,
+          top: '100'
         })
       })
     },

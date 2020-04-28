@@ -79,7 +79,8 @@ import { firebase } from '@/MyFireBase'
 export const FB = {
   channelRef: firebase.firestore().collection('channels'),
   scheduleRef: firebase.firestore().collection('schedules'),
-  programRef: firebase.firestore().collection('programs')
+  programRef: firebase.firestore().collection('programs'),
+  timestamp: firebase.firestore.Timestamp
 }
 
 export const programRankOptions = [
