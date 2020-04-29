@@ -60,13 +60,19 @@ import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
+  asyncData({ params }) {
+    if (!this.nextDaysProgramList) {
+      this.updateNextDaysProgramList()
+    }
+  },
   data() {
     return {
     }
   },
   computed: {
     ...mapGetters({
-      programList: 'programList'
+      programList: 'programList',
+      nextDaysProgramList: 'nextDaysProgramList'
     }),
     // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
 
@@ -90,21 +96,11 @@ export default {
     }
   },
   watch: {
-    // programList: {
-    //   immediate: true,
-    //   handler() {
-    //     if (!this.programList) {
-    //       this.$store.dispatch('app/fetchProgramList', {})
-    //     } else {
-    //       if (!this.nextDaysProgramList) {
-    //         this.updateNextDaysProgramList()
-    //       }
-    //     }
-    //   }
-    // }
   },
   created() {
-    this.updateNextDaysProgramList()
+    if (!this.nextDaysProgramList) {
+      this.updateNextDaysProgramList()
+    }
   },
   methods: {
     handleCreateProgramClick() {
@@ -114,11 +110,7 @@ export default {
 
     handleNextDaysShowChange(program) {
       this.$store.dispatch('app/updateProgram', program).then(() => {
-        this.$store.dispatch('app/fetchProgramList', {}).then(() => {
-          this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
-            this.$store.dispatch('app/setNextDaysProgramList', list)
-          })
-        })
+        this.updateNextDaysProgramList()
       })
     }
 

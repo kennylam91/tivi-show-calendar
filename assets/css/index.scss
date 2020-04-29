@@ -15,6 +15,9 @@
 .color-info{
   color:$--color-info
 }
+.bg-info{
+  background:$--color-info!important; 
+}
 .flex {
   display: flex
 }

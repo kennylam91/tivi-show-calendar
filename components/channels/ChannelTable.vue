@@ -8,7 +8,7 @@
       >
         <template slot-scope="{row}">
           <el-link @click="handleNameClick(row)">
-            <span>{{ row.name }}</span>
+            <span class="color-primary">{{ row.name }}</span>
           </el-link>
         </template>
       </el-table-column>

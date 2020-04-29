@@ -54,14 +54,12 @@ Vue.mixin({
       })
     },
     fetchAllProgramByDate(date) {
-      debugger
       if (!this.channelList) {
         this.$store.dispatch('app/fetchChannelList')
       }
       return new Promise((resolve, reject) => {
         const startOfDate = date
         startOfDate.setHours(0, 0, 0, 0)
-        debugger
         const startOfDateInSeconds = Date.parse(startOfDate)
         this.$store.dispatch('app/fetchProgramList',
           { schedules: [startOfDateInSeconds] }).then(list => {

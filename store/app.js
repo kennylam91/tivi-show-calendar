@@ -99,7 +99,10 @@ export const actions = {
   },
   // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
   fetchScheduleList({ state, dispatch }, request) {
-    let programList = state.todayProgramList.concat(state.nextDaysProgramList)
+    let programList
+    if (state.todayProgramList && state.nextDaysProgramList) {
+      programList = state.todayProgramList.concat(state.nextDaysProgramList)
+    }
     let scheduleQuery = FB.scheduleRef
     if (request.channelId) {
       // fetch program list of this channel
@@ -201,7 +204,6 @@ export const actions = {
   },
   // request = {isTodayShow, isNextDaysShow, channelId}
   fetchProgramList({ commit }, request) {
-    debugger
     return new Promise((resolve, reject) => {
       let programQuery = FB.programRef
       if (request.isTodayShow) {

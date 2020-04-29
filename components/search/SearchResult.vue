@@ -2,7 +2,7 @@
   <el-link id="searchResult" class=" w-100" :underline="false" @click="handleLinkClick">
     <div class="flex w-100 " style="align-items: center;">
       <img class="img-fluid " :src="result.logo" :alt="result.name" :width="width">
-      <div class="ml-2 break-word smaller-font-size">
+      <div class="ml-2 break-word smaller-font-size color-warning">
         {{ result.name }}
       </div>
     </div>

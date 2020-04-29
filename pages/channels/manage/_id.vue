@@ -59,7 +59,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      programList: 'programList',
       todayProgramList: 'todayProgramList',
       nextDaysProgramList: 'nextDaysProgramList',
       channelList: 'channelList'

@@ -20,37 +20,52 @@
       <ChannelTable v-if="channelList" :channel-list="channelList" :is-admin="false" />
 
     </el-card>
+    {{ channelList[0].name }}
   </div>
 </template>
 <script>
 import ChannelTable from '@/components/channels/ChannelTable'
+import { firebase } from '@/MyFireBase'
 
 export default {
   components: { ChannelTable },
-  computed: {
-    // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
-    channelList() {
-      const list = this.$store.state.app.channelList
-      const result = []
-      if (list) {
-        list.forEach(item => {
-          result.push({ ...item })
-        })
-        return result
-      } else {
-        return null
-      }
+  asyncData({ store }) {
+    return firebase.firestore().collection('channels').orderBy('name', 'asc').get().then(list => {
+      const channelList = []
+      list.forEach((channel) => {
+        channelList.push({ ...channel.data(), id: channel.id })
+      })
+      return { channelList: channelList }
+    })
+  },
+  data() {
+    return {
     }
   },
+  computed: {
+    // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
+    // channelList() {
+    //   const list = this.$store.state.app.channelList
+    //   const result = []
+    //   if (list) {
+    //     list.forEach(item => {
+    //       result.push({ ...item })
+    //     })
+    //     return result
+    //   } else {
+    //     return null
+    //   }
+    // }
+  },
   watch: {
-    channelList: {
-      immediate: true,
-      handler() {
-        if (!this.channelList) {
-          this.$store.dispatch('app/fetchChannelList')
-        }
-      }
-    }
+    // channelList: {
+    //   immediate: true,
+    //   handler() {
+    //     if (!this.channelList) {
+    //       this.$store.dispatch('app/fetchChannelList')
+    //     }
+    //   }
+    // }
   },
   methods: {
     handleCreateChannelClick() {
