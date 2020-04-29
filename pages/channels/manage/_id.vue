@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-      <ScheduleTable :schedule-list="scheduleData" @changed="handleChanged" />
+      <ScheduleTable :channel-prop="channel" :schedule-list="scheduleData" @changed="handleChanged" />
     </el-card>
 
   </div>

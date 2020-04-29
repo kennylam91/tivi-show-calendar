@@ -67,7 +67,7 @@
       width="60%"
       @close="handleDialogClose"
     >
-      <CreateSchedule :schedule-prop="schedule" @saved="handleSaved" />
+      <CreateSchedule :channel-prop="channelProp" :schedule-prop="schedule" @saved="handleSaved" />
     </el-dialog>
 
   </div>
@@ -82,6 +82,10 @@ export default {
     scheduleList: {
       required: true,
       type: Array
+    },
+    channelProp: {
+      required: true,
+      type: Object
     }
   },
   data() {

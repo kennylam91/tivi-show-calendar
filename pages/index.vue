@@ -22,13 +22,12 @@
               fit="fill"
             />
           </el-link>
-          <div>{{ channel.name }}</div>
           <el-button
             class="my-2 w-100"
             type="primary"
             size="small"
             @click="viewChannelDetail(channel)"
-          >{{ COMMON.SCHEDULE }}</el-button>
+          >{{ COMMON.SCHEDULE }} {{ channel.name }}</el-button>
 
         </el-card>
       </div>
@@ -80,14 +79,22 @@ export default {
     const promise1 = store.dispatch('app/fetchChannelList', {})
     const startOfDate = new Date()
     startOfDate.setHours(0, 0, 0, 0)
+    const milliSecondsOneDay = 24 * 60 * 60 * 1000
     const startOfDateInSeconds = Date.parse(startOfDate)
     const promise2 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
-    return Promise.all([promise1, promise2]).then(results => {
+    const promise3 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
+    return Promise.all([promise1, promise2, promise3]).then(results => {
       const todayProgramList = []
+      const nextDaysProgramList = []
       results[1].forEach(program => {
         todayProgramList.push({ ...program.data(), id: program.id })
       })
-      return { channelList: results[0], todayProgramList }
+      results[2].forEach(program => {
+        nextDaysProgramList.push({ ...program.data(), id: program.id })
+      })
+      store.dispatch('app/setChannelList', results[0])
+      store.dispatch('app/setTodayProgramList', todayProgramList)
+      store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
     })
   },
   data() {

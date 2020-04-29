@@ -54,6 +54,10 @@ export default {
     scheduleProp: {
       required: true,
       type: Object
+    },
+    channelProp: {
+      required: true,
+      type: Object
     }
   },
   data() {
@@ -124,6 +128,9 @@ export default {
       const id = this.scheduleData.id
       this.validateSchedule(this.scheduleData).then(() => {
         this.removeProperty(this.scheduleData)
+        this.scheduleData.channelName = this.channelProp.name
+        this.scheduleData.programName = this.selectedProgram.name
+        this.scheduleData.categories = this.selectedProgram.categories
         if (!id) {
           this.$store.dispatch('app/createSchedule', this.scheduleData).then(() => {
             const startTime = this.scheduleData.startTime
@@ -146,10 +153,11 @@ export default {
           })
         } else {
           this.$store.dispatch('app/updateSchedule', this.scheduleData).then(() => {
-            const schedules = this.selectedProgram.schedules || []
-            schedules.push(Date.parse(this.scheduleData.startTime))
-            const updatedProgram = { ...this.selectedProgram, schedules: schedules }
-            this.$store.dispatch('app/updateProgram', updatedProgram)
+            const startTime = this.scheduleData.startTime
+            startTime.setHours(0, 0, 0, 0)
+            FB.programRef.doc(this.selectedProgram.id).update({
+              schedules: firebase.firestore.FieldValue.arrayUnion(Date.parse(startTime))
+            })
             console.log('update schedule ok')
             this.$notify({
               title: 'Schedule Updated',
@@ -187,7 +195,7 @@ export default {
     },
     removeProperty(object) {
       for (const key in object) {
-        if (!['startTime', 'endTime', 'channelId', 'programId', 'id'].includes(key)) {
+        if (!['startTime', 'endTime', 'channelId', 'programId', 'id', 'channelName', 'programName', 'categories'].includes(key)) {
           delete object[key]
         }
       }

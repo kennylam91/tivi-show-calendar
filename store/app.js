@@ -100,9 +100,6 @@ export const actions = {
   // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
   fetchScheduleList({ state, dispatch }, request) {
     let programList
-    if (state.todayProgramList && state.nextDaysProgramList) {
-      programList = state.todayProgramList.concat(state.nextDaysProgramList)
-    }
     let scheduleQuery = FB.scheduleRef
     if (request.channelId) {
       // fetch program list of this channel
@@ -133,14 +130,8 @@ export const actions = {
       scheduleQuery.get().then((list) => {
         const scheduleList = []
         list.forEach((doc) => {
-          const programId = doc.data().programId
           const schedule = { ...doc.data(), id: doc.id }
-          const foundProgram = programList.find(program => program.id === programId)
-          if (foundProgram) {
-            schedule.programName = foundProgram.name
-            schedule.categories = foundProgram.categories
-            scheduleList.push(schedule)
-          }
+          scheduleList.push(schedule)
         })
         resolve(scheduleList)
       })

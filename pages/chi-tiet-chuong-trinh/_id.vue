@@ -34,8 +34,8 @@
           <template slot-scope="{row}">
             <el-link
               class="break-word"
-              @click="viewChannelDetail(row.channel)"
-            >{{ row.channel.name }}</el-link>
+              @click="viewChannelDetail({id: row.channelId, name: row.channelName})"
+            >{{ row.channelName }}</el-link>
           </template>
         </el-table-column>
         <el-table-column
@@ -67,12 +67,48 @@
 <script>
 import { mapGetters } from 'vuex'
 import { parseVNTime } from '@/assets/utils/index'
+import { FB } from '@/assets/utils/constant'
 
 export default {
   filters: {
     parseTime(time) {
       return parseVNTime(time, '{d}/{m}/{y} {h}:{i}{a}', true, true)
     }
+  },
+  asyncData({ store, params }) {
+    const startOfDate = new Date()
+    startOfDate.setHours(0, 0, 0, 0)
+    const milliSecondsOneDay = 24 * 60 * 60 * 1000
+    const startOfDateInSeconds = Date.parse(startOfDate)
+    const promise0 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
+    const promise1 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
+    const now = new Date()
+    const programId = params.id.split('-').pop().trim()
+
+    const promise2 = FB.scheduleRef.where('programId', '==', programId)
+      .where('startTime', '>=', FB.timestamp.fromDate(now))
+      .orderBy('startTime', 'asc').get()
+    return Promise.all([promise0, promise1, promise2]).then(results => {
+      const todayProgramList = []
+      const nextDaysProgramList = []
+      results[0].forEach(program => {
+        todayProgramList.push({ ...program.data(), id: program.id })
+      })
+      results[1].forEach(program => {
+        nextDaysProgramList.push({ ...program.data(), id: program.id })
+      })
+      const programList = todayProgramList.concat(nextDaysProgramList)
+      const program = programList.find(item => item.id === programId)
+      const scheduleList = []
+      results[2].forEach(doc => {
+        const schedule = { ...doc.data(), id: doc.id }
+        scheduleList.push(schedule)
+      })
+
+      store.dispatch('app/setTodayProgramList', todayProgramList)
+      store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
+      return { program, programId, scheduleList }
+    })
   },
   data() {
     return {
@@ -83,18 +119,24 @@ export default {
   },
   computed: {
     ...mapGetters({
-      channelList: 'channelList'
+      channelList: 'channelList',
+      todayProgramList: 'todayProgramList',
+      nextDaysProgramList: 'nextDaysProgramList'
     })
   },
   watch: {
   },
   created() {
-    if (!this.todayProgramList) {
-      this.fetchTodayProgramList()
-    }
-    if (!this.nextDaysProgramList) {
-      this.fetchNextDaysProgramList()
-    }
+    // const promise1 = this.fetchAllProgramByDate(new Date())
+    // const promise2 = this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM)
+    // Promise.all([promise1, promise2]).then(results => {
+    //   this.$store.dispatch('app/setTodayProgramList', results[0])
+    //   this.$store.dispatch('app/setNextDaysProgramList', results[1])
+    //   const programList = this.todayProgramList.concat(this.nextDaysProgramList)
+    //   this.programId = this.$route.params.id.split('-').pop().trim()
+    //   this.program = programList.find(item => item.id === this.programId)
+    //   this.fetchScheduleList()
+    // })
   },
   methods: {
     fetchScheduleList() {

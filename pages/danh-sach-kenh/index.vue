@@ -20,7 +20,6 @@
       <ChannelTable v-if="channelList" :channel-list="channelList" :is-admin="false" />
 
     </el-card>
-    {{ channelList[0].name }}
   </div>
 </template>
 <script>
