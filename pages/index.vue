@@ -115,8 +115,12 @@ export default {
   watch: {
   },
   created() {
-    this.fetchTodayProgramList()
-    this.fetchNextDaysProgramList()
+    if (!this.todayProgramList) {
+      this.fetchTodayProgramList()
+    }
+    if (!this.nextDaysProgramList) {
+      this.fetchNextDaysProgramList()
+    }
   },
   methods: {
 

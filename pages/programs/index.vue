@@ -83,25 +83,15 @@ export default {
         limit: 20
       },
       tableData: null,
-      programListData: []
+      programListData: [],
+      programList: null
 
     }
   },
   computed: {
-    ...mapGetters({
-      programList: 'programList'
-    }),
-    // programListData() {
-    //   if (this.programList) {
-    //     if (this.programNameSearch) {
-    //       return this.programList.filter(item => item.name.toLowerCase().includes(this.programNameSearch.toLowerCase()))
-    //     } else {
-    //       return this.programList
-    //     }
-    //   } else {
-    //     return []
-    //   }
-    // },
+    // ...mapGetters({
+    //   programList: 'programList'
+    // }),
     programsNumber() {
       return this.programListData.length
     }
@@ -121,7 +111,9 @@ export default {
     }
   },
   created() {
-    this.fetchAllProgram({})
+    if (!this.programList) {
+      this.fetchAllProgram({})
+    }
   },
   methods: {
     handleCreateProgramClick() {
@@ -142,7 +134,8 @@ export default {
         this.$store.dispatch('app/deleteProgram', { programId: row.id }).then(() => {
           this.$message({
             type: 'success',
-            message: 'Delete completed'
+            message: 'Delete completed',
+            offset: 100
           })
           this.$store.dispatch('app/fetchProgramList', {}).then(list => {
             this.programList = list
@@ -154,7 +147,7 @@ export default {
       if (this.programNameSearch) {
         this.programListData = this.programList.filter(item => item.name.toLowerCase().includes(this.programNameSearch.toLowerCase()))
       } else {
-        this.programListData = this.programList
+        this.programListData = [...this.programList]
       }
       this.handlePaginationChange()
     },
@@ -177,8 +170,8 @@ export default {
           const program = { ...doc.data(), id: doc.id }
           list.push(program)
         })
-        this.$store.dispatch('app/setProgramList', list)
-        debugger
+        this.programList = list
+        // this.$store.dispatch('app/setProgramList', [...list])
       })
     }
 
