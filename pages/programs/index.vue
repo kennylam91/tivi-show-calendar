@@ -70,7 +70,6 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import { FB } from '@/assets/utils/constant'
 
 export default {

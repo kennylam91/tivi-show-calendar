@@ -114,7 +114,7 @@ export default {
   },
   watch: {
   },
-  created() {
+  mounted() {
     if (!this.todayProgramList) {
       this.fetchTodayProgramList()
     }

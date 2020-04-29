@@ -2,15 +2,15 @@ import Vue from 'vue'
 import { COMMON, FB, CATEGORIES } from '@/assets/utils/constant'
 // import { firebase } from '@/MyFireBase'
 
-const sortByName = (a, b) => {
-  if (a.name > b.name) {
-    return 1
-  } else if (a.name < b.name) {
-    return -1
-  } else {
-    return 0
-  }
-}
+// const sortByName = (a, b) => {
+//   if (a.name > b.name) {
+//     return 1
+//   } else if (a.name < b.name) {
+//     return -1
+//   } else {
+//     return 0
+//   }
+// }
 
 Vue.mixin({
   data() {
@@ -54,6 +54,7 @@ Vue.mixin({
       })
     },
     fetchAllProgramByDate(date) {
+      debugger
       if (!this.channelList) {
         this.$store.dispatch('app/fetchChannelList')
       }

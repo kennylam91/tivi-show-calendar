@@ -83,37 +83,24 @@ export default {
   },
   computed: {
     ...mapGetters({
-      programList: 'programList',
       channelList: 'channelList'
     })
   },
   watch: {
-    programList: {
-      immediate: true,
-      deep: true,
-      handler() {
-        this.programId = this.$route.params.id.split('-').pop().trim()
-        if (this.programList) {
-          this.program = this.programList.find(item => item.id === this.programId)
-          this.fetchScheduleList()
-        } else {
-          this.$store.dispatch('app/fetchProgram', { programId: this.programId }).then(data => {
-            this.program = data
-            this.$store.dispatch('app/setProgramList', [this.program])
-            this.fetchScheduleList()
-          })
-        }
-      }
-    }
   },
   created() {
-    // fetch schedule list of this program from now
-
+    if (!this.todayProgramList) {
+      this.fetchTodayProgramList()
+    }
+    if (!this.nextDaysProgramList) {
+      this.fetchNextDaysProgramList()
+    }
   },
   methods: {
     fetchScheduleList() {
       const now = new Date()
-      this.$store.dispatch('app/fetchScheduleList', { programId: this.programId, startTime: now, orderBy: ['startTime', 'asc'] }).then(list => {
+      this.$store.dispatch('app/fetchScheduleList',
+        { programId: this.programId, startTime: now, orderBy: ['startTime', 'asc'] }).then(list => {
         list.forEach(schedule => {
           schedule.channel = this.channelList.find(item => item.id === schedule.channelId)
         })

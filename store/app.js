@@ -99,9 +99,14 @@ export const actions = {
   },
   // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
   fetchScheduleList({ state, dispatch }, request) {
+    let programList = state.todayProgramList.concat(state.nextDaysProgramList)
     let scheduleQuery = FB.scheduleRef
     if (request.channelId) {
+      // fetch program list of this channel
       scheduleQuery = scheduleQuery.where('channelId', '==', request.channelId)
+      dispatch('fetchProgramList', { channelId: request.channelId }).then(list => {
+        programList = list
+      })
     }
     if (request.programId) {
       scheduleQuery = scheduleQuery.where('programId', '==', request.programId)
@@ -120,12 +125,7 @@ export const actions = {
     if (request.limit) {
       scheduleQuery = scheduleQuery.limit(request.limit)
     }
-    // fetch program list of this channel
-    let programList = []
-    dispatch('fetchProgramList', { channelId: request.channelId }).then(list => {
-      programList = list
-    })
-    debugger
+
     return new Promise((resolve, reject) => {
       scheduleQuery.get().then((list) => {
         const scheduleList = []
@@ -201,6 +201,7 @@ export const actions = {
   },
   // request = {isTodayShow, isNextDaysShow, channelId}
   fetchProgramList({ commit }, request) {
+    debugger
     return new Promise((resolve, reject) => {
       let programQuery = FB.programRef
       if (request.isTodayShow) {
@@ -209,13 +210,14 @@ export const actions = {
       if (request.isNextDaysShow) {
         programQuery = programQuery.where('isNextDaysShow', '==', true)
       }
+
       if (request.channelId) {
         programQuery = programQuery.where('channels', 'array-contains', request.channelId)
       }
       if (request.schedules) {
         programQuery = programQuery.where('schedules', 'array-contains-any', request.schedules)
       }
-      debugger
+
       programQuery.orderBy('name', 'asc').get().then(doc => {
         const programList = []
         doc.forEach(program => {
