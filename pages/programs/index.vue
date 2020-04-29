@@ -122,12 +122,6 @@ export default {
   },
   created() {
     this.fetchAllProgram({})
-    // this.$store.dispatch('app/fetchProgramList', {}).onSnapshot(docSnapshot => {
-    //   debugger
-    //   this.$store.dispatch('app/setProgramList', docSnapshot)
-    //   this.programListData = docSnapshot
-    //   this.handlePaginationChange()
-    // })
   },
   methods: {
     handleCreateProgramClick() {

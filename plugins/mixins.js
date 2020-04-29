@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { COMMON, FB, CATEGORIES } from '@/assets/utils/constant'
-import { firebase } from '@/MyFireBase'
+// import { firebase } from '@/MyFireBase'
 
 const sortByName = (a, b) => {
   if (a.name > b.name) {
@@ -46,7 +46,9 @@ Vue.mixin({
         const endTimestamp = FB.timestamp.fromDate(end)
 
         this.$store.dispatch('app/fetchScheduleList',
-          { channelId: channelId, startTime: startTimestamp, endTime: endTimestamp }).then(scheduleList => {
+          { channelId: channelId,
+            startTime: startTimestamp,
+            endTime: endTimestamp }).then(scheduleList => {
           resolve(scheduleList)
         })
       })
@@ -60,7 +62,8 @@ Vue.mixin({
         startOfDate.setHours(0, 0, 0, 0)
         debugger
         const startOfDateInSeconds = Date.parse(startOfDate)
-        this.$store.dispatch('app/fetchProgramList', { schedules: [startOfDateInSeconds] }).then(list => {
+        this.$store.dispatch('app/fetchProgramList',
+          { schedules: [startOfDateInSeconds] }).then(list => {
           resolve(list)
         })
       })
@@ -75,11 +78,28 @@ Vue.mixin({
       }
 
       return new Promise((resolve, reject) => {
-        this.$store.dispatch('app/fetchProgramList', { schedules: nextDayArr }).then(list => {
+        this.$store.dispatch('app/fetchProgramList',
+          { schedules: nextDayArr }).then(list => {
           resolve(list)
         })
       })
     },
+    // fetchAllProgramTodayAndNextDays(nextDays) {
+    //   const now = new Date()
+    //   const todayStart = new Date(now.setHours(0, 0, 0, 0))
+    //   const milliSecondsOneDay = 24 * 60 * 60 * 1000
+    //   const nextDayArr = [Date.parse(todayStart)]
+    //   for (let i = 1; i <= nextDays; i++) {
+    //     nextDayArr.push(Date.parse(todayStart) + milliSecondsOneDay * i)
+    //   }
+
+    //   return new Promise((resolve, reject) => {
+    //     this.$store.dispatch('app/fetchProgramList',
+    //       { schedules: nextDayArr }).then(list => {
+    //       resolve(list)
+    //     })
+    //   })
+    // },
     updateTodayProgramList() {
       this.fetchAllProgramByDate(new Date()).then(list => {
         this.$store.dispatch('app/setTodayProgramList', list)
@@ -109,6 +129,25 @@ Vue.mixin({
     },
     moveToChannelManageView(channel) {
       this.$router.push({ path: `/channels/manage/${channel.id}` })
+    },
+    fetchTodayProgramList() {
+      this.fetchAllProgramByDate(new Date()).then(list => {
+        this.$store.dispatch('app/setTodayProgramList', list)
+      })
+    },
+    fetchNextDaysProgramList() {
+      this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
+        this.$store.dispatch('app/setNextDaysProgramList', list)
+      })
+    },
+    concatTwoProgramList(firstArr, secondArr) {
+      const finalArr = [].concat(firstArr)
+      for (const second of secondArr) {
+        if (!firstArr.some(item => item.id === second.id)) {
+          finalArr.push(second)
+        }
+      }
+      return finalArr
     }
   }
 })

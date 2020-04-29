@@ -137,7 +137,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      channelList: 'channelList'
+      channelList: 'channelList',
+      todayProgramList: 'todayProgramList',
+      nextDaysProgramList: 'nextDaysProgramList'
     }),
     path() {
       return this.$route.path
@@ -212,13 +214,14 @@ export default {
         })
 
         this.searchAllResults = this.searchAllResults.concat(channelSearchResult)
-        this.$store.dispatch('app/fetchProgramList', {}).then(list => {
-          const programSearchResult = list.filter(program => {
-            return program.name.toLowerCase().includes(lowerCaseSearchText) ||
+
+        const allProgramList = this.concatTwoProgramList(this.todayProgramList, this.nextDaysProgramList)
+        const programSearchResult = allProgramList.filter(program => {
+          return program.name.toLowerCase().includes(lowerCaseSearchText) ||
           program.description.toLowerCase().includes(lowerCaseSearchText)
-          })
-          this.searchAllResults = this.searchAllResults.concat(programSearchResult)
         })
+        this.searchAllResults = this.searchAllResults.concat(programSearchResult)
+
         this.visible = true
       }
     }

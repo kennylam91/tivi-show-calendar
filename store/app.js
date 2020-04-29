@@ -215,6 +215,7 @@ export const actions = {
       if (request.schedules) {
         programQuery = programQuery.where('schedules', 'array-contains-any', request.schedules)
       }
+      debugger
       programQuery.orderBy('name', 'asc').get().then(doc => {
         const programList = []
         doc.forEach(program => {

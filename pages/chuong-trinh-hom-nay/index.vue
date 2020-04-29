@@ -99,7 +99,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      programList: 'programList',
       todayProgramList: 'todayProgramList',
       channelList: 'channelList',
       todayScheduleList: 'todayScheduleList'
@@ -110,23 +109,13 @@ export default {
     }
   },
   watch: {
-    programList: {
-      immediate: true,
-      handler() {
-        if (!this.programList) {
-          this.$store.dispatch('app/fetchProgramList', {})
-        } else {
-          if (!this.todayProgramList) {
-            this.updateTodayProgramList()
-          }
-        }
-      }
-    },
     todayProgramList: {
       immediate: true,
       handler() {
         if (this.todayProgramList) {
           this.searchProgram()
+        } else {
+          this.fetchTodayProgramList()
         }
       }
     }
@@ -136,17 +125,6 @@ export default {
   methods: {
     searchProgram() {
       this.programData = []
-      if (this.programSearchForm.channels.length > 0) {
-        // get channels of program in todayProgramList
-        for (const program of this.todayProgramList) {
-          program.channels = []
-          for (const schedule of this.todayScheduleList) {
-            if (schedule.programId === program.id && !program.channels.includes(schedule.channelId)) {
-              program.channels.push(schedule.channelId)
-            }
-          }
-        }
-      }
       this.programData = this.todayProgramList.filter(program => {
         return this.filterByCategory(program) && this.filterByChannel(program) && this.filterByName(program)
       })
@@ -194,6 +172,5 @@ export default {
       this.programData = this.todayProgramList
     }
   }
-
 }
 </script>

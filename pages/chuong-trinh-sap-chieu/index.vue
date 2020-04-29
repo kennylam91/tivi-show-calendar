@@ -110,23 +110,13 @@ export default {
     }
   },
   watch: {
-    programList: {
-      immediate: true,
-      handler() {
-        if (!this.programList) {
-          this.$store.dispatch('app/fetchProgramList', {})
-        } else {
-          if (!this.nextDaysProgramList) {
-            this.updateNextDaysProgramList()
-          }
-        }
-      }
-    },
     nextDaysProgramList: {
       immediate: true,
       handler() {
         if (this.nextDaysProgramList) {
           this.searchProgram()
+        } else {
+          this.fetchNextDaysProgramList()
         }
       }
     }
@@ -136,17 +126,6 @@ export default {
   methods: {
     searchProgram() {
       this.programData = []
-      if (this.programSearchForm.channels.length > 0) {
-        // get channels of program in nextDaysProgramList
-        for (const program of this.nextDaysProgramList) {
-          program.channels = []
-          for (const schedule of this.nextDaysScheduleList) {
-            if (schedule.programId === program.id && !program.channels.includes(schedule.channelId)) {
-              program.channels.push(schedule.channelId)
-            }
-          }
-        }
-      }
       this.programData = this.nextDaysProgramList.filter(program => {
         return this.filterByCategory(program) && this.filterByChannel(program) && this.filterByName(program)
       })

@@ -113,22 +113,10 @@ export default {
 
   },
   watch: {
-    programList: {
-      immediate: true,
-      deep: true,
-      handler() {
-        this.fetchAllProgramByDate(new Date()).then(list => {
-          const todayProgramList = list.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
-          this.$store.dispatch('app/setTodayProgramList', todayProgramList)
-        })
-        this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
-          const newList = list.slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
-          this.$store.dispatch('app/setNextDaysProgramList', newList)
-        })
-      }
-    }
   },
   created() {
+    this.fetchTodayProgramList()
+    this.fetchNextDaysProgramList()
   },
   methods: {
 
