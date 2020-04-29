@@ -25,17 +25,13 @@
 </template>
 <script>
 import ChannelTable from '@/components/channels/ChannelTable'
-import { firebase } from '@/MyFireBase'
+// import { firebase } from '@/MyFireBase'
 
 export default {
   components: { ChannelTable },
   asyncData({ store }) {
-    return firebase.firestore().collection('channels').orderBy('name', 'asc').get().then(list => {
-      const channelList = []
-      list.forEach((channel) => {
-        channelList.push({ ...channel.data(), id: channel.id })
-      })
-      return { channelList: channelList }
+    return store.dispatch('app/fetchChannelList', {}).then(list => {
+      return { channelList: list }
     })
   },
   data() {

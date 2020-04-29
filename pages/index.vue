@@ -22,7 +22,7 @@
               fit="fill"
             />
           </el-link>
-          <div v-else>{{ channel.name }}</div>
+          <div>{{ channel.name }}</div>
           <el-button
             class="my-2 w-100"
             type="primary"
@@ -72,9 +72,23 @@
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
 import { sortByRankDesc } from '@/assets/utils/index'
+import { FB } from '@/assets/utils/constant'
 
 export default {
-  components: { Program
+  components: { Program },
+  asyncData({ store }) {
+    const promise1 = store.dispatch('app/fetchChannelList', {})
+    const startOfDate = new Date()
+    startOfDate.setHours(0, 0, 0, 0)
+    const startOfDateInSeconds = Date.parse(startOfDate)
+    const promise2 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
+    return Promise.all([promise1, promise2]).then(results => {
+      const todayProgramList = []
+      results[1].forEach(program => {
+        todayProgramList.push({ ...program.data(), id: program.id })
+      })
+      return { channelList: results[0], todayProgramList }
+    })
   },
   data() {
     return {

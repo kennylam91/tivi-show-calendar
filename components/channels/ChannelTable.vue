@@ -1,50 +1,48 @@
 <template>
   <div>
 
-    <el-table v-if="channelList" :data="channelList" border stripe>
-      <el-table-column
-        :label="COMMON.NAME"
-        width="150"
-      >
-        <template slot-scope="{row}">
-          <el-link @click="handleNameClick(row)">
-            <span class="color-primary">{{ row.name }}</span>
-          </el-link>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="description"
-        :label="COMMON.DESCRIPTION"
-      >
-        <template slot-scope="{row}">
-          <div class="break-word">{{ row.description }}</div>
-        </template>
-
-      </el-table-column>
-      <el-table-column
-        v-if="isAdmin"
-        align="center"
-        :label="COMMON.ACTION"
-        width="230"
-      >
-        <template slot-scope="{row}">
-          <div class="mb-2">
-            <el-button size="small" class="mr-2" @click="handleChannelEditClick(row)">{{ COMMON.EDIT }}</el-button>
-            <el-switch
-              v-model="row.isVip"
-              :active-text="COMMON.SHOW"
-              :inactive-text="COMMON.HIDE"
-              @change="handleVipChange(row)"
-            />
-          </div>
-          <div>
-            <el-button type="success" size="small" @click="moveToChannelManageView(row)">{{ COMMON.SCHEDULE }}</el-button>
-            <el-button type="danger" size="small" @click="handleChannelDeleteClick(row)">{{ COMMON.DELETE }}</el-button>
-          </div>
-        </template>
-      </el-table-column>
-
-    </el-table>
+    <table class="table table-hover table-bordered small-font-size">
+      <thead>
+        <tr class="color-info ">
+          <th scope="col" width="150">{{ COMMON.NAME }}</th>
+          <th scope="col">{{ COMMON.DESCRIPTION }}</th>
+          <th v-if="isAdmin" width="230">{{ COMMON.ACTION }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(channel, index) in channelList" :key="index">
+          <td>
+            <el-link @click="handleNameClick(channel)">
+              <span class="color-primary">{{ channel.name }}</span>
+            </el-link>
+          </td>
+          <td>{{ channel.description }}</td>
+          <td v-if="isAdmin">
+            <div class="mb-2">
+              <el-button size="small" class="mr-2" @click="handleChannelEditClick(channel)">{{ COMMON.EDIT }}</el-button>
+              <el-switch
+                v-model="channel.isVip"
+                :active-text="COMMON.SHOW"
+                :inactive-text="COMMON.HIDE"
+                @change="handleVipChange(channel)"
+              />
+            </div>
+            <div>
+              <el-button
+                type="success"
+                size="small"
+                @click="moveToChannelManageView(channel)"
+              >{{ COMMON.SCHEDULE }}</el-button>
+              <el-button
+                type="danger"
+                size="small"
+                @click="handleChannelDeleteClick(channel)"
+              >{{ COMMON.DELETE }}</el-button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
   </div>
 </template>
