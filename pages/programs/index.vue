@@ -8,7 +8,7 @@
         </el-breadcrumb>
         <el-button type="primary" size="small" plain @click="handleCreateProgramClick">Create Program</el-button>
       </div>
-      <el-table id="programTable" :data="tableData" border stripe>
+      <el-table id="programTable" :key="programTableKey" :data="tableData" border stripe>
         <el-table-column
           prop="name"
           label="Name"
@@ -83,7 +83,8 @@ export default {
       },
       tableData: null,
       programListData: [],
-      programList: null
+      programList: null,
+      programTableKey: 0
 
     }
   },
@@ -136,9 +137,7 @@ export default {
             message: 'Delete completed',
             offset: 100
           })
-          this.$store.dispatch('app/fetchProgramList', {}).then(list => {
-            this.programList = list
-          })
+          this.programTableKey++
         })
       })
     },
@@ -163,14 +162,14 @@ export default {
       if (request.schedules) {
         programQuery = programQuery.where('schedules', 'array-contains-any', request.schedules)
       }
-      const list = []
+
       return programQuery.orderBy('name', 'asc').onSnapshot(snapShot => {
+        const list = []
         snapShot.forEach(doc => {
           const program = { ...doc.data(), id: doc.id }
           list.push(program)
         })
-        this.programList = list
-        // this.$store.dispatch('app/setProgramList', [...list])
+        this.programList = [...list]
       })
     }
 
