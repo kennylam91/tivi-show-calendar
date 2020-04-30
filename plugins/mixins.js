@@ -2,16 +2,6 @@ import Vue from 'vue'
 import { COMMON, FB, CATEGORIES } from '@/assets/utils/constant'
 // import { firebase } from '@/MyFireBase'
 
-// const sortByName = (a, b) => {
-//   if (a.name > b.name) {
-//     return 1
-//   } else if (a.name < b.name) {
-//     return -1
-//   } else {
-//     return 0
-//   }
-// }
-
 Vue.mixin({
   data() {
     return {
@@ -147,6 +137,15 @@ Vue.mixin({
         }
       }
       return finalArr
+    },
+    sortByName: (a, b) => {
+      if (a.name > b.name) {
+        return 1
+      } else if (a.name < b.name) {
+        return -1
+      } else {
+        return 0
+      }
     }
   }
 })

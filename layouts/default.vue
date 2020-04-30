@@ -22,7 +22,7 @@
                 {{ COMMON.CHANNEL_LIST }}
               </el-menu-item>
               <el-menu-item
-                v-for="(item, index) in channelList"
+                v-for="(item, index) in vipChannelList"
                 :key="index"
                 :index="item.id"
               >{{ item.name }}</el-menu-item>
@@ -90,7 +90,7 @@
             {{ COMMON.CHANNEL_LIST }}
           </el-menu-item>
           <el-menu-item
-            v-for="(item, index) in channelList"
+            v-for="(item, index) in vipChannelList"
             :key="index"
             :index="item.id"
           >{{ item.name }}</el-menu-item>
@@ -144,6 +144,10 @@ export default {
     }),
     path() {
       return this.$route.path
+    },
+    vipChannelList() {
+      const list = this.channelList.filter(channel => channel.isVip === true)
+      return list
     }
   },
   watch: {
@@ -157,7 +161,7 @@ export default {
   },
   created() {
     this.$store.dispatch('app/fetchChannelList').then(channelList => {
-      for (const channel of channelList) {
+      for (const channel of channelList.filter(channel => channel.isVip === true)) {
         const name = channel.name.split(' ').join('-').trim()
         const channelPath = `/lich-chieu/${name}-${channel.id}`
         const index = channel.id

@@ -50,59 +50,40 @@
         </div>
       </div>
 
-      <el-table
-        id="scheduleTable"
-        :data="scheduleData"
-        size="small"
-        border
-        stripe
-        fit
-        style="width: 100%"
-      >
-        <el-table-column
-          :label="COMMON.TIME"
-          align="center"
-          :min-width="16"
-        >
-          <template slot-scope="{row}">
-            <div>{{ parseTime(row.startTime.seconds) }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="COMMON.PROGRAM_NAME"
-          :min-width="52"
-        >
-          <template slot-scope="{row}">
-            <el-link :underline="false" @click="viewProgramDetail(row)">
-              <span class="color-primary">{{ row.programName | uppercaseFirst }}</span>
-            </el-link>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="COMMON.CATEGORY"
-          :min-width="32"
-          :filters="CATEGORIES"
-          :filter-method="filterCategory"
-          :filter-multiple="true"
-          filter-placement="bottom"
-          prop="categories"
-        >
-          >
-          <template slot-scope="{row}">
-            <el-tag
-              v-for="(item, index) in row.categories"
-              :key="index"
-              size="small"
-              effect="dark"
-              type="info"
-              style="margin: 2px;"
-            >
-              {{ item | getCategory }}
-            </el-tag>
-          </template>
-        </el-table-column>
+      <table class="table table-hover table-bordered smaller-font-size">
+        <thead>
+          <tr class="color-info ">
+            <th scope="col" style="min-width: 14%;">{{ COMMON.TIME }}</th>
+            <th scope="col">{{ COMMON.PROGRAM_NAME }}</th>
+            <th>{{ COMMON.CATEGORY }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(row, index) in scheduleData" :key="index">
+            <td>
+              <div>{{ parseTime(row.startTime.seconds) }}</div>
+            </td>
+            <td>
+              <el-link :underline="false" @click="viewProgramDetail(row)">
+                <span class="color-primary">{{ row.programName | uppercaseFirst }}</span>
+              </el-link>
+            </td>
+            <td>
+              <el-tag
+                v-for="(item, index) in row.categories"
+                :key="index"
+                size="small"
+                effect="dark"
+                type="info"
+                style="margin: 2px;"
+              >
+                {{ item | getCategory }}
+              </el-tag>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-      </el-table>
     </el-card>
 
   </div>
@@ -167,27 +148,13 @@ export default {
     selectedDate() {
       this.getScheduleList()
     }
-    // channelList: {
-    //   immediate: true,
-    //   deep: true,
-    //   handler() {
-    //     this.channelId = this.$route.params.id.split('-').pop()
-    //     if (this.channelList) {
-    //       this.channel = this.channelList.find(item => item.id === this.channelId)
-    //     } else {
-    //       this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
-    //         this.channel = channel
-    //       })
-    //     }
-    //   }
-    // }
+
   },
   created() {
-    // this.getScheduleList()
   },
   methods: {
     parseTime(time) {
-      return parseVNTime(time, '{h}:{i} {a}', true, true)
+      return parseVNTime(time, '{H}:{i}', true, true)
     },
     getScheduleList() {
       this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
