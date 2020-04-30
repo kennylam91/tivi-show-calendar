@@ -151,6 +151,10 @@ export default {
 
   },
   created() {
+    const dateParam = this.$route.query.date
+    if (dateParam) {
+      this.selectedDate = dateParam
+    }
   },
   methods: {
     parseTime(time) {

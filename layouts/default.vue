@@ -162,15 +162,16 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('app/fetchChannelList').then(channelList => {
-      for (const channel of channelList.filter(channel => channel.isVip === true)) {
-        const name = channel.name.split(' ').join('-').trim()
-        const channelPath = `/lich-chieu/${name}-${channel.id}`
-        const index = channel.id
-        this.pathIndexMatrix.push([channelPath, index])
-      }
-      this.pathIndexMap = new Map(this.pathIndexMatrix)
-    })
+
+  },
+  mounted() {
+    for (const channel of this.vipChannelList) {
+      const name = channel.name.split(' ').join('-').trim()
+      const channelPath = `/lich-chieu/${name}-${channel.id}`
+      const index = channel.id
+      this.pathIndexMatrix.push([channelPath, index])
+    }
+    this.pathIndexMap = new Map(this.pathIndexMatrix)
   },
   methods: {
     handleSelect(key, keyPath) {

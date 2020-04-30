@@ -76,26 +76,50 @@ import { FB } from '@/assets/utils/constant'
 export default {
   components: { Program },
   asyncData({ store }) {
-    const promise1 = store.dispatch('app/fetchChannelList', {})
-    const startOfDate = new Date()
-    startOfDate.setHours(0, 0, 0, 0)
-    const milliSecondsOneDay = 24 * 60 * 60 * 1000
-    const startOfDateInSeconds = Date.parse(startOfDate)
-    const promise2 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
-    const promise3 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
-    return Promise.all([promise1, promise2, promise3]).then(results => {
-      const todayProgramList = []
-      const nextDaysProgramList = []
-      results[1].forEach(program => {
-        todayProgramList.push({ ...program.data(), id: program.id })
-      })
-      results[2].forEach(program => {
-        nextDaysProgramList.push({ ...program.data(), id: program.id })
-      })
-      store.dispatch('app/setChannelList', results[0])
-      store.dispatch('app/setTodayProgramList', todayProgramList)
-      store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
-    })
+    if (!store.state.app.todayProgramList || !store.state.app.nextDaysProgramList) {
+      const startOfDate = new Date()
+      startOfDate.setHours(0, 0, 0, 0)
+      const milliSecondsOneDay = 24 * 60 * 60 * 1000
+      const startOfDateInSeconds = Date.parse(startOfDate)
+      const promise2 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
+      const promise3 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
+      if (!store.state.app.channelList) {
+        const channelPromise = store.dispatch('app/fetchChannelList', {})
+        return Promise.all([channelPromise, promise2, promise3]).then(results => {
+          const todayProgramList = []
+          const nextDaysProgramList = []
+          results[1].forEach(program => {
+            todayProgramList.push({ ...program.data(), id: program.id })
+          })
+          results[2].forEach(program => {
+            nextDaysProgramList.push({ ...program.data(), id: program.id })
+          })
+          store.dispatch('app/setChannelList', results[0])
+          store.dispatch('app/setTodayProgramList', todayProgramList)
+          store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
+          return { channelList: results[0], todayProgramList, nextDaysProgramList }
+        })
+      } else {
+        return Promise.all([promise2, promise3]).then(results => {
+          const todayProgramList = []
+          const nextDaysProgramList = []
+          results[0].forEach(program => {
+            todayProgramList.push({ ...program.data(), id: program.id })
+          })
+          results[1].forEach(program => {
+            nextDaysProgramList.push({ ...program.data(), id: program.id })
+          })
+          const channelList = store.state.app.channelList
+          store.dispatch('app/setTodayProgramList', todayProgramList)
+          store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
+          return { channelList, todayProgramList, nextDaysProgramList }
+        })
+      }
+    } else {
+      return { channelList: store.state.app.channelList,
+        todayProgramList: store.state.app.todayProgramList,
+        nextDaysProgramList: store.state.app.nextDaysProgramList }
+    }
   },
   data() {
     return {
@@ -103,10 +127,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      channelList: 'channelList',
-      programList: 'programList',
-      todayProgramList: 'todayProgramList',
-      nextDaysProgramList: 'nextDaysProgramList'
     }),
     vipChannels() {
       if (this.channelList) {
@@ -136,12 +156,6 @@ export default {
   watch: {
   },
   mounted() {
-    if (!this.todayProgramList) {
-      this.fetchTodayProgramList()
-    }
-    if (!this.nextDaysProgramList) {
-      this.fetchNextDaysProgramList()
-    }
   },
   methods: {
 

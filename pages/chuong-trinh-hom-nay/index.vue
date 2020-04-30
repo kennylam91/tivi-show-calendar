@@ -94,14 +94,31 @@ export default {
       const startOfDate = new Date()
       startOfDate.setHours(0, 0, 0, 0)
       const startOfDateInSeconds = Date.parse(startOfDate)
-      const list = []
-      const promise0 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
-      return promise0.then(doc => {
-        doc.forEach(program => {
-          list.push({ ...program.data(), id: program.id })
+      const programPromise = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
+      if (!store.state.app.channelList) {
+        const channelPromise = store.dispatch('app/fetchChannelList')
+        return Promise.all([programPromise, channelPromise]).then(results => {
+          const todayProgramList = []
+          results[0].forEach(program => {
+            todayProgramList.push({ ...program.data(), id: program.id })
+          })
+          const channelList = results[1]
+          store.dispatch('app/setTodayProgramList', todayProgramList)
+          store.dispatch('app/setChannelList', channelList)
+          return { todayProgramList, channelList: channelList }
         })
-        store.dispatch('app/setTodayProgramList', list)
-      })
+      } else {
+        return Promise.all([programPromise]).then(results => {
+          const todayProgramList = []
+          results[0].forEach(program => {
+            todayProgramList.push({ ...program.data(), id: program.id })
+          })
+          store.dispatch('app/setTodayProgramList', todayProgramList)
+          return { todayProgramList, channelList: store.state.app.channelList }
+        })
+      }
+    } else {
+      return { todayProgramList: store.state.app.todayProgramList, channelList: store.state.app.channelList }
     }
   },
   data() {
@@ -116,8 +133,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      todayProgramList: 'todayProgramList',
-      channelList: 'channelList',
       todayScheduleList: 'todayScheduleList'
     }),
     isSearching() {
