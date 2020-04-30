@@ -4,7 +4,7 @@
     <table class="table table-hover table-bordered small-font-size">
       <thead>
         <tr class="color-info ">
-          <th scope="col" width="150">{{ COMMON.NAME }}</th>
+          <th scope="col">{{ COMMON.NAME }}</th>
           <th scope="col">{{ COMMON.DESCRIPTION }}</th>
           <th v-if="isAdmin" width="230">{{ COMMON.ACTION }}</th>
         </tr>

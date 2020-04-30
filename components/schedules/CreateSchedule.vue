@@ -5,6 +5,7 @@
       <el-form-item label="Start time">
         <el-date-picker
           v-model="scheduleData.startTime"
+          format="yyyy-MM-dd HH:mm"
           style="width: 100%;"
           type="datetime"
           placeholder="Select date and time"
@@ -13,6 +14,7 @@
       <el-form-item label="End time">
         <el-date-picker
           v-model="scheduleData.endTime"
+          format="yyyy-MM-dd HH:mm"
           style="width: 100%;"
           type="datetime"
           placeholder="Select date and time"

@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column
         label="Categories"
-        width="170"
+        width="250"
       >
         <template slot-scope="{row}">
           <el-tag
