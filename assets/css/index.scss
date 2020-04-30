@@ -1,19 +1,19 @@
 @import './element-variables.scss';
 
 .color-primary {
-  color: $--color-primary
+  color: $--color-primary !important;
 }
 .color-success {
-  color: $--color-success
+  color: $--color-success !important;
 }
 .color-warning {
-  color: $--color-warning
+  color: $--color-warning !important;
 }
 .color-danger {
-  color: $--color-danger
+  color: $--color-danger !important;
 }
 .color-info{
-  color:$--color-info
+  color:$--color-info !important;
 }
 .bg-info{
   background:$--color-info!important; 

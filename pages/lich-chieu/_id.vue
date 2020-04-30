@@ -14,7 +14,7 @@
           class="col-sm-4 col-md-2 text-center"
           style="padding-left: 15px;padding-right: 15px; "
         >
-          <img class="img-fluid" :src="channel.logo">
+          <img class="img-fluid" :src="channel.logo" :alt="channel.name">
         </div>
         <div
           class="col-sm-8 col-md-10 flex"
@@ -110,19 +110,52 @@
 <script>
 import { parseVNTime } from '@/assets/utils/index'
 import { mapGetters } from 'vuex'
+import { FB } from '@/assets/utils/constant'
 
 export default {
   components: { },
+  asyncData({ params, store }) {
+    const channelId = params.id.split('-').pop()
+    let channel
+    let scheduleData
+    const start = new Date()
+    start.setHours(0, 0, 0, 0)
+    const startTimestamp = FB.timestamp.fromDate(start)
+
+    const end = new Date()
+    end.setHours(23, 59, 59, 999)
+    const endTimestamp = FB.timestamp.fromDate(end)
+
+    const promise0 = store.dispatch('app/fetchScheduleList',
+      { channelId: channelId,
+        startTime: startTimestamp,
+        endTime: endTimestamp })
+
+    if (store.state.app.channelList) {
+      channel = store.state.app.channelList.find(item => item.id === channelId)
+      return promise0.then(list => {
+        scheduleData = list
+        return { channel, scheduleData, channelId }
+      })
+    } else {
+      const promise1 = store.dispatch('app/fetchChannelList')
+      return Promise.all([promise0, promise1]).then(results => {
+        scheduleData = results[0]
+        channel = results[1].find(item => item.id === channelId)
+        return { channel, scheduleData, channelId }
+      })
+    }
+  },
   data() {
     return {
       channelId: null,
-      channel: null,
       scheduleList: [],
       program: null,
       detailProgramDlgVisible: false,
       selectedDate: new Date(),
       searchText: '',
-      scheduleData: []
+      scheduleData: [],
+      channel: null
     }
   },
   computed: {
@@ -133,24 +166,24 @@ export default {
   watch: {
     selectedDate() {
       this.getScheduleList()
-    },
-    channelList: {
-      immediate: true,
-      deep: true,
-      handler() {
-        this.channelId = this.$route.params.id.split('-').pop()
-        if (this.channelList) {
-          this.channel = this.channelList.find(item => item.id === this.channelId)
-        } else {
-          this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
-            this.channel = channel
-          })
-        }
-      }
     }
+    // channelList: {
+    //   immediate: true,
+    //   deep: true,
+    //   handler() {
+    //     this.channelId = this.$route.params.id.split('-').pop()
+    //     if (this.channelList) {
+    //       this.channel = this.channelList.find(item => item.id === this.channelId)
+    //     } else {
+    //       this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
+    //         this.channel = channel
+    //       })
+    //     }
+    //   }
+    // }
   },
   created() {
-    this.getScheduleList()
+    // this.getScheduleList()
   },
   methods: {
     parseTime(time) {

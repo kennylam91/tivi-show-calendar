@@ -26,38 +26,32 @@
         </div>
       </div>
       <h5>{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
-      <el-table :data="scheduleList" size="small" border stripe fit style="width: 100%">
-        <el-table-column
-          :label="COMMON.CHANNEL"
-          :min-width="44"
-        >
-          <template slot-scope="{row}">
-            <el-link
-              class="break-word"
-              @click="viewChannelDetail({id: row.channelId, name: row.channelName})"
-            >{{ row.channelName }}</el-link>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="COMMON.START"
-          align="center"
-          :min-width="28"
-        >
-          <template slot-scope="{row}">
-            <span class="break-word">{{ row.startTime.seconds | parseTime }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="COMMON.END"
-          align="center"
-          :min-width="28"
-        >
-          <template slot-scope="{row}">
-            <span class="break-word">{{ row.endTime.seconds | parseTime }}</span>
-          </template>
-        </el-table-column>
 
-      </el-table>
+      <table class="table table-hover table-bordered small-font-size">
+        <thead>
+          <tr class="color-info">
+            <th>{{ COMMON.CHANNEL }}</th>
+            <th>{{ COMMON.START }}</th>
+            <th>{{ COMMON.END }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in scheduleList" :key="row.id">
+            <td>
+              <el-link
+                class="color-primary"
+                @click="viewChannelDetail({id: row.channelId, name: row.channelName})"
+              >{{ row.channelName }}</el-link>
+            </td>
+            <td>
+              {{ row.startTime.seconds | parseTime }}
+            </td>
+            <td>
+              {{ row.endTime.seconds | parseTime }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
     </el-card>
   </div>
@@ -127,16 +121,6 @@ export default {
   watch: {
   },
   created() {
-    // const promise1 = this.fetchAllProgramByDate(new Date())
-    // const promise2 = this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM)
-    // Promise.all([promise1, promise2]).then(results => {
-    //   this.$store.dispatch('app/setTodayProgramList', results[0])
-    //   this.$store.dispatch('app/setNextDaysProgramList', results[1])
-    //   const programList = this.todayProgramList.concat(this.nextDaysProgramList)
-    //   this.programId = this.$route.params.id.split('-').pop().trim()
-    //   this.program = programList.find(item => item.id === this.programId)
-    //   this.fetchScheduleList()
-    // })
   },
   methods: {
     fetchScheduleList() {

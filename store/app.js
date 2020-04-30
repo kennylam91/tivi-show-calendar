@@ -99,14 +99,10 @@ export const actions = {
   },
   // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
   fetchScheduleList({ state, dispatch }, request) {
-    let programList
     let scheduleQuery = FB.scheduleRef
     if (request.channelId) {
       // fetch program list of this channel
       scheduleQuery = scheduleQuery.where('channelId', '==', request.channelId)
-      dispatch('fetchProgramList', { channelId: request.channelId }).then(list => {
-        programList = list
-      })
     }
     if (request.programId) {
       scheduleQuery = scheduleQuery.where('programId', '==', request.programId)

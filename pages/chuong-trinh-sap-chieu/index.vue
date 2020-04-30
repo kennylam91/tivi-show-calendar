@@ -84,9 +84,27 @@
 <script>
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
+import { FB } from '@/assets/utils/constant'
 
 export default {
   components: { Program },
+  asyncData({ store }) {
+    const nextDaysPgList = store.state.app.nextDaysProgramList
+    if (!nextDaysPgList) {
+      const startOfDate = new Date()
+      startOfDate.setHours(0, 0, 0, 0)
+      const milliSecondsOneDay = 24 * 60 * 60 * 1000
+      const startOfDateInSeconds = Date.parse(startOfDate)
+      const list = []
+      const promise0 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
+      return promise0.then(doc => {
+        doc.forEach(program => {
+          list.push({ ...program.data(), id: program.id })
+        })
+        store.dispatch('app/setNextDaysProgramList', list)
+      })
+    }
+  },
   data() {
     return {
       programSearchForm: {
