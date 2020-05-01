@@ -78,10 +78,11 @@ export default {
   asyncData({ store }) {
     // const promise1 = store.dispatch('app/fetchChannelList', {})
 
-    const startOfDate = new Date()
-    startOfDate.setHours(0, 0, 0, 0)
+    // const startOfDate = new Date()
+    // startOfDate.setHours(0, 0, 0, 0)
     const milliSecondsOneDay = 24 * 60 * 60 * 1000
-    const startOfDateInSeconds = Date.parse(startOfDate)
+    // const startOfDateInSeconds = Date.parse(startOfDate)
+    const startOfDateInSeconds = 1588093200000
     const promise1 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
 
     const promise2 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
