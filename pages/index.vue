@@ -40,7 +40,7 @@
         </p>
       </el-divider>
       <div
-        v-for="program in todayVipProgramList"
+        v-for="program in todayProgramList"
         :key="program.id"
         class="col-md-3 col-6 my-2 px-2"
       >
@@ -92,9 +92,10 @@ export default {
       results[2].forEach(program => {
         nextDaysProgramList.push({ ...program.data(), id: program.id })
       })
-      store.dispatch('app/setChannelList', results[0])
-      store.dispatch('app/setTodayProgramList', todayProgramList)
-      store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
+      // store.dispatch('app/setChannelList', results[0])
+      // store.dispatch('app/setTodayProgramList', todayProgramList)
+      // store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
+      return { channelList: results[0], todayProgramList, nextDaysProgramList }
     })
   },
   data() {
