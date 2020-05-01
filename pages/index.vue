@@ -76,7 +76,9 @@ import { FB } from '@/assets/utils/constant'
 export default {
   components: { Program },
   asyncData({ store }) {
-    const promise1 = store.dispatch('app/fetchChannelList', {})
+    // const promise1 = store.dispatch('app/fetchChannelList', {})
+    const promise1 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
+
     const startOfDate = new Date()
     startOfDate.setHours(0, 0, 0, 0)
     const milliSecondsOneDay = 24 * 60 * 60 * 1000
@@ -86,7 +88,7 @@ export default {
     return Promise.all([promise1, promise2, promise3]).then(results => {
       const todayProgramList = []
       const nextDaysProgramList = []
-      results[1].forEach(program => {
+      results[0].forEach(program => {
         todayProgramList.push({ ...program.data(), id: program.id })
       })
       results[2].forEach(program => {
