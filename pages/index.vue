@@ -92,10 +92,11 @@ export default {
       results[2].forEach(program => {
         nextDaysProgramList.push({ ...program.data(), id: program.id })
       })
-      store.dispatch('app/setChannelList', results[0])
-      store.dispatch('app/setTodayProgramList', todayProgramList)
-      store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
-      return { channelList: results[0], todayProgramList, nextDaysProgramList }
+      const channelList = results[0]
+      // store.dispatch('app/setChannelList', results[0])
+      // store.dispatch('app/setTodayProgramList', todayProgramList)
+      // store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
+      return { channelList, todayProgramList, nextDaysProgramList }
     })
   },
   data() {
