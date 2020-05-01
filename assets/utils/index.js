@@ -33,7 +33,6 @@ export function parseVNTime(time, vformat, pad, isFourDigitYear) {
       m: date.getMonth() + 1,
       y: date.getFullYear(),
       h: hours < 12 ? hours : hours - 12,
-      H: hours,
       i: date.getMinutes(),
       a: hours < 12 ? 'AM' : 'PM',
       w: date.getDay()
@@ -44,14 +43,13 @@ export function parseVNTime(time, vformat, pad, isFourDigitYear) {
       m: date.getMonth() + 1,
       y: date.getFullYear() % 100,
       h: hours < 12 ? hours : hours - 12,
-      H: hours,
       i: date.getMinutes(),
       a: hours < 12 ? 'AM' : 'PM',
       w: date.getDay()
     }
   }
 
-  const time_str = format.replace(/{([dmyhHiaw])+}/g, (result, key) => {
+  const time_str = format.replace(/{([dmyhiaw])+}/g, (result, key) => {
     const value = formatObj[key]
     if (key === 'w') {
       return [COMMON.SUNDAY, COMMON.MONDAY, COMMON.TUESDAY, COMMON.WEDNESDAY, COMMON.THURSDAY, COMMON.FRIDAY, COMMON.SATURDAY][value]

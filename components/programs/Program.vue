@@ -15,7 +15,7 @@
       </el-link>
       <div v-else>{{ program.name }}</div>
       <div class="shorten-text color-info smaller-font-size my-2">
-        {{ program.name | shortenName | uppercaseAll }}
+        {{ program.name | shortenName }}
       </div>
       <el-link
         id="programName"
@@ -24,12 +24,12 @@
         @click="viewProgramDetail(program)"
       >
         <el-tooltip
-          :content="program.name | getVNTranslateName | uppercaseAll"
+          :content="program.name | getVNTranslateName"
           placement="bottom"
           effect="dark"
         >
           <div class="shorten-text color-primary bold smaller-font-size">
-            {{ program.name | getVNTranslateName | uppercaseAll }}
+            {{ program.name | getVNTranslateName }}
           </div>
         </el-tooltip>
       </el-link>

@@ -66,7 +66,7 @@ import { FB } from '@/assets/utils/constant'
 export default {
   filters: {
     parseTime(time) {
-      return parseVNTime(time, '{d}/{m}/{y} {H}:{i}', true, true)
+      return parseVNTime(time, '{d}/{m}/{y} {h}:{i}{a}', true, true)
     }
   },
   asyncData({ store, params }) {
