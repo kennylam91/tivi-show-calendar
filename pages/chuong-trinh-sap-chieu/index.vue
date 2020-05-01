@@ -89,20 +89,38 @@ import { FB } from '@/assets/utils/constant'
 export default {
   components: { Program },
   asyncData({ store }) {
-    const nextDaysPgList = store.state.app.nextDaysProgramList
-    if (!nextDaysPgList) {
+    const nextDaysProgramList = store.state.app.nextDaysProgramList
+    if (!nextDaysProgramList) {
       const startOfDate = new Date()
       startOfDate.setHours(0, 0, 0, 0)
       const milliSecondsOneDay = 24 * 60 * 60 * 1000
       const startOfDateInSeconds = Date.parse(startOfDate)
-      const list = []
-      const promise0 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
-      return promise0.then(doc => {
-        doc.forEach(program => {
-          list.push({ ...program.data(), id: program.id })
+      const programPromise = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
+      if (!store.state.app.channelList) {
+        const channelPromise = store.dispatch('app/fetchChannelList')
+
+        return Promise.all([programPromise, channelPromise]).then(results => {
+          const nextDaysProgramList = []
+          results[0].forEach(program => {
+            nextDaysProgramList.push({ ...program.data(), id: program.id })
+          })
+          const channelList = results[1]
+          store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
+          store.dispatch('app/setChannelList', channelList)
+          return { nextDaysProgramList, channelList }
         })
-        store.dispatch('app/setNextDaysProgramList', list)
-      })
+      } else {
+        return Promise.all([programPromise]).then(results => {
+          const nextDaysProgramList = []
+          results[0].forEach(program => {
+            nextDaysProgramList.push({ ...program.data(), id: program.id })
+          })
+          store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
+          return { nextDaysProgramList }
+        })
+      }
+    } else {
+      return { nextDaysProgramList: store.state.app.nextDaysProgramList, channelList: store.state.app.channelList }
     }
   },
   data() {
@@ -117,10 +135,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      programList: 'programList',
-      nextDaysProgramList: 'nextDaysProgramList',
-      channelList: 'channelList',
-      nextDaysScheduleList: 'nextDaysScheduleList'
     }),
     isSearching() {
       return this.programSearchForm.name || this.programSearchForm.channels.length > 0 ||
