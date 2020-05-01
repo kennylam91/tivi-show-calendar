@@ -72,66 +72,37 @@ export default {
   asyncData({ store, params }) {
     const startOfDate = new Date()
     startOfDate.setHours(0, 0, 0, 0)
-    // const milliSecondsOneDay = 24 * 60 * 60 * 1000
-    // const startOfDateInSeconds = Date.parse(startOfDate)
-    // const promise0 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
-    // const promise1 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
+    const milliSecondsOneDay = 24 * 60 * 60 * 1000
+    const startOfDateInSeconds = Date.parse(startOfDate)
+    const promise0 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
+    const promise1 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
     const now = new Date()
     const programId = params.id.split('-').pop().trim()
 
-    const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
+    const promise2 = FB.scheduleRef.where('programId', '==', programId)
       .where('startTime', '>=', FB.timestamp.fromDate(now))
       .orderBy('startTime', 'asc').get()
-    const programPromise = store.dispatch('app/fetchProgram', { programId })
-    if (!store.state.app.channelList) {
-      const channelPromise = store.dispatch('app/fetchChannelList')
-      return Promise.all([schedulePromise, channelPromise, programPromise]).then(results => {
-        const channelList = results[1]
-        const scheduleListDoc = results[0]
-        const scheduleList = []
-        const program = results[2]
-        scheduleListDoc.forEach(doc => {
-          const schedule = { ...doc.data(), id: doc.id }
-          scheduleList.push(schedule)
-        })
-        store.dispatch('app/setChannelList', channelList)
-        return { channelList, scheduleList, program }
+    return Promise.all([promise0, promise1, promise2]).then(results => {
+      const todayProgramList = []
+      const nextDaysProgramList = []
+      results[0].forEach(program => {
+        todayProgramList.push({ ...program.data(), id: program.id })
       })
-    } else {
-      return Promise.all([schedulePromise, programPromise]).then(results => {
-        const scheduleListDoc = results[0]
-        const scheduleList = []
-        const program = results[1]
-        scheduleListDoc.forEach(doc => {
-          const schedule = { ...doc.data(), id: doc.id }
-          scheduleList.push(schedule)
-        })
-        return { scheduleList, program, channelList: store.state.app.channelList }
+      results[1].forEach(program => {
+        nextDaysProgramList.push({ ...program.data(), id: program.id })
       })
-    }
-    // return Promise.all([promise0, promise1, promise2, promise3]).then(results => {
-    //   const todayProgramList = []
-    //   const nextDaysProgramList = []
-    //   results[0].forEach(program => {
-    //     todayProgramList.push({ ...program.data(), id: program.id })
-    //   })
-    //   results[1].forEach(program => {
-    //     nextDaysProgramList.push({ ...program.data(), id: program.id })
-    //   })
-    //   const programList = todayProgramList.concat(nextDaysProgramList)
-    //   const program = programList.find(item => item.id === programId)
-    //   const scheduleList = []
-    //   results[2].forEach(doc => {
-    //     const schedule = { ...doc.data(), id: doc.id }
-    //     scheduleList.push(schedule)
-    //   })
-    //   const channelList = results[3]
+      const programList = todayProgramList.concat(nextDaysProgramList)
+      const program = programList.find(item => item.id === programId)
+      const scheduleList = []
+      results[2].forEach(doc => {
+        const schedule = { ...doc.data(), id: doc.id }
+        scheduleList.push(schedule)
+      })
 
-    //   store.dispatch('app/setTodayProgramList', todayProgramList)
-    //   store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
-    //   store.dispatch('app/setChannelList', channelList)
-    //   return { program, programId, scheduleList, channelList }
-    // })
+      store.dispatch('app/setTodayProgramList', todayProgramList)
+      store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
+      return { program, programId, scheduleList }
+    })
   },
   data() {
     return {
@@ -142,6 +113,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      channelList: 'channelList',
       todayProgramList: 'todayProgramList',
       nextDaysProgramList: 'nextDaysProgramList'
     })

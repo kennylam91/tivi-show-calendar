@@ -45,23 +45,6 @@ export const mutations = {
 }
 
 export const actions = {
-
-  nuxtServerInit({ dispatch }) {
-    // const startOfDate = new Date()
-    // startOfDate.setHours(0, 0, 0, 0)
-    // const startOfDateInSeconds = Date.parse(startOfDate)
-    // dispatch('fetchProgramList', { schedules: [startOfDateInSeconds] }).then(list => {
-    //   dispatch('setTodayProgramList', list)
-    // })
-
-    // const milliSecondsOneDay = 24 * 60 * 60 * 1000
-    // const startOfNextDay = startOfDateInSeconds + milliSecondsOneDay
-    // dispatch('fetchProgramList', { schedules: [startOfNextDay] }).then(list => {
-    //   dispatch('setNextDaysProgramList', list)
-    // })
-
-    // dispatch('fetchChannelList')
-  },
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
