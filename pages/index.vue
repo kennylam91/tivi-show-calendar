@@ -77,12 +77,13 @@ export default {
   components: { Program },
   asyncData({ store }) {
     // const promise1 = store.dispatch('app/fetchChannelList', {})
-    const promise1 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
 
     const startOfDate = new Date()
     startOfDate.setHours(0, 0, 0, 0)
     const milliSecondsOneDay = 24 * 60 * 60 * 1000
     const startOfDateInSeconds = Date.parse(startOfDate)
+    const promise1 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
+
     const promise2 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
     const promise3 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
     return Promise.all([promise1, promise2, promise3]).then(results => {
@@ -94,11 +95,11 @@ export default {
       results[2].forEach(program => {
         nextDaysProgramList.push({ ...program.data(), id: program.id })
       })
-      const channelList = results[0]
+      // const channelList = results[0]
       // store.dispatch('app/setChannelList', results[0])
       // store.dispatch('app/setTodayProgramList', todayProgramList)
       // store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
-      return { channelList, todayProgramList, nextDaysProgramList }
+      return { todayProgramList, nextDaysProgramList }
     })
   },
   data() {
