@@ -116,7 +116,6 @@ export default {
   components: { },
   asyncData({ params, store }) {
     const channelId = params.id.split('-').pop()
-    let channel
     let scheduleData
     const start = new Date()
     start.setHours(0, 0, 0, 0)
@@ -131,20 +130,11 @@ export default {
         startTime: startTimestamp,
         endTime: endTimestamp })
 
-    if (store.state.app.channelList) {
-      channel = store.state.app.channelList.find(item => item.id === channelId)
-      return promise0.then(list => {
-        scheduleData = list
-        return { channel, scheduleData, channelId }
-      })
-    } else {
-      const promise1 = store.dispatch('app/fetchChannelList')
-      return Promise.all([promise0, promise1]).then(results => {
-        scheduleData = results[0]
-        channel = results[1].find(item => item.id === channelId)
-        return { channel, scheduleData, channelId }
-      })
-    }
+    const channel = store.state.app.channelList.find(item => item.id === channelId)
+    return promise0.then(list => {
+      scheduleData = list
+      return { channel, scheduleData, channelId }
+    })
   },
   data() {
     return {
@@ -167,20 +157,6 @@ export default {
     selectedDate() {
       this.getScheduleList()
     }
-    // channelList: {
-    //   immediate: true,
-    //   deep: true,
-    //   handler() {
-    //     this.channelId = this.$route.params.id.split('-').pop()
-    //     if (this.channelList) {
-    //       this.channel = this.channelList.find(item => item.id === this.channelId)
-    //     } else {
-    //       this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
-    //         this.channel = channel
-    //       })
-    //     }
-    //   }
-    // }
   },
   created() {
     const dateParam = this.$route.query.date

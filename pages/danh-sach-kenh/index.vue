@@ -24,25 +24,18 @@
 </template>
 <script>
 import ChannelTable from '@/components/channels/ChannelTable'
-// import { firebase } from '@/MyFireBase'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { ChannelTable },
-  asyncData({ store }) {
-    if (!store.state.app.channelList) {
-      return store.dispatch('app/fetchChannelList', {}).then(list => {
-        store.dispatch('app/setChannelList', list)
-        return { channelList: list }
-      })
-    } else {
-      return { channelList: store.state.app.channelList }
-    }
-  },
   data() {
     return {
     }
   },
   computed: {
+    ...mapGetters({
+      channelList: 'channelList'
+    })
   },
   watch: {
   },

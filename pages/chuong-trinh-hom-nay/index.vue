@@ -88,39 +88,7 @@ import { FB } from '@/assets/utils/constant'
 
 export default {
   components: { Program },
-  asyncData({ store }) {
-    const todayPgList = store.state.app.todayProgramList
-    if (!todayPgList) {
-      const startOfDate = new Date()
-      startOfDate.setHours(0, 0, 0, 0)
-      const startOfDateInSeconds = Date.parse(startOfDate)
-      const programPromise = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
-      if (!store.state.app.channelList) {
-        const channelPromise = store.dispatch('app/fetchChannelList')
-        return Promise.all([programPromise, channelPromise]).then(results => {
-          const todayProgramList = []
-          results[0].forEach(program => {
-            todayProgramList.push({ ...program.data(), id: program.id })
-          })
-          const channelList = results[1]
-          store.dispatch('app/setTodayProgramList', todayProgramList)
-          store.dispatch('app/setChannelList', channelList)
-          return { todayProgramList, channelList: channelList }
-        })
-      } else {
-        return Promise.all([programPromise]).then(results => {
-          const todayProgramList = []
-          results[0].forEach(program => {
-            todayProgramList.push({ ...program.data(), id: program.id })
-          })
-          store.dispatch('app/setTodayProgramList', todayProgramList)
-          return { todayProgramList, channelList: store.state.app.channelList }
-        })
-      }
-    } else {
-      return { todayProgramList: store.state.app.todayProgramList, channelList: store.state.app.channelList }
-    }
-  },
+
   data() {
     return {
       programSearchForm: {
@@ -133,7 +101,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      todayScheduleList: 'todayScheduleList'
+      todayProgramList: 'todayProgramList'
     }),
     isSearching() {
       return this.programSearchForm.name || this.programSearchForm.channels.length > 0 ||

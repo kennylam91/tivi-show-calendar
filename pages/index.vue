@@ -71,64 +71,18 @@
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
 import { sortByRankDesc } from '@/assets/utils/index'
-import { FB } from '@/assets/utils/constant'
-import { getStartOfDayInGMT7 } from '@/assets/utils/index'
 
 export default {
   components: { Program },
-  asyncData({ store }) {
-    if (!store.state.app.todayProgramList || !store.state.app.nextDaysProgramList) {
-      const now = new Date()
-      const milliSecondsOneDay = 24 * 60 * 60 * 1000
-
-      const startOfDateInGMT7 = getStartOfDayInGMT7(now)
-      const promise2 = FB.programRef.where('schedules', 'array-contains', startOfDateInGMT7).orderBy('name', 'asc').get()
-      const promise3 = FB.programRef.where('schedules', 'array-contains', startOfDateInGMT7 + milliSecondsOneDay).orderBy('name', 'asc').get()
-      if (!store.state.app.channelList) {
-        const channelPromise = store.dispatch('app/fetchChannelList', {})
-        return Promise.all([channelPromise, promise2, promise3]).then(results => {
-          const todayProgramList = []
-          const nextDaysProgramList = []
-          results[1].forEach(program => {
-            todayProgramList.push({ ...program.data(), id: program.id })
-          })
-          results[2].forEach(program => {
-            nextDaysProgramList.push({ ...program.data(), id: program.id })
-          })
-          store.dispatch('app/setChannelList', results[0])
-          store.dispatch('app/setTodayProgramList', todayProgramList)
-          store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
-          return { channelList: results[0], todayProgramList, nextDaysProgramList,
-            dateParse: startOfDateInGMT7 }
-        })
-      } else {
-        return Promise.all([promise2, promise3]).then(results => {
-          const todayProgramList = []
-          const nextDaysProgramList = []
-          results[0].forEach(program => {
-            todayProgramList.push({ ...program.data(), id: program.id })
-          })
-          results[1].forEach(program => {
-            nextDaysProgramList.push({ ...program.data(), id: program.id })
-          })
-          const channelList = store.state.app.channelList
-          store.dispatch('app/setTodayProgramList', todayProgramList)
-          store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
-          return { channelList, todayProgramList, nextDaysProgramList }
-        })
-      }
-    } else {
-      return { channelList: store.state.app.channelList,
-        todayProgramList: store.state.app.todayProgramList,
-        nextDaysProgramList: store.state.app.nextDaysProgramList }
-    }
-  },
   data() {
     return {
     }
   },
   computed: {
     ...mapGetters({
+      todayProgramList: 'todayProgramList',
+      channelList: 'channelList',
+      nextDaysProgramList: 'nextDaysProgramList'
     }),
     vipChannels() {
       if (this.channelList) {

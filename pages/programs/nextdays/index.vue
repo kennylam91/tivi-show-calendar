@@ -60,11 +60,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
-  asyncData({ params }) {
-    if (!this.nextDaysProgramList) {
-      this.updateNextDaysProgramList()
-    }
-  },
+
   data() {
     return {
     }
@@ -96,11 +92,6 @@ export default {
     }
   },
   watch: {
-  },
-  created() {
-    if (!this.nextDaysProgramList) {
-      this.updateNextDaysProgramList()
-    }
   },
   methods: {
     handleCreateProgramClick() {

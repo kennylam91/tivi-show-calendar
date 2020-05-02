@@ -88,9 +88,7 @@ export default {
   watch: {
 
   },
-  created() {
-    this.updateTodayProgramList()
-  },
+
   methods: {
     handleCreateProgramClick() {
       console.log('handleCreateProgramClick')
