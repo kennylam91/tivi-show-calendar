@@ -25,7 +25,7 @@
   font-size: 0.875rem;
 }
 .smaller-font-size{
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
 }
 .large-font-size{
   font-size: 1.125rem;
@@ -110,7 +110,47 @@
   max-width: 100%;
 }
 .el-popover{
-  max-height: 500px;
+  max-height: 250px;
   overflow: auto;
 }
+#searchInput{
+  position: absolute;
+  width: 300px;
+  right: 10px;
+  top: 10px;
+}
+.searchFormItem{
+  width: 230px;
+}
+.programName{
+  display: -webkit-box; 
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  min-height: 2rem;
+  max-height: 2rem;
 
+}
+
+@media only screen and (min-width: 769px) { 
+  #searchInput{
+    position: absolute;
+    width: 350px;
+    right: 10px;
+    top: 10px;
+  }
+}
+
+@media only screen and (min-width: 1024px) { 
+  #searchInput{
+    position: absolute;
+    width: 500px;
+    right: 16px;
+    top: 10px;
+  }
+  .searchFormItem{
+    width: 190px;
+  }
+  
+}

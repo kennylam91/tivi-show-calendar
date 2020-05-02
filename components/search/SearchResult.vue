@@ -2,7 +2,10 @@
   <el-link id="searchResult" class=" w-100" :underline="false" @click="handleLinkClick">
     <div class="flex w-100 " style="align-items: center;">
       <img class="img-fluid " :src="result.logo" :alt="result.name" :width="width">
-      <div class="ml-2 break-word smaller-font-size color-warning">
+      <div
+        class="break-word smaller-font-size color-warning searchResultName"
+        style="margin: 0 0 7px 10px;"
+      >
         {{ result.name }}
       </div>
     </div>
@@ -40,5 +43,10 @@ export default {
 }
 #searchResult:hover{
   background:#f1f1f1;
+}
+.searchResultName{
+  max-height: 2rem;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
 }
 </style>

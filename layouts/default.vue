@@ -41,11 +41,14 @@
               <el-popover
                 v-model="visible"
                 placement="bottom-start"
-                width="270"
                 trigger="manual"
                 popper-class="popover-class"
               >
-                <div v-for="(result, index) in searchAllResults" :key="index" class="my-1 w-100 ">
+                <div
+                  v-for="(result, index) in searchAllResults"
+                  :key="index"
+                  class="my-1 w-100 "
+                >
                   <SearchResult :result="result" :width="60" />
                 </div>
 
@@ -256,12 +259,6 @@ html {
 
 .el-menu--collapse .el-menu .el-submenu, .el-menu--popup{
   min-width: 140px;
-}
-#searchInput{
-  position: absolute;
-  width: 270px;
-  right: 10px;
-  top: 10px;
 }
 .popover-class{
   background-color: #545c64 !important;

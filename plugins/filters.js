@@ -22,7 +22,7 @@ Vue.filter('shortenName', val => {
 Vue.filter('getVNTranslateName', val => {
   if (val) {
     const array = val.split('-')
-    return array[1] ? array[1].trim() : ''
+    return array[1] ? array[1].trim() : array[0]
   }
   return ''
 })

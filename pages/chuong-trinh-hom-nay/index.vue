@@ -21,8 +21,8 @@
         <el-form-item :label="COMMON.SEARCH">
           <el-input
             v-model="programSearchForm.name"
+            class="searchFormItem"
             :placeholder="COMMON.INPUT_PROGRAM_NAME"
-            style="width: 180px;"
             @change="searchProgram"
           />
         </el-form-item>
@@ -30,13 +30,13 @@
           <el-select
             v-model="programSearchForm.channels"
             multiple
+            class="searchFormItem"
             size="small"
             :placeholder="COMMON.SELECT_CHANNEL"
-            style="width: 180px"
             @change="searchProgram"
           >
             <el-option
-              v-for="channel in channelList"
+              v-for="channel in vipChannelList"
               :key="channel.id"
               :label="channel.name"
               :value="channel.id"
@@ -46,10 +46,10 @@
         <el-form-item :label="COMMON.CATEGORY">
           <el-select
             v-model="programSearchForm.categories"
+            class="searchFormItem"
             multiple
             size="small"
             :placeholder="COMMON.SELECT_CATEGORY"
-            style="width: 180px"
             @change="searchProgram"
           >
             <el-option
@@ -61,8 +61,8 @@
           </el-select>
         </el-form-item>
         <el-form-item v-if="isSearching">
-          <el-tooltip :content="COMMON.CLEAR_SEARCH" placement="top" effect="dark">
-            <el-button size="small" icon="el-icon-close" type="danger" @click="clearSearchingForm" />
+          <el-tooltip slot="label" :content="COMMON.CLEAR_SEARCH" placement="top" effect="dark">
+            <el-button class="clearBtn" size="small" icon="el-icon-close" type="danger" @click="clearSearchingForm" />
           </el-tooltip>
 
         </el-form-item>
@@ -84,7 +84,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
-import { FB } from '@/assets/utils/constant'
 
 export default {
   components: { Program },
@@ -101,11 +100,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      todayProgramList: 'todayProgramList'
+      todayProgramList: 'todayProgramList',
+      channelList: 'channelList'
     }),
     isSearching() {
       return this.programSearchForm.name || this.programSearchForm.channels.length > 0 ||
       this.programSearchForm.categories.length > 0
+    },
+    vipChannelList() {
+      return this.channelList.filter(channel => channel.isVip === true)
     }
   },
   watch: {

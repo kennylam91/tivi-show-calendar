@@ -8,7 +8,7 @@
           <nuxt-link to="/danh-sach-kenh">{{ `(${COMMON.ALL_CHANNEL})` }}</nuxt-link>
         </p>
       </el-divider>
-      <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-2">
+      <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
           <el-link
             v-if="channel.logo"
@@ -23,7 +23,7 @@
             />
           </el-link>
           <el-button
-            class="my-2 w-100"
+            class="my-2 w-100 py-2 px-1"
             type="primary"
             size="small"
             @click="viewChannelDetail(channel)"
@@ -42,7 +42,7 @@
       <div
         v-for="program in todayVipProgramList"
         :key="program.id"
-        class="col-md-3 col-6 my-2 px-2"
+        class="col-md-3 col-6 my-2 px-1"
       >
         <Program :program="program" />
       </div>
@@ -58,7 +58,7 @@
       <div
         v-for="program in nextDaysVipProgramList"
         :key="program.id"
-        class="col-md-3 col-6 px-2 my-2"
+        class="col-md-3 col-6 px-1 my-2"
       >
         <Program :program="program" />
       </div>

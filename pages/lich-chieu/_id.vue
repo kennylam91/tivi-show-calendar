@@ -11,7 +11,7 @@
     <el-card :body-style="{ padding: '10px' }">
       <div class="row">
         <div
-          class="col-sm-4 col-md-2 text-center"
+          class="col-sm-4 col-md-2 text-center mb-2"
           style="padding-left: 15px;padding-right: 15px; "
         >
           <img class="img-fluid" :src="channel.logo" :alt="channel.name">
@@ -50,59 +50,39 @@
         </div>
       </div>
 
-      <el-table
-        id="scheduleTable"
-        :data="scheduleData"
-        size="small"
-        border
-        stripe
-        fit
-        style="width: 100%"
-      >
-        <el-table-column
-          :label="COMMON.TIME"
-          align="center"
-          :min-width="16"
-        >
-          <template slot-scope="{row}">
-            <div>{{ parseTime(row.startTime.seconds) }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="COMMON.PROGRAM_NAME"
-          :min-width="52"
-        >
-          <template slot-scope="{row}">
-            <el-link :underline="false" @click="viewProgramDetail(row)">
-              <span class="color-primary">{{ row.programName | uppercaseAll }}</span>
-            </el-link>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="COMMON.CATEGORY"
-          :min-width="32"
-          :filters="CATEGORIES"
-          :filter-method="filterCategory"
-          :filter-multiple="true"
-          filter-placement="bottom"
-          prop="categories"
-        >
-          >
-          <template slot-scope="{row}">
-            <el-tag
-              v-for="(item, index) in row.categories"
-              :key="index"
-              size="small"
-              effect="dark"
-              type="info"
-              style="margin: 2px;"
-            >
-              {{ item | getCategory }}
-            </el-tag>
-          </template>
-        </el-table-column>
-
-      </el-table>
+      <table class="table table-hover table-bordered small-font-size table-sm">
+        <thead>
+          <tr class="color-info ">
+            <th scope="col">{{ COMMON.TIME }}</th>
+            <th scope="col">{{ COMMON.PROGRAM_NAME }}</th>
+            <th>{{ COMMON.CATEGORY }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(row, index) in scheduleData" :key="index">
+            <td>
+              <div>{{ parseTime(row.startTime.seconds) }}</div>
+            </td>
+            <td>
+              <el-link :underline="false" @click="viewProgramDetail(row)">
+                <span class="color-primary small-font-size">{{ row.programName | uppercaseAll }}</span>
+              </el-link>
+            </td>
+            <td>
+              <el-tag
+                v-for="item in row.categories.filter(item => item !== 1)"
+                :key="item"
+                size="small"
+                effect="dark"
+                type="info"
+                style="margin: 2px;"
+              >
+                {{ item | getCategory }}
+              </el-tag>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </el-card>
 
   </div>
@@ -159,7 +139,7 @@ export default {
     }
   },
   created() {
-    const dateParam = this.$route.query.date
+    const dateParam = this.$route.query.date || new Date()
     if (dateParam) {
       this.selectedDate = dateParam
     }
