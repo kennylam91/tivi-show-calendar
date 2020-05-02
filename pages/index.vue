@@ -40,7 +40,7 @@
         </p>
       </el-divider>
       <div
-        v-for="program in todayProgramList"
+        v-for="program in todayVipProgramList"
         :key="program.id"
         class="col-md-3 col-6 my-2 px-2"
       >
@@ -72,17 +72,18 @@ import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
 import { sortByRankDesc } from '@/assets/utils/index'
 import { FB } from '@/assets/utils/constant'
+import { getStartOfDayInGMT7 } from '@/assets/utils/index'
 
 export default {
   components: { Program },
   asyncData({ store }) {
     if (!store.state.app.todayProgramList || !store.state.app.nextDaysProgramList) {
-      const startOfDate = new Date()
-      startOfDate.setHours(0, 0, 0, 0)
+      const now = new Date()
       const milliSecondsOneDay = 24 * 60 * 60 * 1000
-      const startOfDateInSeconds = Date.parse(startOfDate)
-      const promise2 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds).orderBy('name', 'asc').get()
-      const promise3 = FB.programRef.where('schedules', 'array-contains', startOfDateInSeconds + milliSecondsOneDay).orderBy('name', 'asc').get()
+
+      const startOfDateInGMT7 = getStartOfDayInGMT7(now)
+      const promise2 = FB.programRef.where('schedules', 'array-contains', startOfDateInGMT7).orderBy('name', 'asc').get()
+      const promise3 = FB.programRef.where('schedules', 'array-contains', startOfDateInGMT7 + milliSecondsOneDay).orderBy('name', 'asc').get()
       if (!store.state.app.channelList) {
         const channelPromise = store.dispatch('app/fetchChannelList', {})
         return Promise.all([channelPromise, promise2, promise3]).then(results => {
@@ -97,7 +98,8 @@ export default {
           store.dispatch('app/setChannelList', results[0])
           store.dispatch('app/setTodayProgramList', todayProgramList)
           store.dispatch('app/setNextDaysProgramList', nextDaysProgramList)
-          return { channelList: results[0], todayProgramList, nextDaysProgramList }
+          return { channelList: results[0], todayProgramList, nextDaysProgramList,
+            dateParse: startOfDateInGMT7 }
         })
       } else {
         return Promise.all([promise2, promise3]).then(results => {

@@ -91,3 +91,16 @@ export const sortByRankDesc = (a, b) => {
     return 0
   }
 }
+
+// return in milliseconds
+export const getStartOfDayInGMT7 = (datetime) => {
+  const now = datetime
+  now.setHours(0, 0, 0, 0)
+
+  const nowInMilli = Date.parse(now)
+  // convert now to GMT timezone
+  const timeZoneOffsetInMin = now.getTimezoneOffset()
+  const timeZoneDiffInMin = (-7 * 60) - timeZoneOffsetInMin
+  const startOfDateInGMT7 = nowInMilli + timeZoneDiffInMin * 60 * 1000
+  return startOfDateInGMT7
+}

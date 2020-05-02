@@ -48,6 +48,7 @@
 <script>
 import { firebase } from '@/MyFireBase'
 import { FB } from '@/assets/utils/constant'
+import { getStartOfDayInGMT7 } from '@/assets/utils/index'
 
 export default {
   props: {
@@ -134,9 +135,9 @@ export default {
         if (!id) {
           this.$store.dispatch('app/createSchedule', this.scheduleData).then(() => {
             const startTime = this.scheduleData.startTime
-            startTime.setHours(0, 0, 0, 0)
+            const startOfDateInGMT7 = getStartOfDayInGMT7(startTime)
             FB.programRef.doc(this.selectedProgram.id).update({
-              schedules: firebase.firestore.FieldValue.arrayUnion(Date.parse(startTime))
+              schedules: firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
             })
             console.log('add schedule success')
             this.$notify({
@@ -154,9 +155,9 @@ export default {
         } else {
           this.$store.dispatch('app/updateSchedule', this.scheduleData).then(() => {
             const startTime = this.scheduleData.startTime
-            startTime.setHours(0, 0, 0, 0)
+            const startOfDateInGMT7 = getStartOfDayInGMT7(startTime)
             FB.programRef.doc(this.selectedProgram.id).update({
-              schedules: firebase.firestore.FieldValue.arrayUnion(Date.parse(startTime))
+              schedules: firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
             })
             console.log('update schedule ok')
             this.$notify({

@@ -148,5 +148,6 @@ Vue.mixin({
       }
       return finalArr
     }
+
   }
 })
