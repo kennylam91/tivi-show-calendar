@@ -22,7 +22,7 @@ Vue.mixin({
   methods: {
     viewChannelDetail(channel) {
       const name = channel.name.split(' ').join('-').trim()
-      this.$router.push({ path: `/lich-chieu/${name}-${channel.id}` })
+      this.$router.push({ path: `/lich-chieu/${name}_${channel.id}` })
     },
     viewProgramDetail(program) {
       let id
@@ -32,8 +32,8 @@ Vue.mixin({
       } else {
         id = program.id
       }
-      const name = program.name.split(' ').join('-').trim()
-      this.$router.push({ path: `/chi-tiet-chuong-trinh/${name}-${id}` })
+      const name = program.name.split(/[\s:]+/).join('-').trim()
+      this.$router.push({ path: `/chi-tiet-chuong-trinh/${name}_${id}` })
     },
     fetchScheduleList(channelId, date) {
       return new Promise((resolve, reject) => {

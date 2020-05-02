@@ -112,7 +112,7 @@ export default {
       this.createScheduleDialogVisibleProp = true
     },
     parseVNTime(time) {
-      return parseVNTime(time, '{h}:{i}{a}', true, true)
+      return parseVNTime(time, '{H}:{i}', true, true)
     },
     handleSaved() {
       this.createScheduleDialogVisibleProp = false

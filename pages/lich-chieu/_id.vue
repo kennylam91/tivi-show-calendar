@@ -74,7 +74,7 @@
         >
           <template slot-scope="{row}">
             <el-link :underline="false" @click="viewProgramDetail(row)">
-              <span class="color-primary">{{ row.programName | uppercaseFirst }}</span>
+              <span class="color-primary">{{ row.programName | uppercaseAll }}</span>
             </el-link>
           </template>
         </el-table-column>
@@ -115,7 +115,7 @@ import { FB } from '@/assets/utils/constant'
 export default {
   components: { },
   asyncData({ params, store }) {
-    const channelId = params.id.split('-').pop()
+    const channelId = params.id.split('_').pop()
     let scheduleData
     const start = new Date()
     start.setHours(0, 0, 0, 0)
@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     parseTime(time) {
-      return parseVNTime(time, '{h}:{i} {a}', true, true)
+      return parseVNTime(time, '{H}:{i} ', true, true)
     },
     getScheduleList() {
       this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {

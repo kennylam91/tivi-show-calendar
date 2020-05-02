@@ -66,14 +66,14 @@ import { FB } from '@/assets/utils/constant'
 export default {
   filters: {
     parseTime(time) {
-      return parseVNTime(time, '{d}/{m}/{y} {h}:{i}{a}', true, true)
+      return parseVNTime(time, '{d}/{m}/{y} {H}:{i}', true, true)
     }
   },
   asyncData({ store, params }) {
     const startOfDate = new Date()
     startOfDate.setHours(0, 0, 0, 0)
     const now = new Date()
-    const programId = params.id.split('-').pop().trim()
+    const programId = params.id.split('_').pop().trim()
 
     const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
       .where('startTime', '>=', FB.timestamp.fromDate(now))

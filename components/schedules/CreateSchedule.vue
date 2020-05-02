@@ -8,6 +8,7 @@
           style="width: 100%;"
           type="datetime"
           placeholder="Select date and time"
+          format="yyyy-MM-dd HH:mm"
         />
       </el-form-item>
       <el-form-item label="End time">
@@ -16,6 +17,7 @@
           style="width: 100%;"
           type="datetime"
           placeholder="Select date and time"
+          format="yyyy-MM-dd HH:mm"
         />
       </el-form-item>
       <el-form-item label="Program">

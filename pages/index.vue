@@ -102,7 +102,7 @@ export default {
     nextDaysVipProgramList() {
       if (this.nextDaysProgramList) {
         const clonedList = [...this.nextDaysProgramList]
-        return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.NEXT_DAYS_VIP_PROGRAM_MAX_NUM)
+        return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
       } else {
         return []
       }
