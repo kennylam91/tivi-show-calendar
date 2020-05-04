@@ -40,7 +40,7 @@
         </p>
       </el-divider>
       <div
-        v-for="program in todayVipProgramList"
+        v-for="program in fromNowInDayVipProgramList"
         :key="program.id"
         class="col-md-3 col-6 my-2 px-1"
       >
@@ -82,7 +82,9 @@ export default {
     ...mapGetters({
       todayProgramList: 'todayProgramList',
       channelList: 'channelList',
-      nextDaysProgramList: 'nextDaysProgramList'
+      nextDaysProgramList: 'nextDaysProgramList',
+      fromTodayProgramList: 'fromTodayProgramList',
+      fromNowInDayProgramList: 'fromNowInDayProgramList'
     }),
     vipChannels() {
       if (this.channelList) {
@@ -106,12 +108,21 @@ export default {
       } else {
         return []
       }
+    },
+    fromNowInDayVipProgramList() {
+      if (this.fromNowInDayProgramList) {
+        const clonedList = [...this.fromNowInDayProgramList]
+        return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+      } else {
+        return []
+      }
     }
 
   },
   watch: {
   },
   mounted() {
+
   },
   methods: {
 

@@ -23,6 +23,7 @@
         id="programName"
         class="mb-2 w-100"
         type="primary"
+        :underline="false"
         @click="viewProgramDetail(program)"
       >
         <el-tooltip
@@ -37,7 +38,7 @@
       </el-link>
 
       <el-tag
-        v-for="(item, index) in program.categories.slice(0,2)"
+        v-for="(item, index) in getCategoryList(program.categories)"
         :key="index"
         size="small"
         effect="dark"
@@ -55,6 +56,24 @@ export default {
     program: {
       required: true,
       type: Object
+    }
+  },
+  computed: {
+
+  },
+  methods: {
+    getCategoryList(categories) {
+      if (categories) {
+        if (categories.length <= 2) {
+          return categories
+        } else if (categories.includes(1)) {
+          return categories.filter(item => item !== 1).slice(0, 2)
+        } else {
+          return categories.slice(0, 2)
+        }
+      } else {
+        return []
+      }
     }
   }
 }

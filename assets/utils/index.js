@@ -106,3 +106,13 @@ export const getStartOfDayInGMT7 = (datetime) => {
   const startOfDateInGMT7 = nowInMilli + timeZoneDiffInMin * 60 * 1000
   return startOfDateInGMT7
 }
+
+// return in milliseconds
+export const getTimeInGMT7 = (time) => {
+  const timeInMilli = Date.parse(time)
+  // convert now to GMT timezone
+  const timeZoneOffsetInMin = time.getTimezoneOffset()
+  const timeZoneDiffInMin = (-7 * 60) - timeZoneOffsetInMin
+  const startOfDateInGMT7 = timeInMilli + timeZoneDiffInMin * 60 * 1000
+  return startOfDateInGMT7
+}
