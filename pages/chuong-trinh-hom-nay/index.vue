@@ -95,12 +95,12 @@ export default {
         channels: [],
         categories: []
       },
-      programData: null
+      programData: []
     }
   },
   computed: {
     ...mapGetters({
-      todayProgramList: 'todayProgramList',
+      todayProgramList: 'fromNowInDayProgramList',
       channelList: 'channelList'
     }),
     isSearching() {

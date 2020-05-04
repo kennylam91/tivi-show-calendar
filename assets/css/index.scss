@@ -132,11 +132,14 @@
   max-height: 2rem;
 
 }
+.scheduleInShowing{
+  background-color: #90939963;
+}
 
 @media only screen and (min-width: 769px) { 
   #searchInput{
     position: absolute;
-    width: 350px;
+    width: 340px;
     right: 10px;
     top: 10px;
   }

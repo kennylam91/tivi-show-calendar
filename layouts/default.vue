@@ -143,7 +143,11 @@ export default {
     ...mapGetters({
       channelList: 'channelList',
       todayProgramList: 'todayProgramList',
-      nextDaysProgramList: 'nextDaysProgramList'
+      nextDaysProgramList: 'nextDaysProgramList',
+      fromNowInDayProgramList: 'fromNowInDayProgramList',
+      fromNowInDayScheduleList: 'fromNowInDayScheduleList',
+      fromTodayProgramList: 'fromTodayProgramList'
+
     }),
     path() {
       return this.$route.path

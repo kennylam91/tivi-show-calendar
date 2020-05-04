@@ -12,18 +12,18 @@
       <div slot="header">
         <div class="row mb-2">
           <div class="col-sm-4 col-md-3 text-center">
-            <img class="img-fluid " :src="program.logo" :alt="program.name">
+            <img class="img-fluid mb-2 " :src="program.logo" :alt="program.name">
           </div>
           <div class="col-sm-8 col-md-9">
-            <div class="color-primary bold mt-1">{{ program.name }}</div>
-            <div>
+            <div class="color-primary bold mb-2">{{ program.name }}</div>
+            <div class="small-font-size">
               <span>{{ COMMON.CATEGORY }}: </span><el-tag v-for="(item, index) in program.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
                 {{ item | getCategory }}
               </el-tag>
             </div>
-            <p class="smaller-font-size">{{ program.description }}</p>
           </div>
         </div>
+        <p class="small-font-size">{{ program.description }}</p>
       </div>
       <h5>{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
 

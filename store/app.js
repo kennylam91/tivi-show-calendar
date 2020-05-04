@@ -10,7 +10,10 @@ export const state = () => ({
   nextDaysVipProgramList: null,
   nextDaysProgramList: null,
   todayScheduleList: null,
-  nextDaysScheduleList: null
+  nextDaysScheduleList: null,
+  fromTodayProgramList: null,
+  fromNowInDayProgramList: null,
+  fromNowInDayScheduleList: null
 })
 
 export const mutations = {
@@ -40,28 +43,21 @@ export const mutations = {
   },
   SET_NEXT_DAYS_SCHEDULE_LIST: (state, value) => {
     state.nextDaysScheduleList = value
+  },
+  SET_FROM_TODAY_PROGRAM_LIST: (state, value) => {
+    state.fromTodayProgramList = value
+  },
+  SET_FROM_NOW_IN_DAY_PROGRAM_LIST: (state, value) => {
+    state.fromNowInDayProgramList = value
+  },
+  SET_FROM_NOW_IN_DAY_SCHEDULE_LIST: (state, value) => {
+    state.fromNowInDayScheduleList = value
   }
 
 }
 
 export const actions = {
 
-  nuxtServerInit({ dispatch }) {
-    // const startOfDate = new Date()
-    // startOfDate.setHours(0, 0, 0, 0)
-    // const startOfDateInSeconds = Date.parse(startOfDate)
-    // dispatch('fetchProgramList', { schedules: [startOfDateInSeconds] }).then(list => {
-    //   dispatch('setTodayProgramList', list)
-    // })
-
-    // const milliSecondsOneDay = 24 * 60 * 60 * 1000
-    // const startOfNextDay = startOfDateInSeconds + milliSecondsOneDay
-    // dispatch('fetchProgramList', { schedules: [startOfNextDay] }).then(list => {
-    //   dispatch('setNextDaysProgramList', list)
-    // })
-
-    // dispatch('fetchChannelList')
-  },
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
@@ -101,6 +97,15 @@ export const actions = {
   },
   setNextDaysScheduleList({ commit }, value) {
     commit('SET_NEXT_DAYS_SCHEDULE_LIST', value)
+  },
+  setFromTodayProgramList({ commit }, value) {
+    commit('SET_FROM_TODAY_PROGRAM_LIST', value)
+  },
+  setFromNowInDayProgramList({ commit }, value) {
+    commit('SET_FROM_NOW_IN_DAY_PROGRAM_LIST', value)
+  },
+  setFromNowInDayScheduleList({ commit }, value) {
+    commit('SET_FROM_NOW_IN_DAY_SCHEDULE_LIST', value)
   },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {

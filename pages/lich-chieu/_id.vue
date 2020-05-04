@@ -59,7 +59,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(row, index) in scheduleData" :key="index">
+          <tr v-for="(row, index) in scheduleData" :key="index" :class="{scheduleInShowing : isShowing(row)}">
             <td>
               <div>{{ parseTime(row.startTime.seconds) }}</div>
             </td>
@@ -159,8 +159,12 @@ export default {
       this.scheduleData = this.searchText
         ? this.scheduleList.filter(schedule => schedule.programName.toLowerCase().includes(this.searchText.toLowerCase()))
         : this.scheduleList
+    },
+    isShowing(schedule) {
+      const now = new Date()
+      return (schedule.startTime.seconds * 1000 <= Date.parse(now) &&
+      schedule.endTime.seconds * 1000 >= Date.parse(now))
     }
-
   }
 }
 </script>
@@ -168,5 +172,6 @@ export default {
 #scheduleTable .cell {
   word-break: break-word;
 }
+
 </style>
 

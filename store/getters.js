@@ -9,6 +9,9 @@ const getters = {
   todayProgramList: state => state.app.todayProgramList,
   nextDaysProgramList: state => state.app.nextDaysProgramList,
   todayScheduleList: state => state.app.todayScheduleList,
-  nextDaysScheduleList: state => state.app.nextDaysScheduleList
+  nextDaysScheduleList: state => state.app.nextDaysScheduleList,
+  fromTodayProgramList: state => state.app.fromTodayProgramList,
+  fromNowInDayProgramList: state => state.app.fromNowInDayProgramList,
+  fromNowInDayScheduleList: state => state.app.fromNowInDayScheduleList
 }
 export default getters
