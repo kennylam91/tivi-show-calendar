@@ -22,8 +22,8 @@ export const actions = {
       .where('schedules', 'array-contains', startOfDateInGMT7 + milliSecondsOneDay)
       .orderBy('name', 'asc').get()
 
-    const nowInGMT7 = getTimeInGMT7(new Date())
-    const nowInGMT7Timestamp = FB.timestamp.fromMillis(nowInGMT7)
+    const now2 = new Date()
+    const nowInGMT7Timestamp = FB.timestamp.fromDate(now2)
     const startOfNextDayInGMT7 = startOfDateInGMT7 + milliSecondsOneDay
     const startOfNextDayInGMT7Timestamp = FB.timestamp.fromMillis(startOfNextDayInGMT7)
     const fromtNowScheduleFetchPromise = dispatch('app/fetchScheduleList', {
