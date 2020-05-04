@@ -4,9 +4,9 @@
     <table class="table table-hover table-bordered small-font-size">
       <thead>
         <tr class="color-info ">
-          <th scope="col" width="150">{{ COMMON.NAME }}</th>
+          <th scope="col">{{ COMMON.NAME }}</th>
           <th scope="col">{{ COMMON.DESCRIPTION }}</th>
-          <th v-if="isAdmin" width="230">{{ COMMON.ACTION }}</th>
+          <th v-if="isAdmin" width="150">{{ COMMON.ACTION }}</th>
         </tr>
       </thead>
       <tbody>
@@ -17,9 +17,15 @@
             </el-link>
           </td>
           <td>{{ channel.description }}</td>
-          <td v-if="isAdmin">
+          <td v-if="isAdmin" align="center">
             <div class="mb-2">
-              <el-button size="small" class="mr-2" @click="handleChannelEditClick(channel)">{{ COMMON.EDIT }}</el-button>
+              <el-button
+                style="width: 115px;"
+                size="small"
+                type="primary"
+                plain
+                @click="handleChannelEditClick(channel)"
+              >{{ COMMON.EDIT }}</el-button>
               <el-switch
                 v-model="channel.isVip"
                 :active-text="COMMON.SHOW"
@@ -31,11 +37,16 @@
               <el-button
                 type="success"
                 size="small"
+                class="mb-1"
+                style="width: 115px;"
                 @click="moveToChannelManageView(channel)"
               >{{ COMMON.SCHEDULE }}</el-button>
+            </div>
+            <div>
               <el-button
                 type="danger"
                 size="small"
+                style="width: 115px;"
                 @click="handleChannelDeleteClick(channel)"
               >{{ COMMON.DELETE }}</el-button>
             </div>

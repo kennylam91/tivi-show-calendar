@@ -1,17 +1,16 @@
 <template>
   <div>
-    <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
+    <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center',background: '#6062662e' }">
       <el-link
         v-if="program.logo"
         :underline="false"
         @click="viewProgramDetail(program)"
       >
-        <el-image
-          style="width: 100%;"
+        <img
+          class="img-fluid"
           :src="program.logo"
           :alt="program.name"
-          fit="fill"
-        />
+        >
       </el-link>
       <div v-else>{{ program.name }}</div>
       <div
@@ -37,25 +36,39 @@
         </el-tooltip>
       </el-link>
 
-      <el-tag
-        v-for="(item, index) in getCategoryList(program.categories)"
-        :key="index"
-        size="small"
-        effect="dark"
-        type="info"
-        style="margin: 2px; padding: 0 4px;"
-      >
-        {{ item | getCategory }}
-      </el-tag>
+      <div v-if="live" class="small-font-size mb-1 bold" style="color: #000000b5;">
+        <div>{{ COMMON.CHANNEL }}: {{ program.schedule.channelName }}</div>
+        <div>{{ COMMON.TIME }}: {{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}</div>
+      </div>
+
+      <div v-if="!live">
+        <el-tag
+          v-for="(item, index) in getCategoryList(program.categories)"
+          :key="index"
+          size="small"
+          effect="dark"
+          type="info"
+          style="margin: 2px; padding: 0 4px;"
+        >
+          {{ item | getCategory }}
+        </el-tag>
+      </div>
     </el-card>
   </div>
 </template>
 <script>
+import { parseVNTime } from '@/assets/utils/index'
+
 export default {
   props: {
     program: {
       required: true,
       type: Object
+    },
+    live: {
+      required: false,
+      type: Boolean,
+      default: () => false
     }
   },
   computed: {
@@ -74,6 +87,9 @@ export default {
       } else {
         return []
       }
+    },
+    parseTime(time) {
+      return parseVNTime(time, '{H}:{i}', true, true)
     }
   }
 }

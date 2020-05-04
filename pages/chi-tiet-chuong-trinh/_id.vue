@@ -9,7 +9,7 @@
       </el-breadcrumb>
     </div>
     <el-card>
-      <div slot="header">
+      <div>
         <div class="row mb-2">
           <div class="col-sm-4 col-md-3 text-center">
             <img class="img-fluid mb-2 " :src="program.logo" :alt="program.name">
@@ -25,9 +25,9 @@
         </div>
         <p class="small-font-size">{{ program.description }}</p>
       </div>
-      <h5>{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
+      <h6>{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h6>
 
-      <table class="table table-hover table-bordered small-font-size">
+      <table class="table table-hover small-font-size">
         <thead>
           <tr class="color-info">
             <th>{{ COMMON.CHANNEL }}</th>
@@ -70,13 +70,12 @@ export default {
     }
   },
   asyncData({ store, params }) {
-    const startOfDate = new Date()
-    startOfDate.setHours(0, 0, 0, 0)
     const now = new Date()
+    const before30Mins = Date.parse(now) - 30 * 60 * 1000
     const programId = params.id.split('_').pop().trim()
 
     const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
-      .where('startTime', '>=', FB.timestamp.fromDate(now))
+      .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
       .orderBy('startTime', 'asc').get()
     const programPromise = store.dispatch('app/fetchProgram', { programId })
     return Promise.all([schedulePromise, programPromise]).then(results => {

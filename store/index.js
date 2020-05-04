@@ -1,6 +1,6 @@
 import { FB } from '@/assets/utils/constant'
 // import { trimObject } from '../assets/utils'
-import { getStartOfDayInGMT7, getTimeInGMT7 } from '@/assets/utils/index'
+import { getStartOfDayInGMT7 } from '@/assets/utils/index'
 export const state = () => ({
 
 })
@@ -23,7 +23,8 @@ export const actions = {
       .orderBy('name', 'asc').get()
 
     const now2 = new Date()
-    const nowInGMT7Timestamp = FB.timestamp.fromDate(now2)
+    const before30Mins = Date.parse(now2) - 30 * 60 * 1000
+    const nowInGMT7Timestamp = FB.timestamp.fromMillis(before30Mins)
     const startOfNextDayInGMT7 = startOfDateInGMT7 + milliSecondsOneDay
     const startOfNextDayInGMT7Timestamp = FB.timestamp.fromMillis(startOfNextDayInGMT7)
     const fromtNowScheduleFetchPromise = dispatch('app/fetchScheduleList', {

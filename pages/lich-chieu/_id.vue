@@ -1,6 +1,6 @@
 <template>
   <div v-if="channel">
-    <div class="p-4">
+    <div class="py-4 px-2">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">{{ COMMON.HOMEPAGE }}</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/danh-sach-kenh' }">{{ COMMON.CHANNEL_LIST }}</el-breadcrumb-item>
@@ -20,7 +20,7 @@
           class="col-sm-8 col-md-10 flex"
           style="padding-left: 15px;padding-right: 15px; align-items: center "
         >
-          <p class="smaller-font-size">{{ channel.description }}</p>
+          <p class="small-font-size">{{ channel.description }}</p>
         </div>
       </div>
       <div class="row">
@@ -50,10 +50,10 @@
         </div>
       </div>
 
-      <table class="table table-hover table-bordered small-font-size table-sm">
+      <table class="table table-hover small-font-size table-sm">
         <thead>
           <tr class="color-info ">
-            <th scope="col">{{ COMMON.TIME }}</th>
+            <th scope="col">Time</th>
             <th scope="col">{{ COMMON.PROGRAM_NAME }}</th>
             <th>{{ COMMON.CATEGORY }}</th>
           </tr>

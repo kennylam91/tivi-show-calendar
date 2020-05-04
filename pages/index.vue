@@ -1,6 +1,48 @@
 <template>
   <div>
+    <div class="row mt-2">
+      <el-divider content-position="left">
+        <h6 class="d-inline">{{ COMMON.ON_BROADCASTING_PROGRAMS }}</h6>
+      </el-divider>
+      <div
+        v-for="program in broadCastingPrograms"
+        :key="program.id"
+        class="col-md-3 col-6 my-2 px-1"
+      >
+        <Program v-if="program" :live="true" :program="program" />
+      </div>
+    </div>
+    <div class="row mt-2">
+      <el-divider content-position="left">
+        <h6 class="d-inline">{{ COMMON.VIP_INCOMING_PROGRAM }}</h6>
+        <p class="d-inline">
+          <nuxt-link to="/chuong-trinh-hom-nay">{{ `(${COMMON.ALL})` }}</nuxt-link>
+        </p>
+      </el-divider>
+      <div
+        v-for="program in onGoingTodayProgramList"
+        :key="program.id"
+        class="col-md-3 col-6 my-2 px-1"
+      >
+        <Program v-if="program" :program="program" />
+      </div>
+    </div>
 
+    <div class="row mt-2">
+      <el-divider content-position="left">
+        <h6 class="d-inline">{{ COMMON.VIP_TOMORROW_PROGRAM }}</h6>
+        <p class="d-inline">
+          <nuxt-link to="/chuong-trinh-sap-chieu">{{ `(${COMMON.ALL})` }}</nuxt-link>
+        </p>
+      </el-divider>
+      <div
+        v-for="program in nextDaysVipProgramList"
+        :key="program.id"
+        class="col-md-3 col-6 px-1 my-2"
+      >
+        <Program :program="program" />
+      </div>
+    </div>
     <div class="row mt-2">
       <el-divider content-position="left">
         <h6 class="d-inline">{{ COMMON.VIP_CHANNEL }}</h6>
@@ -15,12 +57,11 @@
             :underline="false"
             @click="viewChannelDetail(channel)"
           >
-            <el-image
-              style="width: 100%;"
+            <img
+              class="img-fluid"
               :src="channel.logo"
               :alt="channel.name"
-              fit="fill"
-            />
+            >
           </el-link>
           <el-button
             class="my-2 w-100 py-2 px-1"
@@ -30,37 +71,6 @@
           >{{ COMMON.SCHEDULE }} {{ channel.name }}</el-button>
 
         </el-card>
-      </div>
-    </div>
-    <div class="row mt-2">
-      <el-divider content-position="left">
-        <h6 class="d-inline">{{ COMMON.VIP_TODAY_PROGRAM }}</h6>
-        <p class="d-inline">
-          <nuxt-link to="/chuong-trinh-hom-nay">{{ `(${COMMON.ALL})` }}</nuxt-link>
-        </p>
-      </el-divider>
-      <div
-        v-for="program in fromNowInDayVipProgramList"
-        :key="program.id"
-        class="col-md-3 col-6 my-2 px-1"
-      >
-        <Program v-if="program" :program="program" />
-      </div>
-    </div>
-
-    <div class="row mt-2">
-      <el-divider content-position="left">
-        <h6 class="d-inline">{{ COMMON.VIP_INCOMING_PROGRAM }}</h6>
-        <p class="d-inline">
-          <nuxt-link to="/chuong-trinh-sap-chieu">{{ `(${COMMON.ALL})` }}</nuxt-link>
-        </p>
-      </el-divider>
-      <div
-        v-for="program in nextDaysVipProgramList"
-        :key="program.id"
-        class="col-md-3 col-6 px-1 my-2"
-      >
-        <Program :program="program" />
       </div>
     </div>
 
@@ -84,7 +94,8 @@ export default {
       channelList: 'channelList',
       nextDaysProgramList: 'nextDaysProgramList',
       fromTodayProgramList: 'fromTodayProgramList',
-      fromNowInDayProgramList: 'fromNowInDayProgramList'
+      fromNowInDayProgramList: 'fromNowInDayProgramList',
+      fromNowInDayScheduleList: 'fromNowInDayScheduleList'
     }),
     vipChannels() {
       if (this.channelList) {
@@ -116,6 +127,24 @@ export default {
       } else {
         return []
       }
+    },
+    broadCastingPrograms() {
+      const liveSchedules = this.fromNowInDayScheduleList.filter(this.liveProgramFilter)
+      const livePrograms = []
+      liveSchedules.forEach(schedule => {
+        const program = this.fromTodayProgramList.find(item => item.id === schedule.programId)
+        livePrograms.push({ ...program, schedule: schedule })
+      })
+      return livePrograms.sort(sortByRankDesc).slice(0, 4)
+    },
+    onGoingTodayProgramList() {
+      const list = []
+      for (const program of this.fromNowInDayProgramList) {
+        if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
+          list.push({ ...program })
+        }
+      }
+      return list.sort(sortByRankDesc).slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
     }
 
   },
@@ -125,6 +154,9 @@ export default {
 
   },
   methods: {
+    liveProgramFilter(schedule) {
+      return schedule.startTime.seconds * 1000 < Date.parse(new Date()) + 30 * 60 * 1000
+    }
 
   }
 }
