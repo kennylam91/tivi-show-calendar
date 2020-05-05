@@ -57,7 +57,7 @@ export const COMMON = {
   SELECT_CATEGORY: 'Chọn thể loại',
   SELECT_CHANNEL: 'Chọn kênh',
   INPUT_PROGRAM_NAME: 'Nhập tên chương trình',
-  VIP_INCOMING_PROGRAM: 'Chương trình nổi bật sắp chiếu',
+  VIP_INCOMING_PROGRAM: 'Chương trình sắp chiếu',
   VIP_TOMORROW_PROGRAM: 'Chương trình nổi bật ngày mai',
   SHOW_ON_HOMEPAGE: 'Hiển thị trên trang chủ',
   NO_MORE_THAN_TWO: 'Không chọn nhiều hơn 2 thể loại',

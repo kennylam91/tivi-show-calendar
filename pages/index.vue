@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div class="row mt-2">
-      <el-divider content-position="left">
-        <h6 class="d-inline">{{ COMMON.ON_BROADCASTING_PROGRAMS }}</h6>
-      </el-divider>
+    <div class="row py-1 px-2 pt-2">
+      <span
+        style="color: purple; font-size: 1.1rem;"
+      >{{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseAll }}</span>
+    </div>
+    <div class="row">
       <div
         v-for="program in broadCastingPrograms"
         :key="program.id"
@@ -12,13 +14,16 @@
         <Program v-if="program" :live="true" :program="program" />
       </div>
     </div>
+    <div class="row py-1 px-2">
+      <nuxt-link
+        to="/chuong-trinh-hom-nay"
+        style="color: purple; font-size: 1.1rem;"
+      >{{ COMMON.VIP_INCOMING_PROGRAM | uppercaseAll }} >></nuxt-link>
+    </div>
     <div class="row mt-2">
-      <el-divider content-position="left">
-        <h6 class="d-inline">{{ COMMON.VIP_INCOMING_PROGRAM }}</h6>
-        <p class="d-inline">
-          <nuxt-link to="/chuong-trinh-hom-nay">{{ `(${COMMON.ALL})` }}</nuxt-link>
-        </p>
-      </el-divider>
+      <!-- <el-divider content-position="left"> -->
+
+      <!-- </el-divider> -->
       <div
         v-for="program in onGoingTodayProgramList"
         :key="program.id"
@@ -28,13 +33,14 @@
       </div>
     </div>
 
+    <div class="row py-1 px-2 pt-2">
+      <nuxt-link
+        to="/chuong-trinh-sap-chieu"
+        style="color: purple; font-size: 1.1rem;"
+      >{{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></nuxt-link>
+    </div>
+
     <div class="row mt-2">
-      <el-divider content-position="left">
-        <h6 class="d-inline">{{ COMMON.VIP_TOMORROW_PROGRAM }}</h6>
-        <p class="d-inline">
-          <nuxt-link to="/chuong-trinh-sap-chieu">{{ `(${COMMON.ALL})` }}</nuxt-link>
-        </p>
-      </el-divider>
       <div
         v-for="program in nextDaysVipProgramList"
         :key="program.id"
@@ -43,13 +49,14 @@
         <Program :program="program" />
       </div>
     </div>
+
+    <div class="row py-1 px-2 pt-2">
+      <nuxt-link
+        to="/danh-sach-kenh"
+        style="color: purple; font-size: 1.1rem;"
+      >{{ COMMON.VIP_CHANNEL | uppercaseAll }} >></nuxt-link>
+    </div>
     <div class="row mt-2">
-      <el-divider content-position="left">
-        <h6 class="d-inline">{{ COMMON.VIP_CHANNEL }}</h6>
-        <p class="d-inline">
-          <nuxt-link to="/danh-sach-kenh">{{ `(${COMMON.ALL_CHANNEL})` }}</nuxt-link>
-        </p>
-      </el-divider>
       <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
         <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
           <el-link
@@ -65,8 +72,8 @@
           </el-link>
           <el-button
             class="my-2 w-100 py-2 px-1"
-            type="primary"
             size="small"
+            style="color: purple"
             @click="viewChannelDetail(channel)"
           >{{ COMMON.SCHEDULE }} {{ channel.name }}</el-button>
 

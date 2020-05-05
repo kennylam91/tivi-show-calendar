@@ -7,9 +7,7 @@
             ref="mainMenu"
             :default-active="activeIndex"
             mode="horizontal"
-            background-color="#545c64"
-            text-color="#fff"
-            active-text-color="#ffd04b"
+            active-text-color="purple"
             menu-trigger="click"
             @select="handleSelect"
           >
@@ -56,7 +54,9 @@
                   slot="reference"
                   v-model="searchText"
                   :placeholder="COMMON.SEARCH_CHANNEL_PROGRAM"
+                  prefix-icon="el-icon-search"
                   clearable
+                  style=""
                   @keydown.enter.native="handlSearchAll"
                   @blur="visible = false"
                 />
@@ -79,6 +79,7 @@
         id="verticalMenu"
         ref="mainMenu"
         style="position:fixed; top: 65px; z-index: 99999; width: 100%;"
+        active-text-color="purple"
         :default-active="activeIndex"
         mode="vertical"
         menu-trigger="click"
@@ -266,6 +267,9 @@ html {
 }
 .popover-class{
   background-color: #545c64 !important;
+}
+#searchInput .el-input__inner:focus{
+  border-color: purple;
 }
 
 </style>

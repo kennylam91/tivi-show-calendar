@@ -30,7 +30,7 @@
           placement="bottom"
           effect="dark"
         >
-          <div class="color-primary bold smaller-font-size programName">
+          <div class="bold smaller-font-size programName" style="color: purple">
             {{ program.name | getVNTranslateName | uppercaseAll }}
           </div>
         </el-tooltip>
