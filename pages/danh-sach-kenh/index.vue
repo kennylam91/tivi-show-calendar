@@ -28,6 +28,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: { ChannelTable },
+  layout: 'vuetify-layout',
   data() {
     return {
     }

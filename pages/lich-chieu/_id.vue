@@ -94,6 +94,7 @@ import { FB } from '@/assets/utils/constant'
 
 export default {
   components: { },
+  layout: 'vuetify-layout',
   asyncData({ params, store }) {
     const channelId = params.id.split('_').pop()
     let scheduleData

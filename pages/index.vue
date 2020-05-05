@@ -91,6 +91,7 @@ import { sortByRankDesc } from '@/assets/utils/index'
 
 export default {
   components: { Program },
+  layout: 'vuetify-layout',
   data() {
     return {
     }
