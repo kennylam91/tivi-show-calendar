@@ -43,7 +43,7 @@ export const COMMON = {
   VIP_CHANNEL: 'Kênh nổi bật',
   TODAY: 'Hôm nay',
   VIP_TODAY_PROGRAM: 'Chương trình nổi bật hôm nay',
-  ON_BROADCASTING_PROGRAMS: 'Chương trình nổi bật hiện tại',
+  ON_BROADCASTING_PROGRAMS: 'Chương trình đang chiếu',
   TODAY_PROGRAM: 'Chương trình hôm nay',
   NEXT_THREE_DAY_PROGRAM: 'Chương trình trong 3 ngày tới',
   NEXT_DAY: 'Sắp chiếu',
@@ -114,6 +114,31 @@ export const categoryMap = new Map([
   [20, 'Hoạt hình'],
   [21, 'Tình cảm'],
   [22, 'Tâm lý']
+])
+
+export const categoryTagMap = new Map([
+  [1, 'primary'], // 'Phim',
+  [2, 'primary'], // 'Game show',
+  [3, 'primary'], // 'Thực tế',
+  [4, 'primary'], // 'Trực tiếp',
+  [5, 'info'], // 'Phóng sự',
+  [6, 'info'], // 'Tin tức',
+  [7, 'info'], // 'Khoa học',
+  [8, 'info'], // 'Tài liệu',
+  [9, 'primary'], // 'Khám phá',
+  [10, 'primary'], // 'Ca nhạc',
+  [11, 'danger'], // 'Kinh dị',
+  [12, 'success'], // 'Hài hước',
+  [13, 'danger'], // 'Hành động',
+  [14, 'warning'], // 'Viễn tưởng',
+  [15, 'warning'], // 'Thần thoại',
+  [16, 'danger'], // 'Hình sự',
+  [17, 'success'], // 'Phiên lưu',
+  [18, 'warning'], // 'Cổ trang',
+  [19, 'danger'], // 'Chiến tranh',
+  [20, 'warning'], // 'Hoạt hình',
+  [21, 'success'], // 'Tình cảm',
+  [22, 'success'] // 'Tâm lý',
 ])
 
 export const CATEGORIES = [

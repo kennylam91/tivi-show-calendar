@@ -74,7 +74,7 @@
                 :key="item"
                 size="small"
                 effect="dark"
-                type="info"
+                :type="categoryTagMap.get(item)"
                 style="margin: 2px;"
               >
                 {{ item | getCategory }}
@@ -91,6 +91,7 @@
 import { parseVNTime } from '@/assets/utils/index'
 import { mapGetters } from 'vuex'
 import { FB } from '@/assets/utils/constant'
+import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
   components: { },
@@ -125,7 +126,8 @@ export default {
       selectedDate: new Date(),
       searchText: '',
       scheduleData: [],
-      channel: null
+      channel: null,
+      categoryTagMap: categoryTagMap
     }
   },
   computed: {
