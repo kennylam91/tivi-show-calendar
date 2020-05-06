@@ -14,7 +14,11 @@ export const actions = {
   nuxtServerInit({ dispatch }) {
     const now = new Date()
     const milliSecondsOneDay = 24 * 60 * 60 * 1000
-    const startOfDateInGMT7 = getStartOfDayInGMT7(now)
+    const nowInMilli = Date.parse(now)
+    // Cong them 7h vi server mui gio 0, tu 0 -> 7h sang gio VN se bi loi xac dinh
+    // gio bat dau cua ngay
+    const nowInMilliPlus7Hours = nowInMilli + 7 * 60 * 60 * 1000
+    const startOfDateInGMT7 = getStartOfDayInGMT7(new Date(nowInMilliPlus7Hours))
     const channelFetchPm = dispatch('app/fetchChannelList')
     const todayPgFetchPm = FB.programRef.where('schedules', 'array-contains', startOfDateInGMT7)
       .orderBy('name', 'asc').get()
@@ -57,7 +61,10 @@ export const actions = {
         for (const schedule of fromNowScheduleList) {
           if (!scheduleMap.has(schedule.programId)) {
             scheduleMap.set(schedule.programId, true)
-            fromNowInDayProgramList.push(fromTodayProgramList.find(item => item.id === schedule.programId))
+            const foundProgram = fromTodayProgramList.find(item => item.id === schedule.programId)
+            if (foundProgram) {
+              fromNowInDayProgramList.push(foundProgram)
+            }
           }
         }
         dispatch('app/setChannelList', results[0])

@@ -135,14 +135,21 @@
 .scheduleInShowing{
   background-color: #90939963;
 }
+.categoryTag{
+  margin: 2px;
+  padding: 0 0px;
+  width: 63px;
+}
+.categoryTagSmall{
+  margin: 2px; 
+  padding: 0 0px; 
+  width: 63px; 
+}
 
 @media only screen and (min-width: 769px) { 
-  #searchInput{
-    position: absolute;
-    width: 340px;
-    right: 10px;
-    top: 10px;
-  }
+  
+  
+  
 }
 
 @media only screen and (min-width: 1024px) { 
@@ -153,7 +160,13 @@
     top: 10px;
   }
   .searchFormItem{
-    width: 190px;
+    width: 175px;
   }
+  .categoryTag{
+    margin: 4px;
+    width: 100px;
+    font-size: 0.85rem;
+  }
+  
   
 }

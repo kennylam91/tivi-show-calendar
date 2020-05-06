@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center',background: '#6062662e' }">
+    <el-card
+      shadow="hover"
+      :body-style="{ padding: '5px','text-align':'center',background: '#6062662e' }"
+    >
       <el-link
         v-if="program.logo"
         :underline="false"
@@ -12,7 +15,9 @@
           :alt="program.name"
         >
       </el-link>
-      <div v-else>{{ program.name }}</div>
+      <div v-else>
+        <img class="img-fluid" src="https://via.placeholder.com/400x225" :alt="program.name">
+      </div>
       <div
         class="color-info smaller-font-size my-2 shorten-text"
       >
@@ -30,34 +35,34 @@
           placement="bottom"
           effect="dark"
         >
-          <div class="bold smaller-font-size programName" style="color: purple">
+          <div class="bold smaller-font-size programName" style="color: #000000c2">
             {{ program.name | getVNTranslateName | uppercaseAll }}
           </div>
         </el-tooltip>
       </el-link>
 
-      <div v-if="live" class="small-font-size mb-1 bold" style="color: #000000b5;">
-        <div>{{ COMMON.CHANNEL }}: {{ program.schedule.channelName }}</div>
-        <div>{{ COMMON.TIME }}: {{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}</div>
-      </div>
-
-      <div v-if="!live">
+      <div>
         <el-tag
           v-for="(item, index) in getCategoryList(program.categories)"
           :key="index"
           size="small"
           effect="dark"
-          type="info"
-          style="margin: 2px; padding: 0 4px;"
+          :type="categoryTagMap.get(item)"
+          :class="{'categoryTag':!small, 'categoryTagSmall': small }"
         >
           {{ item | getCategory }}
         </el-tag>
+      </div>
+      <div v-if="live" class="small-font-size mb-1 bold" style="color: #000000b5;">
+        <div>{{ COMMON.CHANNEL }}: {{ program.schedule.channelName }}</div>
+        <div>{{ COMMON.TIME }}: {{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}</div>
       </div>
     </el-card>
   </div>
 </template>
 <script>
 import { parseVNTime } from '@/assets/utils/index'
+import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
   props: {
@@ -69,6 +74,16 @@ export default {
       required: false,
       type: Boolean,
       default: () => false
+    },
+    small: {
+      required: false,
+      type: Boolean,
+      default: () => false
+    }
+  },
+  data() {
+    return {
+      categoryTagMap: categoryTagMap
     }
   },
   computed: {
@@ -91,6 +106,11 @@ export default {
     parseTime(time) {
       return parseVNTime(time, '{H}:{i}', true, true)
     }
+    // getTagType(item){
+    //   const tagTypeMap = new Map([
+    //     []
+    //   ])
+    // }
   }
 }
 </script>

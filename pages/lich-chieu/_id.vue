@@ -11,7 +11,7 @@
     <el-card :body-style="{ padding: '10px' }">
       <div class="row">
         <div
-          class="col-sm-4 col-md-2 text-center mb-2"
+          class="col-sm-4 col-md-2 text-center mb-2 pt-1"
           style="padding-left: 15px;padding-right: 15px; "
         >
           <img class="img-fluid" :src="channel.logo" :alt="channel.name">
@@ -74,7 +74,7 @@
                 :key="item"
                 size="small"
                 effect="dark"
-                type="info"
+                :type="categoryTagMap.get(item)"
                 style="margin: 2px;"
               >
                 {{ item | getCategory }}
@@ -91,6 +91,7 @@
 import { parseVNTime } from '@/assets/utils/index'
 import { mapGetters } from 'vuex'
 import { FB } from '@/assets/utils/constant'
+import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
   components: { },
@@ -126,7 +127,8 @@ export default {
       selectedDate: new Date(),
       searchText: '',
       scheduleData: [],
-      channel: null
+      channel: null,
+      categoryTagMap: categoryTagMap
     }
   },
   computed: {

@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="row py-1 px-2 pt-2">
-      <span
-        style="color: purple; font-size: 1.1rem;"
-      >{{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseAll }}</span>
+      <div
+        style="color: purple; font-size: 1.1rem; padding-top: 0.5rem;"
+      >{{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseAll }}</div>
     </div>
     <div class="row">
       <div
@@ -14,7 +14,8 @@
         <Program v-if="program" :live="true" :program="program" />
       </div>
     </div>
-    <div class="row py-1 px-2">
+
+    <div class="row mt-2 py-1 px-2">
       <nuxt-link
         to="/chuong-trinh-hom-nay"
         style="color: purple; font-size: 1.1rem;"
@@ -33,7 +34,7 @@
       </div>
     </div>
 
-    <div class="row py-1 px-2 pt-2">
+    <div class="row mt-2 py-1 px-2 pt-2">
       <nuxt-link
         to="/chuong-trinh-sap-chieu"
         style="color: purple; font-size: 1.1rem;"
@@ -50,7 +51,7 @@
       </div>
     </div>
 
-    <div class="row py-1 px-2 pt-2">
+    <div class="row mt-2 py-1 px-2 pt-2">
       <nuxt-link
         to="/danh-sach-kenh"
         style="color: purple; font-size: 1.1rem;"
@@ -141,15 +142,19 @@ export default {
       const livePrograms = []
       liveSchedules.forEach(schedule => {
         const program = this.fromTodayProgramList.find(item => item.id === schedule.programId)
-        livePrograms.push({ ...program, schedule: schedule })
+        if (program) {
+          livePrograms.push({ ...program, schedule: schedule })
+        }
       })
       return livePrograms.sort(sortByRankDesc).slice(0, 4)
     },
     onGoingTodayProgramList() {
       const list = []
       for (const program of this.fromNowInDayProgramList) {
-        if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
-          list.push({ ...program })
+        if (program) {
+          if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
+            list.push({ ...program })
+          }
         }
       }
       return list.sort(sortByRankDesc).slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
