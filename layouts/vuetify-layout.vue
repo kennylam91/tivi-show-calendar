@@ -83,7 +83,7 @@ export default {
       channelMenu: {
         icon: 'mdi-calendar-clock',
         title: COMMON.SCHEDULE,
-        items: []
+        items: [{ title: 'ABC' }]
       },
       items: [
         {
@@ -116,7 +116,7 @@ export default {
   },
   watch: {
   },
-  created() {
+  mounted() {
     this.pathIndexMatrix = []
     for (const channel of this.vipChannelList) {
       this.channelMenu.items.push({ title: channel.name })
