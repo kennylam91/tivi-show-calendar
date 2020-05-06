@@ -75,7 +75,7 @@
           :key="program.id"
           class="col-sm-4 col-md-3 col-lg-2 col-6 my-2 px-1"
         >
-          <Program :program="program" />
+          <Program :program="program" :small="true" />
         </div></div>
     </el-card>
   </div>

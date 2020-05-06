@@ -48,7 +48,7 @@
           size="small"
           effect="dark"
           :type="categoryTagMap.get(item)"
-          style="margin: 2px; padding: 0 0px; width: 63px;"
+          :class="{'categoryTag':!small, 'categoryTagSmall': small }"
         >
           {{ item | getCategory }}
         </el-tag>
@@ -71,6 +71,11 @@ export default {
       type: Object
     },
     live: {
+      required: false,
+      type: Boolean,
+      default: () => false
+    },
+    small: {
       required: false,
       type: Boolean,
       default: () => false

@@ -11,7 +11,7 @@
     <el-card :body-style="{ padding: '10px' }">
       <div class="row">
         <div
-          class="col-sm-4 col-md-2 text-center mb-2"
+          class="col-sm-4 col-md-2 text-center mb-2 pt-1"
           style="padding-left: 15px;padding-right: 15px; "
         >
           <img class="img-fluid" :src="channel.logo" :alt="channel.name">
