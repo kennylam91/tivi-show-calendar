@@ -6,24 +6,24 @@
         <el-breadcrumb-item>{{ COMMON.TODAY_PROGRAM }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-dialog
-      :visible.sync="searchDialogVisible"
-      custom-class="dialogClass"
-    >
-      <ProgramSearchForm @search="searchProgram" @clear="handleClear" />
-
-    </el-dialog>
 
     <el-card v-if="todayProgramList" :body-style="{ padding: '0px' }">
       <div slot="header" class="justify-between-align-center">
-        <span class="bold color-primary">{{ COMMON.TODAY_PROGRAM }}</span>
+        <span class="bold large-font-size color-purple">
+          {{ COMMON.TODAY_PROGRAM }}</span>
         <el-button
+          v-if="!isSearching"
           type="primary"
           size="small"
           plain
           @click="searchDialogVisible = true"
-        >Search</el-button>
-
+        >{{ COMMON.SEARCH }}</el-button>
+        <el-button
+          v-if="isSearching"
+          type="danger"
+          size="small"
+          @click="handleClearSearch"
+        >{{ COMMON.CLEAR_SEARCH }}</el-button>
       </div>
 
       <div class="row" style="margin: 0">
@@ -35,6 +35,19 @@
           <Program :program="program" :small="true" />
         </div></div>
     </el-card>
+
+    <el-dialog
+      :key="dialogKey"
+      :visible.sync="searchDialogVisible"
+      custom-class="dialogClass"
+    >
+      <ProgramSearchForm
+        :clear="false"
+        @search="searchProgram"
+        @clear="handleClearSearch"
+      />
+    </el-dialog>
+
   </div>
 </template>
 
@@ -49,7 +62,9 @@ export default {
   data() {
     return {
       searchDialogVisible: false,
-      programData: []
+      programData: [],
+      isSearching: false,
+      dialogKey: 0
     }
   },
   computed: {
@@ -57,10 +72,6 @@ export default {
       todayProgramList: 'fromNowInDayProgramList',
       channelList: 'channelList'
     }),
-    isSearching() {
-      return this.programSearchForm.name || this.programSearchForm.channels.length > 0 ||
-      this.programSearchForm.categories.length > 0
-    },
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
     }
@@ -71,6 +82,7 @@ export default {
       handler() {
         if (this.todayProgramList) {
           this.searchProgram()
+          this.isSearching = false
         } else {
           this.fetchTodayProgramList()
         }
@@ -81,15 +93,19 @@ export default {
   },
   methods: {
     searchProgram(searchForm) {
+      this.isSearching = true
       this.programData = []
       this.programData = this.todayProgramList.filter(program => {
         return this.filterByCategory(program, searchForm) &&
         this.filterByChannel(program, searchForm) &&
-        this.filterByName(program, searchForm)
+        this.filterByName(program, searchForm) &&
+        this.filterByRank(program, searchForm)
       })
     },
-    handleClear() {
+    handleClearSearch() {
+      this.isSearching = false
       this.programData = this.todayProgramList
+      this.dialogKey++
     }
 
   }

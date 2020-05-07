@@ -194,7 +194,8 @@ export default {
       this.programListData = this.programList.filter(program => {
         return this.filterByCategory(program, searchForm) &&
         this.filterByChannel(program, searchForm) &&
-        this.filterByName(program, searchForm)
+        this.filterByName(program, searchForm) &&
+        this.filterByRank(program, searchForm)
       })
       this.handlePaginationChange()
     },

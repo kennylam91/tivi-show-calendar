@@ -33,6 +33,23 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item :label="COMMON.RANK">
+        <el-select
+          v-model="programSearchForm.ranks"
+          class="searchFormItem"
+          multiple
+          size="small"
+          :placeholder="COMMON.RANK"
+          @change="searchProgram"
+        >
+          <el-option
+            v-for="item in programRankOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item :label="COMMON.CATEGORY">
         <el-select
           v-model="programSearchForm.categories"
@@ -50,7 +67,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item v-if="isSearching">
+      <el-form-item v-if="clearBtnShow">
         <el-tooltip
           slot="label"
           :content="COMMON.CLEAR_SEARCH"
@@ -75,15 +92,27 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { programRankOptions } from '@/assets/utils/constant'
 
 export default {
+  props: {
+    clear: {
+      required: false,
+      type: Boolean,
+      default: () => true
+    }
+  },
   data() {
     return {
       programSearchForm: {
         name: '',
         channels: [],
-        categories: []
-      }
+        categories: [],
+        ranks: []
+      },
+      programRankOptions,
+      isSearching: false
+
     }
   },
   computed: {
@@ -91,9 +120,8 @@ export default {
       todayProgramList: 'fromNowInDayProgramList',
       channelList: 'channelList'
     }),
-    isSearching() {
-      return this.programSearchForm.name || this.programSearchForm.channels.length > 0 ||
-      this.programSearchForm.categories.length > 0
+    clearBtnShow() {
+      return this.isSearching && this.clear
     },
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
@@ -101,9 +129,11 @@ export default {
   },
   methods: {
     searchProgram() {
+      this.isSearching = true
       this.$emit('search', this.programSearchForm)
     },
     clearSearchingForm() {
+      this.isSearching = false
       this.programSearchForm.name = ''
       this.programSearchForm.channels = []
       this.programSearchForm.categories = []

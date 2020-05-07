@@ -47,7 +47,7 @@ export const COMMON = {
   TODAY_PROGRAM: 'Chương trình hôm nay',
   NEXT_THREE_DAY_PROGRAM: 'Chương trình trong 3 ngày tới',
   NEXT_DAY: 'Sắp chiếu',
-  NEXT_DAY_PROGRAM: 'Chương trình sắp chiếu',
+  NEXT_DAY_PROGRAM: 'Chương trình ngày mai',
   HIDE: 'Ẩn',
   SHOW: 'Hiện',
   UPLOAD: 'Tải lên',
@@ -67,7 +67,7 @@ export const COMMON = {
   NEXT_DAYS_SHOW_NUM: 3,
   PAGE_TITLE: 'Truyền hình 24h',
   PROGRAM_SCHEDULE_NEXT_DAYS: 'Lịch phát sóng thời gian tới',
-  CLEAR_SEARCH: 'Xóa tìm kiếm',
+  CLEAR_SEARCH: 'Hủy tìm kiếm',
   PROGRAM_LIST: 'Danh sách chương trình',
   ALL_CHANNEL: 'Tất cả kênh',
   ALL: 'Tất cả',
@@ -75,7 +75,7 @@ export const COMMON = {
   TOTAL: 'Tổng số',
   SEARCH_CHANNEL_PROGRAM: 'Tìm kiếm các kênh, chương trình,...',
   TYPE_2_CHAR_AT_LEAST: 'Nhập tối thiểu 2 kí tự',
-  RANK: 'Xếp loại'
+  RANK: 'Đánh giá'
 }
 import { firebase } from '@/MyFireBase'
 export const FB = {

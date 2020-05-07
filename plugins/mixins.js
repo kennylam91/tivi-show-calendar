@@ -167,6 +167,14 @@ Vue.mixin({
       }
       return true
     },
+    filterByRank(program, programSearchForm) {
+      if (programSearchForm) {
+        if (programSearchForm.ranks.length > 0) {
+          return this.isTwoArrayHaveSameElement([program.rank], programSearchForm.ranks)
+        }
+      }
+      return true
+    },
     filterByName(program, programSearchForm) {
       if (programSearchForm) {
         if (programSearchForm.name) {

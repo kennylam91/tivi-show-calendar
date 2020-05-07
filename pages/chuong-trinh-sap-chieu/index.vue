@@ -7,67 +7,22 @@
       </el-breadcrumb>
     </div>
     <el-card v-if="nextDaysProgramList" :body-style="{ padding: '0px' }">
-      <div slot="header">
-        <span class="bold color-primary">{{ COMMON.NEXT_DAY_PROGRAM }}</span>
+      <div slot="header" class="justify-between-align-center">
+        <span class="bold large-font-size color-purple">
+          {{ COMMON.NEXT_DAY_PROGRAM }}</span>
+        <el-button
+          v-if="!isSearching"
+          type="primary"
+          size="small"
+          @click="searchDialogVisible = true"
+        >{{ COMMON.SEARCH }}</el-button>
+        <el-button
+          v-if="isSearching"
+          type="danger"
+          size="small"
+          @click="handleClearSearch"
+        >{{ COMMON.CLEAR_SEARCH }}</el-button>
       </div>
-      <el-form
-        ref="programSearchForm"
-        size="small"
-        :inline="true"
-        :model="programSearchForm"
-        class="m-2"
-        label-width="80px"
-      >
-        <el-form-item :label="COMMON.SEARCH">
-          <el-input
-            v-model="programSearchForm.name"
-            class="searchFormItem"
-            :placeholder="COMMON.INPUT_PROGRAM_NAME"
-            @change="searchProgram"
-          />
-        </el-form-item>
-        <el-form-item :label="COMMON.CHANNEL">
-          <el-select
-            v-model="programSearchForm.channels"
-            multiple
-            class="searchFormItem"
-            size="small"
-            :placeholder="COMMON.SELECT_CHANNEL"
-            @change="searchProgram"
-          >
-            <el-option
-              v-for="channel in vipChannelList"
-              :key="channel.id"
-              :label="channel.name"
-              :value="channel.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="COMMON.CATEGORY">
-          <el-select
-            v-model="programSearchForm.categories"
-            multiple
-            class="searchFormItem"
-            size="small"
-            :placeholder="COMMON.SELECT_CATEGORY"
-            @change="searchProgram"
-          >
-            <el-option
-              v-for="item in CATEGORIES"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item v-if="isSearching">
-          <el-tooltip slot="label" :content="COMMON.CLEAR_SEARCH" placement="top" effect="dark">
-            <el-button size="small" icon="el-icon-close" type="danger" @click="clearSearchingForm" />
-          </el-tooltip>
-
-        </el-form-item>
-
-      </el-form>
 
       <div class="row" style="margin: 0">
         <div
@@ -78,23 +33,33 @@
           <Program :program="program" :small="true" />
         </div></div>
     </el-card>
+    <el-dialog
+      :key="dialogKey"
+      :visible.sync="searchDialogVisible"
+      custom-class="dialogClass"
+    >
+      <ProgramSearchForm
+        :clear="false"
+        @search="searchProgram"
+        @clear="handleClearSearch"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
+import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
 
 export default {
-  components: { Program },
+  components: { Program, ProgramSearchForm },
   data() {
     return {
-      programSearchForm: {
-        name: '',
-        channels: [],
-        categories: []
-      },
-      programData: null
+      programData: null,
+      searchDialogVisible: false,
+      dialogKey: 0,
+      isSearching: false
     }
   },
   computed: {
@@ -102,10 +67,6 @@ export default {
       nextDaysProgramList: 'nextDaysProgramList',
       channelList: 'channelList'
     }),
-    isSearching() {
-      return this.programSearchForm.name || this.programSearchForm.channels.length > 0 ||
-      this.programSearchForm.categories.length > 0
-    },
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
     }
@@ -116,6 +77,7 @@ export default {
       handler() {
         if (this.nextDaysProgramList) {
           this.searchProgram()
+          this.isSearching = false
         } else {
           this.fetchNextDaysProgramList()
         }
@@ -125,53 +87,21 @@ export default {
   created() {
   },
   methods: {
-    searchProgram() {
+    searchProgram(searchForm) {
+      this.isSearching = true
       this.programData = []
       this.programData = this.nextDaysProgramList.filter(program => {
-        return this.filterByCategory(program) && this.filterByChannel(program) && this.filterByName(program)
+        return this.filterByCategory(program, searchForm) &&
+        this.filterByChannel(program, searchForm) &&
+        this.filterByName(program, searchForm) &&
+        this.filterByRank(program, searchForm)
       })
     },
-    filterByCategory(program) {
-      if (this.programSearchForm.categories.length > 0) {
-        return this.isTwoArrayHaveSameElement(program.categories, this.programSearchForm.categories)
-      }
-      return true
-    },
-    filterByChannel(program) {
-      if (this.programSearchForm.channels.length > 0) {
-        return this.isTwoArrayHaveSameElement(program.channels, this.programSearchForm.channels)
-      }
-      return true
-    },
-    filterByName(program) {
-      if (this.programSearchForm.name) {
-        return program.name.toLowerCase().includes(this.programSearchForm.name.toLowerCase())
-      }
-      return true
-    },
-    isTwoArrayHaveSameElement(first, second) {
-      if (!first || !second) {
-        return false
-      } else {
-        if (!first.length || !second.length) {
-          return false
-        } else {
-          for (const i of first) {
-            for (const j of second) {
-              if (i === j) {
-                return true
-              }
-            }
-          }
-          return false
-        }
-      }
-    },
-    clearSearchingForm() {
-      this.programSearchForm.name = ''
-      this.programSearchForm.channels = []
-      this.programSearchForm.categories = []
+
+    handleClearSearch() {
+      this.isSearching = false
       this.programData = this.nextDaysProgramList
+      this.dialogKey++
     }
   }
 
