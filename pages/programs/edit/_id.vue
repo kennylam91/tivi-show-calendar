@@ -25,7 +25,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      programList: 'programList'
+      programList: 'programList',
+      programSearchQuery: 'programSearchQuery'
     })
   },
   watch: {
@@ -49,7 +50,7 @@ export default {
   methods: {
     handleSavedAction() {
       console.log('handleSavedAction')
-      this.$router.push({ path: '/programs' })
+      this.$router.push({ path: '/programs', query: { ...this.programSearchQuery }})
     },
     handleCancel() {
       this.$router.push({ path: '/programs' })

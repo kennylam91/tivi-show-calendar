@@ -6,68 +6,11 @@
         <el-breadcrumb-item>{{ COMMON.TODAY_PROGRAM }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
+    <ProgramSearchForm @search="searchProgram" @clear="handleClear" />
     <el-card v-if="todayProgramList" :body-style="{ padding: '0px' }">
       <div slot="header">
         <span class="bold color-primary">{{ COMMON.TODAY_PROGRAM }}</span>
       </div>
-      <el-form
-        ref="programSearchForm"
-        size="small"
-        :inline="true"
-        :model="programSearchForm"
-        class="m-2"
-        label-width="80px"
-      >
-        <el-form-item :label="COMMON.SEARCH">
-          <el-input
-            v-model="programSearchForm.name"
-            class="searchFormItem"
-            :placeholder="COMMON.INPUT_PROGRAM_NAME"
-            @change="searchProgram"
-          />
-        </el-form-item>
-        <el-form-item :label="COMMON.CHANNEL">
-          <el-select
-            v-model="programSearchForm.channels"
-            multiple
-            class="searchFormItem"
-            size="small"
-            :placeholder="COMMON.SELECT_CHANNEL"
-            @change="searchProgram"
-          >
-            <el-option
-              v-for="channel in vipChannelList"
-              :key="channel.id"
-              :label="channel.name"
-              :value="channel.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="COMMON.CATEGORY">
-          <el-select
-            v-model="programSearchForm.categories"
-            class="searchFormItem"
-            multiple
-            size="small"
-            :placeholder="COMMON.SELECT_CATEGORY"
-            @change="searchProgram"
-          >
-            <el-option
-              v-for="item in CATEGORIES"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item v-if="isSearching">
-          <el-tooltip slot="label" :content="COMMON.CLEAR_SEARCH" placement="top" effect="dark">
-            <el-button class="clearBtn" size="small" icon="el-icon-close" type="danger" @click="clearSearchingForm" />
-          </el-tooltip>
-
-        </el-form-item>
-
-      </el-form>
 
       <div class="row" style="margin: 0">
         <div
@@ -84,17 +27,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
+import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
 
 export default {
-  components: { Program },
+  components: { Program, ProgramSearchForm },
 
   data() {
     return {
-      programSearchForm: {
-        name: '',
-        channels: [],
-        categories: []
-      },
+
       programData: []
     }
   },
@@ -126,54 +66,18 @@ export default {
   created() {
   },
   methods: {
-    searchProgram() {
+    searchProgram(searchForm) {
       this.programData = []
       this.programData = this.todayProgramList.filter(program => {
-        return this.filterByCategory(program) && this.filterByChannel(program) && this.filterByName(program)
+        return this.filterByCategory(program, searchForm) &&
+        this.filterByChannel(program, searchForm) &&
+        this.filterByName(program, searchForm)
       })
     },
-    filterByCategory(program) {
-      if (this.programSearchForm.categories.length > 0) {
-        return this.isTwoArrayHaveSameElement(program.categories, this.programSearchForm.categories)
-      }
-      return true
-    },
-    filterByChannel(program) {
-      if (this.programSearchForm.channels.length > 0) {
-        return this.isTwoArrayHaveSameElement(program.channels, this.programSearchForm.channels)
-      }
-      return true
-    },
-    filterByName(program) {
-      if (this.programSearchForm.name) {
-        return program.name.toLowerCase().includes(this.programSearchForm.name.toLowerCase())
-      }
-      return true
-    },
-    isTwoArrayHaveSameElement(first, second) {
-      if (!first || !second) {
-        return false
-      } else {
-        if (!first.length || !second.length) {
-          return false
-        } else {
-          for (const i of first) {
-            for (const j of second) {
-              if (i === j) {
-                return true
-              }
-            }
-          }
-          return false
-        }
-      }
-    },
-    clearSearchingForm() {
-      this.programSearchForm.name = ''
-      this.programSearchForm.channels = []
-      this.programSearchForm.categories = []
+    handleClear() {
       this.programData = this.todayProgramList
     }
+
   }
 }
 </script>

@@ -1,35 +1,48 @@
 <template>
   <div>
-    <el-card :body-style="{ padding: '16px' }">
+    <el-card :body-style="{ padding: '5px' }">
       <div slot="header" class="justify-between-align-center">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>
           <el-breadcrumb-item>Program List</el-breadcrumb-item>
         </el-breadcrumb>
-        <el-button type="primary" size="small" plain @click="handleCreateProgramClick">Create Program</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          plain
+          @click="handleCreateProgramClick"
+        >Create Program</el-button>
       </div>
-      <el-table id="programTable" :key="programTableKey" :data="tableData" border stripe>
+
+      <ProgramSearchForm @search="filterProgramList" @clear="handleClear" />
+
+      <el-table
+        id="programTable"
+        :key="programTableKey"
+        :data="tableData"
+        border
+        stripe
+      >
         <el-table-column
           prop="name"
           label="Name"
+          min-width="49"
+        />
+        <el-table-column
+          label="Rank"
+          align="center"
+          min-width="13"
         >
-          <template slot="header" slot-scope="{row}">
-            <span>{{ COMMON.TOTAL }}: {{ programsNumber }}</span>
-            <el-input
-              v-model="programNameSearch"
-              style="width: 60%; float: right;"
-              :placeholder="COMMON.SEARCH_PROGRAM"
-              @change="handleProgramSearch(row)"
-            />
+          <template slot-scope="{row}">
+            <el-tag v-if="row.rank" effect="dark" :type="getRankTagType(row.rank)">
+              {{ row.rank | getRankLabel }}
+            </el-tag>
+
           </template>
         </el-table-column>
         <el-table-column
           label="Category"
-          width="300"
-          :filters="CATEGORIES"
-          :filter-method="filterCategory"
-          :filter-multiple="true"
-          filter-placement="bottom"
+          min-width="20"
         >
           <template slot-scope="{row}">
             <div v-if="row.categories">
@@ -39,6 +52,7 @@
                 class="m-1"
                 effect="dark"
                 type="info"
+                size="small"
               >{{ item | getCategory }}</el-tag>
             </div>
           </template>
@@ -47,11 +61,18 @@
         <el-table-column
           align="center"
           label="Operations"
-          width="170"
+          min-width="18"
         >
           <template slot-scope="scope">
-            <el-button size="small" @click="handleProgramEditClick(scope.row)">Edit</el-button>
-            <el-button type="danger" size="small" @click="handleProgramDeleteClick(scope.row)">Delete</el-button>
+            <el-button
+              size="small"
+              @click="handleProgramEditClick(scope.row)"
+            >Edit</el-button>
+            <el-button
+              type="danger"
+              size="small"
+              @click="handleProgramDeleteClick(scope.row)"
+            >Delete</el-button>
           </template>
         </el-table-column>
 
@@ -71,12 +92,23 @@
 </template>
 <script>
 import { FB } from '@/assets/utils/constant'
+import { programRankMap, programRankOptions } from '@/assets/utils/constant'
+import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
 
 export default {
   middleware: 'auth',
+  components: { ProgramSearchForm },
+  filters: {
+    getRankLabel(value) {
+      if (value) {
+        return programRankMap.get(value)
+      }
+      return ''
+    }
+
+  },
   data() {
     return {
-      programNameSearch: '',
       pagination: {
         page: 1,
         limit: 20
@@ -84,7 +116,8 @@ export default {
       tableData: null,
       programListData: [],
       programList: null,
-      programTableKey: 0
+      programTableKey: 0,
+      programRankOptions
 
     }
   },
@@ -106,7 +139,13 @@ export default {
     programList: {
       deep: true,
       handler() {
-        this.handleProgramSearch()
+        this.filterProgramList()
+      }
+    },
+    programListData: {
+      deep: true,
+      handler() {
+        this.handlePaginationChange()
       }
     }
   },
@@ -114,8 +153,17 @@ export default {
     if (!this.programList) {
       this.fetchAllProgram({})
     }
+    // this.listQuery.name = this.$route.query.q
   },
   methods: {
+    getRankTagType(value) {
+      const map = new Map([
+        [3, 'danger'],
+        [2, 'success'],
+        [1, 'info']
+      ])
+      return map.get(value)
+    },
     handleCreateProgramClick() {
       console.log('handleCreateProgramClick')
       this.$router.push({ path: '/programs/create' })
@@ -141,12 +189,13 @@ export default {
         })
       })
     },
-    handleProgramSearch() {
-      if (this.programNameSearch) {
-        this.programListData = this.programList.filter(item => item.name.toLowerCase().includes(this.programNameSearch.toLowerCase()))
-      } else {
-        this.programListData = [...this.programList]
-      }
+    filterProgramList(searchForm) {
+      this.programListData = []
+      this.programListData = this.programList.filter(program => {
+        return this.filterByCategory(program, searchForm) &&
+        this.filterByChannel(program, searchForm) &&
+        this.filterByName(program, searchForm)
+      })
       this.handlePaginationChange()
     },
     handlePaginationChange() {
@@ -179,5 +228,8 @@ export default {
 <style>
 #programTable .cell{
   word-break: break-word;
+}
+.filter-container{
+  margin-bottom: 1rem;
 }
 </style>

@@ -121,6 +121,9 @@ Vue.mixin({
     filterCategory(value, row, column) {
       return row.categories.includes(value)
     },
+    filterRank(value, row, column) {
+      return row.rank === value
+    },
     handleLogout() {
       this.$store.dispatch('user/logout').then(() => {
         this.$router.push({ path: this.redirect || '/' })
@@ -147,6 +150,48 @@ Vue.mixin({
         }
       }
       return finalArr
+    },
+    filterByCategory(program, programSearchForm) {
+      if (programSearchForm) {
+        if (programSearchForm.categories.length > 0) {
+          return this.isTwoArrayHaveSameElement(program.categories, programSearchForm.categories)
+        }
+      }
+      return true
+    },
+    filterByChannel(program, programSearchForm) {
+      if (programSearchForm) {
+        if (programSearchForm.channels.length > 0) {
+          return this.isTwoArrayHaveSameElement(program.channels, programSearchForm.channels)
+        }
+      }
+      return true
+    },
+    filterByName(program, programSearchForm) {
+      if (programSearchForm) {
+        if (programSearchForm.name) {
+          return program.name.toLowerCase().includes(programSearchForm.name.toLowerCase())
+        }
+      }
+      return true
+    },
+    isTwoArrayHaveSameElement(first, second) {
+      if (!first || !second) {
+        return false
+      } else {
+        if (!first.length || !second.length) {
+          return false
+        } else {
+          for (const i of first) {
+            for (const j of second) {
+              if (i === j) {
+                return true
+              }
+            }
+          }
+          return false
+        }
+      }
     }
 
   }

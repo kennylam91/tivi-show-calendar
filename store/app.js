@@ -13,7 +13,10 @@ export const state = () => ({
   nextDaysScheduleList: null,
   fromTodayProgramList: null,
   fromNowInDayProgramList: null,
-  fromNowInDayScheduleList: null
+  fromNowInDayScheduleList: null,
+  programSearchQuery: {
+    q: null
+  }
 })
 
 export const mutations = {
@@ -52,6 +55,9 @@ export const mutations = {
   },
   SET_FROM_NOW_IN_DAY_SCHEDULE_LIST: (state, value) => {
     state.fromNowInDayScheduleList = value
+  },
+  SET_PROGRAM_SEARCH_QUERY: (state, value) => {
+    state.programSearchQuery = value
   }
 
 }
@@ -106,6 +112,9 @@ export const actions = {
   },
   setFromNowInDayScheduleList({ commit }, value) {
     commit('SET_FROM_NOW_IN_DAY_SCHEDULE_LIST', value)
+  },
+  setProgramSearchQuery({ commit }, value) {
+    commit('SET_PROGRAM_SEARCH_QUERY', value)
   },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {

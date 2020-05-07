@@ -86,10 +86,16 @@ export const FB = {
 }
 
 export const programRankOptions = [
-  { label: 'Đặc biệt', value: 3 },
-  { label: 'Tốt', value: 2 },
-  { label: 'Bình thường', value: 1 }
+  { label: 'Đặc biệt', value: 3, text: 'Đặc biệt' },
+  { label: 'Tốt', value: 2, text: 'Tốt' },
+  { label: 'Bình thường', value: 1, text: 'Bình thường' }
 ]
+
+export const programRankMap = new Map([
+  [1, 'Bình thường'],
+  [2, 'Tốt'],
+  [3, 'Đặc biệt']
+])
 
 export const categoryMap = new Map([
   [1, 'Phim'],
