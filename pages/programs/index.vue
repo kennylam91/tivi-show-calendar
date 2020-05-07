@@ -26,7 +26,7 @@
         <el-table-column
           prop="name"
           label="Name"
-          min-width="49"
+          min-width="40"
         />
         <el-table-column
           label="Rank"
@@ -42,7 +42,7 @@
         </el-table-column>
         <el-table-column
           label="Category"
-          min-width="20"
+          min-width="29"
         >
           <template slot-scope="{row}">
             <div v-if="row.categories">
@@ -221,6 +221,9 @@ export default {
         })
         this.programList = [...list]
       })
+    },
+    handleClear() {
+      this.programListData = this.programList
     }
 
   }

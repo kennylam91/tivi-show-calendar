@@ -46,7 +46,7 @@ export const COMMON = {
   ON_BROADCASTING_PROGRAMS: 'Chương trình đang chiếu',
   TODAY_PROGRAM: 'Chương trình hôm nay',
   NEXT_THREE_DAY_PROGRAM: 'Chương trình trong 3 ngày tới',
-  NEXT_DAY: 'Sắp chiếu',
+  NEXT_DAY: 'Ngày mai',
   NEXT_DAY_PROGRAM: 'Chương trình ngày mai',
   HIDE: 'Ẩn',
   SHOW: 'Hiện',

@@ -137,6 +137,7 @@ export default {
       this.programSearchForm.name = ''
       this.programSearchForm.channels = []
       this.programSearchForm.categories = []
+      this.programSearchForm.ranks = []
       this.$emit('clear')
     }
 
