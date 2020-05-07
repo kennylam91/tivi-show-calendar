@@ -123,9 +123,19 @@ export default {
             title: 'Program Created',
             type: 'success',
             duration: '4500',
-            position: 'top-right'
+            position: 'bottom-right'
           })
           this.$emit('saved')
+          this.programData = {
+            id: '',
+            name: '',
+            description: '',
+            logo: '',
+            isTodayShow: true,
+            isNextDaysShow: true,
+            categories: null,
+            rank: 1
+          }
         }).catch(err => {
           console.log(err)
         })
@@ -136,7 +146,7 @@ export default {
             title: 'Program Updated',
             type: 'success',
             duration: '4500',
-            position: 'top-right'
+            position: 'bottom-right'
           })
           this.$emit('saved')
         }).catch(err => {

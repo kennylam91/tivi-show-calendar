@@ -100,7 +100,7 @@ export default {
 
     handleClearSearch() {
       this.isSearching = false
-      this.programData = this.nextDaysProgramList
+      this.programData = [...this.nextDaysProgramList]
       this.dialogKey++
     }
   }

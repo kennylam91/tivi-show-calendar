@@ -55,6 +55,7 @@
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
 import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
+import { FB } from '@/assets/utils/constant'
 
 export default {
   components: { Program, ProgramSearchForm },
@@ -64,7 +65,8 @@ export default {
       searchDialogVisible: false,
       programData: [],
       isSearching: false,
-      dialogKey: 0
+      dialogKey: 0,
+      searchByDateProgramList: []
     }
   },
   computed: {
@@ -82,7 +84,6 @@ export default {
       handler() {
         if (this.todayProgramList) {
           this.searchProgram()
-          this.isSearching = false
         } else {
           this.fetchTodayProgramList()
         }
@@ -92,20 +93,84 @@ export default {
   created() {
   },
   methods: {
-    searchProgram(searchForm) {
+    async searchProgram(searchForm) {
+      if (!searchForm) {
+        this.programData = this.todayProgramList
+        return
+      }
       this.isSearching = true
       this.programData = []
-      this.programData = this.todayProgramList.filter(program => {
-        return this.filterByCategory(program, searchForm) &&
+      if (searchForm.startTime || searchForm.endTime) {
+        await this.fetchScheduleListByTime(searchForm.startTime, searchForm.endTime)
+        this.programData = this.todayProgramList.filter(program => {
+          return this.filterByCategory(program, searchForm) &&
         this.filterByChannel(program, searchForm) &&
         this.filterByName(program, searchForm) &&
-        this.filterByRank(program, searchForm)
-      })
+        this.filterByRank(program, searchForm) &&
+        this.filterByTime(program)
+        })
+      } else {
+        this.programData = this.todayProgramList.filter(program => {
+          return this.filterByCategory(program, searchForm) &&
+        this.filterByChannel(program, searchForm) &&
+        this.filterByName(program, searchForm) &&
+        this.filterByRank(program, searchForm) &&
+        this.filterByTime(program)
+        })
+      }
     },
     handleClearSearch() {
       this.isSearching = false
       this.programData = this.todayProgramList
       this.dialogKey++
+    },
+    // 09:30
+    convertStringToTimestamp(string) {
+      if (!string) return null
+      const arr = string.trim().split(':')
+      const hour = arr[0]
+      const min = arr[1]
+      const time = new Date()
+      time.setHours(hour, min, 0, 0)
+      return time
+    },
+    async fetchScheduleListByTime(startTime, endTime) {
+      let start, end
+      const list = []
+      if (!startTime) {
+        start = this.convertStringToTimestamp('00:01')
+      } else {
+        start = this.convertStringToTimestamp(startTime)
+      }
+      const startTimestamp = FB.timestamp.fromDate(start)
+      if (!endTime) {
+        end = this.convertStringToTimestamp('23:59')
+      } else {
+        end = this.convertStringToTimestamp(endTime)
+      }
+      const endTimestamp = FB.timestamp.fromDate(end)
+      await this.$store.dispatch('app/fetchScheduleList',
+        { startTime: startTimestamp,
+          endTime: endTimestamp }).then(scheduleList => {
+        debugger
+        for (const schedule of scheduleList) {
+          if (!list.some(program => program.id === schedule.programId)) {
+            const found = this.todayProgramList.find(program =>
+              program.id === schedule.programId)
+            if (found) {
+              list.push(found)
+            }
+          }
+        }
+        this.searchByDateProgramList = list
+      })
+    },
+    filterByTime(program) {
+      if (this.searchByDateProgramList.length === 0) {
+        return true
+      } else {
+        return this.searchByDateProgramList.some(item => item.id === program.id)
+      }
     }
 
   }

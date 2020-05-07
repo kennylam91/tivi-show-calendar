@@ -45,7 +45,7 @@
             <tr v-for="row in scheduleList" :key="row.id">
               <td>
                 <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
-                  <u class="color-purple">{{ row.channelName }}</u>
+                  <span class="color-purple">{{ row.channelName }}</span>
                 </el-link>
               </td>
               <td>

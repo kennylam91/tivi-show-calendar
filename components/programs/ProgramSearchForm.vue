@@ -67,6 +67,30 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item :label="COMMON.TIME">
+        <el-time-select
+          v-model="programSearchForm.startTime"
+          :placeholder="COMMON.START"
+          style="width: 110px;"
+          :picker-options="{
+            start: '04:30',
+            step: '00:30',
+            end: '23:30'
+          }"
+        />
+        <el-time-select
+          v-model="programSearchForm.endTime"
+          :placeholder="COMMON.END"
+          style="width: 115px;"
+          :picker-options="{
+            start: '04:30',
+            step: '00:30',
+            end: '24:00',
+            minTime: programSearchForm.startTime
+          }"
+        />
+
+      </el-form-item>
       <el-form-item v-if="clearBtnShow">
         <el-tooltip
           slot="label"
@@ -92,7 +116,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { programRankOptions } from '@/assets/utils/constant'
+import { programRankOptions, FB } from '@/assets/utils/constant'
 
 export default {
   props: {
@@ -113,7 +137,9 @@ export default {
         name: '',
         channels: [],
         categories: [],
-        ranks: []
+        ranks: [],
+        startTime: null,
+        endTime: null
       },
       programRankOptions
 
@@ -135,6 +161,12 @@ export default {
       this.programSearchForm.channels.length > 0 ||
       this.programSearchForm.categories.length > 0 ||
       this.programSearchForm.ranks.length > 0
+    },
+    startTime() {
+      return this.programSearchForm.startTime
+    },
+    endTime() {
+      return this.programSearchForm.endTime
     }
   },
   watch: {
@@ -146,6 +178,12 @@ export default {
           this.programSearchForm = { ...this.dataProp }
         }
       }
+    },
+    startTime() {
+      this.searchProgram()
+    },
+    endTime() {
+      this.searchProgram()
     }
   },
   methods: {

@@ -107,21 +107,25 @@ export default {
       deep: true,
       handler() {
         if (!this.programList) {
-          this.$store.dispatch('app/fetchProgramList', { channelId: this.scheduleData.channelId }).then(list => {
+          this.$store.dispatch('app/fetchProgramList',
+            { channelId: this.scheduleData.channelId }).then(list => {
             if (this.scheduleData.programId) {
-              this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
+              this.programName = this.programList.find(pro =>
+                pro.id === this.scheduleData.programId).name
             }
           })
         } else {
           if (this.scheduleData.programId) {
-            this.programName = this.programList.find(pro => pro.id === this.scheduleData.programId).name
+            this.programName = this.programList.find(pro =>
+              pro.id === this.scheduleData.programId).name
           }
         }
       }
     }
   },
   created() {
-    this.$store.dispatch('app/fetchProgramList', { channelId: this.scheduleData.channelId }).then(list => {
+    this.$store.dispatch('app/fetchProgramList',
+      { channelId: this.scheduleData.channelId }).then(list => {
       this.programList = list
     })
   },
