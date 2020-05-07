@@ -57,7 +57,7 @@ export const COMMON = {
   SELECT_CATEGORY: 'Chọn thể loại',
   SELECT_CHANNEL: 'Chọn kênh',
   INPUT_PROGRAM_NAME: 'Nhập tên chương trình',
-  VIP_INCOMING_PROGRAM: 'Chương trình sắp chiếu',
+  VIP_INCOMING_PROGRAM: 'Chương trình sắp chiếu hôm nay',
   VIP_TOMORROW_PROGRAM: 'Chương trình nổi bật ngày mai',
   SHOW_ON_HOMEPAGE: 'Hiển thị trên trang chủ',
   NO_MORE_THAN_TWO: 'Không chọn nhiều hơn 2 thể loại',
@@ -75,7 +75,9 @@ export const COMMON = {
   TOTAL: 'Tổng số',
   SEARCH_CHANNEL_PROGRAM: 'Tìm kiếm các kênh, chương trình,...',
   TYPE_2_CHAR_AT_LEAST: 'Nhập tối thiểu 2 kí tự',
-  RANK: 'Đánh giá'
+  RANK: 'Đánh giá',
+  INTRODUCTION: 'Giới thiệu',
+  NO_DATA: 'Không có dữ liệu!!!'
 }
 import { firebase } from '@/MyFireBase'
 export const FB = {

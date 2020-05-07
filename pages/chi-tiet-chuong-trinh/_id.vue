@@ -10,48 +10,61 @@
     </div>
     <el-card>
       <div>
-        <div class="row mb-2">
+        <div class="row mb-4">
           <div class="col-sm-4 col-md-3 text-center">
             <img class="img-fluid mb-2 " :src="program.logo" :alt="program.name">
           </div>
           <div class="col-sm-8 col-md-9">
-            <div class="color-primary bold mb-2">{{ program.name }}</div>
+            <div class="color-purple bold mb-2">{{ program.name }}</div>
             <div class="small-font-size">
-              <span>{{ COMMON.CATEGORY }}: </span><el-tag v-for="(item, index) in program.categories" :key="index" size="small" effect="dark" type="info" style="margin: 2px;">
+              <span>{{ COMMON.CATEGORY }}: </span>
+              <el-tag
+                v-for="(item, index) in program.categories"
+                :key="index"
+                size="small"
+                effect="dark"
+                :type="categoryTagMap.get(item)"
+                style="margin: 2px;"
+              >
                 {{ item | getCategory }}
               </el-tag>
             </div>
           </div>
         </div>
-        <p class="small-font-size">{{ program.description }}</p>
       </div>
-      <h6>{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h6>
-
-      <table class="table table-hover small-font-size">
-        <thead>
-          <tr class="color-info">
+      <el-divider />
+      <div class="my-2">
+        <h5 class="color-primary">{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
+        <table v-if="scheduleList.length > 0" class="table table-hover small-font-size">
+          <tr class="color-info bold">
             <th>{{ COMMON.CHANNEL }}</th>
             <th>{{ COMMON.START }}</th>
             <th>{{ COMMON.END }}</th>
           </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in scheduleList" :key="row.id">
-            <td>
-              <el-link
-                class="color-primary"
-                @click="viewChannelDetail({id: row.channelId, name: row.channelName})"
-              >{{ row.channelName }}</el-link>
-            </td>
-            <td>
-              {{ row.startTime.seconds | parseTime }}
-            </td>
-            <td>
-              {{ row.endTime.seconds | parseTime }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          <tbody>
+            <tr v-for="row in scheduleList" :key="row.id">
+              <td>
+                <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
+                  <u class="color-purple">{{ row.channelName }}</u>
+                </el-link>
+              </td>
+              <td>
+                {{ row.startTime.seconds | parseTime }}
+              </td>
+              <td>
+                {{ row.endTime.seconds | parseTime }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p v-else class="ml-4 color-info">{{ COMMON.NO_DATA }}</p>
+      </div>
+      <el-divider />
+
+      <div>
+        <h5 class="color-primary">{{ COMMON.INTRODUCTION }}</h5>
+        <p class="small-font-size">{{ program.description }}</p>
+      </div>
 
     </el-card>
   </div>
@@ -62,6 +75,7 @@
 import { mapGetters } from 'vuex'
 import { parseVNTime } from '@/assets/utils/index'
 import { FB } from '@/assets/utils/constant'
+import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
   filters: {
@@ -93,7 +107,8 @@ export default {
     return {
       program: null,
       programId: null,
-      scheduleList: null
+      scheduleList: null,
+      categoryTagMap
     }
   },
   computed: {

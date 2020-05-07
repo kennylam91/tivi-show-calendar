@@ -25,11 +25,11 @@
       >
         <el-table-column
           prop="name"
-          label="Name"
+          :label="COMMON.PROGRAM_NAME"
           min-width="40"
         />
         <el-table-column
-          label="Rank"
+          :label="COMMON.RANK"
           align="center"
           min-width="13"
         >
@@ -41,7 +41,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="Category"
+          :label="COMMON.CATEGORY"
           min-width="29"
         >
           <template slot-scope="{row}">
@@ -60,7 +60,7 @@
 
         <el-table-column
           align="center"
-          label="Operations"
+          :label="COMMON.ACTION"
           min-width="18"
         >
           <template slot-scope="scope">

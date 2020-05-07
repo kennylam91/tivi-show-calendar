@@ -23,6 +23,8 @@
           <p class="small-font-size">{{ channel.description }}</p>
         </div>
       </div>
+      <el-divider />
+      <h5 class="color-purple">{{ COMMON.SCHEDULE }}</h5>
       <div class="row">
         <div
           class="my-2 col-6 col-sm-6 col-md-4"
@@ -51,13 +53,11 @@
       </div>
 
       <table class="table table-hover small-font-size table-sm">
-        <thead>
-          <tr class="color-info ">
-            <th scope="col">Time</th>
-            <th scope="col">{{ COMMON.PROGRAM_NAME }}</th>
-            <th>{{ COMMON.CATEGORY }}</th>
-          </tr>
-        </thead>
+        <tr class="color-info ">
+          <th scope="col">Time</th>
+          <th scope="col">{{ COMMON.PROGRAM_NAME }}</th>
+          <th>{{ COMMON.CATEGORY }}</th>
+        </tr>
         <tbody>
           <tr v-for="(row, index) in scheduleData" :key="index" :class="{scheduleInShowing : isShowing(row)}">
             <td>
@@ -65,7 +65,7 @@
             </td>
             <td>
               <el-link :underline="false" @click="viewProgramDetail(row)">
-                <span class="color-primary small-font-size">{{ row.programName | uppercaseAll }}</span>
+                <span class="color-primary smaller-font-size">{{ row.programName | uppercaseAll }}</span>
               </el-link>
             </td>
             <td>
