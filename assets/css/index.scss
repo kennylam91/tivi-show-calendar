@@ -145,6 +145,9 @@
   padding: 0 0px; 
   width: 63px; 
 }
+.dialogClass{
+  width: 350px!important;
+}
 
 @media only screen and (min-width: 769px) { 
   
@@ -159,8 +162,11 @@
     right: 16px;
     top: 10px;
   }
-  .searchFormItem{
-    width: 175px;
+  // .searchFormItem{
+  //   width: 175px;
+  // }
+  .dialogClass{
+    width: 700px!important;
   }
   .categoryTag{
     margin: 4px;

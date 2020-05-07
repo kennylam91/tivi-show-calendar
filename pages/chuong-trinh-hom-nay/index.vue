@@ -6,10 +6,24 @@
         <el-breadcrumb-item>{{ COMMON.TODAY_PROGRAM }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <ProgramSearchForm @search="searchProgram" @clear="handleClear" />
+    <el-dialog
+      :visible.sync="searchDialogVisible"
+      custom-class="dialogClass"
+    >
+      <ProgramSearchForm @search="searchProgram" @clear="handleClear" />
+
+    </el-dialog>
+
     <el-card v-if="todayProgramList" :body-style="{ padding: '0px' }">
-      <div slot="header">
+      <div slot="header" class="justify-between-align-center">
         <span class="bold color-primary">{{ COMMON.TODAY_PROGRAM }}</span>
+        <el-button
+          type="primary"
+          size="small"
+          plain
+          @click="searchDialogVisible = true"
+        >Search</el-button>
+
       </div>
 
       <div class="row" style="margin: 0">
@@ -34,7 +48,7 @@ export default {
 
   data() {
     return {
-
+      searchDialogVisible: false,
       programData: []
     }
   },
@@ -81,3 +95,9 @@ export default {
   }
 }
 </script>
+<style>
+
+.dialogClass .el-dialog__body {
+  padding: 5px;
+}
+</style>
