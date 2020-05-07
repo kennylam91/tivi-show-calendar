@@ -15,7 +15,10 @@ export const state = () => ({
   fromNowInDayProgramList: null,
   fromNowInDayScheduleList: null,
   programSearchQuery: {
-    q: null
+    name: '',
+    channels: [],
+    categories: [],
+    ranks: []
   }
 })
 

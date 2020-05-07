@@ -14,7 +14,7 @@
         >Create Program</el-button>
       </div>
 
-      <ProgramSearchForm @search="filterProgramList" @clear="handleClear" />
+      <ProgramSearchForm :data-prop="programSearchQuery" @search="filterProgramList" @clear="handleClear" />
 
       <el-table
         id="programTable"
@@ -26,7 +26,7 @@
         <el-table-column
           prop="name"
           label="Name"
-          min-width="49"
+          min-width="40"
         />
         <el-table-column
           label="Rank"
@@ -42,7 +42,7 @@
         </el-table-column>
         <el-table-column
           label="Category"
-          min-width="20"
+          min-width="29"
         >
           <template slot-scope="{row}">
             <div v-if="row.categories">
@@ -91,6 +91,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import { FB } from '@/assets/utils/constant'
 import { programRankMap, programRankOptions } from '@/assets/utils/constant'
 import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
@@ -122,9 +123,10 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters({
-    //   programList: 'programList'
-    // }),
+    ...mapGetters({
+      // programList: 'programList',
+      programSearchQuery: 'programSearchQuery'
+    }),
     programsNumber() {
       return this.programListData.length
     }
@@ -139,7 +141,7 @@ export default {
     programList: {
       deep: true,
       handler() {
-        this.filterProgramList()
+        this.filterProgramList(this.programSearchQuery)
       }
     },
     programListData: {
@@ -191,13 +193,16 @@ export default {
     },
     filterProgramList(searchForm) {
       this.programListData = []
-      this.programListData = this.programList.filter(program => {
-        return this.filterByCategory(program, searchForm) &&
+      this.$store.dispatch('app/setProgramSearchQuery', searchForm)
+      if (this.programList) {
+        this.programListData = this.programList.filter(program => {
+          return this.filterByCategory(program, searchForm) &&
         this.filterByChannel(program, searchForm) &&
         this.filterByName(program, searchForm) &&
         this.filterByRank(program, searchForm)
-      })
-      this.handlePaginationChange()
+        })
+        this.handlePaginationChange()
+      }
     },
     handlePaginationChange() {
       const start = (this.pagination.page - 1) * this.pagination.limit
@@ -221,6 +226,9 @@ export default {
         })
         this.programList = [...list]
       })
+    },
+    handleClear() {
+      this.programListData = this.programList
     }
 
   }

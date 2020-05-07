@@ -50,7 +50,7 @@ export default {
   methods: {
     handleSavedAction() {
       console.log('handleSavedAction')
-      this.$router.push({ path: '/programs', query: { ...this.programSearchQuery }})
+      this.$router.push({ path: '/programs' })
     },
     handleCancel() {
       this.$router.push({ path: '/programs' })

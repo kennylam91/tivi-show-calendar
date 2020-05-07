@@ -100,6 +100,11 @@ export default {
       required: false,
       type: Boolean,
       default: () => true
+    },
+    dataProp: {
+      required: false,
+      type: Object,
+      default: () => null
     }
   },
   data() {
@@ -110,8 +115,7 @@ export default {
         categories: [],
         ranks: []
       },
-      programRankOptions,
-      isSearching: false
+      programRankOptions
 
     }
   },
@@ -125,18 +129,34 @@ export default {
     },
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
+    },
+    isSearching() {
+      return this.programSearchForm.name ||
+      this.programSearchForm.channels.length > 0 ||
+      this.programSearchForm.categories.length > 0 ||
+      this.programSearchForm.ranks.length > 0
+    }
+  },
+  watch: {
+    dataProp: {
+      immediate: true,
+      deep: true,
+      handler() {
+        if (this.dataProp) {
+          this.programSearchForm = { ...this.dataProp }
+        }
+      }
     }
   },
   methods: {
     searchProgram() {
-      this.isSearching = true
       this.$emit('search', this.programSearchForm)
     },
     clearSearchingForm() {
-      this.isSearching = false
       this.programSearchForm.name = ''
       this.programSearchForm.channels = []
       this.programSearchForm.categories = []
+      this.programSearchForm.ranks = []
       this.$emit('clear')
     }
 
