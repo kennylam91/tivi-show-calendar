@@ -60,13 +60,22 @@
           <td />
         </tr>
         <tbody>
-          <tr v-for="(row, index) in scheduleData" :key="index" :class="{scheduleInShowing : isShowing(row)}">
+          <tr
+            v-for="(row, index) in scheduleData"
+            :key="index"
+            :class="{scheduleInShowing : isShowing(row)}"
+          >
             <td style="padding-top: 6px;">
               <strong>{{ parseTime(row.startTime.seconds) }}</strong>
             </td>
             <td>
-              <el-link :underline="false" @click="viewProgramDetail(row)">
-                <span class="color-primary smaller-font-size">{{ row.programName | uppercaseAll }}</span>
+              <el-link
+                :underline="false"
+                @click="viewProgramDetail(row)"
+              >
+                <span
+                  class="color-primary smaller-font-size"
+                >{{ row.programName | uppercaseAll }}</span>
               </el-link>
             </td>
             <td class="categoryColumn">
@@ -88,7 +97,8 @@
                 effect="dark"
               >
                 <el-button
-                  size="mini"
+                  v-if="isShowAddBtn(row)"
+                  size="small"
                   type="success"
                   circle
                   icon="el-icon-plus"
@@ -98,8 +108,22 @@
 
             </td>
           </tr>
+
         </tbody>
+
       </table>
+      <div class="small-font-size">
+        <span> {{ COMMON.CLICK_BUTTON }}</span>
+        <el-button
+          size="mini"
+          type="success"
+          circle
+          icon="el-icon-plus"
+          style="display: inline;"
+        />
+        <span>{{ COMMON.TO_ADD_GG_CAL }}</span>
+
+      </div>
     </el-card>
 
   </div>
@@ -144,7 +168,8 @@ export default {
       searchText: '',
       scheduleData: [],
       channel: null,
-      categoryTagMap: categoryTagMap
+      categoryTagMap: categoryTagMap,
+      addedSchedule: []
     }
   },
   computed: {
@@ -184,11 +209,22 @@ export default {
       return (schedule.startTime.seconds * 1000 <= Date.parse(now) &&
       schedule.endTime.seconds * 1000 >= Date.parse(now))
     },
+    isShowAddBtn(schedule) {
+      const now = new Date()
+      return schedule.startTime.seconds * 1000 >= now && !this.isAddBtnDisabled(schedule)
+    },
+    isAddBtnDisabled(schedule) {
+      return this.addedSchedule.some(item => item.id === schedule.id)
+    },
     addScheduleToGGCal(schedule) {
       console.log('addScheduleToGGCal')
-      gapi.auth2.getAuthInstance().signIn().then(() => {
+      const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get()
+      if (!isSignedIn) {
+        gapi.auth2.getAuthInstance().signIn().then(() => {
+        })
+      } else {
         this.addEvent(schedule)
-      })
+      }
     },
     addEvent(schedule) {
       const event = {
@@ -214,9 +250,13 @@ export default {
         'calendarId': 'primary',
         'resource': event
       })
-
-      request.execute(function(event) {
-        console.log('Event created: ' + event.htmlLink)
+      request.execute((event) => {
+        this.$message({
+          offset: 100,
+          message: this.COMMON.SCHEDULE_ADDED_SUCCESS,
+          type: 'success'
+        })
+        this.addedSchedule.push(schedule)
       })
     }
   }

@@ -78,7 +78,11 @@ export const COMMON = {
   RANK: 'Đánh giá',
   INTRODUCTION: 'Giới thiệu',
   NO_DATA: 'Không có dữ liệu!!!',
-  ADD_TO_GOOGLE_CAL: 'Thêm vào Google Calendar'
+  ADD_TO_GOOGLE_CAL: 'Thêm vào Google Calendar',
+  CLICK_BUTTON: 'Click nút',
+  TO_ADD_GG_CAL: 'để thêm phim vào Google lịch!',
+  SCHEDULE_ADDED_SUCCESS: 'Thêm lịch chiếu thành công'
+
 }
 import { firebase } from '@/MyFireBase'
 export const FB = {
