@@ -9,6 +9,7 @@ const SCOPES = 'https://www.googleapis.com/auth/calendar'
 
 gapi.load('client:auth2', initClient)
 function initClient() {
+  debugger
   gapi.client.init({
     apiKey: API_KEY,
     clientId: CLIENT_ID,

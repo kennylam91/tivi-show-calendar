@@ -16,6 +16,9 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      { src: 'https://apis.google.com/js/api.js' }
     ]
   },
   /*
