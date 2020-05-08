@@ -77,7 +77,8 @@ export const COMMON = {
   TYPE_2_CHAR_AT_LEAST: 'Nhập tối thiểu 2 kí tự',
   RANK: 'Đánh giá',
   INTRODUCTION: 'Giới thiệu',
-  NO_DATA: 'Không có dữ liệu!!!'
+  NO_DATA: 'Không có dữ liệu!!!',
+  ADD_TO_GOOGLE_CAL: 'Thêm vào Google Calendar'
 }
 import { firebase } from '@/MyFireBase'
 export const FB = {

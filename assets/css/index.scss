@@ -153,11 +153,14 @@
 .color-purple{
   color: purple;
 }
+.categoryColumn{
+  display: none;
+}
 
 @media only screen and (min-width: 769px) { 
-  
-  
-  
+  .categoryColumn{
+    display: table-cell;
+  }
 }
 
 @media only screen and (min-width: 1024px) { 

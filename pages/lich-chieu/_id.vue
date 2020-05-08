@@ -56,7 +56,8 @@
         <tr class="color-info ">
           <th scope="col">Time</th>
           <th scope="col">{{ COMMON.PROGRAM_NAME }}</th>
-          <th>{{ COMMON.CATEGORY }}</th>
+          <th class="categoryColumn">{{ COMMON.CATEGORY }}</th>
+          <td />
         </tr>
         <tbody>
           <tr v-for="(row, index) in scheduleData" :key="index" :class="{scheduleInShowing : isShowing(row)}">
@@ -68,7 +69,7 @@
                 <span class="color-primary smaller-font-size">{{ row.programName | uppercaseAll }}</span>
               </el-link>
             </td>
-            <td>
+            <td class="categoryColumn">
               <el-tag
                 v-for="item in row.categories.filter(item => item !== 1)"
                 :key="item"
@@ -79,6 +80,22 @@
               >
                 {{ item | getCategory }}
               </el-tag>
+            </td>
+            <td>
+              <el-tooltip
+                :content="COMMON.ADD_TO_GOOGLE_CAL"
+                placement="bottom-start"
+                effect="dark"
+              >
+                <el-button
+                  size="mini"
+                  type="success"
+                  circle
+                  icon="el-icon-plus"
+                  @click="addScheduleToGGCal(row)"
+                />
+              </el-tooltip>
+
             </td>
           </tr>
         </tbody>
@@ -166,6 +183,41 @@ export default {
       const now = new Date()
       return (schedule.startTime.seconds * 1000 <= Date.parse(now) &&
       schedule.endTime.seconds * 1000 >= Date.parse(now))
+    },
+    addScheduleToGGCal(schedule) {
+      console.log('addScheduleToGGCal')
+      gapi.auth2.getAuthInstance().signIn().then(() => {
+        this.addEvent(schedule)
+      })
+    },
+    addEvent(schedule) {
+      const event = {
+        'summary': schedule.channelName + '-' + schedule.programName,
+        'start': {
+          'dateTime': new Date(schedule.startTime.seconds * 1000),
+          // 'dateTime': new Date(2020, 5, 7, 0, 0, 0, 0),
+          'timeZone': 'Etc/GMT+7'
+        },
+        'end': {
+          'dateTime': new Date(schedule.endTime.seconds * 1000),
+          // 'dateTime': new Date(2020, 5, 8, 0, 0, 0, 0),
+          'timeZone': 'Etc/GMT+7'
+        },
+        'reminders': {
+          'useDefault': false,
+          'overrides': [
+            { 'method': 'popup', 'minutes': 10 }
+          ]
+        }
+      }
+      var request = gapi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
+      })
+
+      request.execute(function(event) {
+        console.log('Event created: ' + event.htmlLink)
+      })
     }
   }
 }

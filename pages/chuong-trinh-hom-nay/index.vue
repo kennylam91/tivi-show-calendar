@@ -155,7 +155,6 @@ export default {
       await this.$store.dispatch('app/fetchScheduleList',
         { startTime: startTimestamp,
           endTime: endTimestamp }).then(scheduleList => {
-        debugger
         for (const schedule of scheduleList) {
           if (!list.some(program => program.id === schedule.programId)) {
             const found = this.todayProgramList.find(program =>
