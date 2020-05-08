@@ -47,17 +47,21 @@
         </article>
         <article class="my-2">
           <h5 class="mb-2">{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
-          <table v-if="scheduleList.length > 0" class="table table-hover small-font-size">
+          <table
+            v-if="scheduleList.length > 0"
+            class="table table-hover small-font-size table-sm"
+          >
             <tr class="color-info bold">
               <th>{{ COMMON.CHANNEL }}</th>
               <th>{{ COMMON.START }}</th>
               <th>{{ COMMON.END }}</th>
+              <th />
             </tr>
             <tbody>
               <tr v-for="row in scheduleList" :key="row.id">
                 <td>
                   <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
-                    <h6 class="color-primary">{{ row.channelName }}</h6>
+                    <span class="color-primary bold">{{ row.channelName }}</span>
                   </el-link>
                 </td>
                 <td>
@@ -65,6 +69,22 @@
                 </td>
                 <td>
                   {{ row.endTime.seconds | parseTime }}
+                </td>
+                <td>
+                  <el-tooltip
+                    :content="COMMON.ADD_TO_GOOGLE_CAL"
+                    placement="bottom-start"
+                    effect="dark"
+                  >
+                    <el-button
+                      v-if="isShowAddBtn(row)"
+                      size="small"
+                      type="success"
+                      circle
+                      icon="el-icon-plus"
+                      @click="addScheduleToGGCal(row)"
+                    />
+                  </el-tooltip>
                 </td>
               </tr>
             </tbody>
@@ -120,7 +140,8 @@ export default {
       program: null,
       programId: null,
       scheduleList: null,
-      categoryTagMap
+      categoryTagMap,
+      addedSchedule: []
     }
   },
   computed: {
@@ -143,6 +164,56 @@ export default {
           schedule.channel = this.channelList.find(item => item.id === schedule.channelId)
         })
         this.scheduleList = list
+      })
+    },
+    isShowAddBtn(schedule) {
+      const now = new Date()
+      return schedule.startTime.seconds * 1000 >= now && !this.isAddBtnDisabled(schedule)
+    },
+    isAddBtnDisabled(schedule) {
+      return this.addedSchedule.some(item => item.id === schedule.id)
+    },
+    addScheduleToGGCal(schedule) {
+      console.log('addScheduleToGGCal')
+      const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get()
+      if (!isSignedIn) {
+        gapi.auth2.getAuthInstance().signIn().then(() => {
+        })
+      } else {
+        this.addEvent(schedule)
+      }
+    },
+    addEvent(schedule) {
+      const event = {
+        'summary': schedule.channelName + '-' + schedule.programName,
+        'start': {
+          'dateTime': new Date(schedule.startTime.seconds * 1000),
+          // 'dateTime': new Date(2020, 5, 7, 0, 0, 0, 0),
+          'timeZone': 'Etc/GMT+7'
+        },
+        'end': {
+          'dateTime': new Date(schedule.endTime.seconds * 1000),
+          // 'dateTime': new Date(2020, 5, 8, 0, 0, 0, 0),
+          'timeZone': 'Etc/GMT+7'
+        },
+        'reminders': {
+          'useDefault': false,
+          'overrides': [
+            { 'method': 'popup', 'minutes': 10 }
+          ]
+        }
+      }
+      var request = gapi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
+      })
+      request.execute((event) => {
+        this.$message({
+          offset: 100,
+          message: this.COMMON.SCHEDULE_ADDED_SUCCESS,
+          type: 'success'
+        })
+        this.addedSchedule.push(schedule)
       })
     }
   }
