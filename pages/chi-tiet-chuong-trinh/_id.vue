@@ -28,7 +28,7 @@
 
             </div>
             <div class="col-sm-8 col-md-9">
-              <h5>{{ program.name }}</h5>
+              <h5 class="programNameTitle">{{ program.name }}</h5>
               <div class="small-font-size mt-2">
                 <label>{{ COMMON.CATEGORY }}: </label>
                 <el-tag
@@ -47,49 +47,62 @@
         </article>
         <article class="my-2">
           <h5 class="mb-2">{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
-          <table
-            v-if="scheduleList.length > 0"
-            class="table table-hover small-font-size table-sm"
-          >
-            <tr class="color-info bold">
-              <th>{{ COMMON.CHANNEL }}</th>
-              <th>{{ COMMON.START }}</th>
-              <th>{{ COMMON.END }}</th>
-              <th />
-            </tr>
-            <tbody>
-              <tr v-for="row in scheduleList" :key="row.id">
-                <td>
-                  <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
-                    <span class="color-primary bold">{{ row.channelName }}</span>
-                  </el-link>
-                </td>
-                <td>
-                  {{ row.startTime.seconds | parseTime }}
-                </td>
-                <td>
-                  {{ row.endTime.seconds | parseTime }}
-                </td>
-                <td>
-                  <el-tooltip
-                    :content="COMMON.ADD_TO_GOOGLE_CAL"
-                    placement="bottom-start"
-                    effect="dark"
-                  >
-                    <el-button
-                      v-if="isShowAddBtn(row)"
-                      size="small"
-                      type="success"
-                      circle
-                      icon="el-icon-plus"
-                      @click="addScheduleToGGCal(row)"
-                    />
-                  </el-tooltip>
-                </td>
+          <div v-if="scheduleList.length > 0">
+            <table
+              class="table table-hover small-font-size table-sm"
+            >
+              <tr class="color-info bold">
+                <th>{{ COMMON.CHANNEL }}</th>
+                <th>{{ COMMON.START }}</th>
+                <th>{{ COMMON.END }}</th>
+                <th />
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr v-for="row in scheduleList" :key="row.id">
+                  <td>
+                    <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
+                      <span class="color-primary bold">{{ row.channelName }}</span>
+                    </el-link>
+                  </td>
+                  <td>
+                    {{ row.startTime.seconds | parseTime }}
+                  </td>
+                  <td>
+                    {{ row.endTime.seconds | parseTime }}
+                  </td>
+                  <td>
+                    <el-tooltip
+                      :content="COMMON.ADD_TO_GOOGLE_CAL"
+                      placement="bottom-start"
+                      effect="dark"
+                    >
+                      <el-button
+                        v-if="isShowAddBtn(row)"
+                        size="small"
+                        type="success"
+                        circle
+                        icon="el-icon-plus"
+                        @click="addScheduleToGGCal(row)"
+                      />
+                    </el-tooltip>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="small-font-size">
+              <span> {{ COMMON.CLICK_BUTTON }}</span>
+              <el-button
+                size="mini"
+                type="success"
+                circle
+                icon="el-icon-plus"
+                style="display: inline;"
+              />
+              <span>{{ COMMON.TO_ADD_GG_CAL }}</span>
+            </div>
+          </div>
           <p v-else class="ml-4 color-info">{{ COMMON.NO_DATA }}</p>
+
         </article>
 
         <article>

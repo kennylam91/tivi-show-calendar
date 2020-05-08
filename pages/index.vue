@@ -1,7 +1,7 @@
 <template>
   <div>
     <article class="pb-2 pt-4">
-      <h4 class="color-primary">
+      <h4 class="articleTitle">
         {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseAll }}
       </h4>
       <div class="row">
@@ -17,7 +17,7 @@
 
     <article class="py-2">
       <nuxt-link to="/chuong-trinh-hom-nay">
-        <h4 class="color-primary">{{ COMMON.VIP_INCOMING_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
+        <h4 class="articleTitle">{{ COMMON.VIP_INCOMING_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
       <div class="row mt-2">
         <div
           v-for="program in onGoingTodayProgramList"
@@ -30,8 +30,8 @@
     </article>
 
     <article class="py-2">
-      <nuxt-link to="/chuong-trinh-hom-nay">
-        <h4 class="color-primary">{{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
+      <nuxt-link to="/chuong-trinh-sap-chieu">
+        <h4 class="articleTitle">{{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
       <div class="row mt-2">
         <div
           v-for="program in nextDaysVipProgramList"
@@ -45,7 +45,7 @@
 
     <article class="py-2">
       <nuxt-link to="/danh-sach-kenh">
-        <h4 class="color-primary">{{ COMMON.VIP_CHANNEL | uppercaseAll }} >></h4>
+        <h4 class="articleTitle">{{ COMMON.VIP_CHANNEL | uppercaseAll }} >></h4>
       </nuxt-link>
 
       <div class="row mt-2">

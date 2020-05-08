@@ -10,7 +10,7 @@
         <tr v-for="(channel, index) in channelList" :key="index">
           <td>
             <el-link @click="handleNameClick(channel)">
-              <h6 class="color-primary">{{ channel.name }}</h6>
+              <h6 class="channelNameLink">{{ channel.name }}</h6>
             </el-link>
           </td>
           <td>{{ channel.description }}</td>

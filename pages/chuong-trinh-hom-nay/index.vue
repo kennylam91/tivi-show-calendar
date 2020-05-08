@@ -10,7 +10,7 @@
     <article>
       <el-card v-if="todayProgramList" shadow="never" :body-style="{ padding: '0px' }">
         <div slot="header" class="justify-between-align-center">
-          <h4 class="">
+          <h4 class="pageTitle">
             {{ COMMON.TODAY_PROGRAM }}</h4>
           <el-button
             v-if="!isSearching"

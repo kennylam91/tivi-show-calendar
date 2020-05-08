@@ -156,10 +156,34 @@
 .categoryColumn{
   display: none;
 }
+.articleTitle{
+  @extend .color-primary;
+  font-size: 1.05rem!important;
+}
+.pageTitle{
+  font-size: 1.05rem!important;
+}
+.programNameTitle{
+  font-size: 1.05rem!important;
+}
+.channelNameLink{
+  font-size: 0.875rem!important;
+  @extend .color-primary;
+}
 
-@media only screen and (min-width: 769px) { 
+@media only screen and (min-width: 768px) { 
   .categoryColumn{
     display: table-cell;
+  }
+  .articleTitle{
+    font-size: 1.5rem!important;
+  }
+  .pageTitle{
+    font-size: 1.5rem!important;
+ 
+  }
+  .channelNameLink{
+    font-size: 1rem!important;
   }
 }
 
