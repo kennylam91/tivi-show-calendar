@@ -130,7 +130,9 @@
   overflow: hidden;
   min-height: 2rem;
   max-height: 2rem;
-
+}
+.programName:hover{
+  color: purple!important;
 }
 .scheduleInShowing{
   background-color: #90939963;

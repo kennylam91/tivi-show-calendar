@@ -1,88 +1,79 @@
 <template>
   <div>
-    <div class="row py-1 px-2 pt-2">
-      <div
-        style="color: purple; font-size: 1.1rem; padding-top: 0.5rem;"
-      >{{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseAll }}</div>
-    </div>
-    <div class="row">
-      <div
-        v-for="program in broadCastingPrograms"
-        :key="program.id"
-        class="col-md-3 col-6 my-2 px-1"
-      >
-        <Program v-if="program" :live="true" :program="program" />
+    <article class="pb-2 pt-4">
+      <h4 style="color: purple;">
+        {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseAll }}
+      </h4>
+      <div class="row">
+        <div
+          v-for="program in broadCastingPrograms"
+          :key="program.id"
+          class="col-md-3 col-6 my-2 px-1"
+        >
+          <Program v-if="program" :live="true" :program="program" />
+        </div>
       </div>
-    </div>
+    </article>
 
-    <div class="row mt-2 py-1 px-2">
-      <nuxt-link
-        to="/chuong-trinh-hom-nay"
-        style="color: purple; font-size: 1.1rem;"
-      >{{ COMMON.VIP_INCOMING_PROGRAM | uppercaseAll }} >></nuxt-link>
-    </div>
-    <div class="row mt-2">
-      <!-- <el-divider content-position="left"> -->
-
-      <!-- </el-divider> -->
-      <div
-        v-for="program in onGoingTodayProgramList"
-        :key="program.id"
-        class="col-md-3 col-6 my-2 px-1"
-      >
-        <Program v-if="program" :program="program" />
+    <article class="py-2">
+      <nuxt-link to="/chuong-trinh-hom-nay" style="color: purple;">
+        <h4>{{ COMMON.VIP_INCOMING_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
+      <div class="row mt-2">
+        <div
+          v-for="program in onGoingTodayProgramList"
+          :key="program.id"
+          class="col-md-3 col-6 my-2 px-1"
+        >
+          <Program v-if="program" :program="program" />
+        </div>
       </div>
-    </div>
+    </article>
 
-    <div class="row mt-2 py-1 px-2 pt-2">
-      <nuxt-link
-        to="/chuong-trinh-sap-chieu"
-        style="color: purple; font-size: 1.1rem;"
-      >{{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></nuxt-link>
-    </div>
-
-    <div class="row mt-2">
-      <div
-        v-for="program in nextDaysVipProgramList"
-        :key="program.id"
-        class="col-md-3 col-6 px-1 my-2"
-      >
-        <Program :program="program" />
+    <article class="py-2">
+      <nuxt-link to="/chuong-trinh-hom-nay" style="color: purple;">
+        <h4>{{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
+      <div class="row mt-2">
+        <div
+          v-for="program in nextDaysVipProgramList"
+          :key="program.id"
+          class="col-md-3 col-6 px-1 my-2"
+        >
+          <Program :program="program" />
+        </div>
       </div>
-    </div>
+    </article>
 
-    <div class="row mt-2 py-1 px-2 pt-2">
-      <nuxt-link
-        to="/danh-sach-kenh"
-        style="color: purple; font-size: 1.1rem;"
-      >{{ COMMON.VIP_CHANNEL | uppercaseAll }} >></nuxt-link>
-    </div>
-    <div class="row mt-2">
-      <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
-        <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
-          <el-link
-            v-if="channel.logo"
-            :underline="false"
-            @click="viewChannelDetail(channel)"
-          >
-            <img
-              class="img-fluid"
-              :src="channel.logo"
-              :alt="channel.name"
+    <article class="py-2">
+      <nuxt-link to="/danh-sach-kenh" style="color: purple">
+        <h4>{{ COMMON.VIP_CHANNEL | uppercaseAll }} >></h4>
+      </nuxt-link>
+
+      <div class="row mt-2">
+        <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
+          <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
+            <el-link
+              v-if="channel.logo"
+              :underline="false"
+              @click="viewChannelDetail(channel)"
             >
-          </el-link>
-          <el-button
-            class="my-2 w-100 py-2 px-1"
-            size="small"
-            style="color: purple"
-            @click="viewChannelDetail(channel)"
-          >{{ COMMON.SCHEDULE }} {{ channel.name }}</el-button>
-
-        </el-card>
+              <img
+                class="img-fluid"
+                :src="channel.logo"
+                :alt="channel.name"
+              >
+            </el-link>
+            <el-button
+              class="my-2 w-100 py-2 px-1"
+              size="small"
+              style="color: purple"
+              @click="viewChannelDetail(channel)"
+            >{{ COMMON.SCHEDULE }} {{ channel.name }}</el-button>
+          </el-card>
+        </div>
       </div>
-    </div>
+    </article>
 
-  </div>
+    </article></div>
 </template>
 
 <script>

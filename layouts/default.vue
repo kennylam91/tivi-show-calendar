@@ -111,7 +111,9 @@
         </el-submenu>
       </el-menu>
     </div>
-    <nuxt class="container" style="margin-top: 60px;" />
+    <main class="container" style="margin-top: 60px;">
+      <nuxt />
+    </main>
   </div>
 </template>
 <script>

@@ -24,7 +24,6 @@
         {{ program.name | shortenName | uppercaseAll }}
       </div>
       <el-link
-        id="programName"
         class="mb-2 w-100"
         type="primary"
         :underline="false"
