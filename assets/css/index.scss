@@ -124,7 +124,7 @@
 }
 .programName{
   display: -webkit-box; 
-  -webkit-line-clamp: 2; 
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -132,7 +132,7 @@
   max-height: 2rem;
 }
 .programName:hover{
-  color: purple!important;
+  @extend .color-primary;
 }
 .scheduleInShowing{
   background-color: #90939963;

@@ -23,8 +23,8 @@
           <p class="small-font-size">{{ channel.description }}</p>
         </div>
       </div>
-      <el-divider />
-      <h5 class="color-purple">{{ COMMON.SCHEDULE }}</h5>
+      <el-divider class="my-2" />
+      <h4>{{ COMMON.SCHEDULE }}</h4>
       <div class="row">
         <div
           class="my-2 col-6 col-sm-6 col-md-4"
@@ -60,8 +60,8 @@
         </tr>
         <tbody>
           <tr v-for="(row, index) in scheduleData" :key="index" :class="{scheduleInShowing : isShowing(row)}">
-            <td>
-              <div>{{ parseTime(row.startTime.seconds) }}</div>
+            <td style="padding-top: 6px;">
+              <strong>{{ parseTime(row.startTime.seconds) }}</strong>
             </td>
             <td>
               <el-link :underline="false" @click="viewProgramDetail(row)">

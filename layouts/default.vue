@@ -1,116 +1,121 @@
 <template>
   <div>
-    <div id="defaultLayout">
-      <div class="navWrapper">
-        <div id="menu" :class="{active: isActive}">
-          <el-menu
-            ref="mainMenu"
-            :default-active="activeIndex"
-            mode="horizontal"
-            active-text-color="purple"
-            menu-trigger="click"
-            @select="handleSelect"
-          >
-            <el-menu-item index="1">
-              <span><i class="el-icon-s-home" /><span>{{ COMMON.HOMEPAGE }}</span></span>
-            </el-menu-item>
-            <el-submenu index="2">
-              <template slot="title">{{ COMMON.SCHEDULE }}</template>
-              <el-menu-item index="2-1">
-                {{ COMMON.CHANNEL_LIST }}
+    <header>
+      <nav id="defaultLayout">
+        <div class="navWrapper">
+          <div id="menu" :class="{active: isActive}">
+            <el-menu
+              ref="mainMenu"
+              :default-active="activeIndex"
+              mode="horizontal"
+              active-text-color="#1890ff"
+              menu-trigger="click"
+              @select="handleSelect"
+            >
+              <el-menu-item index="1">
+                <span><i class="el-icon-s-home" /><span>{{ COMMON.HOMEPAGE }}</span></span>
               </el-menu-item>
-              <el-menu-item
-                v-for="(item, index) in vipChannelList"
-                :key="index"
-                :index="item.id"
-              >{{ item.name }}</el-menu-item>
-
-            </el-submenu>
-
-            <el-submenu index="3">
-              <template slot="title">{{ COMMON.PROGRAM }}</template>
-              <el-menu-item
-                v-for="(item) in programMenu"
-                :key="item.value"
-                :index="item.value"
-              >{{ item.label }}</el-menu-item>
-            </el-submenu>
-            <div id="searchInput">
-              <el-popover
-                v-model="visible"
-                placement="bottom-start"
-                trigger="manual"
-                popper-class="popover-class"
-              >
-                <div
-                  v-for="(result, index) in searchAllResults"
+              <el-submenu index="2">
+                <template slot="title">{{ COMMON.SCHEDULE }}</template>
+                <el-menu-item index="2-1">
+                  {{ COMMON.CHANNEL_LIST }}
+                </el-menu-item>
+                <el-menu-item
+                  v-for="(item, index) in vipChannelList"
                   :key="index"
-                  class="my-1 w-100 "
+                  :index="item.id"
+                >{{ item.name }}</el-menu-item>
+
+              </el-submenu>
+
+              <el-submenu index="3">
+                <template slot="title">{{ COMMON.PROGRAM }}</template>
+                <el-menu-item
+                  v-for="(item) in programMenu"
+                  :key="item.value"
+                  :index="item.value"
+                >{{ item.label }}</el-menu-item>
+              </el-submenu>
+              <div id="searchInput">
+                <el-popover
+                  v-model="visible"
+                  placement="bottom-start"
+                  trigger="manual"
+                  popper-class="popover-class"
                 >
-                  <SearchResult :result="result" :width="60" />
-                </div>
+                  <div
+                    v-for="(result, index) in searchAllResults"
+                    :key="index"
+                    class="my-1 w-100 "
+                  >
+                    <SearchResult :result="result" :width="60" />
+                  </div>
 
-                <el-input
-                  slot="reference"
-                  v-model="searchText"
-                  :placeholder="COMMON.SEARCH_CHANNEL_PROGRAM"
-                  prefix-icon="el-icon-search"
-                  clearable
-                  style=""
-                  @keydown.enter.native="handlSearchAll"
-                  @blur="visible = false"
-                />
-              </el-popover>
+                  <el-input
+                    slot="reference"
+                    v-model="searchText"
+                    :placeholder="COMMON.SEARCH_CHANNEL_PROGRAM"
+                    prefix-icon="el-icon-search"
+                    clearable
+                    style=""
+                    @keydown.enter.native="handlSearchAll"
+                    @blur="visible = false"
+                  />
+                </el-popover>
 
-            </div>
-          </el-menu>
+              </div>
+            </el-menu>
+          </div>
+          <div id="toggle" @click="select">
+            <div id="top" class="span" :class="{ active: isActive }" />
+            <div id="middle" class="span" :class="{ active: isActive }" />
+            <div id="bottom" class="span" :class="{ active: isActive }" />
+          </div>
+
         </div>
-        <div id="toggle" @click="select">
-          <div id="top" class="span" :class="{ active: isActive }" />
-          <div id="middle" class="span" :class="{ active: isActive }" />
-          <div id="bottom" class="span" :class="{ active: isActive }" />
-        </div>
+      </nav>
 
-      </div>
-    </div>
-    <div>
-      <el-menu
-        v-if="isShowVerticalMenu"
-        id="verticalMenu"
-        ref="mainMenu"
-        style="position:fixed; top: 65px; z-index: 99999; width: 100%;"
-        active-text-color="purple"
-        :default-active="activeIndex"
-        mode="vertical"
-        menu-trigger="click"
-        @select="handleVerticalSelect"
-      >
-        <el-menu-item index="1">
-          <i class="el-icon-s-home" />{{ COMMON.HOMEPAGE }}
-        </el-menu-item>
-        <el-submenu index="2">
-          <template slot="title">{{ COMMON.SCHEDULE }}</template>
-          <el-menu-item index="2-1">
-            {{ COMMON.CHANNEL_LIST }}
+      <!-- mobile navbar -->
+
+      <nav>
+        <el-menu
+          v-if="isShowVerticalMenu"
+          id="verticalMenu"
+          ref="mainMenu"
+          style="position:fixed; top: 65px; z-index: 99999; width: 100%;"
+          active-text-color="#1890ff"
+          :default-active="activeIndex"
+          mode="vertical"
+          menu-trigger="click"
+          @select="handleVerticalSelect"
+        >
+          <el-menu-item index="1">
+            <i class="el-icon-s-home" />{{ COMMON.HOMEPAGE }}
           </el-menu-item>
-          <el-menu-item
-            v-for="(item, index) in vipChannelList"
-            :key="index"
-            :index="item.id"
-          >{{ item.name }}</el-menu-item>
+          <el-submenu index="2">
+            <template slot="title">{{ COMMON.SCHEDULE }}</template>
+            <el-menu-item index="2-1">
+              {{ COMMON.CHANNEL_LIST }}
+            </el-menu-item>
+            <el-menu-item
+              v-for="(item, index) in vipChannelList"
+              :key="index"
+              :index="item.id"
+            >{{ item.name }}</el-menu-item>
 
-        </el-submenu>
+          </el-submenu>
 
-        <el-submenu index="3">
-          <template slot="title">{{ COMMON.PROGRAM }}</template>
-          <el-menu-item
-            v-for="(item) in programMenu"
-            :key="item.value"
-            :index="item.value"
-          >{{ item.label }}</el-menu-item>
-        </el-submenu>
-      </el-menu>
-    </div>
+          <el-submenu index="3">
+            <template slot="title">{{ COMMON.PROGRAM }}</template>
+            <el-menu-item
+              v-for="(item) in programMenu"
+              :key="item.value"
+              :index="item.value"
+            >{{ item.label }}</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </nav>
+    </header>
     <main class="container" style="margin-top: 60px;">
       <nuxt />
     </main>
@@ -268,10 +273,9 @@ html {
   min-width: 140px;
 }
 .popover-class{
-  background-color: #545c64 !important;
-}
-#searchInput .el-input__inner:focus{
-  border-color: purple;
+  background-color: #212529 !important;
+  width: 90%;
+  max-width: 500px;
 }
 
 </style>

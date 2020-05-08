@@ -1,19 +1,16 @@
 <template>
   <div>
-
     <table class="table table-hover table-bordered small-font-size">
-      <thead>
-        <tr class="color-info ">
-          <th scope="col">{{ COMMON.NAME }}</th>
-          <th scope="col">{{ COMMON.DESCRIPTION }}</th>
-          <th v-if="isAdmin" width="150">{{ COMMON.ACTION }}</th>
-        </tr>
-      </thead>
+      <tr class="color-info ">
+        <th scope="col">{{ COMMON.NAME }}</th>
+        <th scope="col">{{ COMMON.DESCRIPTION }}</th>
+        <th v-if="isAdmin" width="150">{{ COMMON.ACTION }}</th>
+      </tr>
       <tbody>
         <tr v-for="(channel, index) in channelList" :key="index">
           <td>
             <el-link @click="handleNameClick(channel)">
-              <span class="color-primary">{{ channel.name }}</span>
+              <h6 class="color-primary">{{ channel.name }}</h6>
             </el-link>
           </td>
           <td>{{ channel.description }}</td>

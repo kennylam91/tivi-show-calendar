@@ -6,33 +6,41 @@
         <el-breadcrumb-item>{{ COMMON.NEXT_DAY_PROGRAM }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-card v-if="nextDaysProgramList" :body-style="{ padding: '0px' }">
-      <div slot="header" class="justify-between-align-center">
-        <span class="bold large-font-size color-purple">
-          {{ COMMON.NEXT_DAY_PROGRAM }}</span>
-        <el-button
-          v-if="!isSearching"
-          type="primary"
-          size="small"
-          @click="searchDialogVisible = true"
-        >{{ COMMON.SEARCH }}</el-button>
-        <el-button
-          v-if="isSearching"
-          type="danger"
-          size="small"
-          @click="handleClearSearch"
-        >{{ COMMON.CLEAR_SEARCH }}</el-button>
-      </div>
+    <section>
+      <el-card
+        v-if="nextDaysProgramList"
+        shadow="never"
+        :body-style="{ padding: '0px' }"
+      >
+        <div slot="header" class="justify-between-align-center">
+          <h4>
+            {{ COMMON.NEXT_DAY_PROGRAM }}</h4>
+          <el-button
+            v-if="!isSearching"
+            type="primary"
+            size="small"
+            icon="el-icon-search"
+            @click="searchDialogVisible = true"
+          >{{ COMMON.SEARCH }}</el-button>
+          <el-button
+            v-if="isSearching"
+            type="danger"
+            size="small"
+            icon="el-icon-close"
+            @click="handleClearSearch"
+          >{{ COMMON.CLEAR_SEARCH }}</el-button>
+        </div>
 
-      <div class="row" style="margin: 0">
-        <div
-          v-for="program in programData"
-          :key="program.id"
-          class="col-sm-4 col-md-3 col-lg-2 col-6 my-2 px-1"
-        >
-          <Program :program="program" :small="true" />
-        </div></div>
-    </el-card>
+        <div class="row" style="margin: 0">
+          <div
+            v-for="program in programData"
+            :key="program.id"
+            class="col-sm-4 col-md-3 col-lg-2 col-6 my-2 px-1"
+          >
+            <Program :program="program" :small="true" />
+          </div></div>
+      </el-card>
+    </section>
     <el-dialog
       :key="dialogKey"
       :visible.sync="searchDialogVisible"

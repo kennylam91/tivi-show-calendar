@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="justify-between-align-center">
+    <div>
       <div class="p-4">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{path: '/'}">
@@ -13,13 +13,14 @@
       </div>
     </div>
 
-    <el-card class="my-2" :body-style="{ padding: '16px' }">
-      <div slot="header" class="justify-between-align-center">
-        <span class="bold">{{ COMMON.CHANNEL_LIST }}</span>
-      </div>
-      <ChannelTable v-if="channelList" :channel-list="channelList" :is-admin="false" />
-
-    </el-card>
+    <section>
+      <el-card shadow="never" class="my-2" :body-style="{ padding: '16px' }">
+        <div slot="header">
+          <h4>{{ COMMON.CHANNEL_LIST }}</h4>
+        </div>
+        <ChannelTable v-if="channelList" :channel-list="channelList" :is-admin="false" />
+      </el-card>
+    </section>
   </div>
 </template>
 <script>

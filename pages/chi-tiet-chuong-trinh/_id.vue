@@ -8,65 +8,77 @@
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-card>
-      <div>
-        <div class="row mb-4">
-          <div class="col-sm-4 col-md-3 text-center">
-            <img class="img-fluid mb-2 " :src="program.logo" :alt="program.name">
-          </div>
-          <div class="col-sm-8 col-md-9">
-            <div class="color-purple bold mb-2">{{ program.name }}</div>
-            <div class="small-font-size">
-              <span>{{ COMMON.CATEGORY }}: </span>
-              <el-tag
-                v-for="(item, index) in program.categories"
-                :key="index"
-                size="small"
-                effect="dark"
-                :type="categoryTagMap.get(item)"
-                style="margin: 2px;"
+    <section>
+      <el-card shadow="never">
+        <article>
+          <div class="row mb-4">
+            <div class="col-sm-4 col-md-3 text-center">
+              <img
+                v-if="program.logo"
+                class="img-fluid mb-2 "
+                :src="program.logo"
+                :alt="program.name"
               >
-                {{ item | getCategory }}
-              </el-tag>
+              <img
+                v-else
+                class="img-fluid mb-2 "
+                src="https://via.placeholder.com/400x225"
+                :alt="program.name"
+              >
+
+            </div>
+            <div class="col-sm-8 col-md-9">
+              <h5>{{ program.name }}</h5>
+              <div class="small-font-size mt-2">
+                <label>{{ COMMON.CATEGORY }}: </label>
+                <el-tag
+                  v-for="(item, index) in program.categories"
+                  :key="index"
+                  size="small"
+                  effect="dark"
+                  :type="categoryTagMap.get(item)"
+                  style="margin: 2px;"
+                >
+                  {{ item | getCategory }}
+                </el-tag>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <el-divider />
-      <div class="my-2">
-        <h5 class="color-primary">{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
-        <table v-if="scheduleList.length > 0" class="table table-hover small-font-size">
-          <tr class="color-info bold">
-            <th>{{ COMMON.CHANNEL }}</th>
-            <th>{{ COMMON.START }}</th>
-            <th>{{ COMMON.END }}</th>
-          </tr>
-          <tbody>
-            <tr v-for="row in scheduleList" :key="row.id">
-              <td>
-                <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
-                  <span class="color-purple">{{ row.channelName }}</span>
-                </el-link>
-              </td>
-              <td>
-                {{ row.startTime.seconds | parseTime }}
-              </td>
-              <td>
-                {{ row.endTime.seconds | parseTime }}
-              </td>
+        </article>
+        <article class="my-2">
+          <h5 class="mb-2">{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
+          <table v-if="scheduleList.length > 0" class="table table-hover small-font-size">
+            <tr class="color-info bold">
+              <th>{{ COMMON.CHANNEL }}</th>
+              <th>{{ COMMON.START }}</th>
+              <th>{{ COMMON.END }}</th>
             </tr>
-          </tbody>
-        </table>
-        <p v-else class="ml-4 color-info">{{ COMMON.NO_DATA }}</p>
-      </div>
-      <el-divider />
+            <tbody>
+              <tr v-for="row in scheduleList" :key="row.id">
+                <td>
+                  <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
+                    <h6 class="color-primary">{{ row.channelName }}</h6>
+                  </el-link>
+                </td>
+                <td>
+                  {{ row.startTime.seconds | parseTime }}
+                </td>
+                <td>
+                  {{ row.endTime.seconds | parseTime }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p v-else class="ml-4 color-info">{{ COMMON.NO_DATA }}</p>
+        </article>
 
-      <div>
-        <h5 class="color-primary">{{ COMMON.INTRODUCTION }}</h5>
-        <p class="small-font-size">{{ program.description }}</p>
-      </div>
+        <article>
+          <h5>{{ COMMON.INTRODUCTION }}</h5>
+          <p class="small-font-size">{{ program.description }}</p>
+        </article>
 
-    </el-card>
+      </el-card>
+    </section>
   </div>
 
 </template>
