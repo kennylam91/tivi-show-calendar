@@ -30,7 +30,7 @@
     </article>
 
     <article class="py-2">
-      <nuxt-link to="/chuong-trinh-hom-nay">
+      <nuxt-link to="/chuong-trinh-sap-chieu">
         <h4 class="color-primary">{{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
       <div class="row mt-2">
         <div
