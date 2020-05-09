@@ -12,10 +12,10 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Truyền hình 24h cung cấp các thông tin đầy đủ, chính xác lịch chiếu và thông tin các chương trình trên các kênh truyền hình hiện nay.' }
+      { hid: 'description', name: 'description',
+        content: 'Truyền hình 24h - Cập nhật lịch phát sóng các kênh truyền hình hay nhất hàng ngày (HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, ...)' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
       { src: 'https://apis.google.com/js/api.js' }

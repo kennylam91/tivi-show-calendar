@@ -82,7 +82,10 @@ export const COMMON = {
   CLICK_BUTTON: 'Click nút',
   TO_ADD_GG_CAL: 'để thêm phim vào Google lịch!',
   SCHEDULE_ADDED_SUCCESS: 'Thêm lịch chiếu thành công',
-  CONTACT_US: 'Liên hệ chúng tôi'
+  CONTACT_US: 'Liên hệ chúng tôi',
+  TODAY_SCHEDULE: 'Lịch phát sóng hôm nay',
+  TODAY_SCHEDULE_2: 'Lịch truyền hình hôm nay',
+  GOOD_MOVIE: 'Phim hay'
 
 }
 import { firebase } from '@/MyFireBase'

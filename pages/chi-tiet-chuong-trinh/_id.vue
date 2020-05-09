@@ -109,6 +109,17 @@
           <h5>{{ COMMON.INTRODUCTION }}</h5>
           <p class="small-font-size">{{ program.description }}</p>
         </article>
+      </el-card>
+      <el-card :body-style="{ padding: '5px' }">
+        <span>Tags: </span>
+        <el-tag
+          v-for="(item) in tags"
+          :key="item"
+          style="margin: 2px;"
+          size="mini"
+          type="info"
+          effect="plain"
+        >{{ item }}</el-tag>
 
       </el-card>
     </section>
@@ -119,7 +130,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { parseVNTime } from '@/assets/utils/index'
-import { FB } from '@/assets/utils/constant'
+import { FB, COMMON } from '@/assets/utils/constant'
 import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
@@ -154,7 +165,10 @@ export default {
       programId: null,
       scheduleList: null,
       categoryTagMap,
-      addedSchedule: []
+      addedSchedule: [],
+      tags: [COMMON.SCHEDULE, COMMON.SCHEDULE + ' HBO', COMMON.SCHEDULE + ' FOX MOVIES',
+        COMMON.SCHEDULE + ' CINEMAX', COMMON.SCHEDULE + ' AXN', COMMON.SCHEDULE + ' DISCOVERY',
+        COMMON.SCHEDULE + ' RED BY HBO', COMMON.TODAY_SCHEDULE, COMMON.TODAY_SCHEDULE_2, COMMON.GOOD_MOVIE]
     }
   },
   computed: {
@@ -229,6 +243,13 @@ export default {
         this.addedSchedule.push(schedule)
       })
     }
+  },
+  head: {
+    title: `Truyền hình 24h - ${COMMON.PROGRAM_DETAIL}`,
+    meta: [
+      { hid: 'description', name: 'description',
+        content: 'Giới thiệu chi tiết, đầy đủ các chương trình truyền hình được phát sóng hàng ngày trên các kênh HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, ...' }
+    ]
   }
 }
 </script>

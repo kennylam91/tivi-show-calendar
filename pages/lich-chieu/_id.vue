@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-undef */
 <template>
   <div v-if="channel">
     <div class="py-4 px-2">
@@ -122,8 +124,20 @@
           style="display: inline;"
         />
         <span>{{ COMMON.TO_ADD_GG_CAL }}</span>
-
       </div>
+    </el-card>
+
+    <el-card :body-style="{ padding: '5px' }">
+      <span>Tags: </span>
+      <el-tag
+        v-for="(item) in tags"
+        :key="item"
+        style="margin: 2px;"
+        size="mini"
+        type="info"
+        effect="plain"
+      >{{ item }}</el-tag>
+
     </el-card>
 
   </div>
@@ -131,7 +145,7 @@
 <script>
 import { parseVNTime } from '@/assets/utils/index'
 import { mapGetters } from 'vuex'
-import { FB } from '@/assets/utils/constant'
+import { FB, COMMON } from '@/assets/utils/constant'
 import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
@@ -169,7 +183,11 @@ export default {
       scheduleData: [],
       channel: null,
       categoryTagMap: categoryTagMap,
-      addedSchedule: []
+      addedSchedule: [],
+      tags: [COMMON.SCHEDULE, COMMON.SCHEDULE + ' HBO', COMMON.SCHEDULE + ' FOX MOVIES',
+        COMMON.SCHEDULE + ' CINEMAX', COMMON.SCHEDULE + ' AXN', COMMON.SCHEDULE + ' DISCOVERY',
+        COMMON.SCHEDULE + ' RED BY HBO', COMMON.TODAY_SCHEDULE, COMMON.TODAY_SCHEDULE_2, COMMON.GOOD_MOVIE]
+
     }
   },
   computed: {
@@ -259,6 +277,13 @@ export default {
         this.addedSchedule.push(schedule)
       })
     }
+  },
+  head: {
+    title: `Truyền hình 24h - ${COMMON.SCHEDULE}`,
+    meta: [
+      { hid: 'description', name: 'description',
+        content: 'Cập nhật lịch phát sóng các kênh truyền hình hay nhất hàng ngày (HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, ...)' }
+    ]
   }
 }
 </script>

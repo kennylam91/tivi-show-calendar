@@ -120,13 +120,9 @@
       <nuxt />
     </main>
     <el-divider class="m-2" />
-    <footer class="p-4">
+    <footer class="py-2">
       <div class="container">
-        <div class="justify-between-align-center">
-          <div>
-            <p class="mb-1"><i class="el-icon-message" /> {{ COMMON.CONTACT_US }}</p>
-            <p>lampv1806@gmail.com</p>
-          </div>
+        <div class="flex" style="justify-content:space-between;">
           <div>
             <nuxt-link class="color-info bold" to="/">{{ COMMON.HOMEPAGE }}</nuxt-link><BR />
             <nuxt-link
@@ -141,6 +137,10 @@
               class="color-info bold"
               to="/danh-sach-kenh"
             >{{ COMMON.SCHEDULE }}</nuxt-link>
+          </div>
+          <div>
+            <p class="mb-1"><i class="el-icon-message" /> {{ COMMON.CONTACT_US }}</p>
+            <p>lampv1806@gmail.com</p>
           </div>
         </div>
       </div>

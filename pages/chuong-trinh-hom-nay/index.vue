@@ -38,6 +38,18 @@
           </div></div>
       </el-card>
     </article>
+    <el-card :body-style="{ padding: '5px' }">
+      <span>Tags: </span>
+      <el-tag
+        v-for="(item) in tags"
+        :key="item"
+        style="margin: 2px;"
+        size="mini"
+        type="info"
+        effect="plain"
+      >{{ item }}</el-tag>
+
+    </el-card>
 
     <el-dialog
       :key="dialogKey"
@@ -58,20 +70,24 @@
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
 import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
-import { FB } from '@/assets/utils/constant'
+import { FB, COMMON } from '@/assets/utils/constant'
 
 export default {
   components: { Program, ProgramSearchForm },
-
   data() {
     return {
       searchDialogVisible: false,
       programData: [],
       isSearching: false,
       dialogKey: 0,
-      searchByDateProgramList: []
+      searchByDateProgramList: [],
+      tags: [COMMON.SCHEDULE, COMMON.SCHEDULE + ' HBO', COMMON.SCHEDULE + ' FOX MOVIES',
+        COMMON.SCHEDULE + ' CINEMAX', COMMON.SCHEDULE + ' AXN', COMMON.SCHEDULE + ' DISCOVERY',
+        COMMON.SCHEDULE + ' RED BY HBO', COMMON.TODAY_SCHEDULE, COMMON.TODAY_SCHEDULE_2, COMMON.GOOD_MOVIE]
+
     }
   },
+
   computed: {
     ...mapGetters({
       todayProgramList: 'fromNowInDayProgramList',
@@ -175,6 +191,13 @@ export default {
       }
     }
 
+  },
+  head: {
+    title: `Truyền hình 24h - ${COMMON.TODAY_PROGRAM}`,
+    meta: [
+      { hid: 'description', name: 'description',
+        content: 'Tổng hợp đầy đủ các chương trình được phát sóng hàng ngày trên các kênh HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, ...' }
+    ]
   }
 }
 </script>

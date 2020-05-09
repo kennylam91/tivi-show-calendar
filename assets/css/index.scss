@@ -173,8 +173,8 @@
 .bg-dark{
   background-color: #212529!important;
 }
-.footer-main {
-  // color: rgba(255,255,255,.4)!important;
+footer{
+  font-size: 0.875rem;
 }
 
 @media only screen and (min-width: 768px) { 
@@ -190,6 +190,9 @@
   }
   .channelNameLink{
     font-size: 1rem!important;
+  }
+  footer{
+    font-size: 1rem;
   }
 }
 
