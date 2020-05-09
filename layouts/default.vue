@@ -124,23 +124,23 @@
       <div class="container">
         <div class="flex" style="justify-content:space-between;">
           <div>
-            <nuxt-link class="color-info bold" to="/">{{ COMMON.HOMEPAGE }}</nuxt-link><br>
+            <nuxt-link class="color-primary " to="/">{{ COMMON.HOMEPAGE }}</nuxt-link><br>
             <nuxt-link
-              class="color-info bold"
+              class="color-primary "
               to="/chuong-trinh-hom-nay"
             >{{ COMMON.TODAY_PROGRAM }}</nuxt-link><br>
             <nuxt-link
-              class="color-info bold"
+              class="color-primary "
               to="/chuong-trinh-sap-chieu"
             >{{ COMMON.NEXT_DAY_PROGRAM }}</nuxt-link><br>
             <nuxt-link
-              class="color-info bold"
+              class="color-primary "
               to="/danh-sach-kenh"
             >{{ COMMON.SCHEDULE }}</nuxt-link>
           </div>
           <div>
             <p class="mb-1"><i class="el-icon-message" /> {{ COMMON.CONTACT_US }}</p>
-            <p>lampv1806@gmail.com</p>
+            <p>truyenhinh24h.live@gmail.com</p>
           </div>
         </div>
       </div>

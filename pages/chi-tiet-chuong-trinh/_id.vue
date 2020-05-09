@@ -98,7 +98,8 @@
                 icon="el-icon-plus"
                 style="display: inline;"
               />
-              <span>{{ COMMON.TO_ADD_GG_CAL }}</span>
+              <span>{{ COMMON.TO_ADD_GG_CAL }}</span> <br>
+              <p>{{ COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE }}</p>
             </div>
           </div>
           <p
@@ -113,7 +114,7 @@
           <p class="small-font-size">{{ program.description }}</p>
         </article>
       </el-card>
-      <el-card :body-style="{ padding: '5px' }">
+      <el-card shadow="never" :body-style="{ padding: '5px' }">
         <span>Tags: </span>
         <el-tag
           v-for="(item) in tags"

@@ -38,7 +38,7 @@
           </div></div>
       </el-card>
     </article>
-    <el-card :body-style="{ padding: '5px' }">
+    <el-card shadow="never" :body-style="{ padding: '5px' }">
       <span>Tags: </span>
       <el-tag
         v-for="(item) in tags"
