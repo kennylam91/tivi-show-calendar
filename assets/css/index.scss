@@ -170,6 +170,12 @@
   font-size: 0.875rem!important;
   @extend .color-primary;
 }
+.bg-dark{
+  background-color: #212529!important;
+}
+.footer-main {
+  // color: rgba(255,255,255,.4)!important;
+}
 
 @media only screen and (min-width: 768px) { 
   .categoryColumn{

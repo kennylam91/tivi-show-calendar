@@ -119,6 +119,33 @@
     <main class="container" style="margin-top: 60px;">
       <nuxt />
     </main>
+    <el-divider class="m-2" />
+    <footer class="p-4">
+      <div class="container">
+        <div class="justify-between-align-center">
+          <div>
+            <p class="mb-1"><i class="el-icon-message" /> {{ COMMON.CONTACT_US }}</p>
+            <p>lampv1806@gmail.com</p>
+          </div>
+          <div>
+            <nuxt-link class="color-info bold" to="/">{{ COMMON.HOMEPAGE }}</nuxt-link><BR />
+            <nuxt-link
+              class="color-info bold"
+              to="/chuong-trinh-hom-nay"
+            >{{ COMMON.TODAY_PROGRAM }}</nuxt-link><br>
+            <nuxt-link
+              class="color-info bold"
+              to="/chuong-trinh-sap-chieu"
+            >{{ COMMON.NEXT_DAY_PROGRAM }}</nuxt-link><br>
+            <nuxt-link
+              class="color-info bold"
+              to="/danh-sach-kenh"
+            >{{ COMMON.SCHEDULE }}</nuxt-link>
+          </div>
+        </div>
+      </div>
+
+    </footer>
   </div>
 </template>
 <script>

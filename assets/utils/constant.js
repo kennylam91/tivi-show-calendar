@@ -81,7 +81,8 @@ export const COMMON = {
   ADD_TO_GOOGLE_CAL: 'Thêm vào Google Calendar',
   CLICK_BUTTON: 'Click nút',
   TO_ADD_GG_CAL: 'để thêm phim vào Google lịch!',
-  SCHEDULE_ADDED_SUCCESS: 'Thêm lịch chiếu thành công'
+  SCHEDULE_ADDED_SUCCESS: 'Thêm lịch chiếu thành công',
+  CONTACT_US: 'Liên hệ chúng tôi'
 
 }
 import { firebase } from '@/MyFireBase'
