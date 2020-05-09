@@ -9,7 +9,7 @@
         :width="width"
       >
       <img
-        v-else
+        v-if="!result.logo"
         :width="width"
         alt="image"
         class="img-fluid"

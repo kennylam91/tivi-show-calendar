@@ -20,7 +20,7 @@
                 :alt="program.name"
               >
               <img
-                v-else
+                v-if="!program.logo"
                 class="img-fluid mb-2 "
                 src="https://via.placeholder.com/400x225"
                 :alt="program.name"
@@ -101,7 +101,10 @@
               <span>{{ COMMON.TO_ADD_GG_CAL }}</span>
             </div>
           </div>
-          <p v-else class="ml-4 color-info">{{ COMMON.NO_DATA }}</p>
+          <p
+            v-if="scheduleList.length === 0"
+            class="ml-4 color-info"
+          >{{ COMMON.NO_DATA }}</p>
 
         </article>
 
