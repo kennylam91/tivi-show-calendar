@@ -124,7 +124,7 @@
       <div class="container">
         <div class="flex" style="justify-content:space-between;">
           <div>
-            <nuxt-link class="color-info bold" to="/">{{ COMMON.HOMEPAGE }}</nuxt-link><BR />
+            <nuxt-link class="color-info bold" to="/">{{ COMMON.HOMEPAGE }}</nuxt-link><br>
             <nuxt-link
               class="color-info bold"
               to="/chuong-trinh-hom-nay"
