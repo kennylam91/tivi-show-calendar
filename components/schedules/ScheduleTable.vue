@@ -48,14 +48,30 @@
       </el-table-column>
       <el-table-column
         align="center"
-        width="160"
+        width="180"
       >
         <template slot="header">
-          <el-button type="primary" plain size="small" @click="handleCreateSchedule">Create Schedule</el-button>
+          <el-button
+            v-if="!draft"
+            type="primary"
+            plain
+            size="small"
+            @click="handleCreateSchedule"
+          >Create</el-button>
+          <el-button v-if="!draft" type="success" size="small" @click="handleImportSchedule">Import</el-button>
+
         </template>
         <template slot-scope="scope">
-          <el-button size="small" @click="handleScheduleEditClick(scope.row)">Edit</el-button>
-          <el-button type="danger" size="small" @click="handleScheduleDeleteClick(scope.row)">Delete</el-button>
+          <el-button
+            size="small"
+            @click="handleScheduleEditClick(scope.row)"
+          >Edit</el-button>
+          <el-button
+            v-if="!draft"
+            type="danger"
+            size="small"
+            @click="handleScheduleDeleteClick(scope.row)"
+          >Delete</el-button>
         </template>
       </el-table-column>
 
@@ -67,7 +83,13 @@
       width="60%"
       @close="handleDialogClose"
     >
-      <CreateSchedule :channel-prop="channelProp" :schedule-prop="schedule" @saved="handleSaved" />
+      <CreateSchedule
+        :channel-prop="channelProp"
+        :schedule-prop="schedule"
+        :draft="draft"
+        @saved="handleSaved"
+        @confirmed="handleConfirmData"
+      />
     </el-dialog>
 
   </div>
@@ -75,6 +97,7 @@
 <script>
 import CreateSchedule from '@/components/schedules/CreateSchedule'
 import { parseVNTime } from '@/assets/utils/index'
+import { FB } from '@/assets/utils/constant'
 
 export default {
   components: { CreateSchedule },
@@ -86,6 +109,11 @@ export default {
     channelProp: {
       required: true,
       type: Object
+    },
+    draft: {
+      required: false,
+      type: Boolean,
+      default: () => false
     }
   },
   data() {
@@ -145,6 +173,22 @@ export default {
     },
     moveToProgramDetail(programId) {
       this.$router.push(`/programs/edit/${programId}`)
+    },
+    handleImportSchedule() {
+      this.$router.push(`/channels/manage/import/${this.$route.params.id}`)
+    },
+    handleConfirmData(schedule) {
+      const foundIndex = this.scheduleList.findIndex(item =>
+        item.startTime.seconds === Date.parse(schedule.startTime) / 1000)
+      const found = this.scheduleList[foundIndex]
+      if (found) {
+        found.programName = schedule.programName
+        found.programId = schedule.programId
+        found.categories = schedule.categories
+        found.endTime = FB.timestamp.fromDate(schedule.endTime)
+      }
+      this.$set(this.scheduleList, foundIndex, { ...found })
+      this.createScheduleDialogVisibleProp = false
     }
   }
 }

@@ -40,7 +40,9 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Submit</el-button>
+        <el-button v-if="!draft" type="primary" @click="onSubmit">Submit</el-button>
+        <el-button type="info" @click="handleConfirm">Confirm</el-button>
+
       </el-form-item>
 
     </el-form>
@@ -61,6 +63,11 @@ export default {
     channelProp: {
       required: true,
       type: Object
+    },
+    draft: {
+      required: false,
+      type: Boolean,
+      default: () => false
     }
   },
   data() {
@@ -109,6 +116,7 @@ export default {
         if (!this.programList) {
           this.$store.dispatch('app/fetchProgramList',
             { channelId: this.scheduleData.channelId }).then(list => {
+            this.programList = list
             if (this.scheduleData.programId) {
               this.programName = this.programList.find(pro =>
                 pro.id === this.scheduleData.programId).name
@@ -259,6 +267,12 @@ export default {
           }
         })
       })
+    },
+    handleConfirm() {
+      this.scheduleData.programName = this.selectedProgram.name
+      this.scheduleData.programId = this.selectedProgram.id
+      this.scheduleData.categories = this.selectedProgram.categories
+      this.$emit('confirmed', this.scheduleData)
     }
 
   }
