@@ -19,7 +19,8 @@ export const state = () => ({
     channels: [],
     categories: [],
     ranks: []
-  }
+  },
+  loading: false
 })
 
 export const mutations = {
@@ -61,6 +62,9 @@ export const mutations = {
   },
   SET_PROGRAM_SEARCH_QUERY: (state, value) => {
     state.programSearchQuery = value
+  },
+  SET_LOADING: (state, value) => {
+    state.loading = value
   }
 
 }
@@ -118,6 +122,9 @@ export const actions = {
   },
   setProgramSearchQuery({ commit }, value) {
     commit('SET_PROGRAM_SEARCH_QUERY', value)
+  },
+  setLoading({ commit }, value) {
+    commit('SET_LOADING', value)
   },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {

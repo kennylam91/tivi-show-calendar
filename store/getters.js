@@ -13,6 +13,7 @@ const getters = {
   fromTodayProgramList: state => state.app.fromTodayProgramList,
   fromNowInDayProgramList: state => state.app.fromNowInDayProgramList,
   fromNowInDayScheduleList: state => state.app.fromNowInDayScheduleList,
-  programSearchQuery: state => state.app.programSearchQuery
+  programSearchQuery: state => state.app.programSearchQuery,
+  loading: state => state.app.loading
 }
 export default getters

@@ -1,5 +1,5 @@
 <template>
-  <div class="py-2">
+  <div v-loading="loading" class="py-2">
 
     <div class="p-4">
       <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -21,83 +21,10 @@
       v-model="scheduleInput"
       type="textarea"
       :autosize="{ minRows: 5, maxRows: 10}"
-      placeholder="Please input"
+      placeholder="Pick a date first"
+      :disabled="!importDate"
       @input="handleInputChange"
     />
-    <!-- <el-table :data="scheduleList" border stripe style="width: 100%" size="small">
-      <el-table-column
-        label="Start Time"
-        width="100"
-      >
-        <template slot-scope="{row}">
-          <div>{{ parseVNTime(row.startTime.seconds) }}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="End Time"
-        width="100"
-      >
-        <template slot-scope="{row}">
-          <div>{{ parseVNTime(row.endTime.seconds) }}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Program"
-      >
-        <template slot-scope="{row}">
-          <el-link
-            :underline="false"
-            class="break-word"
-            @click="moveToProgramDetail(row.programId)"
-          >{{ row.programName }}</el-link>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Categories"
-        width="170"
-      >
-        <template slot-scope="{row}">
-          <el-tag
-            v-for="(item, index) in row.categories"
-            :key="index"
-            size="small"
-            effect="dark"
-            type="info"
-            style="margin: 2px;"
-          >
-            {{ item | getCategory }}
-          </el-tag>
-
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        width="180"
-      >
-        <template slot="header">
-          <el-button
-            type="primary"
-            plain
-            size="small"
-            @click="handleCreateSchedule"
-          >Create</el-button>
-          <el-button type="success" size="small" @click="handleImportSchedule">Import</el-button>
-
-        </template>
-        <template slot-scope="scope">
-          <el-button
-            size="small"
-            @click="handleScheduleEditClick(scope.row)"
-          >Edit</el-button>
-          <el-button
-            type="danger"
-            size="small"
-            @click="handleScheduleDeleteClick(scope.row)"
-          >Delete</el-button>
-        </template>
-      </el-table-column>
-
-    </el-table> -->
     <ScheduleTable
       v-if="channel"
       class="my-2"
@@ -105,6 +32,8 @@
       :channel-prop="channel"
       :draft="true"
     />
+    <el-button type="primary" @click="importScheduleList">Import All</el-button>
+
   </div>
 </template>
 
@@ -138,7 +67,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      channelList: 'channelList'
+      channelList: 'channelList',
+      loading: 'loading'
     })
   },
   watch: {
@@ -165,13 +95,30 @@ export default {
       const scheduleArr = []
       if (this.importDate) {
         for (const schedule of dataArray) {
-          const array = schedule.split(/\s+/, 2)
+          const array = schedule.split(/\s+/, 3)
+
           const startTime = array[0]
           const timeSplitArr = startTime.split(':')
-          const startTimestamp = FB.timestamp.fromMillis(this.importDate.setHours(timeSplitArr[0], timeSplitArr[1], 0, 0))
+          const startTimestamp = FB.timestamp.fromMillis(
+            this.importDate.setHours(timeSplitArr[0], timeSplitArr[1], 0, 0))
 
           // find program
-          const program = this.programList.find(item => item.name.includes(array[1])) || this.defaultProgram
+          const foundPrograms = this.programList.filter(item => {
+            const nameArr = item.name.split(/\s/)
+            return nameArr[0].toLowerCase() === array[1].toLowerCase()
+            // if (array.length === 2) {
+            //   return nameArr[0].toLowerCase() === array[1].toLowerCase()
+            // } else {
+            //   return nameArr[0].toLowerCase() === array[1].toLowerCase() &&
+            //   nameArr[1].toLowerCase() === array[2].toLowerCase()
+            // }
+          })
+          let program
+          if (foundPrograms.length === 1) {
+            program = foundPrograms[0]
+          } else {
+            program = this.defaultProgram
+          }
           this.channel = this.channelList.find(item => item.id === this.channelId)
           if (scheduleArr.length > 0) {
             scheduleArr[scheduleArr.length - 1].endTime = startTimestamp
@@ -189,6 +136,25 @@ export default {
         }
       }
       this.scheduleList = scheduleArr
+    },
+    importScheduleList() {
+      console.log('importScheduleList')
+      const batch = FB.db.batch()
+      for (const schedule of this.scheduleList) {
+        const docRef = FB.scheduleRef.doc() // auto generate unique id
+        batch.set(docRef, schedule)
+      }
+      this.$store.dispatch('app/setLoading', true)
+      batch.commit().then(() => {
+        this.$notify({
+          title: 'Import Success',
+          type: 'success',
+          duration: '4500',
+          position: 'bottom-right'
+        })
+        this.$store.dispatch('app/setLoading', false)
+        this.moveToChannelManageView(this.channel)
+      })
     }
   }
 }

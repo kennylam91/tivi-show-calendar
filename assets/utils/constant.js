@@ -94,7 +94,8 @@ export const FB = {
   channelRef: firebase.firestore().collection('channels'),
   scheduleRef: firebase.firestore().collection('schedules'),
   programRef: firebase.firestore().collection('programs'),
-  timestamp: firebase.firestore.Timestamp
+  timestamp: firebase.firestore.Timestamp,
+  db: firebase.firestore()
 }
 
 export const programRankOptions = [
