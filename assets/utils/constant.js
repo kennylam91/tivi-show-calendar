@@ -132,7 +132,17 @@ export const categoryMap = new Map([
   [19, 'Chiến tranh'],
   [20, 'Hoạt hình'],
   [21, 'Tình cảm'],
-  [22, 'Tâm lý']
+  [22, 'Tâm lý'],
+  [23, 'Phim Trung'],
+  [24, 'Phim Hàn'],
+  [25, 'Phim Nhật'],
+  [26, 'Phim Âu-Mỹ'],
+  [27, 'Phim Việt'],
+  [28, 'Võ thuật'],
+  [29, 'Ngôn tình'],
+  [30, 'Bí ẩn'],
+  [31, 'Gia đình'],
+  [32, 'Talk show']
 ])
 
 export const categoryTagMap = new Map([
@@ -157,7 +167,17 @@ export const categoryTagMap = new Map([
   [19, 'danger'], // 'Chiến tranh',
   [20, 'warning'], // 'Hoạt hình',
   [21, 'success'], // 'Tình cảm',
-  [22, 'success'] // 'Tâm lý',
+  [22, 'success'], // 'Tâm lý',
+  [23, 'primary'],
+  [24, 'primary'],
+  [25, 'primary'],
+  [26, 'primary'],
+  [27, 'primary'],
+  [28, 'danger'],
+  [29, 'success'],
+  [30, 'info'],
+  [31, 'primary'],
+  [32, 'primar']
 ])
 
 export const CATEGORIES = [
@@ -182,7 +202,17 @@ export const CATEGORIES = [
   { value: 19, label: 'Chiến tranh', text: 'Chiến tranh' },
   { value: 20, label: 'Hoạt hình', text: 'Hoạt hình' },
   { value: 21, label: 'Tình cảm', text: 'Tình cảm' },
-  { value: 22, label: 'Tâm lý', text: 'Tâm lý' }
+  { value: 22, label: 'Tâm lý', text: 'Tâm lý' },
+  { value: 23, label: 'Phim Trung', text: 'Phim Trung' },
+  { value: 24, label: 'Phim Hàn', text: 'Phim Hàn' },
+  { value: 25, label: 'Phim Nhật', text: 'Phim Nhật' },
+  { value: 26, label: 'Phim Âu-Mỹ', text: 'Phim Âu-Mỹ' },
+  { value: 27, label: 'Phim Việt', text: 'Phim Việt' },
+  { value: 28, label: 'Võ thuật', text: 'Võ thuật' },
+  { value: 29, label: 'Ngôn tình', text: 'Ngôn tình' },
+  { value: 30, label: 'Bí ẩn', text: 'Bí ẩn' },
+  { value: 31, label: 'Gia đình', text: 'Gia đình' },
+  { value: 32, label: 'Talk show', text: 'Talk show' }
 ].sort((a, b) => {
   if (a.label > b.label) {
     return 1

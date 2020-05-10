@@ -158,7 +158,7 @@ export default {
               title: 'Schedule Created',
               type: 'success',
               duration: '4500',
-              position: 'top-right',
+              position: 'bottom-right',
               top: '100'
             })
 
@@ -178,7 +178,7 @@ export default {
               title: 'Schedule Updated',
               type: 'success',
               duration: '4500',
-              position: 'top-right'
+              position: 'bottom-right'
             })
             this.$emit('saved')
           }).catch(err => {

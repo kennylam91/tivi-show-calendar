@@ -67,10 +67,9 @@
             @click="handleScheduleEditClick(scope.row)"
           >Edit</el-button>
           <el-button
-            v-if="!draft"
             type="danger"
             size="small"
-            @click="handleScheduleDeleteClick(scope.row)"
+            @click="handleScheduleDeleteClick(scope.row,scope.$index)"
           >Delete</el-button>
         </template>
       </el-table-column>
@@ -151,22 +150,26 @@ export default {
       this.schedule = row
       this.createScheduleDialogVisibleProp = true
     },
-    handleScheduleDeleteClick(row) {
-      this.$confirm('Delete this schedule?', 'Delete', {
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel',
-        type: 'error'
-      }).then(() => {
-        this.$store.dispatch('app/deleteSchedule', { scheduleId: row.id }).then(() => {
-          this.$notify({
-            title: 'Schedule Deleted',
-            type: 'success',
-            duration: '4500',
-            position: 'top-right'
+    handleScheduleDeleteClick(row, index) {
+      if (!this.draft) {
+        this.$confirm('Delete this schedule?', 'Delete', {
+          confirmButtonText: 'Delete',
+          cancelButtonText: 'Cancel',
+          type: 'error'
+        }).then(() => {
+          this.$store.dispatch('app/deleteSchedule', { scheduleId: row.id }).then(() => {
+            this.$notify({
+              title: 'Schedule Deleted',
+              type: 'success',
+              duration: '4500',
+              position: 'bottom-right'
+            })
+            this.$emit('changed')
           })
-          this.$emit('changed')
         })
-      })
+      } else {
+        this.scheduleList.splice(index, 1)
+      }
     },
     handleDialogClose() {
       this.schedule = { ...this.scheduleInit }

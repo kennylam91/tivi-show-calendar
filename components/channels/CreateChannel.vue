@@ -76,7 +76,7 @@ export default {
             title: 'Channel Created',
             type: 'success',
             duration: '4500',
-            position: 'top-right'
+            position: 'bottom-right'
           })
           this.$emit('saved')
         }).catch(err => {
@@ -89,7 +89,7 @@ export default {
             title: 'Channel Updated',
             type: 'success',
             duration: '4500',
-            position: 'top-right'
+            position: 'bottom-right'
           })
           this.$emit('saved')
         }).catch(err => {

@@ -41,6 +41,8 @@
 import { mapGetters } from 'vuex'
 import ScheduleTable from '@/components/schedules/ScheduleTable'
 import { FB } from '@/assets/utils/constant'
+import { firebase } from '@/MyFireBase'
+import { getStartOfDayInGMT7 } from '@/assets/utils/index'
 export default {
   components: { ScheduleTable },
   data() {
@@ -97,21 +99,18 @@ export default {
         for (const schedule of dataArray) {
           const array = schedule.split(/\s+/, 3)
 
-          const startTime = array[0]
-          const timeSplitArr = startTime.split(':')
-          const startTimestamp = FB.timestamp.fromMillis(
-            this.importDate.setHours(timeSplitArr[0], timeSplitArr[1], 0, 0))
+          const startTimeStr = array[0]
+          const timeSplitArr = startTimeStr.split(':')
+          const startTime = this.importDate.setHours(Number(timeSplitArr[0]), Number(timeSplitArr[1]), 0, 0)
+
+          const startTimestamp = FB.timestamp.fromMillis(startTime)
 
           // find program
           const foundPrograms = this.programList.filter(item => {
             const nameArr = item.name.split(/\s/)
-            return nameArr[0].toLowerCase() === array[1].toLowerCase()
-            // if (array.length === 2) {
-            //   return nameArr[0].toLowerCase() === array[1].toLowerCase()
-            // } else {
-            //   return nameArr[0].toLowerCase() === array[1].toLowerCase() &&
-            //   nameArr[1].toLowerCase() === array[2].toLowerCase()
-            // }
+            if (nameArr[0] && array[1]) {
+              return nameArr[0].toLowerCase() === array[1].toLowerCase()
+            }
           })
           let program
           if (foundPrograms.length === 1) {
@@ -141,8 +140,15 @@ export default {
       console.log('importScheduleList')
       const batch = FB.db.batch()
       for (const schedule of this.scheduleList) {
-        const docRef = FB.scheduleRef.doc() // auto generate unique id
-        batch.set(docRef, schedule)
+        const scheduleRef = FB.scheduleRef.doc() // auto generate unique id
+        batch.set(scheduleRef, schedule)
+
+        const programRef = FB.programRef.doc(schedule.programId)
+        const startTime = new Date(schedule.startTime.seconds * 1000)
+        // debugger
+        const startOfDateInGMT7 = getStartOfDayInGMT7(startTime)
+        const newSchedules = firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
+        batch.update(programRef, { 'schedules': newSchedules })
       }
       this.$store.dispatch('app/setLoading', true)
       batch.commit().then(() => {
