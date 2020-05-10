@@ -15,7 +15,7 @@
           :alt="program.name"
         >
       </el-link>
-      <div v-if="!program.logo">
+      <div v-else>
         <img class="img-fluid" src="https://via.placeholder.com/400x225" :alt="program.name">
       </div>
       <div

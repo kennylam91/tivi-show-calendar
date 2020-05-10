@@ -120,27 +120,27 @@
       <nuxt />
     </main>
     <el-divider class="m-2" />
-    <footer class="py-2">
+    <footer class="p-4">
       <div class="container">
-        <div class="flex" style="justify-content:space-between;">
-          <div>
-            <nuxt-link class="color-primary " to="/">{{ COMMON.HOMEPAGE }}</nuxt-link><br>
-            <nuxt-link
-              class="color-primary "
-              to="/chuong-trinh-hom-nay"
-            >{{ COMMON.TODAY_PROGRAM }}</nuxt-link><br>
-            <nuxt-link
-              class="color-primary "
-              to="/chuong-trinh-sap-chieu"
-            >{{ COMMON.NEXT_DAY_PROGRAM }}</nuxt-link><br>
-            <nuxt-link
-              class="color-primary "
-              to="/danh-sach-kenh"
-            >{{ COMMON.SCHEDULE }}</nuxt-link>
-          </div>
+        <div class="justify-between-align-center">
           <div>
             <p class="mb-1"><i class="el-icon-message" /> {{ COMMON.CONTACT_US }}</p>
             <p>truyenhinh24h.live@gmail.com</p>
+          </div>
+          <div>
+            <nuxt-link class="color-info bold block" to="/">{{ COMMON.HOMEPAGE }}</nuxt-link>
+            <nuxt-link
+              class="color-info bold block"
+              to="/chuong-trinh-hom-nay"
+            >{{ COMMON.TODAY_PROGRAM }}</nuxt-link>
+            <nuxt-link
+              class="color-info bold block"
+              to="/chuong-trinh-sap-chieu"
+            >{{ COMMON.NEXT_DAY_PROGRAM }}</nuxt-link>
+            <nuxt-link
+              class="color-info bold block"
+              to="/danh-sach-kenh"
+            >{{ COMMON.SCHEDULE }}</nuxt-link>
           </div>
         </div>
       </div>
