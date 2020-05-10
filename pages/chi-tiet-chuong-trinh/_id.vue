@@ -71,32 +71,19 @@
                     {{ row.endTime.seconds | parseTime }}
                   </td>
                   <td>
-                    <el-tooltip
-                      :content="COMMON.ADD_TO_GOOGLE_CAL"
-                      placement="bottom-start"
-                      effect="dark"
-                    >
-                      <el-button
-                        v-if="isShowAddBtn(row)"
-                        size="small"
-                        type="success"
-                        circle
-                        icon="el-icon-plus"
-                        @click="addScheduleToGGCal(row)"
-                      />
-                    </el-tooltip>
+                    <i
+                      v-if="isShowAddBtn(row)"
+                      class="large-font-size el-icon-bell pointer color-primary"
+                      @click="addScheduleToGGCal(row)"
+                    />
                   </td>
                 </tr>
               </tbody>
             </table>
             <div class="small-font-size">
-              <span> {{ COMMON.CLICK_BUTTON }}</span>
-              <el-button
-                size="mini"
-                type="success"
-                circle
-                icon="el-icon-plus"
-                style="display: inline;"
+              <span> Click</span>
+              <i
+                class="large-font-size el-icon-bell pointer color-primary"
               />
               <span>{{ COMMON.TO_ADD_GG_CAL }}</span> <br>
               <p>{{ COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE }}</p>
@@ -114,18 +101,7 @@
           <p class="small-font-size">{{ program.description }}</p>
         </article>
       </el-card>
-      <el-card shadow="never" :body-style="{ padding: '5px' }">
-        <span>Tags: </span>
-        <el-tag
-          v-for="(item) in tags"
-          :key="item"
-          style="margin: 2px;"
-          size="mini"
-          type="info"
-          effect="plain"
-        >{{ item }}</el-tag>
-
-      </el-card>
+      <el-card shadow="never" />
     </section>
   </div>
 
@@ -242,7 +218,8 @@ export default {
         this.$message({
           offset: 100,
           message: this.COMMON.SCHEDULE_ADDED_SUCCESS,
-          type: 'success'
+          type: 'success',
+          center: true
         })
         this.addedSchedule.push(schedule)
       })

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-card
-      shadow="hover"
+      shadow="never"
       :body-style="{ padding: '5px','text-align':'center',background: '#6062662e' }"
     >
       <el-link

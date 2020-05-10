@@ -16,8 +16,11 @@
     </article>
 
     <article class="py-2">
-      <nuxt-link to="/chuong-trinh-hom-nay">
-        <h4 class="articleTitle">{{ COMMON.VIP_INCOMING_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
+      <h4 class="articleTitle">
+        <nuxt-link to="/chuong-trinh-hom-nay">
+          {{ COMMON.VIP_INCOMING_PROGRAM | uppercaseAll }} >>
+        </nuxt-link>
+      </h4>
       <div class="row mt-2">
         <div
           v-for="program in onGoingTodayProgramList"
@@ -30,8 +33,10 @@
     </article>
 
     <article class="py-2">
-      <nuxt-link to="/chuong-trinh-sap-chieu">
-        <h4 class="articleTitle">{{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
+      <h4 class="articleTitle">
+        <nuxt-link to="/chuong-trinh-sap-chieu">
+          {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></nuxt-link>
+      </h4>
       <div class="row mt-2">
         <div
           v-for="program in nextDaysVipProgramList"
@@ -44,13 +49,15 @@
     </article>
 
     <article class="py-2">
-      <nuxt-link to="/danh-sach-kenh">
-        <h4 class="articleTitle">{{ COMMON.VIP_CHANNEL | uppercaseAll }} >></h4>
-      </nuxt-link>
+      <h4 class="articleTitle">
+        <nuxt-link to="/danh-sach-kenh">
+          {{ COMMON.VIP_CHANNEL | uppercaseAll }} >>
+        </nuxt-link>
+      </h4>
 
       <div class="row mt-2">
         <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
-          <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
+          <el-card shadow="never" :body-style="{ padding: '5px','text-align':'center' }">
             <el-link
               v-if="channel.logo"
               :underline="false"

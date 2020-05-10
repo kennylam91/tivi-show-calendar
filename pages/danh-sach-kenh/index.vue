@@ -20,18 +20,6 @@
         </div>
         <ChannelTable v-if="channelList" :channel-list="channelList" :is-admin="false" />
       </el-card>
-      <el-card shadow="never" :body-style="{ padding: '5px' }">
-        <span>Tags: </span>
-        <el-tag
-          v-for="(item) in tags"
-          :key="item"
-          style="margin: 2px;"
-          size="mini"
-          type="info"
-          effect="plain"
-        >{{ item }}</el-tag>
-
-      </el-card>
     </section>
 
   </div>
@@ -39,15 +27,11 @@
 <script>
 import ChannelTable from '@/components/channels/ChannelTable'
 import { mapGetters } from 'vuex'
-import { COMMON } from '@/assets/utils/constant'
 
 export default {
   components: { ChannelTable },
   data() {
     return {
-      tags: [COMMON.SCHEDULE, COMMON.SCHEDULE + ' HBO', COMMON.SCHEDULE + ' FOX MOVIES',
-        COMMON.SCHEDULE + ' CINEMAX', COMMON.SCHEDULE + ' AXN', COMMON.SCHEDULE + ' DISCOVERY',
-        COMMON.SCHEDULE + ' RED BY HBO', COMMON.TODAY_SCHEDULE, COMMON.TODAY_SCHEDULE_2, COMMON.GOOD_MOVIE]
     }
   },
   computed: {

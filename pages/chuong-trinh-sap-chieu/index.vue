@@ -41,18 +41,6 @@
           </div></div>
       </el-card>
     </section>
-    <el-card shadow="never" :body-style="{ padding: '5px' }">
-      <span>Tags: </span>
-      <el-tag
-        v-for="(item) in tags"
-        :key="item"
-        style="margin: 2px;"
-        size="mini"
-        type="info"
-        effect="plain"
-      >{{ item }}</el-tag>
-
-    </el-card>
 
     <el-dialog
       :key="dialogKey"
@@ -81,10 +69,7 @@ export default {
       programData: null,
       searchDialogVisible: false,
       dialogKey: 0,
-      isSearching: false,
-      tags: [COMMON.SCHEDULE, COMMON.SCHEDULE + ' HBO', COMMON.SCHEDULE + ' FOX MOVIES',
-        COMMON.SCHEDULE + ' CINEMAX', COMMON.SCHEDULE + ' AXN', COMMON.SCHEDULE + ' DISCOVERY',
-        COMMON.SCHEDULE + ' RED BY HBO', COMMON.TODAY_SCHEDULE, COMMON.TODAY_SCHEDULE_2, COMMON.GOOD_MOVIE]
+      isSearching: false
     }
   },
   computed: {

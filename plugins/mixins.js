@@ -16,7 +16,11 @@ Vue.mixin({
   data() {
     return {
       COMMON,
-      CATEGORIES
+      CATEGORIES,
+      defaultTags: [COMMON.SCHEDULE + ' HBO', COMMON.SCHEDULE + ' FOX MOVIES',
+        COMMON.SCHEDULE + ' CINEMAX', COMMON.SCHEDULE + ' AXN', COMMON.SCHEDULE + ' DISCOVERY',
+        COMMON.SCHEDULE + ' RED BY HBO', COMMON.TODAY_SCHEDULE, COMMON.TODAY_SCHEDULE_2]
+
     }
   },
   methods: {

@@ -14,7 +14,11 @@
       <el-button type="text" @click="handleLogout">Log out</el-button>
     </div>
 
-    <el-card class="my-2" :body-style="{ padding: '16px' }">
+    <el-card
+      shadow="never"
+      class="my-2"
+      :body-style="{ padding: '16px' }"
+    >
       <div slot="header" class="justify-between-align-center">
         <span class="bold">{{ COMMON.CHANNEL_LIST }}</span>
         <el-button type="primary" size="small" plain @click="handleCreateChannelClick">{{ COMMON.CREATE_CHANNEL }}</el-button>

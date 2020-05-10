@@ -16,7 +16,7 @@
                 <span><i class="el-icon-s-home" /><span>{{ COMMON.HOMEPAGE }}</span></span>
               </el-menu-item>
               <el-submenu index="2">
-                <template slot="title">{{ COMMON.SCHEDULE }}</template>
+                <template slot="title"><span> {{ COMMON.SCHEDULE }}</span></template>
                 <el-menu-item index="2-1">
                   {{ COMMON.CHANNEL_LIST }}
                 </el-menu-item>
@@ -118,30 +118,41 @@
     </header>
     <main class="container" style="margin-top: 60px;">
       <nuxt />
+      <el-divider class="my-2" />
+      <Tags :tags="defaultTags" />
     </main>
     <el-divider class="m-2" />
-    <footer class="p-4">
+    <footer class="py-4 px-2">
       <div class="container">
         <div class="justify-between-align-center">
           <div>
-            <p class="mb-1"><i class="el-icon-message" /> {{ COMMON.CONTACT_US }}</p>
-            <p>truyenhinh24h.live@gmail.com</p>
+            <div class="mb-2">
+              <nuxt-link class="color-primary bold" to="/"><i class="el-icon-s-home" /> {{ COMMON.HOMEPAGE }}</nuxt-link>
+            </div>
+            <div>
+              <nuxt-link
+                class="color-primary bold block"
+                to="/danh-sach-kenh"
+              ><i class="el-icon-date" /> {{ COMMON.SCHEDULE }}</nuxt-link>
+            </div>
           </div>
           <div>
-            <nuxt-link class="color-info bold block" to="/">{{ COMMON.HOMEPAGE }}</nuxt-link>
-            <nuxt-link
-              class="color-info bold block"
-              to="/chuong-trinh-hom-nay"
-            >{{ COMMON.TODAY_PROGRAM }}</nuxt-link>
-            <nuxt-link
-              class="color-info bold block"
-              to="/chuong-trinh-sap-chieu"
-            >{{ COMMON.NEXT_DAY_PROGRAM }}</nuxt-link>
-            <nuxt-link
-              class="color-info bold block"
-              to="/danh-sach-kenh"
-            >{{ COMMON.SCHEDULE }}</nuxt-link>
+            <div class="mb-2">
+              <nuxt-link
+                class="color-primary bold block"
+                to="/chuong-trinh-hom-nay"
+              ><i class="el-icon-video-play" /> {{ COMMON.TODAY_PROGRAM }}</nuxt-link>
+            </div>
+            <div>
+              <nuxt-link
+                class="color-primary bold block"
+                to="/chuong-trinh-sap-chieu"
+              ><i class="el-icon-time" /> {{ COMMON.NEXT_DAY_PROGRAM }}</nuxt-link>
+            </div>
           </div>
+        </div>
+        <div class="mt-2">
+          <p><i class="el-icon-message" /> {{ COMMON.CONTACT_US }} : truyenhinh24h.live@gmail.com</p>
         </div>
       </div>
 
@@ -152,9 +163,10 @@
 import { mapGetters } from 'vuex'
 import { COMMON } from '@/assets/utils/constant'
 import SearchResult from '@/components/search/SearchResult'
+import Tags from '@/components/tags/Tags'
 
 export default {
-  components: { SearchResult },
+  components: { SearchResult, Tags },
   data() {
     return {
       activeIndex: '1',
@@ -172,6 +184,7 @@ export default {
       searchText: '',
       visible: false,
       searchAllResults: null
+
     }
   },
   computed: {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :body-style="{ padding: '5px' }">
+    <el-card shadow="never" :body-style="{ padding: '5px' }">
       <div slot="header" class="justify-between-align-center">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/dashboard' }">Dashboard</el-breadcrumb-item>

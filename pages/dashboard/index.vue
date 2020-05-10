@@ -9,12 +9,12 @@
       <el-button type="text" @click="handleLogout">Log out</el-button>
 
     </div>
-    <el-card :body-style="{ padding: '16px' }">
+    <el-card shadow="never" :body-style="{ padding: '16px' }">
       <nuxt-link to="/channels">{{ COMMON.CHANNEL_LIST }}</nuxt-link>
 
     </el-card>
 
-    <el-card class="my-2" :body-style="{ padding: '16px' }">
+    <el-card shadow="never" class="my-2" :body-style="{ padding: '16px' }">
 
       <nuxt-link to="/programs">
         <div class="mb-2">{{ COMMON.PROGRAM_LIST }}</div></nuxt-link>

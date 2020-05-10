@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :body-style="{ padding: '16px' }">
+    <el-card shadow="never" :body-style="{ padding: '16px' }">
       <div slot="header" class="justify-between-align-center">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/dashboard' }">{{ COMMON.DASHBOARD }}</el-breadcrumb-item>
@@ -9,7 +9,7 @@
         </el-breadcrumb>
         <el-button type="primary" size="small" plain @click="handleCreateProgramClick">Create Program</el-button>
       </div>
-      <el-card :body-style="{ padding: '0px' }">
+      <el-card shadow="never" :body-style="{ padding: '0px' }">
         <div slot="header">
           <div v-if="nextDaysProgramList">{{ `${COMMON.TODAY_PROGRAM} (${nextDaysProgramList.length})` }}</div>
           <div>{{ `${COMMON.SHOW_ON_HOMEPAGE}: ${nextDaysShowNum}` }}</div>

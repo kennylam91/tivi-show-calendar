@@ -10,7 +10,7 @@
       </el-breadcrumb>
     </div>
 
-    <el-card :body-style="{ padding: '10px' }">
+    <el-card shadow="never" :body-style="{ padding: '10px' }">
       <div class="row">
         <div
           class="col-sm-4 col-md-2 text-center mb-2 pt-1"
@@ -93,21 +93,11 @@
               </el-tag>
             </td>
             <td>
-              <el-tooltip
-                :content="COMMON.ADD_TO_GOOGLE_CAL"
-                placement="bottom-start"
-                effect="dark"
-              >
-                <el-button
-                  v-if="isShowAddBtn(row)"
-                  size="small"
-                  type="success"
-                  circle
-                  icon="el-icon-plus"
-                  @click="addScheduleToGGCal(row)"
-                />
-              </el-tooltip>
-
+              <i
+                v-if="isShowAddBtn(row)"
+                class="large-font-size el-icon-bell pointer color-primary"
+                @click="addScheduleToGGCal(row)"
+              />
             </td>
           </tr>
 
@@ -115,30 +105,13 @@
 
       </table>
       <div class="small-font-size">
-        <span> {{ COMMON.CLICK_BUTTON }}</span>
-        <el-button
-          size="mini"
-          type="success"
-          circle
-          icon="el-icon-plus"
-          style="display: inline;"
+        <span> Click</span>
+        <i
+          class="large-font-size el-icon-bell pointer color-primary"
         />
         <span>{{ COMMON.TO_ADD_GG_CAL }}</span><br>
         <p>{{ COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE }}</p>
       </div>
-    </el-card>
-
-    <el-card shadow="never" :body-style="{ padding: '5px' }">
-      <span>Tags: </span>
-      <el-tag
-        v-for="(item) in tags"
-        :key="item"
-        style="margin: 2px;"
-        size="mini"
-        type="info"
-        effect="plain"
-      >{{ item }}</el-tag>
-
     </el-card>
 
   </div>
@@ -148,9 +121,10 @@ import { parseVNTime } from '@/assets/utils/index'
 import { mapGetters } from 'vuex'
 import { FB, COMMON } from '@/assets/utils/constant'
 import { categoryTagMap } from '@/assets/utils/constant'
+import Tags from '@/components/tags/Tags'
 
 export default {
-  components: { },
+  components: { Tags },
   asyncData({ params, store }) {
     const channelId = params.id.split('_').pop()
     let scheduleData
@@ -184,11 +158,7 @@ export default {
       scheduleData: [],
       channel: null,
       categoryTagMap: categoryTagMap,
-      addedSchedule: [],
-      tags: [COMMON.SCHEDULE, COMMON.SCHEDULE + ' HBO', COMMON.SCHEDULE + ' FOX MOVIES',
-        COMMON.SCHEDULE + ' CINEMAX', COMMON.SCHEDULE + ' AXN', COMMON.SCHEDULE + ' DISCOVERY',
-        COMMON.SCHEDULE + ' RED BY HBO', COMMON.TODAY_SCHEDULE, COMMON.TODAY_SCHEDULE_2, COMMON.GOOD_MOVIE]
-
+      addedSchedule: []
     }
   },
   computed: {
@@ -273,7 +243,8 @@ export default {
         this.$message({
           offset: 100,
           message: this.COMMON.SCHEDULE_ADDED_SUCCESS,
-          type: 'success'
+          type: 'success',
+          center: true
         })
         this.addedSchedule.push(schedule)
       })
