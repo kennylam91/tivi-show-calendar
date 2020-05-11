@@ -8,7 +8,7 @@
               ref="mainMenu"
               :default-active="activeIndex"
               mode="horizontal"
-              active-text-color="#1890ff"
+              active-text-color="#003a77"
               menu-trigger="click"
               @select="handleSelect"
             >
@@ -83,7 +83,7 @@
           id="verticalMenu"
           ref="mainMenu"
           style="position:fixed; top: 65px; z-index: 99999; width: 100%;"
-          active-text-color="#1890ff"
+          active-text-color="#003a77"
           :default-active="activeIndex"
           mode="vertical"
           menu-trigger="click"
