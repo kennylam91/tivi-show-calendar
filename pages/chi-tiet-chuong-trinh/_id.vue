@@ -181,7 +181,6 @@ export default {
       return this.addedSchedule.some(item => item.id === schedule.id)
     },
     addScheduleToGGCal(schedule) {
-      console.log('addScheduleToGGCal')
       const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get()
       if (!isSignedIn) {
         gapi.auth2.getAuthInstance().signIn().then(() => {

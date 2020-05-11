@@ -135,7 +135,6 @@ export default {
   },
   methods: {
     handleCreateSchedule() {
-      console.log('handleCreateSchedule')
       this.createScheduleDialogVisibleProp = true
     },
     parseVNTime(time) {

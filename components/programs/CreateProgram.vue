@@ -118,7 +118,6 @@ export default {
     onSubmit() {
       if (!this.programData.id) {
         this.$store.dispatch('app/createProgram', this.programData).then(() => {
-          console.log('add program success')
           this.$notify({
             title: 'Program Created',
             type: 'success',
@@ -141,7 +140,6 @@ export default {
         })
       } else {
         this.$store.dispatch('app/updateProgram', this.programData).then(() => {
-          console.log('update program ok')
           this.$notify({
             title: 'Program Updated',
             type: 'success',

@@ -68,10 +68,8 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log('onSubmit')
       if (!this.channelData.id) {
         this.$store.dispatch('app/createChannel', this.channelData).then(() => {
-          console.log('add channel success')
           this.$notify({
             title: 'Channel Created',
             type: 'success',
@@ -84,7 +82,6 @@ export default {
         })
       } else {
         this.$store.dispatch('app/updateChannel', this.channelData).then(() => {
-          console.log('update channel ok')
           this.$notify({
             title: 'Channel Updated',
             type: 'success',

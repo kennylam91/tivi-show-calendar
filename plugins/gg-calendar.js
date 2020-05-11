@@ -24,25 +24,3 @@ function updateSigninStatus(isSignedIn) {
     console.log('sign in')
   }
 }
-// function listUpcomingEvents() {
-//   gapi.client.calendar.events.list({
-//     'calendarId': 'primary',
-//     'timeMin': (new Date()).toISOString(),
-//     'showDeleted': false,
-//     'singleEvents': true,
-//     'maxResults': 10,
-//     'orderBy': 'startTime'
-//   }).then(function(response) {
-//     var events = response.result.items
-
-//     if (events.length > 0) {
-//       for (let i = 0; i < events.length; i++) {
-//         var event = events[i]
-//         var when = event.start.dateTime
-//         if (!when) {
-//           when = event.start.date
-//         }
-//       }
-//     }
-//   })
-// }

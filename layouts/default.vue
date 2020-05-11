@@ -227,7 +227,6 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(key, keyPath)
       if (keyPath[0] === '1') {
         this.$router.push({ path: '/' })
       }
@@ -257,8 +256,6 @@ export default {
       this.handleSelect(key, keyPath)
     },
     handlSearchAll() {
-      console.log('handlSearchAll')
-
       const lowerCaseSearchText = this.searchText.trim().toLowerCase()
       if (lowerCaseSearchText.length < 2) {
         this.$message({

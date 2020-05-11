@@ -62,7 +62,6 @@ export default {
   },
   methods: {
     handleCreateChannelClick() {
-      console.log('handleCreateChannelClick')
       this.$router.push({ path: '/channels/create' })
     }
   }

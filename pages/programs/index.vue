@@ -167,15 +167,12 @@ export default {
       return map.get(value)
     },
     handleCreateProgramClick() {
-      console.log('handleCreateProgramClick')
       this.$router.push({ path: '/programs/create' })
     },
     handleProgramEditClick(row) {
-      console.log(row)
       this.$router.push({ path: `/programs/edit/${row.id}` })
     },
     handleProgramDeleteClick(row) {
-      console.log(row)
       this.$confirm('Delete this program?', 'Delete', {
         confirmButtonText: 'Delete',
         cancelButtonText: 'Cancel',

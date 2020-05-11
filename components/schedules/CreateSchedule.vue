@@ -139,7 +139,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log('onSubmit')
       const id = this.scheduleData.id
       this.validateSchedule(this.scheduleData).then(() => {
         this.removeProperty(this.scheduleData)
@@ -153,7 +152,6 @@ export default {
             FB.programRef.doc(this.selectedProgram.id).update({
               schedules: firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
             })
-            console.log('add schedule success')
             this.$notify({
               title: 'Schedule Created',
               type: 'success',
@@ -173,7 +171,6 @@ export default {
             FB.programRef.doc(this.selectedProgram.id).update({
               schedules: firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
             })
-            console.log('update schedule ok')
             this.$notify({
               title: 'Schedule Updated',
               type: 'success',
@@ -225,8 +222,6 @@ export default {
         previousScheduleQuery.onSnapshot((querySnapshot) => {
           if (!querySnapshot.empty) {
             querySnapshot.forEach((foundSchedule) => {
-              console.log(foundSchedule)
-              console.log(foundSchedule.data())
               // compare schedule startTime after foundSchedule endTime, if true: valid, else inValid
               if (Date.parse(schedule.startTime) < foundSchedule.data().endTime.seconds * 1000) {
                 reject('Invalid StartTime')
@@ -235,7 +230,6 @@ export default {
                 nextScheduleQuery.onSnapshot((querySnapshot) => {
                   if (!querySnapshot.empty) {
                     querySnapshot.forEach((foundSchedule) => {
-                      console.log(foundSchedule.data())
                       if (Date.parse(schedule.endTime) > foundSchedule.data().startTime.seconds * 1000) {
                         reject('Invalid EndTime')
                       } else {

@@ -92,7 +92,6 @@ export default {
   },
   methods: {
     handleInputChange() {
-      console.log('handleInputChange')
       const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
       const scheduleArr = []
       if (this.importDate) {
@@ -137,7 +136,6 @@ export default {
       this.scheduleList = scheduleArr
     },
     importScheduleList() {
-      console.log('importScheduleList')
       const batch = FB.db.batch()
       for (const schedule of this.scheduleList) {
         const scheduleRef = FB.scheduleRef.doc() // auto generate unique id

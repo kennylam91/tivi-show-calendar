@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     handleSavedAction() {
-      console.log('handleSavedAction')
       this.$router.push({ path: '/programs' })
     },
     handleCancel() {

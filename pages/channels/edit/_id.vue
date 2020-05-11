@@ -47,7 +47,6 @@ export default {
   },
   methods: {
     handleSavedAction() {
-      console.log('handleSavedAction')
       this.$store.dispatch('app/fetchChannelList')
       this.$router.push({ path: '/channels' })
     },
