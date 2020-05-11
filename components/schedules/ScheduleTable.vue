@@ -2,16 +2,16 @@
   <div>
     <el-table :data="scheduleList" border stripe style="width: 100%" size="small">
       <el-table-column
-        label="Start Time"
-        width="100"
+        label="Start"
+        width="75"
       >
         <template slot-scope="{row}">
           <div>{{ parseVNTime(row.startTime.seconds) }}</div>
         </template>
       </el-table-column>
       <el-table-column
-        label="End Time"
-        width="100"
+        label="End"
+        width="75"
       >
         <template slot-scope="{row}">
           <div>{{ parseVNTime(row.endTime.seconds) }}</div>
@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column
         label="Categories"
-        width="170"
+        width="200"
       >
         <template slot-scope="{row}">
           <el-tag
@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        width="180"
+        width="220"
       >
         <template slot="header">
           <el-button
@@ -58,7 +58,12 @@
             size="small"
             @click="handleCreateSchedule"
           >Create</el-button>
-          <el-button v-if="!draft" type="success" size="small" @click="handleImportSchedule">Import</el-button>
+          <el-button
+            v-if="!draft"
+            type="success"
+            size="small"
+            @click="handleImportSchedule"
+          >Import</el-button>
 
         </template>
         <template slot-scope="scope">
