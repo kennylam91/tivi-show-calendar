@@ -1,9 +1,10 @@
 <template>
   <div>
     <article class="pb-2 pt-4">
-      <h4 class="articleTitle">
-        {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseAll }}
+      <h4 class="color-dark">
+        {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseFirst }}
       </h4>
+      <el-divider class="mt-4 mb-2" />
       <div class="row">
         <div
           v-for="program in broadCastingPrograms"
@@ -16,11 +17,12 @@
     </article>
 
     <article class="py-2">
-      <h4 class="articleTitle">
-        <nuxt-link to="/chuong-trinh-hom-nay">
-          {{ COMMON.VIP_INCOMING_PROGRAM | uppercaseAll }} >>
-        </nuxt-link>
-      </h4>
+      <nuxt-link to="/chuong-trinh-hom-nay">
+        <h4 class="color-dark">
+          {{ COMMON.VIP_INCOMING_PROGRAM | uppercaseFirst }}
+        </h4>
+        <el-divider class="mt-4 mb-2" />
+      </nuxt-link>
       <div class="row mt-2">
         <div
           v-for="program in onGoingTodayProgramList"
@@ -33,10 +35,12 @@
     </article>
 
     <article class="py-2">
-      <h4 class="articleTitle">
-        <nuxt-link to="/chuong-trinh-sap-chieu">
-          {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></nuxt-link>
-      </h4>
+      <nuxt-link to="/chuong-trinh-hom-nay">
+        <h4 class="color-dark">
+          {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseFirst }}
+        </h4>
+        <el-divider class="mt-4 mb-2" />
+      </nuxt-link>
       <div class="row mt-2">
         <div
           v-for="program in nextDaysVipProgramList"
@@ -49,11 +53,12 @@
     </article>
 
     <article class="py-2">
-      <h4 class="articleTitle">
-        <nuxt-link to="/danh-sach-kenh">
-          {{ COMMON.VIP_CHANNEL | uppercaseAll }} >>
-        </nuxt-link>
-      </h4>
+      <nuxt-link to="/danh-sach-kenh">
+        <h4 class="color-dark">
+          {{ COMMON.VIP_CHANNEL | uppercaseFirst }}
+        </h4>
+        <el-divider class="mt-4 mb-2" />
+      </nuxt-link>
 
       <div class="row mt-2">
         <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
