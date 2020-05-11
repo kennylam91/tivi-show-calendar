@@ -20,11 +20,6 @@
           <img class="img-fluid" src="https://via.placeholder.com/400x225" :alt="program.name">
         </div>
       </div>
-      <!-- <div
-        class="color-info smaller-font-size my-2 shorten-text"
-      >
-        {{ program.name | shortenName | uppercaseAll }}
-      </div> -->
       <el-link
         class="mb-2 w-100"
         type="primary"
@@ -40,15 +35,14 @@
         <span
           v-for="(item, index) in getCategoryList(program.categories)"
           :key="index"
-          :class="{'categoryTag':!small, 'categoryTagSmall': small }"
-          class="small-font-size"
+          class="small-font-size color-info"
         >
           {{ item | getCategory }}
-          <el-divider v-if="index===0" direction="vertical" />
+          <el-divider v-if="index===0 && getCategoryList(program.categories).length >=2" direction="vertical" />
         </span>
 
       </div>
-      <div v-if="live" class="small-font-size mb-1 " style="color: #999;">
+      <div v-if="live" class="small-font-size mb-1 color-info ">
         <span>{{ program.schedule.channelName }}</span>
         <el-divider direction="vertical" />
         {{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}
