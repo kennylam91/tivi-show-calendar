@@ -1,7 +1,7 @@
 <template>
   <div>
     <article class="pb-2 pt-4">
-      <h4 class="color-dark">
+      <h4 class="color-dark-blue">
         {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseFirst }}
       </h4>
       <el-divider class="mt-4 mb-2" />
@@ -18,7 +18,7 @@
 
     <article class="py-2">
       <nuxt-link to="/chuong-trinh-hom-nay">
-        <h4 class="color-dark">
+        <h4 class="color-dark-blue">
           {{ COMMON.VIP_INCOMING_PROGRAM | uppercaseFirst }}
         </h4>
         <el-divider class="mt-4 mb-2" />
@@ -36,7 +36,7 @@
 
     <article class="py-2">
       <nuxt-link to="/chuong-trinh-hom-nay">
-        <h4 class="color-dark">
+        <h4 class="color-dark-blue">
           {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseFirst }}
         </h4>
         <el-divider class="mt-4 mb-2" />
@@ -54,7 +54,7 @@
 
     <article class="py-2">
       <nuxt-link to="/danh-sach-kenh">
-        <h4 class="color-dark">
+        <h4 class="color-dark-blue">
           {{ COMMON.VIP_CHANNEL | uppercaseFirst }}
         </h4>
         <el-divider class="mt-4 mb-2" />

@@ -1,4 +1,5 @@
 @import './element-variables.scss';
+$--color-dark-blue:  #003a77;
 
 .color-primary {
   color: $--color-primary !important;
@@ -20,6 +21,9 @@
 }
 .color-dark{
   color: $--color-dark!important;
+}
+.color-dark-blue{
+  color: $--color-dark-blue!important;
 }
 .flex {
   display: flex
@@ -194,7 +198,6 @@ footer{
   }
   .pageTitle{
     font-size: 1.5rem!important;
- 
   }
   .channelNameLink{
     font-size: 1rem!important;

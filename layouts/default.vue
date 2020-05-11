@@ -127,11 +127,11 @@
         <div class="justify-between-align-center">
           <div>
             <div class="mb-2">
-              <nuxt-link class="color-primary bold" to="/"><i class="el-icon-s-home" /> {{ COMMON.HOMEPAGE }}</nuxt-link>
+              <nuxt-link class="color-dark-blue bold" to="/"><i class="el-icon-s-home" /> {{ COMMON.HOMEPAGE }}</nuxt-link>
             </div>
             <div>
               <nuxt-link
-                class="color-primary bold block"
+                class="color-dark-blue bold block"
                 to="/danh-sach-kenh"
               ><i class="el-icon-date" /> {{ COMMON.SCHEDULE }}</nuxt-link>
             </div>
@@ -139,13 +139,13 @@
           <div>
             <div class="mb-2">
               <nuxt-link
-                class="color-primary bold block"
+                class="color-dark-blue bold block"
                 to="/chuong-trinh-hom-nay"
               ><i class="el-icon-video-play" /> {{ COMMON.TODAY_PROGRAM }}</nuxt-link>
             </div>
             <div>
               <nuxt-link
-                class="color-primary bold block"
+                class="color-dark-blue bold block"
                 to="/chuong-trinh-sap-chieu"
               ><i class="el-icon-time" /> {{ COMMON.NEXT_DAY_PROGRAM }}</nuxt-link>
             </div>
