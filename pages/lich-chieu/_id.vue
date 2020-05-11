@@ -54,11 +54,15 @@
         </div>
       </div>
 
-      <table class="table table-hover small-font-size table-sm">
-        <tr class="color-info ">
-          <th scope="col">Time</th>
-          <th scope="col">{{ COMMON.PROGRAM_NAME }}</th>
-          <th class="categoryColumn">{{ COMMON.CATEGORY }}</th>
+      <table id="scheduleTable" class="table table-hover">
+        <tr class="color-info text-left">
+          <th scope="col">
+            <span>Time</span>
+          </th>
+          <th scope="col">
+            <span>{{ COMMON.PROGRAM_NAME }}</span>
+          </th>
+          <!-- <th class="categoryColumn">{{ COMMON.CATEGORY }}</th> -->
           <td />
         </tr>
         <tbody>
@@ -67,20 +71,18 @@
             :key="index"
             :class="{scheduleInShowing : isShowing(row)}"
           >
-            <td style="padding-top: 6px;">
-              <strong>{{ parseTime(row.startTime.seconds) }}</strong>
+            <td style="">
+              <span>{{ parseTime(row.startTime.seconds) }}</span>
             </td>
             <td>
               <el-link
                 :underline="false"
                 @click="viewProgramDetail(row)"
               >
-                <span
-                  class="color-primary smaller-font-size"
-                >{{ row.programName | uppercaseAll }}</span>
+                <span>{{ row.programName | uppercaseAll }}</span>
               </el-link>
             </td>
-            <td class="categoryColumn">
+            <!-- <td class="categoryColumn">
               <el-tag
                 v-for="item in row.categories.filter(item => item !== 1)"
                 :key="item"
@@ -91,7 +93,7 @@
               >
                 {{ item | getCategory }}
               </el-tag>
-            </td>
+            </td> -->
             <td>
               <i
                 v-if="isShowAddBtn(row)"

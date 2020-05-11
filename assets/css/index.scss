@@ -29,10 +29,10 @@ $--color-dark-blue:  #003a77;
   display: flex
 }
 .small-font-size{
-  font-size: 0.875rem;
+  font-size: 0.875rem !important;
 }
 .smaller-font-size{
-  font-size: 0.75rem;
+  font-size: 0.75rem !important;
 }
 .large-font-size{
   font-size: 1.125rem;
@@ -188,6 +188,14 @@ footer{
 .el-divider--vertical{
   margin: 0!important;
 }
+#scheduleTable td, th{
+  vertical-align: middle;
+  padding: 8px!important;
+}
+#scheduleTable a, span{
+  @extend .smaller-font-size;
+
+}
 
 @media only screen and (min-width: 768px) { 
   .categoryColumn{
@@ -204,6 +212,12 @@ footer{
   }
   footer{
     font-size: 1rem;
+  }
+  #scheduleTable a, span{
+    font-size: 0.875rem !important;
+  }
+  #scheduleTable td, th{
+    padding: 12px!important;
   }
   
 }
