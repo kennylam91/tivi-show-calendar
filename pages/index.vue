@@ -17,12 +17,12 @@
     </article>
 
     <article class="py-2">
-      <nuxt-link to="/chuong-trinh-hom-nay">
-        <h4 class="color-dark-blue">
+      <h4>
+        <nuxt-link to="/chuong-trinh-hom-nay" class="color-dark-blue">
           {{ COMMON.VIP_INCOMING_PROGRAM | uppercaseFirst }}
-        </h4>
-        <el-divider class="mt-4 mb-2" />
-      </nuxt-link>
+          <el-divider class="mt-4 mb-2" />
+        </nuxt-link>
+      </h4>
       <div class="row mt-2">
         <div
           v-for="program in onGoingTodayProgramList"
@@ -35,12 +35,12 @@
     </article>
 
     <article class="py-2">
-      <nuxt-link to="/chuong-trinh-hom-nay">
-        <h4 class="color-dark-blue">
+      <h4>
+        <nuxt-link to="/chuong-trinh-hom-nay" class="color-dark-blue">
           {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseFirst }}
-        </h4>
-        <el-divider class="mt-4 mb-2" />
-      </nuxt-link>
+        </nuxt-link>
+      </h4>
+      <el-divider class="mt-4 mb-2" />
       <div class="row mt-2">
         <div
           v-for="program in nextDaysVipProgramList"
@@ -53,12 +53,12 @@
     </article>
 
     <article class="py-2">
-      <nuxt-link to="/danh-sach-kenh">
-        <h4 class="color-dark-blue">
+      <h4>
+        <nuxt-link to="/danh-sach-kenh" class="color-dark-blue">
           {{ COMMON.VIP_CHANNEL | uppercaseFirst }}
-        </h4>
-        <el-divider class="mt-4 mb-2" />
-      </nuxt-link>
+        </nuxt-link>
+      </h4>
+      <el-divider class="mt-4 mb-2" />
 
       <div class="row mt-2">
         <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
