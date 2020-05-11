@@ -1,9 +1,10 @@
 <template>
   <div>
     <article class="pb-2 pt-4">
-      <h4 class="color-primary">
-        {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseAll }}
+      <h4 class="color-dark">
+        {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseFirst }}
       </h4>
+      <el-divider class="mt-4 mb-2" />
       <div class="row">
         <div
           v-for="program in broadCastingPrograms"
@@ -17,7 +18,11 @@
 
     <article class="py-2">
       <nuxt-link to="/chuong-trinh-hom-nay">
-        <h4 class="color-primary">{{ COMMON.VIP_INCOMING_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
+        <h4 class="color-dark">
+          {{ COMMON.VIP_INCOMING_PROGRAM | uppercaseFirst }}
+        </h4>
+        <el-divider class="mt-4 mb-2" />
+      </nuxt-link>
       <div class="row mt-2">
         <div
           v-for="program in onGoingTodayProgramList"
@@ -31,7 +36,11 @@
 
     <article class="py-2">
       <nuxt-link to="/chuong-trinh-hom-nay">
-        <h4 class="color-primary">{{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseAll }} >></h4></nuxt-link>
+        <h4 class="color-dark">
+          {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseFirst }}
+        </h4>
+        <el-divider class="mt-4 mb-2" />
+      </nuxt-link>
       <div class="row mt-2">
         <div
           v-for="program in nextDaysVipProgramList"
@@ -45,7 +54,10 @@
 
     <article class="py-2">
       <nuxt-link to="/danh-sach-kenh">
-        <h4 class="color-primary">{{ COMMON.VIP_CHANNEL | uppercaseAll }} >></h4>
+        <h4 class="color-dark">
+          {{ COMMON.VIP_CHANNEL | uppercaseFirst }}
+        </h4>
+        <el-divider class="mt-4 mb-2" />
       </nuxt-link>
 
       <div class="row mt-2">

@@ -18,6 +18,9 @@
 .bg-info{
   background:$--color-info!important; 
 }
+.color-dark{
+  color: $--color-dark!important;
+}
 .flex {
   display: flex
 }
@@ -160,10 +163,6 @@
 }
 .el-divider--vertical{
   margin: 0 2px;
-}
-.liveInfo{
-  max-width: 70px;
-  display: inline-block;
 }
 
 @media only screen and (min-width: 769px) { 
