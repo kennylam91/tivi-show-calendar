@@ -138,14 +138,16 @@
   background-color: #90939963;
 }
 .categoryTag{
-  margin: 2px;
+  // margin: 2px;
   padding: 0 0px;
-  width: 63px;
+  // width: 63px;
+  color: #999;
 }
 .categoryTagSmall{
-  margin: 2px; 
+  // margin: 2px; 
   padding: 0 0px; 
-  width: 63px; 
+  // width: 63px; 
+  color: #999;
 }
 .dialogClass{
   width: 350px!important;
@@ -155,6 +157,13 @@
 }
 .categoryColumn{
   display: none;
+}
+.el-divider--vertical{
+  margin: 0 2px;
+}
+.liveInfo{
+  max-width: 70px;
+  display: inline-block;
 }
 
 @media only screen and (min-width: 769px) { 
@@ -177,7 +186,7 @@
     width: 700px!important;
   }
   .categoryTag{
-    margin: 4px;
+    // margin: 4px;
     width: 100px;
     font-size: 0.85rem;
   }

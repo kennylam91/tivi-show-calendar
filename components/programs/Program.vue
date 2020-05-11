@@ -2,7 +2,7 @@
   <div>
     <el-card
       shadow="hover"
-      :body-style="{ padding: '5px','text-align':'center',background: '#6062662e' }"
+      :body-style="{ padding: '5px','text-align':'center' }"
     >
       <div class="mb-2">
         <el-link
@@ -31,33 +31,27 @@
         :underline="false"
         @click="viewProgramDetail(program)"
       >
-        <el-tooltip
-          :content="program.name | getVNTranslateName"
-          placement="bottom"
-          effect="dark"
-        >
-          <div class="bold smaller-font-size programName" style="color: #000000c2">
-            {{ program.name | getVNTranslateName | uppercaseAll }}
-          </div>
-        </el-tooltip>
+        <div class="bold smaller-font-size programName" style="color: #000000c2">
+          {{ program.name | getVNTranslateName | uppercaseAll }}
+        </div>
       </el-link>
 
       <div>
-        <el-tag
+        <span
           v-for="(item, index) in getCategoryList(program.categories)"
           :key="index"
-          size="small"
-          effect="dark"
-          :type="categoryTagMap.get(item)"
           :class="{'categoryTag':!small, 'categoryTagSmall': small }"
+          class="small-font-size"
         >
           {{ item | getCategory }}
-        </el-tag>
+          <el-divider v-if="index===0" direction="vertical" />
+        </span>
 
       </div>
-      <div v-if="live" class="small-font-size mb-1 bold" style="color: #000000b5;">
-        <div>{{ COMMON.CHANNEL }}: {{ program.schedule.channelName }}</div>
-        <div>{{ COMMON.TIME }}: {{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}</div>
+      <div v-if="live" class="small-font-size mb-1 " style="color: #999;">
+        <span>{{ program.schedule.channelName }}</span>
+        <el-divider direction="vertical" />
+        {{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}
       </div>
     </el-card>
   </div>
