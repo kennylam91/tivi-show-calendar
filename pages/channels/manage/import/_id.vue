@@ -96,7 +96,7 @@ export default {
       const scheduleArr = []
       if (this.importDate) {
         for (const schedule of dataArray) {
-          const array = schedule.split(/\s+/, 3)
+          const array = schedule.split(/\s+/)
 
           const startTimeStr = array[0]
           const timeSplitArr = startTimeStr.split(':')
@@ -104,16 +104,31 @@ export default {
 
           const startTimestamp = FB.timestamp.fromMillis(startTime)
 
-          // find program
-          const foundPrograms = this.programList.filter(item => {
+          // find program by english name
+          const foundProgramsByEnName = this.programList.filter(item => {
             const nameArr = item.name.split(/\s/)
             if (nameArr[0] && array[1]) {
               return nameArr[0].toLowerCase() === array[1].toLowerCase()
             }
           })
+          const foundProgramByViName = this.programList.filter(item => {
+            const nameArr = item.name.split('-')
+            if (nameArr) {
+              if (nameArr.length >= 2) {
+                const vnName = nameArr[1]
+                const vnNameArr = vnName.trim().split(' ')
+                const firstWord = vnNameArr[0]
+                return array[1].toLowerCase() === firstWord.toLowerCase()
+              }
+            }
+            return false
+          })
+
           let program
-          if (foundPrograms.length === 1) {
-            program = foundPrograms[0]
+          if (foundProgramsByEnName.length === 1) {
+            program = foundProgramsByEnName[0]
+          } else if (foundProgramByViName.length === 1) {
+            program = foundProgramByViName[0]
           } else {
             program = this.defaultProgram
           }

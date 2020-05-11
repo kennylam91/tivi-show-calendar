@@ -36,7 +36,7 @@
 
     <article class="py-2">
       <h4>
-        <nuxt-link to="/chuong-trinh-hom-nay" class="color-dark-blue">
+        <nuxt-link to="/chuong-trinh-sap-chieu" class="color-dark-blue">
           {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseFirst }}
         </nuxt-link>
       </h4>
