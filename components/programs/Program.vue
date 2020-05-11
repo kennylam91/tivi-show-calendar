@@ -4,25 +4,27 @@
       shadow="hover"
       :body-style="{ padding: '5px','text-align':'center',background: '#6062662e' }"
     >
-      <el-link
-        v-if="program.logo"
-        :underline="false"
-        @click="viewProgramDetail(program)"
-      >
-        <img
-          class="img-fluid"
-          :src="program.logo"
-          :alt="program.name"
+      <div class="mb-2">
+        <el-link
+          v-if="program.logo"
+          :underline="false"
+          @click="viewProgramDetail(program)"
         >
-      </el-link>
-      <div v-else>
-        <img class="img-fluid" src="https://via.placeholder.com/400x225" :alt="program.name">
+          <img
+            class="img-fluid"
+            :src="program.logo"
+            :alt="program.name"
+          >
+        </el-link>
+        <div v-else>
+          <img class="img-fluid" src="https://via.placeholder.com/400x225" :alt="program.name">
+        </div>
       </div>
-      <div
+      <!-- <div
         class="color-info smaller-font-size my-2 shorten-text"
       >
         {{ program.name | shortenName | uppercaseAll }}
-      </div>
+      </div> -->
       <el-link
         class="mb-2 w-100"
         type="primary"
@@ -51,6 +53,7 @@
         >
           {{ item | getCategory }}
         </el-tag>
+
       </div>
       <div v-if="live" class="small-font-size mb-1 bold" style="color: #000000b5;">
         <div>{{ COMMON.CHANNEL }}: {{ program.schedule.channelName }}</div>

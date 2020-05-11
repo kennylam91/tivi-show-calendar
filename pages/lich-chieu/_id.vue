@@ -105,7 +105,6 @@
                   @click="addScheduleToGGCal(row)"
                 />
               </el-tooltip>
-
             </td>
           </tr>
 
