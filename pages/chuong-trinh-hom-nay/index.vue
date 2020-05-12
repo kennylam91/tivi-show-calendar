@@ -15,7 +15,6 @@
       >
         <div class="justify-between-align-center mb-2">
           <h4 class="pageTitle">{{ COMMON.TODAY_PROGRAM }}</h4>
-
           <el-button
             v-if="!isSearching"
             type="primary"
@@ -149,29 +148,21 @@ export default {
       this.programData = this.todayProgramList
       this.dialogKey++
     },
-    // 09:30
-    convertStringToTimestamp(string) {
-      if (!string) return null
-      const arr = string.trim().split(':')
-      const hour = arr[0]
-      const min = arr[1]
-      const time = new Date()
-      time.setHours(hour, min, 0, 0)
-      return time
-    },
+
     async fetchScheduleListByTime(startTime, endTime) {
       let start, end
       const list = []
+      const today = new Date()
       if (!startTime) {
-        start = this.convertStringToTimestamp('00:01')
+        start = this.convertStringToTimestamp('00:01', today)
       } else {
-        start = this.convertStringToTimestamp(startTime)
+        start = this.convertStringToTimestamp(startTime, today)
       }
       const startTimestamp = FB.timestamp.fromDate(start)
       if (!endTime) {
-        end = this.convertStringToTimestamp('23:59')
+        end = this.convertStringToTimestamp('23:59', today)
       } else {
-        end = this.convertStringToTimestamp(endTime)
+        end = this.convertStringToTimestamp(endTime, today)
       }
       const endTimestamp = FB.timestamp.fromDate(end)
       await this.$store.dispatch('app/fetchScheduleList',
@@ -188,29 +179,6 @@ export default {
         }
         this.searchByDateProgramList = list
       })
-    },
-    filterByTime(program) {
-      if (this.searchByDateProgramList.length === 0) {
-        return true
-      } else {
-        return this.searchByDateProgramList.some(item => item.id === program.id)
-      }
-    },
-    isMovie(program) {
-      const cats = program.categories
-      if (!cats) {
-        return false
-      }
-      return cats.includes(1) || cats.includes(23) || cats.includes(24) ||
-      cats.includes(25) || cats.includes(26) || cats.includes(27)
-    },
-    isSciExp(program) {
-      const cats = program.categories
-      if (!cats) {
-        return false
-      }
-      return cats.includes(5) || cats.includes(7) || cats.includes(8) ||
-      cats.includes(9)
     }
 
   },

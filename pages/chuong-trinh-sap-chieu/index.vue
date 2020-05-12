@@ -10,9 +10,9 @@
       <el-card
         v-if="nextDaysProgramList"
         shadow="never"
-        :body-style="{ padding: '0px' }"
+        :body-style="{ padding: '16px' }"
       >
-        <div slot="header" class="justify-between-align-center">
+        <div class="justify-between-align-center mb-2">
           <h4 class="pageTitle">
             {{ COMMON.NEXT_DAY_PROGRAM }}</h4>
           <el-button
@@ -30,15 +30,21 @@
             @click="handleClearSearch"
           >{{ COMMON.CLEAR_SEARCH }}</el-button>
         </div>
+        <el-divider />
 
-        <div class="row" style="margin: 0">
-          <div
-            v-for="program in programData"
-            :key="program.id"
-            class="col-sm-4 col-md-3 col-lg-2 col-6 my-2 px-1"
-          >
-            <Program :program="program" :small="true" />
-          </div></div>
+        <ProgramListContainer
+          :title="COMMON.MOVIE"
+          :program-list-prop="movieProgramList"
+        />
+        <ProgramListContainer
+          :title="COMMON.SCIENCE_EXPLORE"
+          :program-list-prop="sciExpProgramList"
+        />
+        <ProgramListContainer
+          :title="COMMON.INFO_ENTERTAINMENT"
+          :program-list-prop="othersProgramList"
+        />
+
       </el-card>
     </section>
 
@@ -58,18 +64,21 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Program from '@/components/programs/Program'
+// import Program from '@/components/programs/Program'
+import ProgramListContainer from '@/components/programs/ProgramListContainer'
 import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
-import { COMMON } from '@/assets/utils/constant'
+import { FB, COMMON } from '@/assets/utils/constant'
+import { sortByRankDesc } from '@/assets/utils/index'
 
 export default {
-  components: { Program, ProgramSearchForm },
+  components: { ProgramSearchForm, ProgramListContainer },
   data() {
     return {
       programData: null,
       searchDialogVisible: false,
       dialogKey: 0,
-      isSearching: false
+      isSearching: false,
+      searchByDateProgramList: []
     }
   },
   computed: {
@@ -79,6 +88,17 @@ export default {
     }),
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
+    },
+    movieProgramList() {
+      return this.programData.filter(this.isMovie).sort(sortByRankDesc)
+    },
+    sciExpProgramList() {
+      return this.programData.filter(this.isSciExp).sort(sortByRankDesc)
+    },
+    othersProgramList() {
+      return this.programData.filter(program => {
+        return !this.isMovie(program) && !this.isSciExp(program)
+      }).sort(sortByRankDesc)
     }
   },
   watch: {
@@ -97,14 +117,63 @@ export default {
   created() {
   },
   methods: {
-    searchProgram(searchForm) {
+    async searchProgram(searchForm) {
+      if (!searchForm) {
+        this.programData = this.nextDaysProgramList
+        return
+      }
       this.isSearching = true
       this.programData = []
-      this.programData = this.nextDaysProgramList.filter(program => {
-        return this.filterByCategory(program, searchForm) &&
+      if (searchForm.startTime || searchForm.endTime) {
+        await this.fetchScheduleListByTime(searchForm.startTime, searchForm.endTime)
+        this.programData = this.nextDaysProgramList.filter(program => {
+          return this.filterByCategory(program, searchForm) &&
         this.filterByChannel(program, searchForm) &&
         this.filterByName(program, searchForm) &&
-        this.filterByRank(program, searchForm)
+        this.filterByRank(program, searchForm) &&
+        this.filterByTime(program)
+        })
+      } else {
+        this.programData = this.nextDaysProgramList.filter(program => {
+          return this.filterByCategory(program, searchForm) &&
+        this.filterByChannel(program, searchForm) &&
+        this.filterByName(program, searchForm) &&
+        this.filterByRank(program, searchForm) &&
+        this.filterByTime(program)
+        })
+      }
+    },
+    async fetchScheduleListByTime(startTime, endTime) {
+      let start, end
+      const list = []
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+
+      if (!startTime) {
+        start = this.convertStringToTimestamp('00:01', tomorrow)
+      } else {
+        start = this.convertStringToTimestamp(startTime, tomorrow)
+      }
+      const startTimestamp = FB.timestamp.fromDate(start)
+      if (!endTime) {
+        end = this.convertStringToTimestamp('23:59', tomorrow)
+      } else {
+        end = this.convertStringToTimestamp(endTime, tomorrow)
+      }
+      const endTimestamp = FB.timestamp.fromDate(end)
+      await this.$store.dispatch('app/fetchScheduleList',
+        { startTime: startTimestamp,
+          endTime: endTimestamp }).then(scheduleList => {
+        for (const schedule of scheduleList) {
+          if (!list.some(program => program.id === schedule.programId)) {
+            const found = this.nextDaysProgramList.find(program =>
+              program.id === schedule.programId)
+            if (found) {
+              list.push(found)
+            }
+          }
+        }
+        this.searchByDateProgramList = list
       })
     },
 
