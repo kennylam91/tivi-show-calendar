@@ -86,7 +86,11 @@ export const COMMON = {
   TODAY_SCHEDULE: 'Lịch phát sóng hôm nay',
   TODAY_SCHEDULE_2: 'Lịch truyền hình hôm nay',
   GOOD_MOVIE: 'Phim hay',
-  IF_NOT_WORKING_PLZ_CLEAR_CACHE: 'Nếu không hoạt động bạn vui lòng xóa cache của trình duyệt nhé!'
+  IF_NOT_WORKING_PLZ_CLEAR_CACHE: 'Nếu không hoạt động bạn vui lòng xóa cache của trình duyệt nhé!',
+  MOVIE: 'Phim truyện',
+  SCIENCE_EXPLORE: 'Khoa học - khám phá',
+  INFO_ENTERTAINMENT: 'Thông tin - giải trí',
+  VIEW_MORE: 'Xem thêm'
 
 }
 import { firebase } from '@/MyFireBase'

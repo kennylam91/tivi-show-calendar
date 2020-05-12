@@ -8,10 +8,14 @@
     </div>
 
     <article>
-      <el-card v-if="todayProgramList" shadow="never" :body-style="{ padding: '0px' }">
-        <div slot="header" class="justify-between-align-center">
-          <h4 class="pageTitle">
-            {{ COMMON.TODAY_PROGRAM }}</h4>
+      <el-card
+        v-if="todayProgramList"
+        shadow="never"
+        :body-style="{ padding: '16px' }"
+      >
+        <div class="justify-between-align-center mb-2">
+          <h4 class="pageTitle">{{ COMMON.TODAY_PROGRAM }}</h4>
+
           <el-button
             v-if="!isSearching"
             type="primary"
@@ -27,15 +31,20 @@
             @click="handleClearSearch"
           >{{ COMMON.CLEAR_SEARCH }}</el-button>
         </div>
+        <el-divider />
 
-        <div class="row" style="margin: 0">
-          <div
-            v-for="program in programData"
-            :key="program.id"
-            class="col-sm-4 col-md-3 col-lg-2 col-6 my-2 px-1"
-          >
-            <Program :program="program" :small="true" />
-          </div></div>
+        <ProgramListContainer
+          :title="COMMON.MOVIE"
+          :program-list-prop="movieProgramList"
+        />
+        <ProgramListContainer
+          :title="COMMON.SCIENCE_EXPLORE"
+          :program-list-prop="sciExpProgramList"
+        />
+        <ProgramListContainer
+          :title="COMMON.INFO_ENTERTAINMENT"
+          :program-list-prop="othersProgramList"
+        />
       </el-card>
     </article>
 
@@ -56,12 +65,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Program from '@/components/programs/Program'
+// import Program from '@/components/programs/Program'
+import ProgramListContainer from '@/components/programs/ProgramListContainer'
 import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
 import { FB, COMMON } from '@/assets/utils/constant'
+import { sortByRankDesc } from '@/assets/utils/index'
 
 export default {
-  components: { Program, ProgramSearchForm },
+  components: { ProgramSearchForm, ProgramListContainer },
   data() {
     return {
       searchDialogVisible: false,
@@ -79,6 +90,17 @@ export default {
     }),
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
+    },
+    movieProgramList() {
+      return this.programData.filter(this.isMovie).sort(sortByRankDesc)
+    },
+    sciExpProgramList() {
+      return this.programData.filter(this.isSciExp).sort(sortByRankDesc)
+    },
+    othersProgramList() {
+      return this.programData.filter(program => {
+        return !this.isMovie(program) && !this.isSciExp(program)
+      }).sort(sortByRankDesc)
     }
   },
   watch: {
@@ -173,6 +195,22 @@ export default {
       } else {
         return this.searchByDateProgramList.some(item => item.id === program.id)
       }
+    },
+    isMovie(program) {
+      const cats = program.categories
+      if (!cats) {
+        return false
+      }
+      return cats.includes(1) || cats.includes(23) || cats.includes(24) ||
+      cats.includes(25) || cats.includes(26) || cats.includes(27)
+    },
+    isSciExp(program) {
+      const cats = program.categories
+      if (!cats) {
+        return false
+      }
+      return cats.includes(5) || cats.includes(7) || cats.includes(8) ||
+      cats.includes(9)
     }
 
   },
