@@ -123,10 +123,8 @@ import { parseVNTime } from '@/assets/utils/index'
 import { mapGetters } from 'vuex'
 import { FB, COMMON } from '@/assets/utils/constant'
 import { categoryTagMap } from '@/assets/utils/constant'
-import Tags from '@/components/tags/Tags'
 
 export default {
-  components: { Tags },
   asyncData({ params, store }) {
     const channelId = params.id.split('_').pop()
     let scheduleData
@@ -157,7 +155,7 @@ export default {
       detailProgramDlgVisible: false,
       selectedDate: new Date(),
       searchText: '',
-      scheduleData: [],
+      scheduleData: null,
       channel: null,
       categoryTagMap: categoryTagMap,
       addedSchedule: []
@@ -169,8 +167,14 @@ export default {
     })
   },
   watch: {
-    selectedDate() {
-      this.getScheduleList()
+    selectedDate(newValue, oldValue) {
+      if (!this.scheduleData) {
+        this.getScheduleList()
+      }
+      if (newValue.getDate() !== oldValue.getDate() ||
+      newValue.getMonth() !== oldValue.getMonth()) {
+        this.getScheduleList()
+      }
     }
   },
   created() {
