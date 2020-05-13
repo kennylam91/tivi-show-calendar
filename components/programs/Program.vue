@@ -6,19 +6,24 @@
     >
       <div class="mb-2">
         <el-link
-          v-if="program.logo"
           :underline="false"
           @click="viewProgramDetail(program)"
         >
           <img
+            v-if="program.logo"
             class="img-fluid"
             :src="program.logo"
             :alt="program.name"
           >
+          <div v-else>
+            <img
+              class="img-fluid"
+              src="https://via.placeholder.com/400x225"
+              :alt="program.name"
+            >
+          </div>
         </el-link>
-        <div v-else>
-          <img class="img-fluid" src="https://via.placeholder.com/400x225" :alt="program.name">
-        </div>
+
       </div>
       <el-link
         class="mb-2 w-100"
