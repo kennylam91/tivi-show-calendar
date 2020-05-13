@@ -15,13 +15,12 @@
             :src="program.logo"
             :alt="program.name"
           >
-          <div v-else>
-            <img
-              class="img-fluid"
-              src="https://via.placeholder.com/400x225"
-              :alt="program.name"
-            >
-          </div>
+          <img
+            v-else
+            class="img-fluid"
+            src="https://via.placeholder.com/400x225"
+            :alt="program.name"
+          >
         </el-link>
 
       </div>
