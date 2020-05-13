@@ -81,7 +81,6 @@
 
     </el-table>
     <el-dialog
-      v-if="createScheduleDialogVisibleProp"
       :title="schedule.id? 'Update Schedule': 'Create Schedule'"
       :visible.sync="createScheduleDialogVisibleProp"
       width="60%"

@@ -95,6 +95,7 @@ export default {
   watch: {
     scheduleProp: {
       immediate: true,
+      deep: true,
       handler() {
         this.scheduleData = { ...this.scheduleProp }
         if (this.scheduleProp.startTime) {
@@ -103,38 +104,61 @@ export default {
         if (this.scheduleProp.endTime) {
           this.scheduleData.endTime = new Date(this.scheduleProp.endTime.seconds * 1000)
         }
+        if (this.scheduleData.programId) {
+          this.programName = this.programList.find(pro =>
+            pro.id === this.scheduleData.programId).name
+        } else {
+          this.programName = ''
+        }
       }
     },
     programName() {
-      this.selectedProgram = this.programList.find(pro => pro.name === this.programName)
-      this.scheduleData.programId = this.selectedProgram.id
+      if (this.programName) {
+        this.selectedProgram = this.programList.find(pro => pro.name === this.programName)
+        this.scheduleData.programId = this.selectedProgram.id
+      }
     },
     programList: {
-      immediate: true,
       deep: true,
       handler() {
-        if (!this.programList) {
-          this.$store.dispatch('app/fetchProgramList',
-            { channelId: this.scheduleData.channelId }).then(list => {
-            this.programList = list
-            if (this.scheduleData.programId) {
-              this.programName = this.programList.find(pro =>
-                pro.id === this.scheduleData.programId).name
-            }
-          })
-        } else {
-          if (this.scheduleData.programId) {
-            this.programName = this.programList.find(pro =>
-              pro.id === this.scheduleData.programId).name
-          }
+        if (this.scheduleData.programId) {
+          this.programName = this.programList.find(pro =>
+            pro.id === this.scheduleData.programId).name
         }
+        // if (!this.programList) {
+        //   this.$store.dispatch('app/fetchProgramList',
+        //     { channelId: this.scheduleData.channelId }).then(list => {
+        //     this.programList = list
+        //     if (this.scheduleData.programId) {
+        //       this.programName = this.programList.find(pro =>
+        //         pro.id === this.scheduleData.programId).name
+        //     }
+        //   })
+        // } else {
+        //   if (this.scheduleData.programId) {
+        //     this.programName = this.programList.find(pro =>
+        //       pro.id === this.scheduleData.programId).name
+        //   }
+        // }
       }
     }
   },
   created() {
-    this.$store.dispatch('app/fetchProgramList',
-      { channelId: this.scheduleData.channelId }).then(list => {
-      this.programList = list
+    // this.$store.dispatch('app/fetchProgramList',
+    //   { channelId: this.scheduleData.channelId }).then(list => {
+    //   this.programList = list
+    // })
+    FB.programRef.where('channels', 'array-contains', this.scheduleData.channelId).onSnapshot(snapshot => {
+      const list = []
+      snapshot.forEach(doc => {
+        const program = { ...doc.data(), id: doc.id }
+        list.push(program)
+      })
+      this.programList = [...list]
+      if (this.scheduleData.programId) {
+        this.programName = this.programList.find(pro =>
+          pro.id === this.scheduleData.programId).name
+      }
     })
   },
   methods: {
