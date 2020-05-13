@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { COMMON, FB, CATEGORIES } from '@/assets/utils/constant'
+import { convertVNToEN } from '@/assets/utils'
 // import { firebase } from '@/MyFireBase'
 
 // const sortByName = (a, b) => {
@@ -37,7 +38,8 @@ Vue.mixin({
         id = program.id
       }
       const name = program.name.split(/[\s:]+/).join('-').trim()
-      this.$router.push({ path: `/chi-tiet-chuong-trinh/${name}_${id}` })
+      const enConvertedName = convertVNToEN(name)
+      this.$router.push({ path: `/chi-tiet-chuong-trinh/${enConvertedName}_${id}` })
     },
     fetchScheduleList(channelId, date) {
       return new Promise((resolve, reject) => {

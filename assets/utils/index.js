@@ -116,3 +116,11 @@ export const getTimeInGMT7 = (time) => {
   const startOfDateInGMT7 = timeInMilli + timeZoneDiffInMin * 60 * 1000
   return startOfDateInGMT7
 }
+
+// convert Vietnamese to English
+export const convertVNToEN = (str) => {
+  return str.normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+}
