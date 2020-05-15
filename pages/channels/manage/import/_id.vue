@@ -43,6 +43,7 @@ import ScheduleTable from '@/components/schedules/ScheduleTable'
 import { FB } from '@/assets/utils/constant'
 import { firebase } from '@/MyFireBase'
 import { getStartOfDayInGMT7 } from '@/assets/utils/index'
+import { Program } from '@/assets/model/Program'
 export default {
   components: { ScheduleTable },
   data() {
@@ -53,17 +54,19 @@ export default {
       importDate: null,
       programList: null,
       scheduleList: [],
-      defaultProgram: { 'logo': '',
-        'description': '',
-        'isNextDaysShow': true,
-        'rank': 1,
-        'isTodayShow': true,
-        'name': 'Defaul',
-        'channels': ['WnzraFRhnu1FKfeRLNCR', 'exhZ2BgF84IFzA0dONhb', 'dcBypFESR46POmThVFOq',
+      defaultProgram: { ...new Program(),
+        channels: ['WnzraFRhnu1FKfeRLNCR', 'exhZ2BgF84IFzA0dONhb', 'dcBypFESR46POmThVFOq',
           'YWsE3a5hcLIAAvoNfETK', 'elFt9Fy6Dz51UPKLHhM5', 'JSVQGwve15mjQxlQhRdJ', '880MoAihKgPWbdfrNwIT',
-          '4NXIQYHUSm2rdfur1Eob', 'N0gf5TR1VLlwLETqDab0', 'lcNJBsaPQ1MhYLQnyxC0', 'wELkPU0ANusKBusDba9H'],
-        'id': 'FeoyRxLLN3QIkrFiFIrF',
-        'categories': [] }
+          '4NXIQYHUSm2rdfur1Eob', 'N0gf5TR1VLlwLETqDab0', 'lcNJBsaPQ1MhYLQnyxC0', 'wELkPU0ANusKBusDba9H'] }
+      // defaultProgram: { 'logo': '',
+      //   'description': '',
+      //   'isNextDaysShow': true,
+      //   'rank': 1,
+      //   'isTodayShow': true,
+      //   'name': 'Defaul',
+      //   'channels': ,
+      //   'id': 'FeoyRxLLN3QIkrFiFIrF',
+      //   'categories': [] }
 
     }
   },
@@ -80,7 +83,7 @@ export default {
       handler() {
         if (!this.programList) {
           this.$store.dispatch('app/fetchProgramList',
-            { channelId: this.$route.params.id }).then(list => {
+            { channelId: this.getChannelId() }).then(list => {
             this.programList = [...list]
           })
         }
@@ -88,28 +91,39 @@ export default {
     }
   },
   created() {
-    this.channelId = this.$route.params.id
+    this.channelId = this.getChannelId()
   },
   methods: {
+    getChannelId() {
+      return this.$route.params.id
+    },
     handleInputChange() {
+      // dataArray: du lieu copy vao textarea, se duoc split bang /n
       const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
       const scheduleArr = []
       if (this.importDate) {
         for (const schedule of dataArray) {
+          // schedule: '00:00	BIẾN ĐI, ÔNG ANH! (GO BROTHER)'
+          // array: cac truong du lieu
           const array = schedule.split(/\s+/)
-
           const startTimeStr = array[0]
           const timeSplitArr = startTimeStr.split(':')
-          const startTime = this.importDate.setHours(Number(timeSplitArr[0]), Number(timeSplitArr[1]), 0, 0)
+          const hour = Number(timeSplitArr[0])
+          const min = Number(timeSplitArr[1])
+          const startTime = this.importDate.setHours(hour, min, 0, 0)
 
           const startTimestamp = FB.timestamp.fromMillis(startTime)
 
           // find program by english name
           const foundProgramsByEnName = this.programList.filter(item => {
+            // mang cac tu cua ten chuong trinh
             const nameArr = item.name.split(/\s/)
-            if (nameArr[0] && array[1]) {
-              return nameArr[0].toLowerCase() === array[1].toLowerCase()
+            if (nameArr.length === 1) {
+              if (nameArr[0] && array[1]) {
+                return nameArr[0].toLowerCase() === array[1].toLowerCase()
+              }
             }
+            return false
           })
           const foundProgramByViName = this.programList.filter(item => {
             const nameArr = item.name.split('-')
