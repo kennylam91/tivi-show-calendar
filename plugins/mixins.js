@@ -206,6 +206,38 @@ Vue.mixin({
           return false
         }
       }
+    },
+    isMovie(program) {
+      const cats = program.categories
+      if (!cats) {
+        return false
+      }
+      return cats.includes(1) || cats.includes(23) || cats.includes(24) ||
+      cats.includes(25) || cats.includes(26) || cats.includes(27)
+    },
+    isSciExp(program) {
+      const cats = program.categories
+      if (!cats) {
+        return false
+      }
+      return cats.includes(5) || cats.includes(7) || cats.includes(8) ||
+      cats.includes(9)
+    },
+    filterByTime(program) {
+      if (this.searchByDateProgramList.length === 0) {
+        return true
+      } else {
+        return this.searchByDateProgramList.some(item => item.id === program.id)
+      }
+    },
+    // 09:30
+    convertStringToTimestamp(string, date) {
+      if (!string) return null
+      const arr = string.trim().split(':')
+      const hour = arr[0]
+      const min = arr[1]
+      date.setHours(hour, min, 0, 0)
+      return date
     }
 
   }

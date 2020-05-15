@@ -37,12 +37,15 @@
 
       <div>
         <span
-          v-for="(item, index) in getCategoryList(program.categories)"
+          v-for="(item, index) in getCategoryList(program)"
           :key="index"
-          class="small-font-size color-info"
+          class="smaller-font-size color-info"
         >
           {{ item | getCategory }}
-          <el-divider v-if="index===0 && getCategoryList(program.categories).length >=2" direction="vertical" />
+          <el-divider
+            v-if="index===0 && getCategoryList(program).length >=2"
+            direction="vertical"
+          />
         </span>
 
       </div>
@@ -84,7 +87,8 @@ export default {
 
   },
   methods: {
-    getCategoryList(categories) {
+    getCategoryList(program) {
+      const categories = program.categories
       if (categories) {
         if (categories.length <= 2) {
           return categories

@@ -157,7 +157,7 @@ $--color-dark-blue:  #003a77;
   color: #999;
 }
 .dialogClass{
-  width: 350px!important;
+  width: 370px!important;
 }
 .color-purple{
   color: purple;
@@ -196,6 +196,9 @@ footer{
   @extend .smaller-font-size;
 
 }
+.categoryTitle{
+  font-size: 1rem!important;
+}
 
 @media only screen and (min-width: 768px) { 
   .categoryColumn{
@@ -206,6 +209,9 @@ footer{
   }
   .pageTitle{
     font-size: 1.5rem!important;
+  }
+  .categoryTitle{
+    font-size: 1.25rem !important;
   }
   .channelNameLink{
     font-size: 1rem!important;
@@ -239,8 +245,5 @@ footer{
     // margin: 4px;
     width: 100px;
     font-size: 0.85rem;
-  }
-  .el-divider--vertical{
-    margin: 0 4px!important;
   }
 }
