@@ -6,7 +6,7 @@ export class Program {
     this.channels = []
     this.categories = []
     this.logo = null
-    this.rank = 3
+    this.rank = 1
     this.schedules = []
   }
   // get instance object from firebase document

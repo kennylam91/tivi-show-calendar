@@ -130,29 +130,10 @@ export default {
           this.programName = this.programList.find(pro =>
             pro.id === this.scheduleData.programId).name
         }
-        // if (!this.programList) {
-        //   this.$store.dispatch('app/fetchProgramList',
-        //     { channelId: this.scheduleData.channelId }).then(list => {
-        //     this.programList = list
-        //     if (this.scheduleData.programId) {
-        //       this.programName = this.programList.find(pro =>
-        //         pro.id === this.scheduleData.programId).name
-        //     }
-        //   })
-        // } else {
-        //   if (this.scheduleData.programId) {
-        //     this.programName = this.programList.find(pro =>
-        //       pro.id === this.scheduleData.programId).name
-        //   }
-        // }
       }
     }
   },
   created() {
-    // this.$store.dispatch('app/fetchProgramList',
-    //   { channelId: this.scheduleData.channelId }).then(list => {
-    //   this.programList = list
-    // })
     FB.programRef.where('channels', 'array-contains', this.scheduleData.channelId).onSnapshot(snapshot => {
       const list = []
       snapshot.forEach(doc => {
