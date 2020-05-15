@@ -118,24 +118,25 @@ export default {
           const foundProgramsByEnName = this.programList.filter(item => {
             // mang cac tu cua ten chuong trinh
             const nameArr = item.name.split(/\s/)
-            if (nameArr.length === 1) {
-              if (nameArr[0] && array[1]) {
-                return nameArr[0].toLowerCase() === array[1].toLowerCase()
-              }
+            const compareProgramName = nameArr[1] ? nameArr[0] + ' ' + nameArr[1] : nameArr[0]
+            const isValid = array[2] && array[2].trim() !== ':'
+            const importProgramName = isValid ? array[1] + ' ' + array[2].replace(':', '') : array[1]
+            debugger
+            if (compareProgramName && importProgramName) {
+              return compareProgramName.toLowerCase().includes(importProgramName.toLowerCase())
             }
-            return false
           })
           const foundProgramByViName = this.programList.filter(item => {
             const nameArr = item.name.split('-')
-            if (nameArr) {
-              if (nameArr.length >= 2) {
-                const vnName = nameArr[1]
-                const vnNameArr = vnName.trim().split(' ')
-                const firstWord = vnNameArr[0]
-                return array[1].toLowerCase() === firstWord.toLowerCase()
-              }
+            const vnName = nameArr[1] ? nameArr[1] : nameArr[0]
+            const vnNameArr = vnName.trim().split(/\s/)
+            const compareProgramName = vnNameArr[1] ? vnNameArr[0] + ' ' + vnNameArr[1] : vnNameArr[0]
+            const isValid = array[2] && array[2].trim() !== ':'
+            const importProgramName = isValid ? array[1] + ' ' + array[2].replace(':', '') : array[1]
+            debugger
+            if (compareProgramName && importProgramName) {
+              return compareProgramName.toLowerCase().includes(importProgramName.toLowerCase())
             }
-            return false
           })
 
           let program

@@ -120,7 +120,9 @@ export default {
       if (this.programName) {
         this.selectedProgram = this.programList.find(pro =>
           pro.name === this.programName)
-        this.scheduleData.programId = this.selectedProgram.id
+        if (this.selectedProgram) {
+          this.scheduleData.programId = this.selectedProgram.id
+        }
       }
     },
     programList: {
