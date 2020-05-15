@@ -1,5 +1,6 @@
 import { FB } from '@/assets/utils/constant'
 import { trimObject } from '../assets/utils'
+import { Channel, Schedule } from '@/assets/model/Channel'
 
 export const state = () => ({
   channelList: null,
@@ -130,8 +131,9 @@ export const actions = {
     return new Promise((resolve, reject) => {
       FB.channelRef.orderBy('name', 'asc').get().then(list => {
         const channelList = []
-        list.forEach((channel) => {
-          channelList.push({ ...channel.data(), id: channel.id })
+        list.forEach((doc) => {
+          const channel = Channel.getInstance(doc)
+          channelList.push(channel)
         })
         commit('SET_CHANNEL_LIST', channelList)
         resolve(channelList)
@@ -167,7 +169,8 @@ export const actions = {
       scheduleQuery.get().then((list) => {
         const scheduleList = []
         list.forEach((doc) => {
-          const schedule = { ...doc.data(), id: doc.id }
+          const schedule = Schedule.getInstanceFromDoc(doc)
+          // const schedule = { ...doc.data(), id: doc.id }
           scheduleList.push(schedule)
         })
         resolve(scheduleList)

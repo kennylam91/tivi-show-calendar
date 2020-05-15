@@ -101,6 +101,7 @@
 import CreateSchedule from '@/components/schedules/CreateSchedule'
 import { parseVNTime } from '@/assets/utils/index'
 import { FB } from '@/assets/utils/constant'
+import { Schedule } from '@/assets/model/Schedule'
 
 export default {
   components: { CreateSchedule },
@@ -123,18 +124,19 @@ export default {
     return {
       createScheduleDialogVisibleProp: false,
       schedule: null,
-      scheduleInit: {
-        startTime: null,
-        endTime: null,
-        programId: null,
-        channelId: null
-      }
+      // scheduleInit: {
+      //   startTime: null,
+      //   endTime: null,
+      //   programId: null,
+      //   channelId: null
+      // }
+      scheduleInit: new Schedule()
     }
   },
   computed: {
   },
   created() {
-    this.scheduleInit.channelId = this.$route.params.id
+    this.scheduleInit.setChannelId(this.$route.params.id)
     this.schedule = { ...this.scheduleInit }
   },
   methods: {

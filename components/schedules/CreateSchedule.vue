@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loadingStore">
     <div class="bold mb-2">{{ title }}</div>
     <el-form schedule-ref="scheduleCreateForm" :model="scheduleData" label-width="100px" style="width: 100%;">
       <el-form-item label="Start time">
@@ -53,6 +53,8 @@
 import { firebase } from '@/MyFireBase'
 import { FB } from '@/assets/utils/constant'
 import { getStartOfDayInGMT7 } from '@/assets/utils/index'
+import { Program } from '@/assets/model/Program'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -90,7 +92,10 @@ export default {
       } else {
         return 'Create schedule'
       }
-    }
+    },
+    ...mapGetters({
+      loadingStore: 'loading'
+    })
   },
   watch: {
     scheduleProp: {
@@ -105,8 +110,7 @@ export default {
           this.scheduleData.endTime = new Date(this.scheduleProp.endTime.seconds * 1000)
         }
         if (this.scheduleData.programId) {
-          this.programName = this.programList.find(pro =>
-            pro.id === this.scheduleData.programId).name
+          this.programName = this.scheduleData.programName
         } else {
           this.programName = ''
         }
@@ -114,7 +118,8 @@ export default {
     },
     programName() {
       if (this.programName) {
-        this.selectedProgram = this.programList.find(pro => pro.name === this.programName)
+        this.selectedProgram = this.programList.find(pro =>
+          pro.name === this.programName)
         this.scheduleData.programId = this.selectedProgram.id
       }
     },
@@ -151,7 +156,7 @@ export default {
     FB.programRef.where('channels', 'array-contains', this.scheduleData.channelId).onSnapshot(snapshot => {
       const list = []
       snapshot.forEach(doc => {
-        const program = { ...doc.data(), id: doc.id }
+        const program = Program.getInstanceFromDoc(doc)
         list.push(program)
       })
       this.programList = [...list]
@@ -165,10 +170,10 @@ export default {
     onSubmit() {
       const id = this.scheduleData.id
       this.validateSchedule(this.scheduleData).then(() => {
-        this.removeProperty(this.scheduleData)
         this.scheduleData.channelName = this.channelProp.name
         this.scheduleData.programName = this.selectedProgram.name
         this.scheduleData.categories = this.selectedProgram.categories
+        this.$store.dispatch('app/setLoading', true)
         if (!id) {
           this.$store.dispatch('app/createSchedule', this.scheduleData).then(() => {
             const startTime = this.scheduleData.startTime
@@ -183,11 +188,10 @@ export default {
               position: 'bottom-right',
               top: '100'
             })
-
             this.$emit('saved')
           }).catch(err => {
             console.log(err)
-          })
+          }).finally(() => this.$store.dispatch('app/setLoading', false))
         } else {
           this.$store.dispatch('app/updateSchedule', this.scheduleData).then(() => {
             const startTime = this.scheduleData.startTime
@@ -204,6 +208,8 @@ export default {
             this.$emit('saved')
           }).catch(err => {
             console.log(err)
+          }).finally(() => {
+            this.$store.dispatch('app/setLoading', false)
           })
         }
       }).catch((err) => {
@@ -211,7 +217,7 @@ export default {
           message: err,
           type: 'error',
           showClose: true,
-          top: '100'
+          offset: '100'
         })
       })
     },
@@ -229,20 +235,17 @@ export default {
         this.options = []
       }
     },
-    removeProperty(object) {
-      for (const key in object) {
-        if (!['startTime', 'endTime', 'channelId', 'programId', 'id', 'channelName', 'programName', 'categories'].includes(key)) {
-          delete object[key]
-        }
-      }
-    },
     validateSchedule(schedule) {
       return new Promise((resolve, reject) => {
         if (schedule.endTime <= schedule.startTime) {
           reject('EndTime must be after StartTime')
         }
 
-        const previousScheduleQuery = this.scheduleRef.where('channelId', '==', schedule.channelId).where('startTime', '<', schedule.startTime).orderBy('startTime', 'desc').limit(1)
+        const previousScheduleQuery = this.scheduleRef
+          .where('channelId', '==', schedule.channelId)
+          .where('startTime', '<', schedule.startTime)
+          .orderBy('startTime', 'desc')
+          .limit(1)
         previousScheduleQuery.onSnapshot((querySnapshot) => {
           if (!querySnapshot.empty) {
             querySnapshot.forEach((foundSchedule) => {
@@ -250,7 +253,11 @@ export default {
               if (Date.parse(schedule.startTime) < foundSchedule.data().endTime.seconds * 1000) {
                 reject('Invalid StartTime')
               } else {
-                const nextScheduleQuery = this.scheduleRef.where('channelId', '==', schedule.channelId).where('startTime', '>', schedule.startTime).orderBy('startTime').limit(1)
+                const nextScheduleQuery = this.scheduleRef
+                  .where('channelId', '==', schedule.channelId)
+                  .where('startTime', '>', schedule.startTime)
+                  .orderBy('startTime')
+                  .limit(1)
                 nextScheduleQuery.onSnapshot((querySnapshot) => {
                   if (!querySnapshot.empty) {
                     querySnapshot.forEach((foundSchedule) => {
@@ -267,7 +274,11 @@ export default {
               }
             })
           } else {
-            const nextScheduleQuery = this.scheduleRef.where('channelId', '==', schedule.channelId).where('startTime', '>', schedule.startTime).orderBy('startTime').limit(1)
+            const nextScheduleQuery = this.scheduleRef
+              .where('channelId', '==', schedule.channelId)
+              .where('startTime', '>', schedule.startTime)
+              .orderBy('startTime')
+              .limit(1)
             nextScheduleQuery.onSnapshot((querySnapshot) => {
               if (!querySnapshot.empty) {
                 querySnapshot.forEach((foundSchedule) => {
