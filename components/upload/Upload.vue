@@ -4,8 +4,9 @@
       <input style="line-height: 1rem;" type="file" accept="image/*" @change="previewImage">
     </div>
     <div v-if="uploading">
-      <p>Progress: {{ uploadValue.toFixed()+"%" }}
-        <progress id="progress" :value="uploadValue" max="100" />  </p>
+      <div>Progress: {{ uploadValue.toFixed()+"%" }}
+        <progress id="progress" :value="uploadValue" max="100" />
+      </div>
     </div>
     <div v-if="picture">
       <img height="200" :src="picture">

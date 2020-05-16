@@ -112,7 +112,7 @@
           class="large-font-size el-icon-bell pointer color-primary"
         />
         <span>{{ COMMON.TO_ADD_GG_CAL }}</span><br>
-        <p>{{ COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE }}</p>
+        <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
       </div>
     </el-card>
 

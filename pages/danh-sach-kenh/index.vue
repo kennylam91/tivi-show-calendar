@@ -4,10 +4,10 @@
       <div class="p-4">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{path: '/'}">
-            <span>{{ COMMON.HOMEPAGE }}</span>
+            <span v-text="COMMON.HOMEPAGE" />
           </el-breadcrumb-item>
           <el-breadcrumb-item>
-            <span>{{ COMMON.CHANNEL_LIST }}</span>
+            <span v-text="COMMON.CHANNEL_LIST" />
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -16,9 +16,13 @@
     <section>
       <el-card shadow="never" class="my-2" :body-style="{ padding: '16px' }">
         <div slot="header">
-          <h4>{{ COMMON.CHANNEL_LIST }}</h4>
+          <h4 v-text="COMMON.CHANNEL_LIST" />
         </div>
-        <ChannelTable v-if="channelList" :channel-list="channelList" :is-admin="false" />
+        <ChannelTable
+          v-if="channelList"
+          :channel-list="vipChannelList"
+          :is-admin="false"
+        />
       </el-card>
     </section>
 
@@ -37,7 +41,10 @@ export default {
   computed: {
     ...mapGetters({
       channelList: 'channelList'
-    })
+    }),
+    vipChannelList() {
+      return this.channelList.filter(item => item.isVip)
+    }
   },
   watch: {
   },

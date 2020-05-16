@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <header>
       <nav id="defaultLayout">
         <div class="navWrapper">
@@ -9,32 +9,40 @@
               :default-active="activeIndex"
               mode="horizontal"
               active-text-color="#003a77"
-              menu-trigger="click"
+              menu-trigger="hover"
               @select="handleSelect"
             >
               <el-menu-item index="1">
-                <span><i class="el-icon-s-home" /><span>{{ COMMON.HOMEPAGE }}</span></span>
+                <span>
+                  <i class="el-icon-s-home" /><span v-text="COMMON.HOMEPAGE" />
+                </span>
               </el-menu-item>
               <el-submenu index="2">
-                <template slot="title"><span> {{ COMMON.SCHEDULE }}</span></template>
+                <template slot="title">
+                  <span v-text="COMMON.SCHEDULE" />
+                </template>
                 <el-menu-item index="2-1">
-                  {{ COMMON.CHANNEL_LIST }}
+                  <span v-text="COMMON.CHANNEL_LIST" />
                 </el-menu-item>
                 <el-menu-item
                   v-for="(item, index) in vipChannelList"
                   :key="index"
                   :index="item.id"
-                >{{ item.name }}</el-menu-item>
-
+                >
+                  <span v-text="item.name " />
+                </el-menu-item>
               </el-submenu>
-
               <el-submenu index="3">
-                <template slot="title">{{ COMMON.PROGRAM }}</template>
+                <template slot="title">
+                  <span v-text="COMMON.PROGRAM" />
+                </template>
                 <el-menu-item
                   v-for="(item) in programMenu"
                   :key="item.value"
                   :index="item.value"
-                >{{ item.label }}</el-menu-item>
+                >
+                  <span v-text="item.label" />
+                </el-menu-item>
               </el-submenu>
               <div id="searchInput">
                 <el-popover
@@ -113,6 +121,7 @@
               :index="item.value"
             >{{ item.label }}</el-menu-item>
           </el-submenu>
+
         </el-menu>
       </nav>
     </header>
@@ -194,7 +203,8 @@ export default {
       nextDaysProgramList: 'nextDaysProgramList',
       fromNowInDayProgramList: 'fromNowInDayProgramList',
       fromNowInDayScheduleList: 'fromNowInDayScheduleList',
-      fromTodayProgramList: 'fromTodayProgramList'
+      fromTodayProgramList: 'fromTodayProgramList',
+      loading: 'loading'
 
     }),
     path() {
