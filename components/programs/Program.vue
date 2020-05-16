@@ -18,7 +18,7 @@
           <img
             v-else
             class="img-fluid"
-            src="/400x225.png"
+            src="~assets/images/400x225.png"
             :alt="program.name"
           >
         </el-link>
