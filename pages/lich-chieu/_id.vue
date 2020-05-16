@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <table id="scheduleTable" class="table table-hover">
+      <table id="scheduleTable" v-loading="tableLoading" class="table table-hover">
         <tr class="color-info text-left">
           <th scope="col">
             <span>Time</span>
@@ -158,7 +158,8 @@ export default {
       scheduleData: null,
       channel: null,
       categoryTagMap: categoryTagMap,
-      addedSchedule: []
+      addedSchedule: [],
+      tableLoading: false
     }
   },
   computed: {
@@ -188,10 +189,12 @@ export default {
       return parseVNTime(time, '{H}:{i} ', true, true)
     },
     getScheduleList() {
+      this.tableLoading = true
       this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
         this.scheduleList = scheduleList
         this.searchText = ''
         this.scheduleData = this.scheduleList
+        this.tableLoading = false
       })
     },
     searchProgram() {

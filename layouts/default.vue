@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div>
     <header>
       <nav id="defaultLayout">
         <div class="navWrapper">
@@ -125,7 +125,7 @@
         </el-menu>
       </nav>
     </header>
-    <main class="container" style="margin-top: 60px;">
+    <main v-loading="loading" class="container" style="margin-top: 60px;">
       <nuxt />
       <el-divider class="my-2" />
       <Tags :tags="defaultTags" />
