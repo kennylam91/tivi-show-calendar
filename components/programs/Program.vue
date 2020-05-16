@@ -18,7 +18,7 @@
           <img
             v-else
             class="img-fluid"
-            src="https://via.placeholder.com/400x225"
+            src="/400x225.png"
             :alt="program.name"
           >
         </el-link>
