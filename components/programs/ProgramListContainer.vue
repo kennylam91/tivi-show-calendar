@@ -51,13 +51,13 @@ export default {
     }
   },
   watch: {
-    // programListProp: {
-    //   deep: true,
-    //   immediate: true,
-    //   handler() {
-    //     this.list = this.programListProp.slice(0, 12)
-    //   }
-    // }
+    programListProp: {
+      deep: true,
+      immediate: true,
+      handler() {
+        this.list = this.programListProp.slice(0, 12)
+      }
+    }
   },
   created() {
     this.list = this.programListProp.slice(0, 12)

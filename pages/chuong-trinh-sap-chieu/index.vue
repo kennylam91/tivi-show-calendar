@@ -122,17 +122,12 @@ export default {
   },
   async created() {
     await this.searchProgram()
-    this.movieProgramList = this.programData.filter(this.isMovie).sort(sortByRankDesc)
-    this.sciExpProgramList = this.programData.filter(this.isSciExp).sort(sortByRankDesc)
-    this.othersProgramList = this.programData.filter(program => {
-      return !this.isMovie(program) && !this.isSciExp(program)
-    })
-      .sort(sortByRankDesc)
   },
   methods: {
     async searchProgram(searchForm) {
       if (!searchForm) {
         this.programData = this.nextDaysProgramList
+        this.getProgramListForContainer()
         return
       }
       this.isSearching = true
@@ -146,6 +141,7 @@ export default {
         this.filterByRank(program, searchForm) &&
         this.filterByTime(program)
         })
+        this.getProgramListForContainer()
       } else {
         this.programData = this.nextDaysProgramList.filter(program => {
           return this.filterByCategory(program, searchForm) &&
@@ -154,6 +150,7 @@ export default {
         this.filterByRank(program, searchForm) &&
         this.filterByTime(program)
         })
+        this.getProgramListForContainer()
       }
     },
     async fetchScheduleListByTime(startTime, endTime) {
@@ -189,11 +186,19 @@ export default {
         this.searchByDateProgramList = list
       })
     },
-
     handleClearSearch() {
       this.isSearching = false
       this.programData = [...this.nextDaysProgramList]
+      this.getProgramListForContainer()
       this.dialogKey++
+    },
+    getProgramListForContainer() {
+      this.movieProgramList = this.programData.filter(this.isMovie).sort(sortByRankDesc)
+      this.sciExpProgramList = this.programData.filter(this.isSciExp).sort(sortByRankDesc)
+      this.othersProgramList = this.programData.filter(program => {
+        return !this.isMovie(program) && !this.isSciExp(program)
+      })
+        .sort(sortByRankDesc)
     }
   },
   head: {
