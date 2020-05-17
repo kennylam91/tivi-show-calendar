@@ -13,8 +13,8 @@
       <el-card :body-style="{ padding: '0px' }" shadow="never">
         <div class="row" style="margin: 0">
           <div
-            v-for="program in list"
-            :key="program.id"
+            v-for="(program, index) in list"
+            :key="index"
             class="col-sm-4 col-md-3 col-lg-2 col-6 my-2 px-1"
           >
             <Program :program="program" :small="true" />
@@ -51,13 +51,16 @@ export default {
     }
   },
   watch: {
-    programListProp: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.list = this.programListProp.slice(0, 12)
-      }
-    }
+    // programListProp: {
+    //   deep: true,
+    //   immediate: true,
+    //   handler() {
+    //     this.list = this.programListProp.slice(0, 12)
+    //   }
+    // }
+  },
+  created() {
+    this.list = this.programListProp.slice(0, 12)
   },
   methods: {
     viewAll() {

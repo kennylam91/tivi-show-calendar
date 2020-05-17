@@ -33,14 +33,17 @@
         <el-divider />
 
         <ProgramListContainer
+          v-if="movieProgramList"
           :title="COMMON.MOVIE"
           :program-list-prop="movieProgramList"
         />
         <ProgramListContainer
+          v-if="sciExpProgramList"
           :title="COMMON.SCIENCE_EXPLORE"
           :program-list-prop="sciExpProgramList"
         />
         <ProgramListContainer
+          v-if="othersProgramList"
           :title="COMMON.INFO_ENTERTAINMENT"
           :program-list-prop="othersProgramList"
         />
@@ -78,7 +81,10 @@ export default {
       programData: [],
       isSearching: false,
       dialogKey: 0,
-      searchByDateProgramList: []
+      searchByDateProgramList: [],
+      movieProgramList: null,
+      sciExpProgramList: null,
+      othersProgramList: null
     }
   },
 
@@ -89,32 +95,39 @@ export default {
     }),
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
-    },
-    movieProgramList() {
-      return this.programData.filter(this.isMovie).sort(sortByRankDesc)
-    },
-    sciExpProgramList() {
-      return this.programData.filter(this.isSciExp).sort(sortByRankDesc)
-    },
-    othersProgramList() {
-      return this.programData.filter(program => {
-        return !this.isMovie(program) && !this.isSciExp(program)
-      }).sort(sortByRankDesc)
     }
+    // movieProgramList() {
+    //   return this.programData.filter(this.isMovie).sort(sortByRankDesc)
+    // },
+    // sciExpProgramList() {
+    //   return this.programData.filter(this.isSciExp).sort(sortByRankDesc)
+    // },
+    // othersProgramList() {
+    //   return this.programData.filter(program => {
+    //     return !this.isMovie(program) && !this.isSciExp(program)
+    //   }).sort(sortByRankDesc)
+    // }
   },
   watch: {
-    todayProgramList: {
-      immediate: true,
-      handler() {
-        if (this.todayProgramList) {
-          this.searchProgram()
-        } else {
-          this.fetchTodayProgramList()
-        }
-      }
-    }
+    // todayProgramList: {
+    //   immediate: true,
+    //   handler() {
+    //     if (this.todayProgramList) {
+    //       this.searchProgram()
+    //     } else {
+    //       this.fetchTodayProgramList()
+    //     }
+    //   }
+    // }
   },
-  created() {
+  async created() {
+    await this.searchProgram()
+    this.movieProgramList = this.programData.filter(this.isMovie).sort(sortByRankDesc)
+    this.sciExpProgramList = this.programData.filter(this.isSciExp).sort(sortByRankDesc)
+    this.othersProgramList = this.programData.filter(program => {
+      return !this.isMovie(program) && !this.isSciExp(program)
+    })
+      .sort(sortByRankDesc)
   },
   methods: {
     async searchProgram(searchForm) {
