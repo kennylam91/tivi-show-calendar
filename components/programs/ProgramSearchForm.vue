@@ -116,7 +116,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { programRankOptions, FB } from '@/assets/utils/constant'
+import { programRankOptions } from '@/assets/utils/constant'
 
 export default {
   props: {

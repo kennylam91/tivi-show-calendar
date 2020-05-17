@@ -33,17 +33,17 @@
         <el-divider />
 
         <ProgramListContainer
-          v-if="movieProgramList"
+          v-if="movieProgramList.length"
           :title="COMMON.MOVIE"
           :program-list-prop="movieProgramList"
         />
         <ProgramListContainer
-          v-if="sciExpProgramList"
+          v-if="sciExpProgramList.length"
           :title="COMMON.SCIENCE_EXPLORE"
           :program-list-prop="sciExpProgramList"
         />
         <ProgramListContainer
-          v-if="othersProgramList"
+          v-if="othersProgramList.length"
           :title="COMMON.INFO_ENTERTAINMENT"
           :program-list-prop="othersProgramList"
         />
@@ -55,8 +55,9 @@
       :visible.sync="searchDialogVisible"
       custom-class="dialogClass"
     >
-      <ProgramSearchForm
+      <ProgramSearchFormComp
         :clear="false"
+        :data-prop="todayProgramSearchForm"
         @search="searchProgram"
         @clear="handleClearSearch"
       />
@@ -69,12 +70,13 @@
 import { mapGetters } from 'vuex'
 // import Program from '@/components/programs/Program'
 import ProgramListContainer from '@/components/programs/ProgramListContainer'
-import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
+import ProgramSearchFormComp from '@/components/programs/ProgramSearchForm'
 import { FB, COMMON } from '@/assets/utils/constant'
 import { sortByRankDesc } from '@/assets/utils/index'
+import { ProgramSearchForm } from '@/assets/model/ProgramSearchForm'
 
 export default {
-  components: { ProgramSearchForm, ProgramListContainer },
+  components: { ProgramSearchFormComp, ProgramListContainer },
   data() {
     return {
       searchDialogVisible: false,
@@ -82,15 +84,16 @@ export default {
       isSearching: false,
       dialogKey: 0,
       searchByDateProgramList: [],
-      movieProgramList: null,
-      sciExpProgramList: null,
-      othersProgramList: null
+      movieProgramList: [],
+      sciExpProgramList: [],
+      othersProgramList: []
     }
   },
   computed: {
     ...mapGetters({
       todayProgramList: 'fromNowInDayProgramList',
-      channelList: 'channelList'
+      channelList: 'channelList',
+      todayProgramSearchForm: 'todayProgramSearchForm'
     }),
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
@@ -108,22 +111,13 @@ export default {
     // }
   },
   watch: {
-    // todayProgramList: {
-    //   immediate: true,
-    //   handler() {
-    //     if (this.todayProgramList) {
-    //       this.searchProgram()
-    //     } else {
-    //       this.fetchTodayProgramList()
-    //     }
-    //   }
-    // }
   },
   async created() {
-    await this.searchProgram()
+    await this.searchProgram(this.todayProgramSearchForm)
   },
   methods: {
     async searchProgram(searchForm) {
+      this.$store.dispatch('app/setTodayProgramSearchForm', searchForm)
       if (!searchForm) {
         this.programData = this.todayProgramList
         this.getProgramListForContainer()
@@ -131,7 +125,6 @@ export default {
       }
       this.isSearching = true
       this.programData = []
-      debugger
       if (searchForm.startTime || searchForm.endTime) {
         await this.fetchScheduleListByTime(searchForm.startTime, searchForm.endTime)
         this.programData = this.todayProgramList.filter(program => {
@@ -157,6 +150,8 @@ export default {
       this.isSearching = false
       this.programData = this.todayProgramList
       this.getProgramListForContainer()
+      this.$store.dispatch('app/setTodayProgramSearchForm', null)
+
       this.dialogKey++
     },
 

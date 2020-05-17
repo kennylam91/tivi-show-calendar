@@ -1,6 +1,8 @@
 import { FB } from '@/assets/utils/constant'
 import { trimObject } from '../assets/utils'
-import { Channel, Schedule } from '@/assets/model/Channel'
+import { Channel } from '@/assets/model/Channel'
+import { Schedule } from '@/assets/model/Schedule'
+// import { ProgramSearchForm } from '@/assets/model/ProgramSearchForm'
 
 export const state = () => ({
   channelList: null,
@@ -21,7 +23,8 @@ export const state = () => ({
     categories: [],
     ranks: []
   },
-  loading: false
+  loading: false,
+  todayProgramSearchForm: null
 })
 
 export const mutations = {
@@ -66,6 +69,9 @@ export const mutations = {
   },
   SET_LOADING: (state, value) => {
     state.loading = value
+  },
+  SET_TODAY_PROGRAM_SEARCH_FORM: (state, value) => {
+    state.todayProgramSearchForm = value
   }
 
 }
@@ -126,6 +132,9 @@ export const actions = {
   },
   setLoading({ commit }, value) {
     commit('SET_LOADING', value)
+  },
+  setTodayProgramSearchForm({ commit }, value) {
+    commit('SET_TODAY_PROGRAM_SEARCH_FORM', value)
   },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {

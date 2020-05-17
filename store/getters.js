@@ -14,6 +14,7 @@ const getters = {
   fromNowInDayProgramList: state => state.app.fromNowInDayProgramList,
   fromNowInDayScheduleList: state => state.app.fromNowInDayScheduleList,
   programSearchQuery: state => state.app.programSearchQuery,
-  loading: state => state.app.loading
+  loading: state => state.app.loading,
+  todayProgramSearchForm: state => state.app.todayProgramSearchForm
 }
 export default getters
