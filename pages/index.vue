@@ -29,7 +29,7 @@
           :key="program.id"
           class="col-md-3 col-6 my-2 px-1"
         >
-          <Program v-if="program" :program="program" />
+          <Program :program="program" />
         </div>
       </div>
     </article>
@@ -95,6 +95,8 @@ export default {
   components: { Program },
   data() {
     return {
+      onGoingTodayProgramList: null,
+      nextDaysVipProgramList: null
     }
   },
   computed: {
@@ -121,14 +123,14 @@ export default {
         return []
       }
     },
-    nextDaysVipProgramList() {
-      if (this.nextDaysProgramList) {
-        const clonedList = [...this.nextDaysProgramList]
-        return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
-      } else {
-        return []
-      }
-    },
+    // nextDaysVipProgramList() {
+    //   if (this.nextDaysProgramList) {
+    //     const clonedList = [...this.nextDaysProgramList]
+    //     return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
+    //   } else {
+    //     return []
+    //   }
+    // },
     fromNowInDayVipProgramList() {
       if (this.fromNowInDayProgramList) {
         const clonedList = [...this.fromNowInDayProgramList]
@@ -147,24 +149,44 @@ export default {
         }
       })
       return livePrograms.sort(sortByRankDesc).slice(0, 4)
-    },
-    onGoingTodayProgramList() {
-      const list = []
-      for (const program of this.fromNowInDayProgramList) {
-        if (program) {
-          if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
-            list.push({ ...program })
-          }
-        }
-      }
-      return list.sort(sortByRankDesc).slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
     }
+    // onGoingTodayProgramList() {
+    //   const list = []
+    //   for (const program of this.fromNowInDayProgramList) {
+    //     if (program) {
+    //       if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
+    //         list.push({ ...program })
+    //       }
+    //     }
+    //   }
+    //   const result = list.sort(sortByRankDesc)
+    //     .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+    //   debugger
+    //   return result
+    // }
 
   },
   watch: {
   },
   mounted() {
+    const list = []
+    for (const program of this.fromNowInDayProgramList) {
+      if (program) {
+        if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
+          list.push({ ...program })
+        }
+      }
+    }
+    this.onGoingTodayProgramList = list.sort(sortByRankDesc)
+      .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
 
+    if (this.nextDaysProgramList) {
+      const clonedList = [...this.nextDaysProgramList]
+      this.nextDaysVipProgramList = clonedList.sort(sortByRankDesc)
+        .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
+    } else {
+      this.nextDaysVipProgramList = []
+    }
   },
   methods: {
     liveProgramFilter(schedule) {
