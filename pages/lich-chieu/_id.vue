@@ -26,7 +26,7 @@
         </div>
       </div>
       <el-divider class="my-2" />
-      <h4>{{ COMMON.SCHEDULE }}</h4>
+      <h4>{{ COMMON.SCHEDULE + ' ' + channel.name + ' ' + COMMON.DATE + ' ' + selectedDateFormatted }}</h4>
       <div class="row">
         <div
           class="my-2 col-6 col-sm-6 col-md-4"
@@ -165,7 +165,10 @@ export default {
   computed: {
     ...mapGetters({
       channelList: 'channelList'
-    })
+    }),
+    selectedDateFormatted() {
+      return parseVNTime(this.selectedDate, '{d}/{m}/{y}', true, true)
+    }
   },
   watch: {
     selectedDate(newValue, oldValue) {
