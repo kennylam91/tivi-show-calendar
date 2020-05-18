@@ -7,62 +7,6 @@
       </el-breadcrumb>
     </div>
 
-    <article>
-      <el-card
-        v-if="todayProgramList"
-        shadow="never"
-        :body-style="{ padding: '16px' }"
-      >
-        <div class="justify-between-align-center mb-2">
-          <h4 class="pageTitle">{{ COMMON.TODAY_PROGRAM }}</h4>
-          <el-button
-            v-if="!isSearching"
-            type="primary"
-            size="small"
-            icon="el-icon-search"
-            @click="searchDialogVisible = true"
-          >{{ COMMON.SEARCH }}</el-button>
-          <el-button
-            v-if="isSearching"
-            type="danger"
-            size="small"
-            icon="el-icon-close"
-            @click="handleClearSearch"
-          >{{ COMMON.CLEAR_SEARCH }}</el-button>
-        </div>
-        <el-divider />
-
-        <ProgramListContainer
-          v-if="movieProgramList.length"
-          :title="COMMON.MOVIE"
-          :program-list-prop="movieProgramList"
-        />
-        <ProgramListContainer
-          v-if="sciExpProgramList.length"
-          :title="COMMON.SCIENCE_EXPLORE"
-          :program-list-prop="sciExpProgramList"
-        />
-        <ProgramListContainer
-          v-if="othersProgramList.length"
-          :title="COMMON.INFO_ENTERTAINMENT"
-          :program-list-prop="othersProgramList"
-        />
-      </el-card>
-    </article>
-
-    <el-dialog
-      :key="dialogKey"
-      :visible.sync="searchDialogVisible"
-      custom-class="dialogClass"
-    >
-      <ProgramSearchFormComp
-        :clear="false"
-        :data-prop="todayProgramSearchForm"
-        @search="searchProgram"
-        @clear="handleClearSearch"
-      />
-    </el-dialog>
-
   </div>
 </template>
 
@@ -94,10 +38,10 @@ export default {
       todayProgramList: 'fromNowInDayProgramList',
       channelList: 'channelList',
       todayProgramSearchForm: 'todayProgramSearchForm'
-    }),
-    vipChannelList() {
-      return this.channelList.filter(channel => channel.isVip === true)
-    }
+    })
+    // vipChannelList() {
+    //   return this.channelList.filter(channel => channel.isVip === true)
+    // }
     // movieProgramList() {
     //   return this.programData.filter(this.isMovie).sort(sortByRankDesc)
     // },
