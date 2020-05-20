@@ -6,6 +6,10 @@
         <el-breadcrumb-item>{{ COMMON.TODAY_PROGRAM }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
+    <ProgramListComplex
+      :program-list-prop="todayProgramList"
+      :search-form-prop="todayProgramSearchForm"
+    />
 
   </div>
 </template>
@@ -18,9 +22,10 @@ import ProgramSearchFormComp from '@/components/programs/ProgramSearchForm'
 import { FB, COMMON } from '@/assets/utils/constant'
 import { sortByRankDesc } from '@/assets/utils/index'
 import { ProgramSearchForm } from '@/assets/model/ProgramSearchForm'
+import { ProgramListComplex } from '@/components/programs/ProgramListComplex'
 
 export default {
-  components: { ProgramSearchFormComp, ProgramListContainer },
+  components: { ProgramSearchFormComp, ProgramListContainer, ProgramListComplex },
   data() {
     return {
       searchDialogVisible: false,
@@ -56,9 +61,9 @@ export default {
   },
   watch: {
   },
-  async created() {
-    await this.searchProgram(this.todayProgramSearchForm)
-  },
+  // async created() {
+  //   await this.searchProgram(this.todayProgramSearchForm)
+  // },
   methods: {
     async searchProgram(searchForm) {
       this.$store.dispatch('app/setTodayProgramSearchForm', searchForm)
