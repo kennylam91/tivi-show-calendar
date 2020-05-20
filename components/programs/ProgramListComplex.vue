@@ -3,11 +3,12 @@
     <article>
       <el-card
         v-if="programList.length > 0"
+        v-loading="loading"
         shadow="never"
         :body-style="{ padding: '16px' }"
       >
         <div class="justify-between-align-center mb-2">
-          <h4 class="pageTitle">{{ COMMON.TODAY_PROGRAM }}</h4>
+          <h4 class="pageTitle" v-text="title" />
           <el-button
             v-if="!isSearching"
             type="primary"
@@ -51,18 +52,16 @@
         :clear="false"
         :data-prop="searchFormProp"
         @search="searchProgram"
-        @clear="handleClearSearch"
       />
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ProgramListContainer from '@/components/programs/ProgramListContainer'
 import ProgramSearchFormComp from '@/components/programs/ProgramSearchForm'
-import { FB, COMMON } from '@/assets/utils/constant'
 import { sortByRankDesc } from '@/assets/utils/index'
-import { ProgramSearchForm } from '@/assets/model/ProgramSearchForm'
 export default {
   components: { ProgramSearchFormComp, ProgramListContainer },
   props: {
@@ -71,8 +70,13 @@ export default {
       type: Array
     },
     searchFormProp: {
+      required: false,
+      type: Object,
+      default: () => null
+    },
+    title: {
       required: true,
-      type: Object
+      type: String
     }
   },
   data() {
@@ -89,92 +93,40 @@ export default {
       // searchFormData: null
     }
   },
+  computed: {
+    ...mapGetters({
+      loading: 'loading'
+    })
+  },
   watch: {
-    programListProp() {
-      this.programList = [...this.programListProp]
+    programListProp: {
+      immediate: true,
+      deep: true,
+      handler() {
+        if (this.programListProp) {
+          this.programList = [...this.programListProp]
+          this.getProgramListForContainer()
+        }
+      }
+
     }
-    // searchFormProp() {
-    //   this.searchFormData = { ...this.searchFormProp }
-    // }
   },
   async created() {
-    await this.searchProgram(this.searchFormProp)
   },
   methods: {
-    async searchProgram(searchForm) {
-      this.$store.dispatch('app/setTodayProgramSearchForm', searchForm)
-      if (!searchForm) {
-        this.programData = this.programList
-        this.getProgramListForContainer()
-        return
-      }
+    searchProgram(searchForm) {
       this.isSearching = true
-      this.programData = []
-      if (searchForm.startTime || searchForm.endTime) {
-        await this.fetchScheduleListByTime(searchForm.startTime, searchForm.endTime)
-        this.programData = this.programList.filter(program => {
-          return this.filterByCategory(program, searchForm) &&
-        this.filterByChannel(program, searchForm) &&
-        this.filterByName(program, searchForm) &&
-        this.filterByRank(program, searchForm) &&
-        this.filterByTime(program)
-        })
-        this.getProgramListForContainer()
-      } else {
-        this.programData = this.programList.filter(program => {
-          return this.filterByCategory(program, searchForm) &&
-        this.filterByChannel(program, searchForm) &&
-        this.filterByName(program, searchForm) &&
-        this.filterByRank(program, searchForm) &&
-        this.filterByTime(program)
-        })
-        this.getProgramListForContainer()
-      }
+      this.$emit('search', searchForm)
     },
     handleClearSearch() {
       this.isSearching = false
-      this.programData = this.todayProgramList
-      this.getProgramListForContainer()
-      this.$store.dispatch('app/setTodayProgramSearchForm', null)
-
       this.dialogKey++
-    },
-
-    async fetchScheduleListByTime(startTime, endTime) {
-      let start, end
-      const list = []
-      const today = new Date()
-      if (!startTime) {
-        start = this.convertStringToTimestamp('00:01', today)
-      } else {
-        start = this.convertStringToTimestamp(startTime, today)
-      }
-      const startTimestamp = FB.timestamp.fromDate(start)
-      if (!endTime) {
-        end = this.convertStringToTimestamp('23:59', today)
-      } else {
-        end = this.convertStringToTimestamp(endTime, today)
-      }
-      const endTimestamp = FB.timestamp.fromDate(end)
-      await this.$store.dispatch('app/fetchScheduleList',
-        { startTime: startTimestamp,
-          endTime: endTimestamp }).then(scheduleList => {
-        for (const schedule of scheduleList) {
-          if (!list.some(program => program.id === schedule.programId)) {
-            const found = this.todayProgramList.find(program =>
-              program.id === schedule.programId)
-            if (found) {
-              list.push(found)
-            }
-          }
-        }
-        this.searchByDateProgramList = list
-      })
+      this.$emit('clear')
     },
     getProgramListForContainer() {
-      this.movieProgramList = this.programData.filter(this.isMovie).sort(sortByRankDesc)
-      this.sciExpProgramList = this.programData.filter(this.isSciExp).sort(sortByRankDesc)
-      this.othersProgramList = this.programData.filter(program => {
+      this.movieProgramList = this.programList.filter(this.isMovie).sort(sortByRankDesc)
+      this.sciExpProgramList = this.programList.filter(this.isSciExp).sort(sortByRankDesc)
+      this.othersProgramList = this.programList.filter(program => {
         return !this.isMovie(program) && !this.isSciExp(program)
       })
         .sort(sortByRankDesc)

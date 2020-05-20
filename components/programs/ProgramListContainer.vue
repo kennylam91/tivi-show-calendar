@@ -10,7 +10,7 @@
           @click="viewAll"
         >{{ COMMON.VIEW_MORE }}({{ total }})</el-button>
       </div>
-      <el-card :body-style="{ padding: '0px' }" shadow="never">
+      <el-card v-loading="loading" :body-style="{ padding: '0px' }" shadow="never">
         <div class="row" style="margin: 0">
           <div
             v-for="(program, index) in list"
@@ -42,7 +42,8 @@ export default {
   },
   data() {
     return {
-      list: null
+      list: null,
+      loading: false
     }
   },
   computed: {
@@ -64,8 +65,11 @@ export default {
   },
   methods: {
     viewAll() {
-      console.log('viewAll')
+      this.loading = true
       this.list = this.programListProp
+      setTimeout(() => {
+        this.loading = false
+      }, 500)
     }
   }
 }

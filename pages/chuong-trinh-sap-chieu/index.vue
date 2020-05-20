@@ -6,81 +6,29 @@
         <el-breadcrumb-item>{{ COMMON.NEXT_DAY_PROGRAM }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <section>
-      <el-card
-        v-if="nextDaysProgramList"
-        shadow="never"
-        :body-style="{ padding: '16px' }"
-      >
-        <div class="justify-between-align-center mb-2">
-          <h4 class="pageTitle">
-            {{ COMMON.NEXT_DAY_PROGRAM }}</h4>
-          <el-button
-            v-if="!isSearching"
-            type="primary"
-            size="small"
-            icon="el-icon-search"
-            @click="searchDialogVisible = true"
-          >{{ COMMON.SEARCH }}</el-button>
-          <el-button
-            v-if="isSearching"
-            type="danger"
-            size="small"
-            icon="el-icon-close"
-            @click="handleClearSearch"
-          >{{ COMMON.CLEAR_SEARCH }}</el-button>
-        </div>
-        <el-divider />
-
-        <ProgramListContainer
-          v-if="movieProgramList"
-          :title="COMMON.MOVIE"
-          :program-list-prop="movieProgramList"
-        />
-        <ProgramListContainer
-          v-if="sciExpProgramList"
-          :title="COMMON.SCIENCE_EXPLORE"
-          :program-list-prop="sciExpProgramList"
-        />
-        <ProgramListContainer
-          v-if="othersProgramList"
-          :title="COMMON.INFO_ENTERTAINMENT"
-          :program-list-prop="othersProgramList"
-        />
-
-      </el-card>
-    </section>
-
-    <el-dialog
-      :key="dialogKey"
-      :visible.sync="searchDialogVisible"
-      custom-class="dialogClass"
-    >
-      <ProgramSearchForm
-        :clear="false"
-        @search="searchProgram"
-        @clear="handleClearSearch"
-      />
-    </el-dialog>
+    <ProgramListComplex
+      :title="COMMON.NEXT_DAY_PROGRAM"
+      :program-list-prop="programData"
+      :search-form-prop="nextDaysProgramSearchForm"
+      @search="searchProgram"
+      @clear="handleClearSearch"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 // import Program from '@/components/programs/Program'
-import ProgramListContainer from '@/components/programs/ProgramListContainer'
-import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
 import { FB, COMMON } from '@/assets/utils/constant'
 import { sortByRankDesc } from '@/assets/utils/index'
+import ProgramListComplex from '@/components/programs/ProgramListComplex'
 
 export default {
-  components: { ProgramSearchForm, ProgramListContainer },
+  components: { ProgramListComplex },
   data() {
     return {
       programData: null,
-      searchDialogVisible: false,
       dialogKey: 0,
-      isSearching: false,
       searchByDateProgramList: [],
       movieProgramList: null,
       sciExpProgramList: null,
@@ -90,44 +38,24 @@ export default {
   computed: {
     ...mapGetters({
       nextDaysProgramList: 'nextDaysProgramList',
-      channelList: 'channelList'
+      channelList: 'channelList',
+      nextDaysProgramSearchForm: 'nextDaysProgramSearchForm'
     }),
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
     }
-    // movieProgramList() {
-    //   return this.programData.filter(this.isMovie).sort(sortByRankDesc)
-    // },
-    // sciExpProgramList() {
-    //   return this.programData.filter(this.isSciExp).sort(sortByRankDesc)
-    // },
-    // othersProgramList() {
-    //   return this.programData.filter(program => {
-    //     return !this.isMovie(program) && !this.isSciExp(program)
-    //   }).sort(sortByRankDesc)
-    // }
   },
   watch: {
-    // nextDaysProgramList: {
-    //   immediate: true,
-    //   handler() {
-    //     if (this.nextDaysProgramList) {
-    //       this.searchProgram()
-    //       this.isSearching = false
-    //     } else {
-    //       this.fetchNextDaysProgramList()
-    //     }
-    //   }
-    // }
+
   },
   async created() {
-    await this.searchProgram()
+    await this.searchProgram(this.nextDaysProgramSearchForm)
   },
   methods: {
     async searchProgram(searchForm) {
+      this.$store.dispatch('app/setNextDaysProgramSearchForm', searchForm)
       if (!searchForm) {
         this.programData = this.nextDaysProgramList
-        this.getProgramListForContainer()
         return
       }
       this.isSearching = true
@@ -141,7 +69,6 @@ export default {
         this.filterByRank(program, searchForm) &&
         this.filterByTime(program)
         })
-        this.getProgramListForContainer()
       } else {
         this.programData = this.nextDaysProgramList.filter(program => {
           return this.filterByCategory(program, searchForm) &&
@@ -150,7 +77,6 @@ export default {
         this.filterByRank(program, searchForm) &&
         this.filterByTime(program)
         })
-        this.getProgramListForContainer()
       }
     },
     async fetchScheduleListByTime(startTime, endTime) {
@@ -187,10 +113,8 @@ export default {
       })
     },
     handleClearSearch() {
-      this.isSearching = false
       this.programData = [...this.nextDaysProgramList]
-      this.getProgramListForContainer()
-      this.dialogKey++
+      this.$store.dispatch('app/setNextDaysProgramSearchForm', null)
     },
     getProgramListForContainer() {
       this.movieProgramList = this.programData.filter(this.isMovie).sort(sortByRankDesc)

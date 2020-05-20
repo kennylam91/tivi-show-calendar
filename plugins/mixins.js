@@ -31,7 +31,7 @@ Vue.mixin({
       this.$store.dispatch('app/setLoading', true)
       setTimeout(() => {
         this.$store.dispatch('app/setLoading', false)
-      }, 500)
+      }, 1000)
     },
     viewProgramDetail(program) {
       let id
@@ -47,7 +47,7 @@ Vue.mixin({
       this.$store.dispatch('app/setLoading', true)
       setTimeout(() => {
         this.$store.dispatch('app/setLoading', false)
-      }, 500)
+      }, 1000)
     },
     fetchScheduleList(channelId, date) {
       return new Promise((resolve, reject) => {

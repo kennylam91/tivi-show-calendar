@@ -24,7 +24,8 @@ export const state = () => ({
     ranks: []
   },
   loading: false,
-  todayProgramSearchForm: null
+  todayProgramSearchForm: null,
+  nextDaysProgramSearchForm: null
 })
 
 export const mutations = {
@@ -72,6 +73,9 @@ export const mutations = {
   },
   SET_TODAY_PROGRAM_SEARCH_FORM: (state, value) => {
     state.todayProgramSearchForm = value
+  },
+  SET_NEXTS_DAY_PROGRAM_SEARCH_FORM: (state, value) => {
+    state.nextDaysProgramSearchForm = value
   }
 
 }
@@ -136,6 +140,9 @@ export const actions = {
   setTodayProgramSearchForm({ commit }, value) {
     commit('SET_TODAY_PROGRAM_SEARCH_FORM', value)
   },
+  setNextDaysProgramSearchForm({ commit }, value) {
+    commit('SET_NEXTS_DAY_PROGRAM_SEARCH_FORM', value)
+  },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {
       FB.channelRef.orderBy('name', 'asc').get().then(list => {
@@ -151,6 +158,7 @@ export const actions = {
   },
   // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
   fetchScheduleList({ state, dispatch }, request) {
+    dispatch('setLoading', true)
     let scheduleQuery = FB.scheduleRef
     if (request.channelId) {
       // fetch program list of this channel
@@ -182,6 +190,7 @@ export const actions = {
           // const schedule = { ...doc.data(), id: doc.id }
           scheduleList.push(schedule)
         })
+        dispatch('setLoading', false)
         resolve(scheduleList)
       })
     })
