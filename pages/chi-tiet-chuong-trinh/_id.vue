@@ -57,7 +57,7 @@
                 <th>{{ COMMON.END }}</th>
                 <th />
               </tr>
-              <tbody>
+              <tbody v-loading="loading">
                 <tr v-for="row in scheduleList" :key="row.id">
                   <td>
                     <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
@@ -155,7 +155,8 @@ export default {
     ...mapGetters({
       channelList: 'channelList',
       todayProgramList: 'todayProgramList',
-      nextDaysProgramList: 'nextDaysProgramList'
+      nextDaysProgramList: 'nextDaysProgramList',
+      loading: 'loading'
     })
   },
   watch: {

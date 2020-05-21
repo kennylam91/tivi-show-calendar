@@ -65,7 +65,7 @@
           <!-- <th class="categoryColumn">{{ COMMON.CATEGORY }}</th> -->
           <td />
         </tr>
-        <tbody>
+        <tbody v-loading="loading">
           <tr
             v-for="(row, index) in scheduleData"
             :key="index"
@@ -164,7 +164,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      channelList: 'channelList'
+      channelList: 'channelList',
+      loading: 'loading'
     }),
     selectedDateFormatted() {
       return parseVNTime(this.selectedDate, '{d}/{m}/{y}', true, true)
