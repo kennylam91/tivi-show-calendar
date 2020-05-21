@@ -47,8 +47,9 @@
         </article>
         <article class="my-2">
           <h5 class="mb-2">{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
-          <div v-if="scheduleList.length > 0">
+          <div>
             <table
+              v-loading="loading"
               class="table table-hover small-font-size table-sm"
             >
               <tr class="color-info bold">
@@ -57,7 +58,7 @@
                 <th>{{ COMMON.END }}</th>
                 <th />
               </tr>
-              <tbody v-loading="loading">
+              <tbody>
                 <tr v-for="row in scheduleList" :key="row.id">
                   <td>
                     <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
@@ -89,10 +90,10 @@
               <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
             </div>
           </div>
-          <p
+          <!-- <p
             v-if="scheduleList.length === 0"
             class="ml-4 color-info"
-          >{{ COMMON.NO_DATA }}</p>
+          >{{ COMMON.NO_DATA }}</p> -->
 
         </article>
 
@@ -119,31 +120,31 @@ export default {
       return parseVNTime(time, '{d}/{m}/{y} {H}:{i}', true, true)
     }
   },
-  asyncData({ store, params }) {
-    const now = new Date()
-    const before30Mins = Date.parse(now) - 30 * 60 * 1000
-    const programId = params.id.split('_').pop().trim()
+  // asyncData({ store, params }) {
+  //   const now = new Date()
+  //   const before30Mins = Date.parse(now) - 30 * 60 * 1000
+  //   const programId = params.id.split('_').pop().trim()
 
-    const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
-      .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
-      .orderBy('startTime', 'asc').get()
-    const programPromise = store.dispatch('app/fetchProgram', { programId })
-    return Promise.all([schedulePromise, programPromise]).then(results => {
-      const scheduleListDoc = results[0]
-      const scheduleList = []
-      const program = results[1]
-      scheduleListDoc.forEach(doc => {
-        const schedule = { ...doc.data(), id: doc.id }
-        scheduleList.push(schedule)
-      })
-      return { scheduleList, program }
-    })
-  },
+  //   const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
+  //     .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
+  //     .orderBy('startTime', 'asc').get()
+  //   const programPromise = store.dispatch('app/fetchProgram', { programId })
+  //   return Promise.all([schedulePromise, programPromise]).then(results => {
+  //     const scheduleListDoc = results[0]
+  //     const scheduleList = []
+  //     const program = results[1]
+  //     scheduleListDoc.forEach(doc => {
+  //       const schedule = { ...doc.data(), id: doc.id }
+  //       scheduleList.push(schedule)
+  //     })
+  //     return { scheduleList, program }
+  //   })
+  // },
   data() {
     return {
       program: null,
       programId: null,
-      scheduleList: null,
+      scheduleList: [],
       categoryTagMap,
       addedSchedule: [],
       tags: [COMMON.SCHEDULE, COMMON.SCHEDULE + ' HBO', COMMON.SCHEDULE + ' FOX MOVIES',
@@ -156,12 +157,41 @@ export default {
       channelList: 'channelList',
       todayProgramList: 'todayProgramList',
       nextDaysProgramList: 'nextDaysProgramList',
-      loading: 'loading'
+      loading: 'loading',
+      fromTodayProgramList: 'fromTodayProgramList'
     })
   },
   watch: {
   },
   created() {
+    const now = new Date()
+    const before30Mins = Date.parse(now) - 30 * 60 * 1000
+    const programId = this.$route.params.id.split('_').pop().trim()
+    const scheduleList = []
+    this.program = this.fromTodayProgramList.find(item => item.id === programId)
+    this.$store.dispatch('app/setLoading', true)
+    const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
+      .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
+      .orderBy('startTime', 'asc').get()
+    schedulePromise.then(scheduleListDoc => {
+      scheduleListDoc.forEach(doc => {
+        const schedule = { ...doc.data(), id: doc.id }
+        scheduleList.push(schedule)
+      })
+      this.$store.dispatch('app/setLoading', false)
+      this.scheduleList = [...scheduleList]
+    })
+    // const programPromise = store.dispatch('app/fetchProgram', { programId })
+    // return Promise.all([schedulePromise, programPromise]).then(results => {
+    //   const scheduleListDoc = results[0]
+    //   const scheduleList = []
+    //   const program = results[1]
+    //   scheduleListDoc.forEach(doc => {
+    //     const schedule = { ...doc.data(), id: doc.id }
+    //     scheduleList.push(schedule)
+    //   })
+    //   return { scheduleList, program }
+    // })
   },
   methods: {
     fetchScheduleList() {

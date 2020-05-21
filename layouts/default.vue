@@ -125,7 +125,7 @@
         </el-menu>
       </nav>
     </header>
-    <main v-loading="loading" class="container" style="margin-top: 60px;">
+    <main class="container" style="margin-top: 60px;">
       <nuxt />
       <el-divider class="my-2" />
       <Tags :tags="defaultTags" />
