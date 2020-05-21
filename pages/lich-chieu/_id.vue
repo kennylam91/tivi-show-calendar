@@ -125,28 +125,28 @@ import { FB, COMMON } from '@/assets/utils/constant'
 import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
-  asyncData({ params, store }) {
-    const channelId = params.id.split('_').pop()
-    let scheduleData
-    const start = new Date()
-    start.setHours(0, 0, 0, 0)
-    const startTimestamp = FB.timestamp.fromDate(start)
+  // asyncData({ params, store }) {
+  //   const channelId = params.id.split('_').pop()
+  //   let scheduleData
+  //   const start = new Date()
+  //   start.setHours(0, 0, 0, 0)
+  //   const startTimestamp = FB.timestamp.fromDate(start)
 
-    const end = new Date()
-    end.setHours(23, 59, 59, 999)
-    const endTimestamp = FB.timestamp.fromDate(end)
+  //   const end = new Date()
+  //   end.setHours(23, 59, 59, 999)
+  //   const endTimestamp = FB.timestamp.fromDate(end)
 
-    const promise0 = store.dispatch('app/fetchScheduleList',
-      { channelId: channelId,
-        startTime: startTimestamp,
-        endTime: endTimestamp })
+  //   const promise0 = store.dispatch('app/fetchScheduleList',
+  //     { channelId: channelId,
+  //       startTime: startTimestamp,
+  //       endTime: endTimestamp })
 
-    const channel = store.state.app.channelList.find(item => item.id === channelId)
-    return promise0.then(list => {
-      scheduleData = list
-      return { channel, scheduleData, channelId }
-    })
-  },
+  //   const channel = store.state.app.channelList.find(item => item.id === channelId)
+  //   return promise0.then(list => {
+  //     scheduleData = list
+  //     return { channel, scheduleData, channelId }
+  //   })
+  // },
   data() {
     return {
       channelId: null,
@@ -187,6 +187,24 @@ export default {
     if (dateParam) {
       this.selectedDate = dateParam
     }
+    const channelId = this.$route.params.id.split('_').pop()
+    const start = new Date()
+    start.setHours(0, 0, 0, 0)
+    const startTimestamp = FB.timestamp.fromDate(start)
+
+    const end = new Date()
+    end.setHours(23, 59, 59, 999)
+    const endTimestamp = FB.timestamp.fromDate(end)
+
+    const promise0 = this.$store.dispatch('app/fetchScheduleList',
+      { channelId: channelId,
+        startTime: startTimestamp,
+        endTime: endTimestamp })
+
+    this.channel = this.$store.state.app.channelList.find(item => item.id === channelId)
+    promise0.then(list => {
+      this.scheduleData = list
+    })
   },
   methods: {
     parseTime(time) {
