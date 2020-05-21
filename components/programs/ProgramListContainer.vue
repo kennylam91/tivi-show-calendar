@@ -3,14 +3,9 @@
     <article class="mt-4">
       <div class="justify-between-align-center">
         <h5 class="categoryTitle" style="margin-bottom: 0;">{{ title }}</h5>
-        <el-button
-          v-if="total > 12"
-          class="color-info"
-          type="text"
-          @click="viewAll"
-        >{{ COMMON.VIEW_MORE }}({{ total }})</el-button>
+
       </div>
-      <el-card v-loading="loading" :body-style="{ padding: '0px' }" shadow="never">
+      <el-card :body-style="{ padding: '0px' }" shadow="never">
         <div class="row" style="margin: 0">
           <div
             v-for="(program, index) in list"
@@ -18,9 +13,24 @@
             class="col-sm-4 col-md-3 col-lg-2 col-6 my-2 px-1"
           >
             <Program :program="program" :small="true" />
-          </div></div>
-      </el-card>
+          </div>
+        </div>
 
+        <div class="text-center">
+          <el-button
+            v-if="isShowViewMoreBtn"
+            type="text"
+            @click="viewAll"
+          >{{ COMMON.VIEW_MORE }}({{ total }})
+          </el-button>
+
+          <el-button
+            v-if="list.length > 12"
+            type="text"
+            @click="viewLess"
+          >{{ COMMON.VIEW_LESS }}</el-button>
+        </div>
+      </el-card>
     </article>
 
   </div>
@@ -42,13 +52,15 @@ export default {
   },
   data() {
     return {
-      list: null,
-      loading: false
+      list: null
     }
   },
   computed: {
     total() {
       return this.programListProp.length
+    },
+    isShowViewMoreBtn() {
+      return this.total > 12 && this.list.length < this.programListProp.length
     }
   },
   watch: {
@@ -65,11 +77,10 @@ export default {
   },
   methods: {
     viewAll() {
-      this.loading = true
       this.list = this.programListProp
-      setTimeout(() => {
-        this.loading = false
-      }, 500)
+    },
+    viewLess() {
+      this.list = this.programListProp.slice(0, 12)
     }
   }
 }

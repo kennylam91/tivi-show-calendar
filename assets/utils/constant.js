@@ -90,7 +90,8 @@ export const COMMON = {
   MOVIE: 'Phim truyện',
   SCIENCE_EXPLORE: 'Khoa học - khám phá',
   INFO_ENTERTAINMENT: 'Thông tin - giải trí',
-  VIEW_MORE: 'Xem thêm'
+  VIEW_MORE: 'Xem thêm',
+  VIEW_LESS: 'Ẩn bớt'
 
 }
 import { firebase } from '@/MyFireBase'
