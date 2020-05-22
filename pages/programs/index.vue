@@ -34,7 +34,7 @@
           min-width="13"
         >
           <template slot-scope="{row}">
-            <el-tag v-if="row.rank" effect="dark" :type="getRankTagType(row.rank)">
+            <el-tag v-if="row.rank" size="small" effect="dark" :type="getRankTagType(row.rank)">
               {{ row.rank | getRankLabel }}
             </el-tag>
 
@@ -42,7 +42,7 @@
         </el-table-column>
         <el-table-column
           :label="COMMON.CATEGORY"
-          min-width="29"
+          min-width="27"
         >
           <template slot-scope="{row}">
             <div v-if="row.categories">
@@ -125,7 +125,8 @@ export default {
   computed: {
     ...mapGetters({
       // programList: 'programList',
-      programSearchQuery: 'programSearchQuery'
+      programSearchQuery: 'programSearchQuery',
+      fromTodayProgramList: 'fromTodayProgramList'
     }),
     programsNumber() {
       return this.programListData.length
@@ -152,9 +153,10 @@ export default {
     }
   },
   created() {
-    if (!this.programList) {
-      this.fetchAllProgram({})
-    }
+    // if (!this.programList) {
+    //   this.fetchAllProgram({})
+    // }
+    this.programList = [...this.fromTodayProgramList]
     // this.listQuery.name = this.$route.query.q
   },
   methods: {
