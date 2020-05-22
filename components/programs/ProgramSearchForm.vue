@@ -73,9 +73,9 @@
           :placeholder="COMMON.START"
           style="width: 110px;"
           :picker-options="{
-            start: '04:30',
-            step: '00:30',
-            end: '23:30'
+            start: '00:00',
+            step: '01:00',
+            end: '24:00'
           }"
         />
         <el-time-select

@@ -10,6 +10,7 @@
       :title="COMMON.TODAY_PROGRAM"
       :program-list-prop="programData"
       :search-form-prop="todayProgramSearchForm"
+      :is-searching="isSearching"
       @search="searchProgram"
       @clear="handleClearSearch"
     />
@@ -40,7 +41,18 @@ export default {
       todayProgramList: 'fromNowInDayProgramList',
       channelList: 'channelList',
       todayProgramSearchForm: 'todayProgramSearchForm'
-    })
+    }),
+    isSearching() {
+      if (this.todayProgramSearchForm) {
+        return this.todayProgramSearchForm.categories.length > 0 ||
+      this.todayProgramSearchForm.channels.length > 0 ||
+      this.todayProgramSearchForm.endTime ||
+      this.todayProgramSearchForm.startTime ||
+      this.todayProgramSearchForm.name ||
+      this.todayProgramSearchForm.ranks.length > 0
+      }
+      return false
+    }
   },
   watch: {
   },

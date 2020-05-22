@@ -2,7 +2,6 @@
   <div>
     <article>
       <el-card
-        v-if="programList.length > 0"
         v-loading="loading"
         shadow="never"
         :body-style="{ padding: '16px' }"
@@ -77,13 +76,17 @@ export default {
     title: {
       required: true,
       type: String
+    },
+    isSearching: {
+      required: false,
+      type: Boolean,
+      default: () => false
     }
   },
   data() {
     return {
       searchDialogVisible: false,
       programData: [],
-      isSearching: false,
       dialogKey: 0,
       searchByDateProgramList: [],
       movieProgramList: [],
@@ -115,11 +118,9 @@ export default {
   },
   methods: {
     searchProgram(searchForm) {
-      this.isSearching = true
       this.$emit('search', searchForm)
     },
     handleClearSearch() {
-      this.isSearching = false
       this.dialogKey++
       this.$emit('clear')
     },

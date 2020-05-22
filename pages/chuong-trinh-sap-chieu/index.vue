@@ -10,6 +10,7 @@
       :title="COMMON.NEXT_DAY_PROGRAM"
       :program-list-prop="programData"
       :search-form-prop="nextDaysProgramSearchForm"
+      :is-searching="isSearching"
       @search="searchProgram"
       @clear="handleClearSearch"
     />
@@ -43,6 +44,17 @@ export default {
     }),
     vipChannelList() {
       return this.channelList.filter(channel => channel.isVip === true)
+    },
+    isSearching() {
+      if (this.nextDaysProgramSearchForm) {
+        return this.nextDaysProgramSearchForm.categories.length > 0 ||
+      this.nextDaysProgramSearchForm.channels.length > 0 ||
+      this.nextDaysProgramSearchForm.endTime ||
+      this.nextDaysProgramSearchForm.startTime ||
+      this.nextDaysProgramSearchForm.name ||
+      this.nextDaysProgramSearchForm.ranks.length > 0
+      }
+      return false
     }
   },
   watch: {
