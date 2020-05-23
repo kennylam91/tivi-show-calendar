@@ -173,6 +173,7 @@ export default {
   },
   watch: {
     selectedDate(newValue, oldValue) {
+      debugger
       if (!this.scheduleData) {
         this.getScheduleList()
       }
@@ -182,29 +183,14 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
+    debugger
     const dateParam = this.$route.query.date || new Date()
     if (dateParam) {
       this.selectedDate = dateParam
     }
-    const channelId = this.$route.params.id.split('_').pop()
-    const start = new Date()
-    start.setHours(0, 0, 0, 0)
-    const startTimestamp = FB.timestamp.fromDate(start)
-
-    const end = new Date()
-    end.setHours(23, 59, 59, 999)
-    const endTimestamp = FB.timestamp.fromDate(end)
-
-    const promise0 = this.$store.dispatch('app/fetchScheduleList',
-      { channelId: channelId,
-        startTime: startTimestamp,
-        endTime: endTimestamp })
-
-    this.channel = this.$store.state.app.channelList.find(item => item.id === channelId)
-    promise0.then(list => {
-      this.scheduleData = list
-    })
+    this.channelId = this.$route.params.id.split('_').pop()
+    this.channel = this.$store.state.app.channelList.find(item => item.id === this.channelId)
   },
   methods: {
     parseTime(time) {
