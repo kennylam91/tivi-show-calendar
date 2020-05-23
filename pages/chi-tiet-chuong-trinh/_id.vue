@@ -146,29 +146,29 @@ export default {
   },
   watch: {
   },
-  async created() {
+  created() {
     const now = new Date()
     const before30Mins = Date.parse(now) - 30 * 60 * 1000
     const programId = this.$route.params.id.split('_').pop().trim()
     const scheduleList = []
     this.program = this.fromTodayProgramList.find(item => item.id === programId)
     if (!this.program) {
-      this.program = await this.$store.dispatch('app/fetchProgram', { programId: programId })
-    }
-    if (this.program) {
-      this.$store.dispatch('app/setLoading', true)
-      const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
-        .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
-        .orderBy('startTime', 'asc').get()
-      schedulePromise.then(scheduleListDoc => {
-        scheduleListDoc.forEach(doc => {
-          const schedule = { ...doc.data(), id: doc.id }
-          scheduleList.push(schedule)
-        })
-        this.$store.dispatch('app/setLoading', false)
-        this.scheduleList = [...scheduleList]
+      this.$store.dispatch('app/fetchProgram', { programId: programId }).then(program => {
+        this.program = program
       })
     }
+    this.$store.dispatch('app/setLoading', true)
+    const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
+      .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
+      .orderBy('startTime', 'asc').get()
+    schedulePromise.then(scheduleListDoc => {
+      scheduleListDoc.forEach(doc => {
+        const schedule = { ...doc.data(), id: doc.id }
+        scheduleList.push(schedule)
+      })
+      this.$store.dispatch('app/setLoading', false)
+      this.scheduleList = [...scheduleList]
+    })
   },
   methods: {
     fetchScheduleList() {

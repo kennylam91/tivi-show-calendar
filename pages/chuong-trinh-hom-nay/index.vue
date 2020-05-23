@@ -57,8 +57,8 @@ export default {
   },
   watch: {
   },
-  async created() {
-    await this.searchProgram(this.todayProgramSearchForm)
+  created() {
+    this.searchProgram(this.todayProgramSearchForm)
   },
   methods: {
     async searchProgram(searchForm) {

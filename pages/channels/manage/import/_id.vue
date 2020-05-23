@@ -121,7 +121,6 @@ export default {
             const compareProgramName = nameArr[1] ? nameArr[0] + ' ' + nameArr[1] : nameArr[0]
             const isValid = array[2] && array[2].trim() !== ':'
             const importProgramName = isValid ? array[1] + ' ' + array[2].replace(':', '') : array[1]
-            debugger
             if (compareProgramName && importProgramName) {
               return compareProgramName.toLowerCase().includes(importProgramName.toLowerCase())
             }
@@ -133,7 +132,6 @@ export default {
             const compareProgramName = vnNameArr[1] ? vnNameArr[0] + ' ' + vnNameArr[1] : vnNameArr[0]
             const isValid = array[2] && array[2].trim() !== ':'
             const importProgramName = isValid ? array[1] + ' ' + array[2].replace(':', '') : array[1]
-            debugger
             if (compareProgramName && importProgramName) {
               return compareProgramName.toLowerCase().includes(importProgramName.toLowerCase())
             }

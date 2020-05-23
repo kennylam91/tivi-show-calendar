@@ -114,8 +114,7 @@ export default {
 
     }
   },
-  async created() {
-  },
+
   methods: {
     searchProgram(searchForm) {
       this.$emit('search', searchForm)

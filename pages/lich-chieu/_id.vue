@@ -173,7 +173,6 @@ export default {
   },
   watch: {
     selectedDate(newValue, oldValue) {
-      debugger
       if (!this.scheduleData) {
         this.getScheduleList()
       }
@@ -183,8 +182,7 @@ export default {
       }
     }
   },
-  async created() {
-    debugger
+  created() {
     const dateParam = this.$route.query.date || new Date()
     if (dateParam) {
       this.selectedDate = dateParam
