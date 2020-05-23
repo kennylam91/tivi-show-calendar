@@ -47,7 +47,7 @@
         </article>
         <article class="my-2">
           <h5 class="mb-2">{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
-          <div>
+          <div v-if="scheduleList.length > 0">
             <table
               v-loading="loading"
               class="table table-hover small-font-size table-sm"
@@ -90,10 +90,10 @@
               <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
             </div>
           </div>
-          <!-- <p
+          <p
             v-if="scheduleList.length === 0"
             class="ml-4 color-info"
-          >{{ COMMON.NO_DATA }}</p> -->
+          >{{ COMMON.NO_DATA }}</p>
 
         </article>
 
@@ -146,24 +146,29 @@ export default {
   },
   watch: {
   },
-  created() {
+  async created() {
     const now = new Date()
     const before30Mins = Date.parse(now) - 30 * 60 * 1000
     const programId = this.$route.params.id.split('_').pop().trim()
     const scheduleList = []
     this.program = this.fromTodayProgramList.find(item => item.id === programId)
-    this.$store.dispatch('app/setLoading', true)
-    const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
-      .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
-      .orderBy('startTime', 'asc').get()
-    schedulePromise.then(scheduleListDoc => {
-      scheduleListDoc.forEach(doc => {
-        const schedule = { ...doc.data(), id: doc.id }
-        scheduleList.push(schedule)
+    if (!this.program) {
+      this.program = await this.$store.dispatch('app/fetchProgram', { programId: programId })
+    }
+    if (this.program) {
+      this.$store.dispatch('app/setLoading', true)
+      const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
+        .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
+        .orderBy('startTime', 'asc').get()
+      schedulePromise.then(scheduleListDoc => {
+        scheduleListDoc.forEach(doc => {
+          const schedule = { ...doc.data(), id: doc.id }
+          scheduleList.push(schedule)
+        })
+        this.$store.dispatch('app/setLoading', false)
+        this.scheduleList = [...scheduleList]
       })
-      this.$store.dispatch('app/setLoading', false)
-      this.scheduleList = [...scheduleList]
-    })
+    }
   },
   methods: {
     fetchScheduleList() {
