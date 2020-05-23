@@ -100,6 +100,9 @@
         <article>
           <h5>{{ COMMON.INTRODUCTION }}</h5>
           <p class="small-font-size">{{ program.description }}</p>
+          <div v-if="program.trailer" class="embed-responsive embed-responsive-16by9">
+            <span v-html="program.trailer" />
+          </div>
         </article>
       </el-card>
       <el-card shadow="never" />
@@ -120,26 +123,6 @@ export default {
       return parseVNTime(time, '{d}/{m}/{y} {H}:{i}', true, true)
     }
   },
-  // asyncData({ store, params }) {
-  //   const now = new Date()
-  //   const before30Mins = Date.parse(now) - 30 * 60 * 1000
-  //   const programId = params.id.split('_').pop().trim()
-
-  //   const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
-  //     .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
-  //     .orderBy('startTime', 'asc').get()
-  //   const programPromise = store.dispatch('app/fetchProgram', { programId })
-  //   return Promise.all([schedulePromise, programPromise]).then(results => {
-  //     const scheduleListDoc = results[0]
-  //     const scheduleList = []
-  //     const program = results[1]
-  //     scheduleListDoc.forEach(doc => {
-  //       const schedule = { ...doc.data(), id: doc.id }
-  //       scheduleList.push(schedule)
-  //     })
-  //     return { scheduleList, program }
-  //   })
-  // },
   data() {
     return {
       program: null,
@@ -181,17 +164,6 @@ export default {
       this.$store.dispatch('app/setLoading', false)
       this.scheduleList = [...scheduleList]
     })
-    // const programPromise = store.dispatch('app/fetchProgram', { programId })
-    // return Promise.all([schedulePromise, programPromise]).then(results => {
-    //   const scheduleListDoc = results[0]
-    //   const scheduleList = []
-    //   const program = results[1]
-    //   scheduleListDoc.forEach(doc => {
-    //     const schedule = { ...doc.data(), id: doc.id }
-    //     scheduleList.push(schedule)
-    //   })
-    //   return { scheduleList, program }
-    // })
   },
   methods: {
     fetchScheduleList() {

@@ -128,7 +128,6 @@
     <main class="container" style="margin-top: 60px;">
       <nuxt />
       <el-divider class="my-2" />
-      <Tags :tags="defaultTags" />
     </main>
     <el-divider class="m-2" />
     <footer class="py-4 px-2">
@@ -284,8 +283,7 @@ export default {
 
         const allProgramList = this.concatTwoProgramList(this.todayProgramList, this.nextDaysProgramList)
         const programSearchResult = allProgramList.filter(program => {
-          return program.name.toLowerCase().includes(lowerCaseSearchText) ||
-          program.description.toLowerCase().includes(lowerCaseSearchText)
+          return program.name.toLowerCase().includes(lowerCaseSearchText)
         })
         this.searchAllResults = this.searchAllResults.concat(programSearchResult)
 

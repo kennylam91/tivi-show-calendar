@@ -14,6 +14,7 @@
       @search="searchProgram"
       @clear="handleClearSearch"
     />
+    <Tags :tags="tags" />
 
   </div>
 </template>

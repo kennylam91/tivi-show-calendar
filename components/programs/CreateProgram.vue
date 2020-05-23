@@ -57,6 +57,9 @@
           :rows="4"
         />
       </el-form-item>
+      <el-form-item label="Trailer">
+        <el-input v-model="programData.trailer" />
+      </el-form-item>
       <el-form-item label="Logo">
         <Upload :picture-prop="programData.logo" @uploaded="handleUploaded" />
       </el-form-item>
