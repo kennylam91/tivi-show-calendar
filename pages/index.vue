@@ -123,14 +123,6 @@ export default {
         return []
       }
     },
-    // nextDaysVipProgramList() {
-    //   if (this.nextDaysProgramList) {
-    //     const clonedList = [...this.nextDaysProgramList]
-    //     return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
-    //   } else {
-    //     return []
-    //   }
-    // },
     fromNowInDayVipProgramList() {
       if (this.fromNowInDayProgramList) {
         const clonedList = [...this.fromNowInDayProgramList]
@@ -144,27 +136,16 @@ export default {
       const livePrograms = []
       liveSchedules.forEach(schedule => {
         const program = this.fromTodayProgramList.find(item => item.id === schedule.programId)
-        if (program) {
+        if (program && !livePrograms.some(pro => pro.id === program.id)) {
           livePrograms.push({ ...program, schedule: schedule })
         }
       })
-      return livePrograms.sort(sortByRankDesc).slice(0, 4)
+      if (livePrograms.length > 8) {
+        return livePrograms.sort(sortByRankDesc).slice(0, 8)
+      } else {
+        return livePrograms.sort(sortByRankDesc).slice(0, 4)
+      }
     }
-    // onGoingTodayProgramList() {
-    //   const list = []
-    //   for (const program of this.fromNowInDayProgramList) {
-    //     if (program) {
-    //       if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
-    //         list.push({ ...program })
-    //       }
-    //     }
-    //   }
-    //   const result = list.sort(sortByRankDesc)
-    //     .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
-    //   debugger
-    //   return result
-    // }
-
   },
   watch: {
   },

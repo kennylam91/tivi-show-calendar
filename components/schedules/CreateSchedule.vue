@@ -111,26 +111,33 @@ export default {
         }
         if (this.scheduleData.programId) {
           this.programName = this.scheduleData.programName
+          if (this.programList) {
+            this.selectedProgram = this.programList.find(pro =>
+              pro.name === this.programName)
+          }
         } else {
           this.programName = ''
-        }
-      }
-    },
-    programName() {
-      if (this.programName) {
-        this.selectedProgram = this.programList.find(pro =>
-          pro.name === this.programName)
-        if (this.selectedProgram) {
-          this.scheduleData.programId = this.selectedProgram.id
         }
       }
     },
     programList: {
       deep: true,
       handler() {
+        this.selectedProgram = this.programList.find(pro =>
+          pro.name === this.programName)
+        if (this.selectedProgram) {
+          this.scheduleData.programId = this.selectedProgram.id
+        }
         if (this.scheduleData.programId) {
-          this.programName = this.programList.find(pro =>
-            pro.id === this.scheduleData.programId).name
+          const found = this.programList.find(pro =>
+            pro.id === this.scheduleData.programId)
+          if (found) {
+            this.programName = found.name
+            this.selectedProgram = found
+          } else {
+            this.programName = ''
+            this.selectedProgram = null
+          }
         }
       }
     }
@@ -144,8 +151,11 @@ export default {
       })
       this.programList = [...list]
       if (this.scheduleData.programId) {
-        this.programName = this.programList.find(pro =>
-          pro.id === this.scheduleData.programId).name
+        const found = this.programList.find(pro =>
+          pro.id === this.scheduleData.programId)
+        if (found) {
+          this.programName = found.name
+        }
       }
     })
   },
@@ -196,6 +206,7 @@ export default {
           })
         }
       }).catch((err) => {
+        debugger
         this.$message({
           message: err,
           type: 'error',
