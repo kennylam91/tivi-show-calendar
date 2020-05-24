@@ -206,7 +206,6 @@ export default {
           })
         }
       }).catch((err) => {
-        debugger
         this.$message({
           message: err,
           type: 'error',

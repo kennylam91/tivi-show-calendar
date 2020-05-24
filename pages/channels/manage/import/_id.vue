@@ -102,10 +102,15 @@ export default {
       const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
       const scheduleArr = []
       if (this.importDate) {
-        for (const schedule of dataArray) {
+        for (let schedule of dataArray) {
           // schedule: '00:00	BIẾN ĐI, ÔNG ANH! (GO BROTHER)'
           // array: cac truong du lieu
+          schedule = schedule.replace('Phim truyện :', '').replace('Phim Sitcom : ', '')
           const array = schedule.split(/\s+/)
+          for (let index = 0; index < array.length; index++) {
+            const element = array[index]
+            array[index] = element.replace(/-.*/gi, '')
+          }
           const startTimeStr = array[0]
           const timeSplitArr = startTimeStr.split(':')
           const hour = Number(timeSplitArr[0])
@@ -117,21 +122,33 @@ export default {
           // find program by english name
           const foundProgramsByEnName = this.programList.filter(item => {
             // mang cac tu cua ten chuong trinh
-            const nameArr = item.name.split(/\s/)
-            const compareProgramName = nameArr[1] ? nameArr[0] + ' ' + nameArr[1] : nameArr[0]
-            const isValid = array[2] && array[2].trim() !== ':'
+            // const nameArr = item.name.split(/\s/)
+            // const compareProgramName = nameArr[1] ? nameArr[0] + ' ' + nameArr[1] : nameArr[0]
+            const compareProgramName = item.name
+            const isValid = array[2] && array[2].trim() !== ':' && !array[2].includes('(')
             const importProgramName = isValid ? array[1] + ' ' + array[2].replace(':', '') : array[1]
             if (compareProgramName && importProgramName) {
               return compareProgramName.toLowerCase().includes(importProgramName.toLowerCase())
             }
           })
           const foundProgramByViName = this.programList.filter(item => {
-            const nameArr = item.name.split('-')
-            const vnName = nameArr[1] ? nameArr[1] : nameArr[0]
-            const vnNameArr = vnName.trim().split(/\s/)
-            const compareProgramName = vnNameArr[1] ? vnNameArr[0] + ' ' + vnNameArr[1] : vnNameArr[0]
-            const isValid = array[2] && array[2].trim() !== ':'
-            const importProgramName = isValid ? array[1] + ' ' + array[2].replace(':', '') : array[1]
+            // const nameArr = item.name.split('-')
+            // const vnName = nameArr[1] ? nameArr[1] : nameArr[0]
+            // const vnNameArr = vnName.trim().split(/\s/)
+            // const compareProgramName = vnNameArr[1] ? vnNameArr[0] + ' ' + vnNameArr[1] : vnNameArr[0]
+            const compareProgramName = item.name
+            let importProgramName
+            if (array[2] && array[2].trim !== ':') {
+              if (array[3] && array[3].trim !== ':') {
+                importProgramName = array[1] + ' ' + array[2].replace(':', '') + ' ' + array[3].replace(':', '')
+              } else {
+                importProgramName = array[1] + ' ' + array[2].replace(':', '')
+              }
+            } else {
+              importProgramName = array[1]
+            }
+            // const isValid = array[2] && array[2].trim() !== ':'
+            // const importProgramName = isValid ? array[1] + ' ' + array[2].replace(':', '') : array[1]
             if (compareProgramName && importProgramName) {
               return compareProgramName.toLowerCase().includes(importProgramName.toLowerCase())
             }
@@ -171,7 +188,6 @@ export default {
 
         const programRef = FB.programRef.doc(schedule.programId)
         const startTime = new Date(schedule.startTime.seconds * 1000)
-        // debugger
         const startOfDateInGMT7 = getStartOfDayInGMT7(startTime)
         const newSchedules = firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
         batch.update(programRef, { 'schedules': newSchedules })
