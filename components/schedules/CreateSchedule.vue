@@ -140,6 +140,11 @@ export default {
           }
         }
       }
+    },
+    programName: {
+      handler() {
+        this.selectedProgram = this.programList.find(pro => pro.name === this.programName)
+      }
     }
   },
   created() {

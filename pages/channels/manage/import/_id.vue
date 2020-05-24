@@ -105,7 +105,9 @@ export default {
         for (let schedule of dataArray) {
           // schedule: '00:00	BIẾN ĐI, ÔNG ANH! (GO BROTHER)'
           // array: cac truong du lieu
-          schedule = schedule.replace('Phim truyện :', '').replace('Phim Sitcom : ', '')
+          schedule = schedule.replace('Phim truyện :', '').replace('Phim Sitcom : ', '').replace('Phim Việt Nam:', '')
+            .replace('Phim tài liệu:', '').replace('Phim hoạt hình:', '').replace('Ký sự truyền hình:', '').replace('Phim Ấn Độ:', '')
+            .replace('Phim Thổ Nhĩ Kỳ:', '').replace('Sitcom:', '').replace('Phim Đài Loan:', '').replace('Phim Ukraina:', '')
           const array = schedule.split(/\s+/)
           for (let index = 0; index < array.length; index++) {
             const element = array[index]

@@ -47,6 +47,17 @@
                 @click="handleChannelDeleteClick(channel)"
               >{{ COMMON.DELETE }}</el-button>
             </div>
+            <div>
+              <el-button
+                size="small"
+                type="warning"
+                style="width: 115px;"
+                @click="$router.push({path: `/programs?channelId=${channel.id}`})"
+              >
+                Programs
+              </el-button>
+
+            </div>
           </td>
         </tr>
       </tbody>

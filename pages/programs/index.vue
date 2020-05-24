@@ -153,10 +153,11 @@ export default {
     }
   },
   created() {
-    // if (!this.programList) {
-    //   this.fetchAllProgram({})
-    // }
     this.programList = [...this.fromTodayProgramList]
+    const channelId = this.$route.query.channelId
+    if (channelId) {
+      this.fetchAllProgram({ channelId })
+    }
     // this.listQuery.name = this.$route.query.q
   },
   methods: {
