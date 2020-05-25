@@ -43,7 +43,7 @@
         >
           {{ item | getCategory }}
           <el-divider
-            v-if="index===0 && getCategoryList(program).length >=2"
+            v-show="index===0 && getCategoryList(program).length >=2"
             direction="vertical"
           />
         </span>
