@@ -42,10 +42,11 @@
           class="smaller-font-size color-info"
         >
           {{ item | getCategory }}
-          <el-divider
-            v-show="index===0 && getCategoryList(program).length >=2"
-            direction="vertical"
-          />
+          <span v-show="isShowDivider(index,program)">
+            <el-divider
+              direction="vertical"
+            />
+          </span>
         </span>
 
       </div>
@@ -103,6 +104,9 @@ export default {
     },
     parseTime(time) {
       return parseVNTime(time, '{H}:{i}', true, true)
+    },
+    isShowDivider(index, program) {
+      return index === 0 && this.getCategoryList(program).length >= 2
     }
     // getTagType(item){
     //   const tagTypeMap = new Map([
