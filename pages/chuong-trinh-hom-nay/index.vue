@@ -7,6 +7,7 @@
       </el-breadcrumb>
     </div>
     <ProgramListComplex
+      v-if="programData"
       :title="COMMON.TODAY_PROGRAM"
       :program-list-prop="programData"
       :search-form-prop="todayProgramSearchForm"
@@ -14,7 +15,7 @@
       @search="searchProgram"
       @clear="handleClearSearch"
     />
-    <Tags :tags="tags" />
+    <!-- <Tags :tags="tags" /> -->
 
   </div>
 </template>
@@ -29,7 +30,7 @@ export default {
   components: { ProgramListComplex },
   data() {
     return {
-      programData: [],
+      programData: null,
       dialogKey: 0,
       searchByDateProgramList: [],
       movieProgramList: [],

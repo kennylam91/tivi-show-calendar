@@ -24,12 +24,13 @@
           >{{ COMMON.CLEAR_SEARCH }}</el-button>
         </div>
         <el-divider />
+        <div v-if="movieProgramList.length">
+          <ProgramListContainer
+            :title="COMMON.MOVIE"
+            :program-list-prop="movieProgramList"
+          />
+        </div>
 
-        <ProgramListContainer
-          v-if="movieProgramList.length"
-          :title="COMMON.MOVIE"
-          :program-list-prop="movieProgramList"
-        />
         <ProgramListContainer
           v-if="sciExpProgramList.length"
           :title="COMMON.SCIENCE_EXPLORE"
@@ -60,7 +61,7 @@
 import { mapGetters } from 'vuex'
 import ProgramListContainer from '@/components/programs/ProgramListContainer'
 import ProgramSearchFormComp from '@/components/programs/ProgramSearchForm'
-import { sortByRankDesc } from '@/assets/utils/index'
+import { sortByRankDesc, sortByName } from '@/assets/utils/index'
 export default {
   components: { ProgramSearchFormComp, ProgramListContainer },
   props: {
@@ -106,8 +107,9 @@ export default {
       immediate: true,
       deep: true,
       handler() {
+        debugger
         if (this.programListProp) {
-          this.programList = [...this.programListProp]
+          this.programList = [...this.programListProp].sort(sortByName)
           this.getProgramListForContainer()
         }
       }
@@ -117,6 +119,7 @@ export default {
 
   methods: {
     searchProgram(searchForm) {
+      debugger
       this.$emit('search', searchForm)
     },
     handleClearSearch() {
@@ -125,6 +128,7 @@ export default {
     },
     getProgramListForContainer() {
       this.movieProgramList = this.programList.filter(this.isMovie).sort(sortByRankDesc)
+      debugger
       this.sciExpProgramList = this.programList.filter(this.isSciExp).sort(sortByRankDesc)
       this.othersProgramList = this.programList.filter(program => {
         return !this.isMovie(program) && !this.isSciExp(program)

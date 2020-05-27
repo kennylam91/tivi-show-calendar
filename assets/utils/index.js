@@ -124,3 +124,13 @@ export const convertVNToEN = (str) => {
     .replace(/đ/g, 'd')
     .replace(/Đ/g, 'D')
 }
+
+export const sortByName = (a, b) => {
+  if (a.name > b.name) {
+    return 1
+  } else if (a.name < b.name) {
+    return -1
+  } else {
+    return 0
+  }
+}
