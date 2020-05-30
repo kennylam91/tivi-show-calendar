@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-undef */
+/* eslint-disable no-undef */
+/* eslint-disable no-undef */
 <template>
   <div v-if="channel">
     <div class="py-4 px-2">
@@ -126,7 +128,10 @@ import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
   asyncData({ params, store }) {
-    const channelName = params.id.split('_')[0]
+    const channelId = params.id.split('_').pop()
+    const channel = store.state.app.channelList.find(item => item.id === channelId)
+
+    // const channelName = params.id.split('_')[0]
     // let scheduleData
     // const start = new Date()
     // start.setHours(0, 0, 0, 0)
@@ -146,7 +151,7 @@ export default {
     //   scheduleData = list
     //   return { channel, scheduleData, channelId }
     // })
-    return { channelName }
+    return { channelId, channel }
   },
   data() {
     return {
@@ -188,8 +193,6 @@ export default {
     if (dateParam) {
       this.selectedDate = dateParam
     }
-    this.channelId = this.$route.params.id.split('_').pop()
-    this.channel = this.$store.state.app.channelList.find(item => item.id === this.channelId)
   },
   methods: {
     parseTime(time) {
@@ -267,10 +270,11 @@ export default {
   },
   head() {
     return {
-      title: `Truyền hình 24h - ${COMMON.SCHEDULE} ${this.channelName}`,
+      title: `Truyền hình 24h - ${COMMON.SCHEDULE} ${this.channel.name}`,
       meta: [
         { hid: 'description', name: 'description',
-          content: `Cập nhật lịch phát sóng hàng ngày và tổng hợp các chương trình hay nhất trên kênh ${this.channelName} ` }
+          content: `Cập nhật lịch phát sóng hàng ngày và tổng hợp các chương trình hay nhất trên kênh ${this.channel.name}. 
+          ${this.channel.description} ` }
       ]
     }
   }
