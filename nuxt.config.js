@@ -13,7 +13,7 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description',
-        content: 'Truyền hình 24h - Cập nhật lịch phát sóng các kênh truyền hình hay nhất hàng ngày (HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, ...)' }
+        content: 'Nơi tổng hợp các chương trình  và phim truyện hay nhất trên các kênh truyền hình(HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, VTV, THVL, TodayTV, ...)' }
     ],
     link: [
     ],

@@ -141,7 +141,7 @@ export default {
     title: `Truyền hình 24h - ${COMMON.NEXT_DAY_PROGRAM}`,
     meta: [
       { hid: 'description', name: 'description',
-        content: 'Tổng hợp đầy đủ các chương trình được phát sóng hàng ngày trên các kênh HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, ...' }
+        content: 'Tổng hợp đầy đủ, chi tiết các chương trình được phát sóng ngày mai trên các kênh HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, VTV, THVL, TodayTV, ...' }
     ]
   }
 

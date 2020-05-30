@@ -125,28 +125,29 @@ import { FB, COMMON } from '@/assets/utils/constant'
 import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
-  // asyncData({ params, store }) {
-  //   const channelId = params.id.split('_').pop()
-  //   let scheduleData
-  //   const start = new Date()
-  //   start.setHours(0, 0, 0, 0)
-  //   const startTimestamp = FB.timestamp.fromDate(start)
+  asyncData({ params, store }) {
+    const channelName = params.id.split('_')[0]
+    // let scheduleData
+    // const start = new Date()
+    // start.setHours(0, 0, 0, 0)
+    // const startTimestamp = FB.timestamp.fromDate(start)
 
-  //   const end = new Date()
-  //   end.setHours(23, 59, 59, 999)
-  //   const endTimestamp = FB.timestamp.fromDate(end)
+    // const end = new Date()
+    // end.setHours(23, 59, 59, 999)
+    // const endTimestamp = FB.timestamp.fromDate(end)
 
-  //   const promise0 = store.dispatch('app/fetchScheduleList',
-  //     { channelId: channelId,
-  //       startTime: startTimestamp,
-  //       endTime: endTimestamp })
+    // const promise0 = store.dispatch('app/fetchScheduleList',
+    //   { channelId: channelId,
+    //     startTime: startTimestamp,
+    //     endTime: endTimestamp })
 
-  //   const channel = store.state.app.channelList.find(item => item.id === channelId)
-  //   return promise0.then(list => {
-  //     scheduleData = list
-  //     return { channel, scheduleData, channelId }
-  //   })
-  // },
+    // const channel = store.state.app.channelList.find(item => item.id === channelId)
+    // return promise0.then(list => {
+    //   scheduleData = list
+    //   return { channel, scheduleData, channelId }
+    // })
+    return { channelName }
+  },
   data() {
     return {
       channelId: null,
@@ -264,12 +265,14 @@ export default {
       })
     }
   },
-  head: {
-    title: `Truyền hình 24h - ${COMMON.SCHEDULE}`,
-    meta: [
-      { hid: 'description', name: 'description',
-        content: 'Cập nhật lịch phát sóng các kênh truyền hình hay nhất hàng ngày (HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, ...)' }
-    ]
+  head() {
+    return {
+      title: `Truyền hình 24h - ${COMMON.SCHEDULE} ${this.channelName}`,
+      meta: [
+        { hid: 'description', name: 'description',
+          content: `Cập nhật lịch phát sóng hàng ngày và tổng hợp các chương trình hay nhất trên kênh ${this.channelName} ` }
+      ]
+    }
   }
 }
 </script>

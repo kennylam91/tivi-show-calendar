@@ -123,6 +123,16 @@ export default {
       return parseVNTime(time, '{d}/{m}/{y} {H}:{i}', true, true)
     }
   },
+  asyncData({ params, store }) {
+    const programId = params.id.split('_').pop().trim()
+    const program = store.state.app.fromTodayProgramList.find(item => item.id === programId)
+    if (!program) {
+      return store.dispatch('app/fetchProgram', { programId: programId }).then(program => {
+        return { program, programId }
+      })
+    }
+    return { program, programId }
+  },
   data() {
     return {
       program: null,
@@ -149,16 +159,9 @@ export default {
   created() {
     const now = new Date()
     const before30Mins = Date.parse(now) - 30 * 60 * 1000
-    const programId = this.$route.params.id.split('_').pop().trim()
     const scheduleList = []
-    this.program = this.fromTodayProgramList.find(item => item.id === programId)
-    if (!this.program) {
-      this.$store.dispatch('app/fetchProgram', { programId: programId }).then(program => {
-        this.program = program
-      })
-    }
     this.$store.dispatch('app/setLoading', true)
-    const schedulePromise = FB.scheduleRef.where('programId', '==', programId)
+    const schedulePromise = FB.scheduleRef.where('programId', '==', this.programId)
       .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
       .orderBy('startTime', 'asc').get()
     schedulePromise.then(scheduleListDoc => {
@@ -232,12 +235,14 @@ export default {
       })
     }
   },
-  head: {
-    title: `Truyền hình 24h - ${COMMON.PROGRAM_DETAIL}`,
-    meta: [
-      { hid: 'description', name: 'description',
-        content: 'Giới thiệu chi tiết, đầy đủ các chương trình truyền hình được phát sóng hàng ngày trên các kênh HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, ...' }
-    ]
+  head() {
+    return {
+      title: `${this.program.name} : Chi tiết thông tin chương trình và lịch phát sóng`,
+      meta: [
+        { hid: 'description', name: 'description',
+          content: this.program.description }
+      ]
+    }
   }
 }
 </script>

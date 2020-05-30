@@ -107,7 +107,6 @@ export default {
       immediate: true,
       deep: true,
       handler() {
-        debugger
         if (this.programListProp) {
           this.programList = [...this.programListProp].sort(sortByName)
           this.getProgramListForContainer()
@@ -119,7 +118,6 @@ export default {
 
   methods: {
     searchProgram(searchForm) {
-      debugger
       this.$emit('search', searchForm)
     },
     handleClearSearch() {
@@ -128,7 +126,6 @@ export default {
     },
     getProgramListForContainer() {
       this.movieProgramList = this.programList.filter(this.isMovie).sort(sortByRankDesc)
-      debugger
       this.sciExpProgramList = this.programList.filter(this.isSciExp).sort(sortByRankDesc)
       this.othersProgramList = this.programList.filter(program => {
         return !this.isMovie(program) && !this.isSciExp(program)

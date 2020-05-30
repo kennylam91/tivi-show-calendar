@@ -68,7 +68,6 @@ export default {
       deep: true,
       immediate: true,
       handler() {
-        debugger
         this.list = this.programListProp.slice(0, 12)
       }
     }
