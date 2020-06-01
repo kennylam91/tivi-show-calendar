@@ -134,3 +134,15 @@ export const sortByName = (a, b) => {
     return 0
   }
 }
+
+export const getStartOfDate = date => {
+  const start = date
+  start.setHours(0, 0, 0, 0)
+  return start
+}
+
+export const getEndOfDate = date => {
+  const end = date
+  end.setHours(23, 59, 59, 999)
+  return end
+}

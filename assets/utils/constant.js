@@ -148,7 +148,10 @@ export const categoryMap = new Map([
   [29, 'Ngôn tình'],
   [30, 'Bí ẩn'],
   [31, 'Gia đình'],
-  [32, 'Talk show']
+  [32, 'Talk show'],
+  [33, 'Thể thao'],
+  [34, 'Phim Sitcom'],
+  [35, 'Phim dài tập']
 ])
 
 export const categoryTagMap = new Map([
@@ -183,7 +186,10 @@ export const categoryTagMap = new Map([
   [29, 'success'],
   [30, 'info'],
   [31, 'primary'],
-  [32, 'primar']
+  [32, 'primary'],
+  [33, 'primary'],
+  [34, 'primary'],
+  [35, 'primary']
 ])
 
 export const CATEGORIES = [
@@ -218,7 +224,10 @@ export const CATEGORIES = [
   { value: 29, label: 'Ngôn tình', text: 'Ngôn tình' },
   { value: 30, label: 'Bí ẩn', text: 'Bí ẩn' },
   { value: 31, label: 'Gia đình', text: 'Gia đình' },
-  { value: 32, label: 'Talk show', text: 'Talk show' }
+  { value: 32, label: 'Talk show', text: 'Talk show' },
+  { value: 33, label: 'Thể thao', text: 'Thể thao' },
+  { value: 34, label: 'Phim Sitcom', text: 'Phim Sitcom' },
+  { value: 35, label: 'Phim dài tập', text: 'Phim dài tập' }
 ].sort((a, b) => {
   if (a.label > b.label) {
     return 1
