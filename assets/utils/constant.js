@@ -91,7 +91,8 @@ export const COMMON = {
   SCIENCE_EXPLORE: 'Khoa học - khám phá',
   INFO_ENTERTAINMENT: 'Thông tin - giải trí',
   VIEW_MORE: 'Xem thêm',
-  VIEW_LESS: 'Ẩn bớt'
+  VIEW_LESS: 'Ẩn bớt',
+  UPDATING: 'Đang cập nhật!!!'
 
 }
 import { firebase } from '@/MyFireBase'

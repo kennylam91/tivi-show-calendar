@@ -47,7 +47,7 @@
         </article>
         <article class="my-2">
           <h5 class="mb-2">{{ COMMON.PROGRAM_SCHEDULE_NEXT_DAYS }}</h5>
-          <div v-if="scheduleList.length > 0">
+          <div>
             <table
               v-loading="loading"
               class="table table-hover small-font-size table-sm"
@@ -81,7 +81,7 @@
                 </tr>
               </tbody>
             </table>
-            <div class="small-font-size">
+            <div v-if="scheduleList.length > 0" class="small-font-size">
               <span> Click</span>
               <i
                 class="large-font-size el-icon-bell pointer color-primary"
@@ -91,7 +91,7 @@
             </div>
           </div>
           <p
-            v-if="scheduleList.length === 0"
+            v-if="isShowNoData"
             class="ml-4 color-info"
           >{{ COMMON.NO_DATA }}</p>
 
@@ -152,7 +152,10 @@ export default {
       nextDaysProgramList: 'nextDaysProgramList',
       loading: 'loading',
       fromTodayProgramList: 'fromTodayProgramList'
-    })
+    }),
+    isShowNoData() {
+      return this.scheduleList.length === 0 && this.loading === false
+    }
   },
   watch: {
   },

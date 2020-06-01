@@ -55,36 +55,36 @@
           />
         </div>
       </div>
-
-      <table id="scheduleTable" v-loading="tableLoading" class="table table-hover">
-        <tr class="color-info text-left">
-          <th scope="col">
-            <span>Time</span>
-          </th>
-          <th scope="col">
-            <span>{{ COMMON.PROGRAM_NAME }}</span>
-          </th>
-          <!-- <th class="categoryColumn">{{ COMMON.CATEGORY }}</th> -->
-          <td />
-        </tr>
-        <tbody v-loading="loading">
-          <tr
-            v-for="(row, index) in scheduleData"
-            :key="index"
-            :class="{scheduleInShowing : isShowing(row)}"
-          >
-            <td style="">
-              <span>{{ parseTime(row.startTime.seconds) }}</span>
-            </td>
-            <td>
-              <el-link
-                :underline="false"
-                @click="viewProgramDetail(row)"
-              >
-                <span>{{ row.programName | uppercaseAll }}</span>
-              </el-link>
-            </td>
-            <!-- <td class="categoryColumn">
+      <div v-if="scheduleData">
+        <table id="scheduleTable" v-loading="tableLoading" class="table table-hover">
+          <tr class="color-info text-left">
+            <th scope="col">
+              <span>Time</span>
+            </th>
+            <th scope="col">
+              <span>{{ COMMON.PROGRAM_NAME }}</span>
+            </th>
+            <!-- <th class="categoryColumn">{{ COMMON.CATEGORY }}</th> -->
+            <td />
+          </tr>
+          <tbody v-if="scheduleData.length > 0">
+            <tr
+              v-for="(row, index) in scheduleData"
+              :key="index"
+              :class="{scheduleInShowing : isShowing(row)}"
+            >
+              <td style="">
+                <span>{{ parseTime(row.startTime.seconds) }}</span>
+              </td>
+              <td>
+                <el-link
+                  :underline="false"
+                  @click="viewProgramDetail(row)"
+                >
+                  <span>{{ row.programName | uppercaseAll }}</span>
+                </el-link>
+              </td>
+              <!-- <td class="categoryColumn">
               <el-tag
                 v-for="item in row.categories.filter(item => item !== 1)"
                 :key="item"
@@ -96,26 +96,30 @@
                 {{ item | getCategory }}
               </el-tag>
             </td> -->
-            <td>
-              <i
-                v-if="isShowAddBtn(row)"
-                class="large-font-size el-icon-bell pointer color-primary"
-                @click="addScheduleToGGCal(row)"
-              />
-            </td>
-          </tr>
-
-        </tbody>
-
-      </table>
-      <div class="small-font-size">
-        <span> Click</span>
-        <i
-          class="large-font-size el-icon-bell pointer color-primary"
-        />
-        <span>{{ COMMON.TO_ADD_GG_CAL }}</span><br>
-        <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
+              <td>
+                <i
+                  v-if="isShowAddBtn(row)"
+                  class="large-font-size el-icon-bell pointer color-primary"
+                  @click="addScheduleToGGCal(row)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p
+          v-if="isShowNoData"
+          class="ml-4 color-info"
+        >{{ COMMON.UPDATING }}</p>
+        <div v-if="scheduleData.length > 0" class="small-font-size">
+          <span> Click</span>
+          <i
+            class="large-font-size el-icon-bell pointer color-primary"
+          />
+          <span>{{ COMMON.TO_ADD_GG_CAL }}</span><br>
+          <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
+        </div>
       </div>
+
     </el-card>
 
   </div>
@@ -175,6 +179,12 @@ export default {
     }),
     selectedDateFormatted() {
       return parseVNTime(this.selectedDate, '{d}/{m}/{y}', true, true)
+    },
+    isShowNoData() {
+      if (this.scheduleData) {
+        return this.scheduleData.length === 0
+      }
+      return false
     }
   },
   watch: {
