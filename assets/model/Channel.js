@@ -1,10 +1,11 @@
 export class Channel {
-  constructor(id, name, desc, logo, isVip) {
+  constructor(id, name, desc, logo, isVip, schedules) {
     this.id = id
     this.name = name
     this.description = desc
     this.logo = logo
     this.isVip = isVip
+    this.schedules = schedules
   }
   getId() { return this.id }
   getName() { return this.name }
@@ -17,13 +18,14 @@ export class Channel {
   setLogo(value) { this.logo = value }
   setIsVip(value) { this.isVip = value }
 
-  static getInstance(doc) {
+  static getInstanceFromDoc(doc) {
     return {
       id: doc.id,
       name: doc.data().name,
       description: doc.data().description,
       logo: doc.data().logo,
-      isVip: doc.data().isVip
+      isVip: doc.data().isVip,
+      schedules: doc.data().schedules
     }
   }
 }

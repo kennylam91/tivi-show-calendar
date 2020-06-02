@@ -21,7 +21,7 @@
 import { mapGetters } from 'vuex'
 // import Program from '@/components/programs/Program'
 import { FB, COMMON } from '@/assets/utils/constant'
-import { sortByRankDesc } from '@/assets/utils/index'
+// import { sortByRankDesc } from '@/assets/utils/index'
 import ProgramListComplex from '@/components/programs/ProgramListComplex'
 
 export default {
@@ -129,12 +129,11 @@ export default {
       this.$store.dispatch('app/setNextDaysProgramSearchForm', null)
     },
     getProgramListForContainer() {
-      this.movieProgramList = this.programData.filter(this.isMovie).sort(sortByRankDesc)
-      this.sciExpProgramList = this.programData.filter(this.isSciExp).sort(sortByRankDesc)
+      this.movieProgramList = this.programData.filter(this.isMovie)
+      this.sciExpProgramList = this.programData.filter(this.isSciExp)
       this.othersProgramList = this.programData.filter(program => {
         return !this.isMovie(program) && !this.isSciExp(program)
       })
-        .sort(sortByRankDesc)
     }
   },
   head: {

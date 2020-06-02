@@ -89,7 +89,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
-import { sortByRankDesc } from '@/assets/utils/index'
+// import { sortByRankDesc } from '@/assets/utils/index'
 
 export default {
   components: { Program },
@@ -118,7 +118,7 @@ export default {
     todayVipProgramList() {
       if (this.todayProgramList) {
         const clonedList = [...this.todayProgramList]
-        return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+        return clonedList.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
       } else {
         return []
       }
@@ -126,7 +126,7 @@ export default {
     fromNowInDayVipProgramList() {
       if (this.fromNowInDayProgramList) {
         const clonedList = [...this.fromNowInDayProgramList]
-        return clonedList.sort(sortByRankDesc).slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+        return clonedList.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
       } else {
         return []
       }
@@ -141,9 +141,9 @@ export default {
         }
       })
       if (livePrograms.length > 8) {
-        return livePrograms.sort(sortByRankDesc).slice(0, 8)
+        return livePrograms.slice(0, 8)
       } else {
-        return livePrograms.sort(sortByRankDesc).slice(0, 4)
+        return livePrograms.slice(0, 4)
       }
     }
   },
@@ -158,12 +158,12 @@ export default {
         }
       }
     }
-    this.onGoingTodayProgramList = list.sort(sortByRankDesc)
+    this.onGoingTodayProgramList = list
       .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
 
     if (this.nextDaysProgramList) {
       const clonedList = [...this.nextDaysProgramList]
-      this.nextDaysVipProgramList = clonedList.sort(sortByRankDesc)
+      this.nextDaysVipProgramList = clonedList
         .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
     } else {
       this.nextDaysVipProgramList = []

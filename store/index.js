@@ -1,6 +1,7 @@
 import { FB } from '@/assets/utils/constant'
 // import { trimObject } from '../assets/utils'
 import { getStartOfDayInGMT7 } from '@/assets/utils/index'
+import { sortByRankDesc } from '@/assets/utils/index'
 export const state = () => ({
 
 })
@@ -69,10 +70,10 @@ export const actions = {
           }
         }
         dispatch('app/setChannelList', results[0])
-        dispatch('app/setTodayProgramList', todayProgramList)
-        dispatch('app/setNextDaysProgramList', nextDaysProgramList)
-        dispatch('app/setFromTodayProgramList', fromTodayProgramList)
-        dispatch('app/setFromNowInDayProgramList', fromNowInDayProgramList)
+        dispatch('app/setTodayProgramList', todayProgramList.sort(sortByRankDesc))
+        dispatch('app/setNextDaysProgramList', nextDaysProgramList.sort(sortByRankDesc))
+        dispatch('app/setFromTodayProgramList', fromTodayProgramList.sort(sortByRankDesc))
+        dispatch('app/setFromNowInDayProgramList', fromNowInDayProgramList.sort(sortByRankDesc))
         dispatch('app/setFromNowInDayScheduleList', fromNowScheduleList)
       })
   }

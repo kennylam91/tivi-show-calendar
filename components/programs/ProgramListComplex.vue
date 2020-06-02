@@ -125,12 +125,11 @@ export default {
       this.$emit('clear')
     },
     getProgramListForContainer() {
-      this.movieProgramList = this.programList.filter(this.isMovie).sort(sortByRankDesc)
-      this.sciExpProgramList = this.programList.filter(this.isSciExp).sort(sortByRankDesc)
+      this.movieProgramList = this.programList.filter(this.isMovie)
+      this.sciExpProgramList = this.programList.filter(this.isSciExp)
       this.othersProgramList = this.programList.filter(program => {
         return !this.isMovie(program) && !this.isSciExp(program)
       })
-        .sort(sortByRankDesc)
     }
   }
 }

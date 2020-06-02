@@ -21,7 +21,12 @@
     >
       <div slot="header" class="justify-between-align-center">
         <span class="bold">{{ COMMON.CHANNEL_LIST }}</span>
-        <el-button type="primary" size="small" plain @click="handleCreateChannelClick">{{ COMMON.CREATE_CHANNEL }}</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          plain
+          @click="handleCreateChannelClick"
+        >{{ COMMON.CREATE_CHANNEL }}</el-button>
       </div>
       <ChannelTable v-if="channelList" :channel-list="channelList" :is-admin="true" />
 
