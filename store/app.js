@@ -148,7 +148,7 @@ export const actions = {
       FB.channelRef.orderBy('name', 'asc').get().then(list => {
         const channelList = []
         list.forEach((doc) => {
-          const channel = Channel.getInstance(doc)
+          const channel = Channel.getInstanceFromDoc(doc)
           channelList.push(channel)
         })
         commit('SET_CHANNEL_LIST', channelList)

@@ -31,49 +31,55 @@
           <td v-if="!isAdmin">{{ channel.description }}</td>
           <td
             v-if="isAdmin"
-            :class="getTextColorClass(channel.isTodayScheduled)"
-          >{{ channel.isTodayScheduled }}</td>
+            :class="getTextColorClass(isChannelScheduled(channel, today))"
+          >{{ isChannelScheduled(channel, today) }}</td>
           <td
             v-if="isAdmin"
-            :class="getTextColorClass(channel.isTomorrowScheduled)"
-          >{{ channel.isTomorrowScheduled }}</td>
+            :class="getTextColorClass(isChannelScheduled(channel, tomorrow))"
+          >{{ isChannelScheduled(channel, tomorrow) }}</td>
           <td
             v-if="isAdmin"
-            :class="getTextColorClass(channel.isNext2DaysScheduled)"
-          >{{ channel.isNext2DaysScheduled }}</td>
+            :class="getTextColorClass(isChannelScheduled(channel, next2Days))"
+          >{{ isChannelScheduled(channel, next2Days) }}</td>
 
-          <td v-if="isAdmin" align="center" width="270">
+          <td v-if="isAdmin" align="center" width="300">
             <el-button-group class="mb-2 d-block">
-              <el-button
-                style="width: 115px;"
-                size="mini"
-                type="primary"
-                plain
-                @click="handleChannelEditClick(channel)"
-              >{{ COMMON.EDIT }}</el-button>
               <el-button
                 type="success"
                 size="mini"
-                style="width: 115px;"
+                style="width: 120px;"
                 @click="moveToChannelManageView(channel)"
               >{{ COMMON.SCHEDULE }}</el-button>
+              <el-button
+                style="width: 70px;"
+                size="mini"
+                type="info"
+                @click="handleChannelEditClick(channel)"
+              >{{ COMMON.EDIT }}</el-button>
 
+              <el-button
+                type="danger"
+                size="mini"
+                style="width: 70px;"
+                @click="handleChannelDeleteClick(channel)"
+              >{{ COMMON.DELETE }}</el-button>
             </el-button-group>
             <el-button-group class="d-block">
               <el-button
                 size="mini"
                 type="warning"
-                style="width: 115px;"
+                style="width: 100px;"
                 @click="$router.push({path: `/programs?channelId=${channel.id}`})"
               >
                 Programs
               </el-button>
+
               <el-button
-                type="danger"
+                type="primary"
                 size="mini"
-                style="width: 115px;"
-                @click="handleChannelDeleteClick(channel)"
-              >{{ COMMON.DELETE }}</el-button>
+                style="width: 100px;"
+                @click="handleImportSchedule(channel)"
+              >Import</el-button>
             </el-button-group>
 
           </td>
@@ -84,8 +90,10 @@
   </div>
 </template>
 <script>
-import { parseVNTime, getStartOfDate, getEndOfDate } from '@/assets/utils/index'
-import { FB } from '@/assets/utils/constant'
+import { parseVNTime } from '@/assets/utils/index'
+// import { getStartOfDate, getEndOfDate } from '@/assets/utils/index'
+import { getStartOfDayInGMT7 } from '@/assets/utils/index'
+// import { FB } from '@/assets/utils/constant'
 
 export default {
   props: {
@@ -109,6 +117,9 @@ export default {
     }
   },
   computed: {
+    startOfTodayInGMT7() {
+      return getStartOfDayInGMT7(this.today)
+    }
   },
   watch: {
     channelList: {
@@ -116,54 +127,10 @@ export default {
       deep: true,
       handler() {
         this.channelData = [...this.channelList]
-        for (const channel of this.channelData) {
-          this.$store.dispatch('app/fetchScheduleList',
-            {
-              channelId: channel.channelId,
-              startTime: FB.timestamp.fromDate(getStartOfDate(this.today)),
-              endTime: FB.timestamp.fromDate(getEndOfDate(this.today)),
-              limit: 1
-            }).then(list => {
-            if (list.length > 0) {
-              this.$set(channel, 'isTodayScheduled', true)
-            } else {
-              this.$set(channel, 'isTodayScheduled', false)
-            }
-          })
-
-          this.$store.dispatch('app/fetchScheduleList',
-            {
-              channelId: channel.channelId,
-              startTime: FB.timestamp.fromDate(getStartOfDate(this.tomorrow)),
-              endTime: FB.timestamp.fromDate(getEndOfDate(this.tomorrow)),
-              limit: 1
-            }).then(list => {
-            if (list.length > 0) {
-              this.$set(channel, 'isTomorrowScheduled', true)
-            } else {
-              this.$set(channel, 'isTomorrowScheduled', false)
-            }
-          })
-
-          this.$store.dispatch('app/fetchScheduleList',
-            {
-              channelId: channel.channelId,
-              startTime: FB.timestamp.fromDate(getStartOfDate(this.next2Days)),
-              endTime: FB.timestamp.fromDate(getEndOfDate(this.next2Days)),
-              limit: 1
-            }).then(list => {
-            if (list.length > 0) {
-              this.$set(channel, 'isNext2DaysScheduled', true)
-            } else {
-              this.$set(channel, 'isNext2DaysScheduled', false)
-            }
-          })
-        }
       }
     }
   },
   created() {
-
   },
   methods: {
     handleChannelEditClick(row) {
@@ -205,6 +172,18 @@ export default {
       } else {
         return 'color-danger'
       }
+    },
+    isChannelScheduled(channel, date) {
+      const schedules = channel.schedules
+      if (schedules) {
+        const startDateInGMT7 = getStartOfDayInGMT7(date)
+        return schedules.includes(startDateInGMT7)
+      } else {
+        return false
+      }
+    },
+    handleImportSchedule(channel) {
+      this.$router.push(`/channels/manage/import/${channel.id}`)
     }
   }
 }

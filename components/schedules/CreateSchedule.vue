@@ -179,6 +179,9 @@ export default {
             FB.programRef.doc(this.selectedProgram.id).update({
               schedules: firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
             })
+            FB.channelRef.doc(this.scheduleData.channelId).update({
+              schedules: firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
+            })
             this.$notify({
               title: 'Schedule Created',
               type: 'success',
@@ -195,6 +198,9 @@ export default {
             const startTime = this.scheduleData.startTime
             const startOfDateInGMT7 = getStartOfDayInGMT7(startTime)
             FB.programRef.doc(this.selectedProgram.id).update({
+              schedules: firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
+            })
+            FB.channelRef.doc(this.scheduleData.channelId).update({
               schedules: firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
             })
             this.$notify({

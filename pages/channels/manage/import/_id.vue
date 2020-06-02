@@ -192,6 +192,8 @@ export default {
         const startTime = new Date(schedule.startTime.seconds * 1000)
         const startOfDateInGMT7 = getStartOfDayInGMT7(startTime)
         const newSchedules = firebase.firestore.FieldValue.arrayUnion(startOfDateInGMT7)
+        const channelRef = FB.channelRef.doc(this.channelId)
+        batch.update(channelRef, { 'schedules': newSchedules })
         batch.update(programRef, { 'schedules': newSchedules })
       }
       this.$store.dispatch('app/setLoading', true)
