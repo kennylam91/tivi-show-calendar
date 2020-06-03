@@ -232,7 +232,7 @@ export default {
           this.loading = false
           this.options = this.programList.filter(item => {
             return item.name.toLowerCase()
-              .indexOf(query.toLowerCase()) > -1
+              .indexOf(query.trim().toLowerCase()) > -1
           })
         }, 200)
       } else {
