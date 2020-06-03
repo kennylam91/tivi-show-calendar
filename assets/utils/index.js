@@ -85,13 +85,7 @@ export const sortByStartTime = (a, b) => {
   }
 }
 export const sortByRankDesc = (a, b) => {
-  if (a.rank < b.rank) {
-    return 1
-  } else if (a.rank > b.rank) {
-    return -1
-  } else {
-    return 0
-  }
+  return b.rank - a.rank
 }
 
 // return in milliseconds

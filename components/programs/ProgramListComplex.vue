@@ -108,7 +108,7 @@ export default {
       deep: true,
       handler() {
         if (this.programListProp) {
-          this.programList = [...this.programListProp].sort(sortByName)
+          this.programList = [...this.programListProp]
           this.getProgramListForContainer()
         }
       }
