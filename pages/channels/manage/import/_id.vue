@@ -105,9 +105,11 @@ export default {
         for (let schedule of dataArray) {
           // schedule: '00:00	BIẾN ĐI, ÔNG ANH! (GO BROTHER)'
           // array: cac truong du lieu
-          schedule = schedule.replace('Phim truyện :', '').replace('Phim Sitcom : ', '').replace('Phim Việt Nam:', '')
-            .replace('Phim tài liệu:', '').replace('Phim hoạt hình:', '').replace('Ký sự truyền hình:', '').replace('Phim Ấn Độ:', '')
-            .replace('Phim Thổ Nhĩ Kỳ:', '').replace('Sitcom:', '').replace('Phim Đài Loan:', '').replace('Phim Ukraina:', '')
+          schedule = schedule.replace('Phim truyện :', '').replace('Phim Sitcom : ', '')
+            .replace('Phim Việt Nam:', '').replace('Phim tài liệu:', '').replace('Phim hoạt hình:', '')
+            .replace('Ký sự truyền hình:', '').replace('Phim Ấn Độ:', '').replace('Phim Thổ Nhĩ Kỳ:', '')
+            .replace('Sitcom:', '').replace('Phim Đài Loan:', '').replace('Phim Ukraina:', '')
+            .replace('Phim ngắn:', '').replace('Phim sitcom:', '')
           const array = schedule.split(/\s+/)
           for (let index = 0; index < array.length; index++) {
             const element = array[index]
@@ -124,8 +126,6 @@ export default {
           // find program by english name
           const foundProgramsByEnName = this.programList.filter(item => {
             // mang cac tu cua ten chuong trinh
-            // const nameArr = item.name.split(/\s/)
-            // const compareProgramName = nameArr[1] ? nameArr[0] + ' ' + nameArr[1] : nameArr[0]
             const compareProgramName = item.name
             const isValid = array[2] && array[2].trim() !== ':' && !array[2].includes('(')
             const importProgramName = isValid ? array[1] + ' ' + array[2].replace(':', '') : array[1]
@@ -134,10 +134,6 @@ export default {
             }
           })
           const foundProgramByViName = this.programList.filter(item => {
-            // const nameArr = item.name.split('-')
-            // const vnName = nameArr[1] ? nameArr[1] : nameArr[0]
-            // const vnNameArr = vnName.trim().split(/\s/)
-            // const compareProgramName = vnNameArr[1] ? vnNameArr[0] + ' ' + vnNameArr[1] : vnNameArr[0]
             const compareProgramName = item.name
             let importProgramName
             if (array[2] && array[2].trim !== ':') {
@@ -149,8 +145,6 @@ export default {
             } else {
               importProgramName = array[1]
             }
-            // const isValid = array[2] && array[2].trim() !== ':'
-            // const importProgramName = isValid ? array[1] + ' ' + array[2].replace(':', '') : array[1]
             if (compareProgramName && importProgramName) {
               return compareProgramName.toLowerCase().includes(importProgramName.toLowerCase())
             }
@@ -205,7 +199,7 @@ export default {
           position: 'bottom-right'
         })
         this.$store.dispatch('app/setLoading', false)
-        this.moveToChannelManageView(this.channel)
+        // this.moveToChannelManageView(this.channel)
       })
     }
   }

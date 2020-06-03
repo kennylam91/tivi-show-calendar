@@ -61,7 +61,7 @@
 import { mapGetters } from 'vuex'
 import ProgramListContainer from '@/components/programs/ProgramListContainer'
 import ProgramSearchFormComp from '@/components/programs/ProgramSearchForm'
-import { sortByRankDesc, sortByName } from '@/assets/utils/index'
+// import { sortByRankDesc, sortByName } from '@/assets/utils/index'
 export default {
   components: { ProgramSearchFormComp, ProgramListContainer },
   props: {
