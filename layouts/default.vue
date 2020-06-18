@@ -171,10 +171,10 @@
 import { mapGetters } from 'vuex'
 import { COMMON } from '@/assets/utils/constant'
 import SearchResult from '@/components/search/SearchResult'
-import Tags from '@/components/tags/Tags'
+// import Tags from '@/components/tags/Tags'
 
 export default {
-  components: { SearchResult, Tags },
+  components: { SearchResult },
   data() {
     return {
       activeIndex: '1',

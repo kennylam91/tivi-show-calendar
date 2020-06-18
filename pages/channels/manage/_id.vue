@@ -12,7 +12,7 @@
     <el-card :body-style="{ padding: '16px' }">
       <div slot="header">
         <div class="mb-2 flex" style="">
-          <img class="mr-2" :src="channel.logo" height="60">
+          <img v-lazy="channel.logo" class="mr-2" height="60">
           <p class="small-font-size">{{ channel.description }}</p>
         </div>
         <div class="row">

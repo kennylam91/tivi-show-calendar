@@ -41,7 +41,8 @@ export default {
   plugins: [
     { src: '~/plugins/element-ui', ssr: true },
     '@/plugins/filters',
-    '@/plugins/mixins'
+    '@/plugins/mixins',
+    { src: '@/plugins/vue-lazyload', mode: 'client' }
     // { src: '@/plugins/gg-calendar', mode: 'client' }
   ],
   /*

@@ -15,14 +15,14 @@
             <div class="col-sm-4 col-md-3 text-center">
               <img
                 v-if="program.logo"
+                v-lazy="program.logo"
                 class="img-fluid mb-2 "
-                :src="program.logo"
                 :alt="program.name"
               >
               <img
                 v-if="!program.logo"
                 class="img-fluid mb-2 "
-                src="https://via.placeholder.com/400x225"
+                src="~assets/images/400x225.png"
                 :alt="program.name"
               >
 
@@ -124,6 +124,7 @@ export default {
     }
   },
   asyncData({ params, store }) {
+    console.log(params)
     const programId = params.id.split('_').pop().trim()
     const program = store.state.app.fromTodayProgramList.find(item => item.id === programId)
     if (!program) {

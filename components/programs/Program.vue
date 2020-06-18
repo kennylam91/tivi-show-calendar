@@ -11,14 +11,14 @@
         >
           <img
             v-if="program.logo"
+            v-lazy="program.logo"
             class="img-fluid"
-            :src="program.logo"
             :alt="program.name"
           >
           <img
             v-else
-            class="img-fluid"
             src="~assets/images/400x225.png"
+            class="img-fluid"
             :alt="program.name"
           >
         </el-link>

@@ -69,8 +69,8 @@
               @click="viewChannelDetail(channel)"
             >
               <img
+                v-lazy="channel.logo"
                 class="img-fluid"
-                :src="channel.logo"
                 :alt="channel.name"
               >
             </el-link>

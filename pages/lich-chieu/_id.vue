@@ -18,7 +18,7 @@
           class="col-sm-4 col-md-2 text-center mb-2 pt-1"
           style="padding-left: 15px;padding-right: 15px; "
         >
-          <img class="img-fluid" :src="channel.logo" :alt="channel.name">
+          <img v-lazy="channel.logo" class="img-fluid" :alt="channel.name">
         </div>
         <div
           class="col-sm-8 col-md-10 flex"

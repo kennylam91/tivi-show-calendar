@@ -3,8 +3,8 @@
     <div class="flex w-100 " style="align-items: center;">
       <img
         v-if="result.logo"
+        v-lazy="result.logo"
         class="img-fluid "
-        :src="result.logo"
         alt="image"
         :width="width"
       >
