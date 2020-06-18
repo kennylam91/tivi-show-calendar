@@ -19,7 +19,7 @@
             <el-link class="mb-2" @click="handleNameClick(channel)">
               <h6 class="channelNameLink">{{ channel.name }}</h6>
             </el-link>
-            <div>
+            <div v-if="isAdmin">
               <el-switch
                 v-model="channel.isVip"
                 :active-text="COMMON.SHOW"
