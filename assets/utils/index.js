@@ -140,3 +140,13 @@ export const getEndOfDate = date => {
   end.setHours(23, 59, 59, 999)
   return end
 }
+
+export const removeFirstWordOfSen = (sen) => {
+  if (!sen) {
+    return null
+  } else {
+    const arr = sen.split(' ')
+    const newSen = arr.slice(1, arr.length)
+    return newSen.join(' ')
+  }
+}

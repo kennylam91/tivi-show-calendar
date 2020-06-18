@@ -102,10 +102,10 @@ export default {
       const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
       const scheduleArr = []
       if (this.importDate) {
-        for (let schedule of dataArray) {
+        for (let item of dataArray) {
           // schedule: '00:00	BIẾN ĐI, ÔNG ANH! (GO BROTHER)'
           // array: cac truong du lieu
-          schedule = schedule.replace('Phim truyện :', '').replace('Phim Sitcom : ', '')
+          schedule = item.replace('Phim truyện :', '').replace('Phim Sitcom : ', '')
             .replace('Phim Việt Nam:', '').replace('Phim tài liệu:', '').replace('Phim hoạt hình:', '')
             .replace('Ký sự truyền hình:', '').replace('Phim Ấn Độ:', '').replace('Phim Thổ Nhĩ Kỳ:', '')
             .replace('Sitcom:', '').replace('Phim Đài Loan:', '').replace('Phim Ukraina:', '')
@@ -156,6 +156,7 @@ export default {
           } else if (foundProgramByViName.length === 1) {
             program = foundProgramByViName[0]
           } else {
+            // create new program
             program = this.defaultProgram
           }
           this.channel = this.channelList.find(item => item.id === this.channelId)
