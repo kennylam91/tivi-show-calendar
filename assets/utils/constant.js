@@ -81,7 +81,7 @@ export const COMMON = {
   ADD_TO_GOOGLE_CAL: 'Thêm vào Google Calendar',
   CLICK_BUTTON: 'Click nút',
   TO_ADD_GG_CAL: 'để thêm phim vào Google lịch!',
-  SCHEDULE_ADDED_SUCCESS: 'Thêm lịch chiếu thành công',
+  SCHEDULE_ADDED_SUCCESS: 'Đã thêm lịch chiếu vào Google Calendar thành công',
   CONTACT_US: 'Liên hệ',
   TODAY_SCHEDULE: 'Lịch phát sóng hôm nay',
   TODAY_SCHEDULE_2: 'Lịch truyền hình hôm nay',

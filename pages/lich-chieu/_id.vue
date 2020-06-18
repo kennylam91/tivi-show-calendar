@@ -28,7 +28,7 @@
         </div>
       </div>
       <el-divider class="my-2" />
-      <h4>{{ COMMON.SCHEDULE + ' ' + channel.name + ' ' + COMMON.DATE + ' ' + selectedDateFormatted }}</h4>
+      <h4 class="my-4 color-dark-blue">{{ COMMON.SCHEDULE + ' ' + channel.name + ' ' + COMMON.DATE + ' ' + selectedDateFormatted }}</h4>
       <div class="row">
         <div
           class="my-2 col-6 col-sm-6 col-md-4"
@@ -37,7 +37,6 @@
           <el-date-picker
             v-model="selectedDate"
             format="dd/MM/yyyy"
-            size="small"
             type="date"
             class="w-100"
           />
@@ -49,15 +48,18 @@
           <el-input
             v-model="searchText"
             :placeholder="COMMON.SEARCH"
-            size="small"
             clearable
             @change="searchProgram"
           />
         </div>
       </div>
       <div v-if="scheduleData">
-        <table id="scheduleTable" v-loading="tableLoading" class="table table-hover">
-          <tr class="color-info text-left">
+        <table
+          id="scheduleTable"
+          v-loading="tableLoading"
+          class="table table-hover table-striped"
+        >
+          <tr class="text-left color-dark-blue">
             <th scope="col">
               <span>Time</span>
             </th>
@@ -96,28 +98,31 @@
                 {{ item | getCategory }}
               </el-tag>
             </td> -->
-              <!-- <td>
-                <i
-                  v-if="isShowAddBtn(row)"
-                  class="large-font-size el-icon-bell pointer color-primary"
-                  @click="addScheduleToGGCal(row)"
-                />
-              </td> -->
+              <td>
+                <el-tooltip :content="COMMON.ADD_TO_GOOGLE_CAL" placement="top-start" effect="dark">
+                  <i
+                    v-if="isShowAddBtn(row)"
+                    class="large-font-size el-icon-bell pointer color-primary"
+                    @click="addScheduleToGGCal(row)"
+                  />
+                </el-tooltip>
+
+              </td>
             </tr>
           </tbody>
         </table>
         <p
           v-if="isShowNoData"
-          class="ml-4 color-info"
+          class="ml-4"
         >{{ COMMON.UPDATING }}</p>
-        <!-- <div v-if="scheduleData.length > 0" class="small-font-size">
+        <div v-if="scheduleData.length > 0" class="small-font-size">
           <span> Click</span>
           <i
             class="large-font-size el-icon-bell pointer color-primary"
           />
           <span>{{ COMMON.TO_ADD_GG_CAL }}</span><br>
           <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
-        </div> -->
+        </div>
       </div>
 
     </el-card>
@@ -127,7 +132,7 @@
 <script>
 import { parseVNTime } from '@/assets/utils/index'
 import { mapGetters } from 'vuex'
-import { FB, COMMON } from '@/assets/utils/constant'
+import { COMMON } from '@/assets/utils/constant'
 import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
@@ -233,50 +238,50 @@ export default {
     },
     isAddBtnDisabled(schedule) {
       return this.addedSchedule.some(item => item.id === schedule.id)
+    },
+    addScheduleToGGCal(schedule) {
+      const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get()
+      if (!isSignedIn) {
+        gapi.auth2.getAuthInstance().signIn().then(() => {
+        })
+      } else {
+        this.addEvent(schedule)
+      }
+    },
+    addEvent(schedule) {
+      const event = {
+        'summary': schedule.channelName + '-' + schedule.programName,
+        'start': {
+          'dateTime': new Date(schedule.startTime.seconds * 1000),
+          // 'dateTime': new Date(2020, 5, 7, 0, 0, 0, 0),
+          'timeZone': 'Etc/GMT+7'
+        },
+        'end': {
+          'dateTime': new Date(schedule.endTime.seconds * 1000),
+          // 'dateTime': new Date(2020, 5, 8, 0, 0, 0, 0),
+          'timeZone': 'Etc/GMT+7'
+        },
+        'reminders': {
+          'useDefault': false,
+          'overrides': [
+            { 'method': 'popup', 'minutes': 10 }
+          ]
+        }
+      }
+      var request = gapi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': event
+      })
+      request.execute((event) => {
+        this.$message({
+          offset: 100,
+          message: this.COMMON.SCHEDULE_ADDED_SUCCESS,
+          type: 'success',
+          center: true
+        })
+        this.addedSchedule.push(schedule)
+      })
     }
-    // addScheduleToGGCal(schedule) {
-    //   const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get()
-    //   if (!isSignedIn) {
-    //     gapi.auth2.getAuthInstance().signIn().then(() => {
-    //     })
-    //   } else {
-    //     this.addEvent(schedule)
-    //   }
-    // },
-    // addEvent(schedule) {
-    //   const event = {
-    //     'summary': schedule.channelName + '-' + schedule.programName,
-    //     'start': {
-    //       'dateTime': new Date(schedule.startTime.seconds * 1000),
-    //       // 'dateTime': new Date(2020, 5, 7, 0, 0, 0, 0),
-    //       'timeZone': 'Etc/GMT+7'
-    //     },
-    //     'end': {
-    //       'dateTime': new Date(schedule.endTime.seconds * 1000),
-    //       // 'dateTime': new Date(2020, 5, 8, 0, 0, 0, 0),
-    //       'timeZone': 'Etc/GMT+7'
-    //     },
-    //     'reminders': {
-    //       'useDefault': false,
-    //       'overrides': [
-    //         { 'method': 'popup', 'minutes': 10 }
-    //       ]
-    //     }
-    //   }
-    //   var request = gapi.client.calendar.events.insert({
-    //     'calendarId': 'primary',
-    //     'resource': event
-    //   })
-    //   request.execute((event) => {
-    //     this.$message({
-    //       offset: 100,
-    //       message: this.COMMON.SCHEDULE_ADDED_SUCCESS,
-    //       type: 'success',
-    //       center: true
-    //     })
-    //     this.addedSchedule.push(schedule)
-    //   })
-    // }
   },
   head() {
     return {
