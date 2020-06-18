@@ -194,15 +194,16 @@ export const categoryTagMap = new Map([
 
 export const CATEGORIES = [
   { value: 1, label: 'Phim', text: 'Phim' },
-  { value: 2, label: 'Game show', text: 'Game show' },
+  { value: 26, label: 'Phim Âu-Mỹ', text: 'Phim Âu-Mỹ' },
+  { value: 23, label: 'Phim Trung', text: 'Phim Trung' },
+  { value: 24, label: 'Phim Hàn', text: 'Phim Hàn' },
+  { value: 25, label: 'Phim Nhật', text: 'Phim Nhật' },
+  { value: 22, label: 'Tâm lý', text: 'Tâm lý' },
   { value: 3, label: 'Thực tế', text: 'Thực tế' },
-  { value: 4, label: 'Trực tiếp', text: 'Trực tiếp' },
   { value: 5, label: 'Phóng sự', text: 'Phóng sự' },
-  { value: 6, label: 'Tin tức', text: 'Tin tức' },
   { value: 7, label: 'Khoa học', text: 'Khoa học' },
   { value: 8, label: 'Tài liệu', text: 'Tài liệu' },
   { value: 9, label: 'Khám phá', text: 'Khám phá' },
-  { value: 10, label: 'Ca nhạc', text: 'Ca nhạc' },
   { value: 11, label: 'Kinh dị', text: 'Kinh dị' },
   { value: 12, label: 'Hài hước', text: 'Hài hước' },
   { value: 13, label: 'Hành động', text: 'Hành động' },
@@ -210,15 +211,14 @@ export const CATEGORIES = [
   { value: 15, label: 'Thần thoại', text: 'Thần thoại' },
   { value: 16, label: 'Hình sự', text: 'Hình sự' },
   { value: 17, label: 'Phiên lưu', text: 'Phiên lưu' },
-  { value: 18, label: 'Cổ trang', text: 'Cổ trang' },
-  { value: 19, label: 'Chiến tranh', text: 'Chiến tranh' },
   { value: 20, label: 'Hoạt hình', text: 'Hoạt hình' },
   { value: 21, label: 'Tình cảm', text: 'Tình cảm' },
-  { value: 22, label: 'Tâm lý', text: 'Tâm lý' },
-  { value: 23, label: 'Phim Trung', text: 'Phim Trung' },
-  { value: 24, label: 'Phim Hàn', text: 'Phim Hàn' },
-  { value: 25, label: 'Phim Nhật', text: 'Phim Nhật' },
-  { value: 26, label: 'Phim Âu-Mỹ', text: 'Phim Âu-Mỹ' },
+  { value: 18, label: 'Cổ trang', text: 'Cổ trang' },
+  { value: 19, label: 'Chiến tranh', text: 'Chiến tranh' },
+  { value: 2, label: 'Game show', text: 'Game show' },
+  { value: 4, label: 'Trực tiếp', text: 'Trực tiếp' },
+  { value: 6, label: 'Tin tức', text: 'Tin tức' },
+  { value: 10, label: 'Ca nhạc', text: 'Ca nhạc' },
   { value: 27, label: 'Phim Việt', text: 'Phim Việt' },
   { value: 28, label: 'Võ thuật', text: 'Võ thuật' },
   { value: 29, label: 'Ngôn tình', text: 'Ngôn tình' },
@@ -228,12 +228,4 @@ export const CATEGORIES = [
   { value: 33, label: 'Thể thao', text: 'Thể thao' },
   { value: 34, label: 'Phim Sitcom', text: 'Phim Sitcom' },
   { value: 35, label: 'Phim dài tập', text: 'Phim dài tập' }
-].sort((a, b) => {
-  if (a.label > b.label) {
-    return 1
-  } else if (a.label < b.label) {
-    return -1
-  } else {
-    return 0
-  }
-})
+]

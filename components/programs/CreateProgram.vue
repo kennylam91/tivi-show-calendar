@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="bold mb-2">{{ title }}</div>
-    <el-form ref="programCreateForm" :model="programData" label-width="170px">
+    <el-form ref="programCreateForm" :model="programData" label-width="170px" size="small">
       <el-form-item :label="COMMON.NAME">
         <el-input v-model="programData.name" />
       </el-form-item>
@@ -26,12 +26,14 @@
           multiple
           class="w-100"
           :placeholder="COMMON.SELECT_CATEGORY"
+          size="small"
         >
           <el-option
             v-for="item in CATEGORIES"
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            class="small-font-size"
           />
         </el-select>
       </el-form-item>
@@ -39,6 +41,7 @@
         <el-select
           v-model="programData.rank"
           class="w-100"
+          size="small"
         >
           <el-option
             v-for="item in programRankOptions"
