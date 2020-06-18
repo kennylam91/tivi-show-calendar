@@ -18,8 +18,8 @@ export default {
     link: [
     ],
     script: [
-      { src: 'https://apis.google.com/js/api.js' },
-      { src: '<script data-ad-client="ca-pub-5015264560254635" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' }
+      { src: 'https://apis.google.com/js/api.js' }
+      // { src: '<script data-ad-client="ca-pub-5015264560254635" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' }
     ]
   },
   /*
