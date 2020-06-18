@@ -18,7 +18,7 @@ export default {
     link: [
     ],
     script: [
-      { src: 'https://apis.google.com/js/api.js' }
+      // { src: 'https://apis.google.com/js/api.js' }
       // { src: '<script data-ad-client="ca-pub-5015264560254635" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' }
     ]
   },
@@ -41,8 +41,8 @@ export default {
   plugins: [
     { src: '~/plugins/element-ui', ssr: true },
     '@/plugins/filters',
-    '@/plugins/mixins',
-    { src: '@/plugins/gg-calendar', mode: 'client' }
+    '@/plugins/mixins'
+    // { src: '@/plugins/gg-calendar', mode: 'client' }
   ],
   /*
   ** Nuxt.js dev-modules
