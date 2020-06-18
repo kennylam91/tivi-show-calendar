@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column
         label="Categories"
-        width="200"
+        width="300"
       >
         <template slot-scope="{row}">
           <el-tag
@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        width="220"
+        width="170"
       >
         <template slot="header">
           <el-button

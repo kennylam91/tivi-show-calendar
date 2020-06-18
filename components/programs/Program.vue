@@ -30,7 +30,7 @@
         :underline="false"
         @click="viewProgramDetail(program)"
       >
-        <div class="bold smaller-font-size programName" style="color: #000000c2">
+        <div class="bold smaller-font-size shorten-text hoverDarkBlue" style="color: #000000c2">
           {{ program.name | getVNTranslateName | uppercaseAll }}
         </div>
       </el-link>
@@ -50,7 +50,7 @@
         </span>
 
       </div>
-      <div v-if="live" class="small-font-size mb-1 color-info ">
+      <div v-if="live" class="smaller-font-size mb-1 color-dark-blue">
         <span>{{ program.schedule.channelName }}</span>
         <el-divider direction="vertical" />
         {{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}

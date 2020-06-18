@@ -199,6 +199,9 @@ footer{
 .categoryTitle{
   font-size: 1rem!important;
 }
+.hoverDarkBlue:hover{
+  @extend .color-dark-blue;
+}
 
 @media only screen and (min-width: 768px) { 
   .categoryColumn{
@@ -225,6 +228,7 @@ footer{
   #scheduleTable td, th{
     padding: 12px!important;
   }
+  
   
 }
 
