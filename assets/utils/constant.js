@@ -57,7 +57,7 @@ export const COMMON = {
   SELECT_CATEGORY: 'Chọn thể loại',
   SELECT_CHANNEL: 'Chọn kênh',
   INPUT_PROGRAM_NAME: 'Nhập tên chương trình',
-  VIP_INCOMING_PROGRAM: 'Sắp chiếu hôm nay',
+  VIP_INCOMING_PROGRAM: 'Nổi bật hôm nay',
   VIP_TOMORROW_PROGRAM: 'Nổi bật ngày mai',
   SHOW_ON_HOMEPAGE: 'Hiển thị trên trang chủ',
   NO_MORE_THAN_TWO: 'Không chọn nhiều hơn 2 thể loại',
@@ -92,7 +92,9 @@ export const COMMON = {
   INFO_ENTERTAINMENT: 'Thông tin - giải trí',
   VIEW_MORE: 'Xem thêm',
   VIEW_LESS: 'Ẩn bớt',
-  UPDATING: 'Đang cập nhật!!!'
+  UPDATING: 'Đang cập nhật!!!',
+  WHAT_SEE_THIS_NOON: 'Xem gì trưa nay',
+  WHAT_SEE_THIS_EVENING: 'Xem gì tối nay'
 
 }
 import { firebase } from '@/MyFireBase'

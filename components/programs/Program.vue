@@ -93,10 +93,9 @@ export default {
       if (categories) {
         if (categories.length <= 2) {
           return categories
-        } else if (categories.includes(1)) {
-          return categories.filter(item => item !== 1).slice(0, 2)
         } else {
-          return categories.slice(0, 2)
+          return categories.filter(item => ![1, 26, 23, 24, 25, 27, 34, 35].includes(item)
+          ).slice(0, 2)
         }
       } else {
         return []

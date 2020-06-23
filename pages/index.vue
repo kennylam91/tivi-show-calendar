@@ -16,6 +16,34 @@
       </div>
     </article>
 
+    <article v-if="noonProgramList" class="py-2">
+      <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_NOON }}      </h4>
+      <el-divider class="mt-4 mb-2" />
+      <div class="row mt-2">
+        <div
+          v-for="program in noonProgramList"
+          :key="program.id"
+          class="col-md-3 col-6 px-1 my-2"
+        >
+          <Program :live="true" :program="program" />
+        </div>
+      </div>
+    </article>
+
+    <article v-if="eveningProgramList" class="py-2">
+      <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_EVENING }}      </h4>
+      <el-divider class="mt-4 mb-2" />
+      <div class="row mt-2">
+        <div
+          v-for="program in eveningProgramList"
+          :key="program.id"
+          class="col-md-3 col-6 px-1 my-2"
+        >
+          <Program :live="true" :program="program" />
+        </div>
+      </div>
+    </article>
+
     <article class="py-2">
       <h4>
         <nuxt-link to="/chuong-trinh-hom-nay" class="color-dark-blue">
@@ -62,7 +90,7 @@
 
       <div class="row mt-2">
         <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
-          <el-card shadow="never" :body-style="{ padding: '5px','text-align':'center' }">
+          <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
             <el-link
               v-if="channel.logo"
               :underline="false"
@@ -83,13 +111,15 @@
           </el-card>
         </div>
       </div>
-    </article></div>
+    </article>
+
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
-// import { sortByRankDesc } from '@/assets/utils/index'
+import { sortByRankDesc } from '@/assets/utils/index'
 
 export default {
   components: { Program },
@@ -123,14 +153,6 @@ export default {
         return []
       }
     },
-    fromNowInDayVipProgramList() {
-      if (this.fromNowInDayProgramList) {
-        const clonedList = [...this.fromNowInDayProgramList]
-        return clonedList.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
-      } else {
-        return []
-      }
-    },
     broadCastingPrograms() {
       const liveSchedules = this.fromNowInDayScheduleList.filter(this.liveProgramFilter)
       const livePrograms = []
@@ -140,12 +162,23 @@ export default {
           livePrograms.push({ ...program, schedule: schedule })
         }
       })
-      if (livePrograms.length > 8) {
-        return livePrograms.slice(0, 8)
-      } else {
-        return livePrograms.slice(0, 4)
+      return this.getFourOrEightPrograms(livePrograms)
+    },
+    noonProgramList() {
+      const now = new Date()
+      if (now.getHours() > 12) {
+        return null
       }
+      return this.getFourOrEightPrograms(this.getProgramListBetweenHours(11, 0, 13, 0))
+    },
+    eveningProgramList() {
+      const now = new Date()
+      if (now.getHours() > 22) {
+        return null
+      }
+      return this.getFourOrEightPrograms(this.getProgramListBetweenHours(20, 0, 23, 0))
     }
+
   },
   watch: {
   },
@@ -172,6 +205,33 @@ export default {
   methods: {
     liveProgramFilter(schedule) {
       return schedule.startTime.seconds * 1000 < Date.parse(new Date()) + 30 * 60 * 1000
+    },
+    getFourOrEightPrograms(programList) {
+      if (!programList) {
+        return null
+      }
+      if (programList.length > 8) {
+        return programList.slice(0, 8)
+      } else {
+        return programList.slice(0, 4)
+      }
+    },
+    getProgramListBetweenHours(startHour, startMin, endHour, endMin) {
+      const first = new Date()
+      const last = new Date()
+      first.setHours(startHour, startMin, 0, 0)
+      last.setHours(endHour, endMin, 0, 0)
+      const schedules = this.fromNowInDayScheduleList.filter(item => {
+        return item.startTime.seconds * 1000 >= first && item.startTime.seconds * 1000 <= last
+      })
+      const programs = []
+      schedules.forEach(schedule => {
+        const program = this.fromTodayProgramList.find(item => item.id === schedule.programId)
+        if (program && !programs.some(pro => pro.id === program.id)) {
+          programs.push({ ...program, schedule: schedule })
+        }
+      })
+      return programs.sort(sortByRankDesc)
     }
 
   }
