@@ -13,7 +13,7 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description',
-        content: 'Nơi tổng hợp các chương trình  và phim truyện hay nhất trên các kênh truyền hình(HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, VTV, THVL, TodayTV, ...)' }
+        content: 'Trang web tổng hợp các chương trình, phim truyện hay nhất trên các kênh truyền hình nổi tiếng( HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, VTV, THVL, TodayTV, ...)' }
     ],
     link: [
     ],

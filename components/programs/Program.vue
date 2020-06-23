@@ -30,16 +30,27 @@
         :underline="false"
         @click="viewProgramDetail(program)"
       >
-        <div class="bold smaller-font-size shorten-text hoverDarkBlue" style="color: #000000c2">
-          {{ program.name | getVNTranslateName | uppercaseAll }}
-        </div>
+        <el-tooltip
+          :content="program.name"
+          open-delay="300"
+          placement="bottom-start"
+          effect="dark"
+        >
+          <div
+            class="bold smaller-font-size shorten-text hoverDarkBlue"
+            style="color: #000000c2"
+          >
+            {{ program.name | getVNTranslateName | uppercaseAll }}
+          </div>
+        </el-tooltip>
+
       </el-link>
 
       <div>
         <span
           v-for="(item, index) in getCategoryList(program)"
           :key="index"
-          class="smaller-font-size color-info"
+          class="smaller-font-size color-primary"
         >
           {{ item | getCategory }}
           <span v-show="isShowDivider(index,program)">
@@ -50,10 +61,10 @@
         </span>
 
       </div>
-      <div v-if="live" class="smaller-font-size mb-1 color-dark-blue">
-        <span>{{ program.schedule.channelName }}</span>
+      <div v-if="live" class="smaller-font-size mb-1">
+        <span class="color-success">{{ program.schedule.channelName }}</span>
         <el-divider direction="vertical" />
-        {{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}
+        <span class="color-primary">{{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}</span>
       </div>
     </el-card>
   </div>
