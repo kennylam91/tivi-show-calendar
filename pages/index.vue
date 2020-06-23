@@ -16,33 +16,36 @@
       </div>
     </article>
 
-    <article v-if="noonProgramList" class="py-2">
-      <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_NOON }}      </h4>
-      <el-divider class="mt-4 mb-2" />
-      <div class="row mt-2">
-        <div
-          v-for="program in noonProgramList"
-          :key="program.id"
-          class="col-md-3 col-6 px-1 my-2"
-        >
-          <Program :live="true" :program="program" />
-        </div>
-      </div>
-    </article>
+    <client-only>
 
-    <article v-if="eveningProgramList" class="py-2">
-      <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_EVENING }}      </h4>
-      <el-divider class="mt-4 mb-2" />
-      <div class="row mt-2">
-        <div
-          v-for="program in eveningProgramList"
-          :key="program.id"
-          class="col-md-3 col-6 px-1 my-2"
-        >
-          <Program :live="true" :program="program" />
+      <article v-if="noonProgramList" class="py-2">
+        <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_NOON }}      </h4>
+        <el-divider class="mt-4 mb-2" />
+        <div class="row mt-2">
+          <div
+            v-for="program in noonProgramList"
+            :key="program.id"
+            class="col-md-3 col-6 px-1 my-2"
+          >
+            <Program :live="true" :program="program" />
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+
+      <article v-if="eveningProgramList" class="py-2">
+        <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_EVENING }}      </h4>
+        <el-divider class="mt-4 mb-2" />
+        <div class="row mt-2">
+          <div
+            v-for="program in eveningProgramList"
+            :key="program.id"
+            class="col-md-3 col-6 px-1 my-2"
+          >
+            <Program :live="true" :program="program" />
+          </div>
+        </div>
+      </article>
+    </client-only>
 
     <article class="py-2">
       <h4>
