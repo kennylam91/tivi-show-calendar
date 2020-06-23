@@ -32,7 +32,7 @@
       >
         <el-tooltip
           :content="program.name"
-          open-delay="300"
+          :open-delay="300"
           placement="bottom-start"
           effect="dark"
         >
