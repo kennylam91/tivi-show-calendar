@@ -142,7 +142,7 @@ $--color-dark-blue:  #003a77;
   @extend .color-primary;
 }
 .scheduleInShowing{
-  background-color: $--color-warning;
+  background-color: $--color-warning!important;
 }
 .categoryTag{
   // margin: 2px;

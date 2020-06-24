@@ -63,7 +63,7 @@
                 <tr v-for="row in scheduleList" :key="row.id">
                   <td>
                     <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
-                      <span class="color-primary bold">{{ row.channelName }}</span>
+                      <span class="color-primary">{{ row.channelName }}</span>
                     </el-link>
                   </td>
                   <td>
@@ -76,11 +76,10 @@
                     <el-tooltip :content="COMMON.ADD_TO_GOOGLE_CAL" placement="top-start" effect="dark">
                       <i
                         v-if="isShowAddBtn(row)"
-                        class="large-font-size el-icon-bell pointer color-primary"
+                        class="large-font-size el-icon-bell pointer color-success bold"
                         @click="addScheduleToGGCal(row)"
                       />
                     </el-tooltip>
-
                   </td>
                 </tr>
               </tbody>
@@ -88,7 +87,7 @@
             <div v-if="scheduleList.length > 0" class="small-font-size">
               <span> Click</span>
               <i
-                class="large-font-size el-icon-bell pointer color-primary"
+                class="large-font-size el-icon-bell pointer color-success bold"
               />
               <span>{{ COMMON.TO_ADD_GG_CAL }}</span> <br>
               <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
@@ -98,7 +97,6 @@
             v-if="isShowNoData"
             class="ml-4 color-info"
           >{{ COMMON.NO_DATA }}</p>
-
         </article>
         <el-divider />
         <article>

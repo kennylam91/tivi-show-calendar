@@ -102,7 +102,7 @@
                 <el-tooltip :content="COMMON.ADD_TO_GOOGLE_CAL" placement="top-start" effect="dark">
                   <i
                     v-if="isShowAddBtn(row)"
-                    class="large-font-size el-icon-bell pointer color-primary"
+                    class="large-font-size el-icon-bell pointer color-success bold"
                     @click="addScheduleToGGCal(row)"
                   />
                 </el-tooltip>
@@ -118,7 +118,7 @@
         <div v-if="scheduleData.length > 0" class="small-font-size">
           <span> Click</span>
           <i
-            class="large-font-size el-icon-bell pointer color-primary"
+            class="large-font-size el-icon-bell pointer color-success bold"
           />
           <span>{{ COMMON.TO_ADD_GG_CAL }}</span><br>
           <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
