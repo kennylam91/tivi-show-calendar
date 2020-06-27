@@ -3,7 +3,13 @@
     <div class="bold mb-2">{{ title }}</div>
     <el-form ref="programCreateForm" :model="programData" label-width="170px" size="small">
       <el-form-item :label="COMMON.NAME">
-        <el-input v-model="programData.name" />
+        <el-input v-model="programData.name">
+          <template slot="append">
+            <el-button type="primary" @click="searchProgramOnTheMovieDb">Search</el-button>
+
+          </template>
+        </el-input>
+
       </el-form-item>
       <el-form-item :label="COMMON.CHANNEL">
         <el-select
@@ -63,6 +69,7 @@
       <el-form-item label="Trailer">
         <el-input v-model="programData.trailer" />
       </el-form-item>
+      <img v-for="item in movieImages" :key="item" :src="item">
       <el-form-item label="Logo">
         <Upload :picture-prop="programData.logo" @uploaded="handleUploaded" />
       </el-form-item>
@@ -72,7 +79,12 @@
         <el-button type="info" @click="handleCancelClick">{{ COMMON.CANCEL }}</el-button>
       </el-form-item>
     </el-form>
-
+    <ProgramSearchResultDialog
+      v-if="searchProgramResult"
+      :visible-prop="searchResultDialog"
+      :search-result-prop="searchProgramResult"
+      @close="handleDialogClose"
+    />
   </div>
 </template>
 <script>
@@ -80,9 +92,11 @@ import { CATEGORIES } from '@/assets/utils/constant'
 import Upload from '@/components/upload/Upload'
 import { programRankOptions } from '@/assets/utils/constant'
 import { mapGetters } from 'vuex'
+import { getProgramEnTitle, getProgramNameFromMovieTitle, getRankFromVoteAvg, mapGenre } from '@/assets/utils/index'
+import ProgramSearchResultDialog from './ProgramSearchResultDialog'
 
 export default {
-  components: { Upload },
+  components: { Upload, ProgramSearchResultDialog },
   props: {
     programProp: {
       required: true,
@@ -93,7 +107,10 @@ export default {
     return {
       programData: null,
       CATEGORIES,
-      programRankOptions
+      programRankOptions,
+      searchProgramResult: null, // search from themoviedb
+      searchResultDialog: false,
+      movieImages: null
 
     }
   },
@@ -163,6 +180,31 @@ export default {
     },
     handleUploaded(picture) {
       this.programData.logo = picture
+    },
+    searchProgramOnTheMovieDb() {
+      console.log('searchProgramOnTheMovieDb')
+      debugger
+      this.$store.dispatch('app/searchProgramOnTheMovieDb', {
+        movieTitle: getProgramEnTitle(this.programData.name)
+      }).then(res => {
+        this.searchProgramResult = res
+        this.searchResultDialog = true
+      })
+    },
+    handleDialogClose(selectedMovie) {
+      if (selectedMovie) {
+        this.programData.name = getProgramNameFromMovieTitle(selectedMovie)
+        this.programData.description = selectedMovie.overview
+        this.programData.rank = getRankFromVoteAvg(selectedMovie.vote_average)
+        this.programData.categories = mapGenre(selectedMovie.genre_ids)
+        this.$store.dispatch('app/fetchImagesFromTheMovieDb', { movieId: selectedMovie.id })
+          .then(data => {
+            this.movieImages = data.backdrops.concat(data.posters)
+              .filter(image => image.aspect_ratio > 1)
+              .map(image => 'https://image.tmdb.org/t/p/w400' + image.file_path)
+          })
+      }
+      this.searchResultDialog = false
     }
   }
 }

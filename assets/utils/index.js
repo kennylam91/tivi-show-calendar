@@ -150,3 +150,40 @@ export const removeFirstWordOfSen = (sen) => {
     return newSen.join(' ')
   }
 }
+
+export const getProgramEnTitle = (title) => {
+  if (title) {
+    return title.split('-')[0].trim()
+  }
+  return ''
+}
+
+export const getProgramNameFromMovieTitle = (movie) => {
+  const enName = movie.original_title.replace('-', ' ')
+  const viName = movie.title.replace('-', ' ')
+  if (enName !== viName) {
+    return enName + ' - ' + viName
+  } else {
+    return enName
+  }
+}
+
+export const getRankFromVoteAvg = (voteAvg) => {
+  if (voteAvg > 8.5) {
+    return 4
+  } else if (voteAvg > 7) {
+    return 3
+  } else if (voteAvg > 5.5) {
+    return 2
+  } else {
+    return 1
+  }
+}
+
+export const mapGenre = (genre) => {
+  const map = new Map([
+    [28, 13], [12, 17], [16, 20], [35, 12], [80, 16], [99, 8], [10751, 31], [9648, 30],
+    [10749, 21], [878, 14], [10770, 2], [10752, 19], [14, 14]
+  ])
+  return genre.map(item => map.get(item))
+}

@@ -107,15 +107,17 @@ export const FB = {
 }
 
 export const programRankOptions = [
-  { label: 'Đặc biệt', value: 3, text: 'Đặc biệt' },
-  { label: 'Tốt', value: 2, text: 'Tốt' },
+  { label: 'Đặc biệt', value: 4, text: 'Đặc biệt' },
+  { label: 'Tốt', value: 3, text: 'Tốt' },
+  { label: 'Khá', value: 2, text: 'Khá' },
   { label: 'Bình thường', value: 1, text: 'Bình thường' }
 ]
 
 export const programRankMap = new Map([
   [1, 'Bình thường'],
-  [2, 'Tốt'],
-  [3, 'Đặc biệt']
+  [2, 'Khá'],
+  [3, 'Tốt'],
+  [4, 'Đặc biệt']
 ])
 
 export const categoryMap = new Map([
@@ -231,3 +233,8 @@ export const CATEGORIES = [
   { value: 34, label: 'Phim Sitcom', text: 'Phim Sitcom' },
   { value: 35, label: 'Phim dài tập', text: 'Phim dài tập' }
 ]
+
+export const THE_MOVIE_DB = {
+  API: 'https://api.themoviedb.org/3',
+  API_KEY: '3c2fbbda11f848974ff3f31236794b89'
+}

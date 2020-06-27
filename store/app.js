@@ -2,6 +2,9 @@ import { FB } from '@/assets/utils/constant'
 import { trimObject } from '../assets/utils'
 import { Channel } from '@/assets/model/Channel'
 import { Schedule } from '@/assets/model/Schedule'
+import axios from 'axios'
+import { THE_MOVIE_DB } from '../assets/utils/constant'
+
 // import { ProgramSearchForm } from '@/assets/model/ProgramSearchForm'
 
 export const state = () => ({
@@ -333,6 +336,24 @@ export const actions = {
       query.then(() => {
         resolve()
       }).catch(err => reject(err))
+    })
+  },
+  /*
+  @params: query:{movieTitle, }
+  */
+  searchProgramOnTheMovieDb({ commit }, query) {
+    return new Promise((resolve, reject) => {
+      axios.get(THE_MOVIE_DB.API + '/search/movie/?api_key=' + THE_MOVIE_DB.API_KEY + '&query=' + query.movieTitle + '&language=vi')
+        .then(({ data }) => resolve(data))
+        .catch(err => reject(err))
+    })
+  },
+
+  fetchImagesFromTheMovieDb({ commit }, query) {
+    return new Promise((resolve, reject) => {
+      axios.get(THE_MOVIE_DB.API + '/movie/' + query.movieId + '/images?api_key=' + THE_MOVIE_DB.API_KEY)
+        .then(({ data }) => resolve(data))
+        .catch(err => reject(err))
     })
   }
 
