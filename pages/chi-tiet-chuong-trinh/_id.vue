@@ -30,13 +30,12 @@
             <div class="col-sm-8 col-md-9">
               <h5 class="programNameTitle">{{ program.name }}</h5>
               <div class="small-font-size">
-                <label class="bold">{{ COMMON.RANK }}: </label>
+                <label class="bold label">{{ COMMON.RANK }} </label>
                 <el-tag :type="program.rank | getRankTagType" size="small" effect="dark">{{ program.rank | getRankText }}</el-tag>
 
-                <span />
               </div>
               <div class="small-font-size">
-                <label class="bold">{{ COMMON.CATEGORY }}: </label>
+                <label class="bold label">{{ COMMON.CATEGORY }} </label>
                 <el-tag
                   v-for="(item, index) in program.categories"
                   :key="index"
@@ -49,7 +48,7 @@
                 </el-tag>
               </div>
               <div v-if="program.year" class="small-font-size">
-                <label class="bold">{{ COMMON.YEAR | uppercaseFirst }}: </label>
+                <label class="bold label">{{ COMMON.YEAR | uppercaseFirst }} </label>
                 <span>{{ program.year }}</span>
               </div>
             </div>
@@ -262,3 +261,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.label{
+  width: 80px;
+}
+</style>

@@ -310,7 +310,7 @@ export default {
             'part': [
               'snippet'
             ],
-            'maxResults': 25,
+            'maxResults': 10,
             'q': getProgramEnTitle(this.programData.name) + ' trailer'
           }).then(({ result }) => {
             this.trailerList = result.items.map(item => item)
