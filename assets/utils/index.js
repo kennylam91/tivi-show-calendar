@@ -172,11 +172,11 @@ export const getProgramNameFromMovieTitle = (movie) => {
 }
 
 export const getRankFromVoteAvg = (voteAvg) => {
-  if (voteAvg > 8.5) {
+  if (voteAvg >= 8.5) {
     return 4
-  } else if (voteAvg > 7) {
+  } else if (voteAvg >= 7) {
     return 3
-  } else if (voteAvg > 5.5) {
+  } else if (voteAvg >= 5.5) {
     return 2
   } else {
     return 1

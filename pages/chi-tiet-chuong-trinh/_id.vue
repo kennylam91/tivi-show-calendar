@@ -29,18 +29,28 @@
             </div>
             <div class="col-sm-8 col-md-9">
               <h5 class="programNameTitle">{{ program.name }}</h5>
-              <div class="small-font-size mt-2">
-                <label>{{ COMMON.CATEGORY }}: </label>
+              <div class="small-font-size">
+                <label class="bold">{{ COMMON.RANK }}: </label>
+                <el-tag :type="program.rank | getRankTagType" size="small" effect="dark">{{ program.rank | getRankText }}</el-tag>
+
+                <span />
+              </div>
+              <div class="small-font-size">
+                <label class="bold">{{ COMMON.CATEGORY }}: </label>
                 <el-tag
                   v-for="(item, index) in program.categories"
                   :key="index"
                   size="small"
-                  effect="dark"
+                  effect="light"
                   :type="categoryTagMap.get(item)"
                   style="margin: 2px;"
                 >
                   {{ item | getCategory }}
                 </el-tag>
+              </div>
+              <div v-if="program.year" class="small-font-size">
+                <label class="bold">{{ COMMON.YEAR | uppercaseFirst }}: </label>
+                <span>{{ program.year }}</span>
               </div>
             </div>
           </div>

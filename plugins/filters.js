@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { categoryMap } from '@/assets/utils/constant'
+import { COMMON, programRankMap } from '../assets/utils/constant'
 
 Vue.filter('uppercaseAll', val => val.toUpperCase())
 Vue.filter('uppercaseFirst', string => {
@@ -25,5 +26,24 @@ Vue.filter('getVNTranslateName', val => {
     return array[1] ? array[1].trim() : array[0]
   }
   return ''
+})
+
+Vue.filter('getRankText', val => {
+  if (val) {
+    return programRankMap.get(val)
+  }
+})
+
+Vue.filter('getRankTagType', val => {
+  if (val) {
+    const map = new Map([
+      [1, 'danger'],
+      [2, 'warning'],
+      [3, 'primary'],
+      [4, 'success']
+    ])
+    return map.get(val)
+  }
+  return 'danger'
 })
 

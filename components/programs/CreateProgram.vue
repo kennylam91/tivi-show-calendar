@@ -10,6 +10,9 @@
         </el-input>
         {{ suggesstionMovieName }}
       </el-form-item>
+      <el-form-item label="Year">
+        <el-input v-model="programData.year" />
+      </el-form-item>
       <el-form-item :label="COMMON.CHANNEL">
         <el-select
           v-model="programData.channels"
@@ -43,19 +46,22 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="COMMON.RANK">
-        <el-select
-          v-model="programData.rank"
-          class="w-100"
-          size="small"
-        >
-          <el-option
-            v-for="item in programRankOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+        <div class="flex">
+          <el-select
+            v-model="programData.rank"
+            class="w-100"
+            size="small"
+          >
+            <el-option
+              v-for="item in programRankOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
 
-        </el-select>
+          </el-select>
+          <span class="block bold mx-4">{{ voteAvg }}</span>
+        </div>
       </el-form-item>
 
       <el-form-item :label="COMMON.DESCRIPTION">
@@ -177,7 +183,8 @@ export default {
       movieImagesDialogVisible: false,
       suggesstionMovieName: null,
       trailerList: null,
-      trailerDialogVisible: false
+      trailerDialogVisible: false,
+      voteAvg: 0
 
     }
   },
@@ -264,9 +271,13 @@ export default {
     handleDialogClose(selectedMovie) {
       if (selectedMovie) {
         this.suggesstionMovieName = getProgramNameFromMovieTitle(selectedMovie)
-        this.programData.description = selectedMovie.overview
+        if (selectedMovie.overview) {
+          this.programData.description = selectedMovie.overview
+        }
+        this.voteAvg = selectedMovie.vote_average
         this.programData.rank = getRankFromVoteAvg(selectedMovie.vote_average)
         this.programData.categories = mapGenre(selectedMovie.genre_ids)
+        this.programData.year = selectedMovie.release_date.split('-')[0]
         this.$store.dispatch('app/fetchImagesFromTheMovieDb', { movieId: selectedMovie.id })
           .then(data => {
             this.movieImages = data.backdrops.concat(data.posters)
@@ -282,7 +293,6 @@ export default {
     },
     searchTrailer() {
       console.log('searchTrailer')
-      debugger
       const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get()
 
       if (!isSignedIn) {

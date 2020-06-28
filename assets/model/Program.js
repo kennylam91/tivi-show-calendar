@@ -8,6 +8,7 @@ export class Program {
     this.logo = null
     this.rank = 1
     this.schedules = []
+    this.year = null
   }
   // get instance object from firebase document
   static getInstanceFromDoc(doc) {
@@ -19,7 +20,8 @@ export class Program {
       categories: doc.data().categories,
       logo: doc.data().logo,
       rank: doc.data().rank,
-      schedules: doc.data().schedules
+      schedules: doc.data().schedules,
+      year: doc.data().year
     }
   }
 }
