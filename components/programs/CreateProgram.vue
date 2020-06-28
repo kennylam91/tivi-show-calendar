@@ -98,7 +98,6 @@
       title="Choose logo"
       :visible.sync="movieImagesDialogVisible"
       width="50%"
-      @close="handleImageDgClose"
     >
       <el-table
         v-if="movieImages"
@@ -118,6 +117,36 @@
 
       </el-table>
     </el-dialog>
+    <el-dialog
+      title="Choose trailer"
+      :visible.sync="trailerDialogVisible"
+      width="70%"
+    >
+      <el-table
+        v-if="trailerList"
+        height="700"
+        :data="trailerList"
+        highlight-current-row
+        border
+        stripe
+        size="small"
+        @current-change="handleSelectTrailer"
+      >
+        <el-table-column label="Trailer">
+          <template slot-scope="{row}">
+            {{ row.snippet.title }}
+          </template>
+        </el-table-column>
+        <el-table-column width="400">
+          <template slot-scope="{row}">
+            <div class="embed-responsive embed-responsive-16by9">
+              <span v-html="getEmbedLinkFromYoutubeVideoId(row.id.videoId)" />
+            </div>
+          </template>
+        </el-table-column>
+
+      </el-table>
+    </el-dialog>
 
   </div>
 </template>
@@ -126,7 +155,7 @@ import { CATEGORIES } from '@/assets/utils/constant'
 import Upload from '@/components/upload/Upload'
 import { programRankOptions } from '@/assets/utils/constant'
 import { mapGetters } from 'vuex'
-import { getProgramEnTitle, getProgramNameFromMovieTitle, getRankFromVoteAvg, mapGenre } from '@/assets/utils/index'
+import { getProgramEnTitle, getProgramNameFromMovieTitle, getRankFromVoteAvg, mapGenre, getEmbedLinkFromYoutubeVideoId } from '@/assets/utils/index'
 import ProgramSearchResultDialog from './ProgramSearchResultDialog'
 
 export default {
@@ -146,7 +175,9 @@ export default {
       searchResultDialog: false,
       movieImages: null,
       movieImagesDialogVisible: false,
-      suggesstionMovieName: null
+      suggesstionMovieName: null,
+      trailerList: null,
+      trailerDialogVisible: false
 
     }
   },
@@ -270,10 +301,10 @@ export default {
               'snippet'
             ],
             'maxResults': 25,
-            'q': getProgramEnTitle(this.programData.name)
-          }).then(res => {
-            debugger
-            console.log(res)
+            'q': getProgramEnTitle(this.programData.name) + ' trailer'
+          }).then(({ result }) => {
+            this.trailerList = result.items.map(item => item)
+            this.trailerDialogVisible = true
           }).catch(err => {
             this.$message({
               message: err,
@@ -282,6 +313,12 @@ export default {
             })
           })
         })
+    },
+    getEmbedLinkFromYoutubeVideoId(videoId) {
+      return getEmbedLinkFromYoutubeVideoId(videoId)
+    },
+    handleSelectTrailer(val) {
+      this.programData.trailer = this.getEmbedLinkFromYoutubeVideoId(val.id.videoId)
     }
 
   }

@@ -190,3 +190,7 @@ export const mapGenre = (genre) => {
   ])
   return genre.map(item => map.get(item))
 }
+
+export const getEmbedLinkFromYoutubeVideoId = (videoId) => {
+  return `<iframe width="1280" height="720" src="https://www.youtube.com/embed/` + videoId + `" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+}
