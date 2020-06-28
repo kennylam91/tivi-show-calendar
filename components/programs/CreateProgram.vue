@@ -5,7 +5,7 @@
       <el-form-item :label="COMMON.NAME">
         <el-input v-model="programData.name" @change="searchProgramOnTheMovieDb">
           <template slot="append">
-            <el-button type="primary" @click="searchProgramOnTheMovieDb">Search</el-button>
+            <el-button :disabled="!programData.name" type="primary" @click="searchProgramOnTheMovieDb">Search</el-button>
           </template>
         </el-input>
         {{ suggesstionMovieName }}
@@ -62,11 +62,15 @@
         <el-input
           v-model="programData.description"
           type="textarea"
-          :rows="4"
+          :rows="5"
         />
       </el-form-item>
       <el-form-item label="Trailer">
-        <el-input v-model="programData.trailer" />
+        <el-input v-model="programData.trailer">
+          <template slot="append">
+            <el-button :disabled="!programData.name" type="primary" @click="searchTrailer">Search Trailer</el-button>
+          </template>
+        </el-input>
       </el-form-item>
 
       <el-form-item label="Logo">
@@ -219,7 +223,6 @@ export default {
     },
     searchProgramOnTheMovieDb() {
       console.log('searchProgramOnTheMovieDb')
-      debugger
       this.$store.dispatch('app/searchProgramOnTheMovieDb', {
         movieTitle: getProgramEnTitle(this.programData.name)
       }).then(res => {
@@ -245,6 +248,40 @@ export default {
     handleSelectImage(selectedImage) {
       console.log(selectedImage)
       this.programData.logo = selectedImage
+    },
+    searchTrailer() {
+      console.log('searchTrailer')
+      debugger
+      const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get()
+
+      if (!isSignedIn) {
+        gapi.auth2.getAuthInstance().signIn().then(() => {
+          this.searchYoutube()
+        })
+      } else {
+        this.searchYoutube()
+      }
+    },
+    searchYoutube() {
+      gapi.client.load('https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest')
+        .then(() => {
+          gapi.client.youtube.search.list({
+            'part': [
+              'snippet'
+            ],
+            'maxResults': 25,
+            'q': getProgramEnTitle(this.programData.name)
+          }).then(res => {
+            debugger
+            console.log(res)
+          }).catch(err => {
+            this.$message({
+              message: err,
+              type: 'error',
+              showClose: true
+            })
+          })
+        })
     }
 
   }

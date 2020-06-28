@@ -57,7 +57,6 @@ export default {
     visibleProp: {
       immediate: true,
       handler() {
-        debugger
         this.visible = this.visibleProp
       }
     },

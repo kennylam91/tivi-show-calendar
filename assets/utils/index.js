@@ -159,13 +159,16 @@ export const getProgramEnTitle = (title) => {
 }
 
 export const getProgramNameFromMovieTitle = (movie) => {
-  const enName = movie.original_title.replace('-', ' ')
-  const viName = movie.title.replace('-', ' ')
-  if (enName !== viName) {
-    return enName + ' - ' + viName
-  } else {
-    return enName
+  if (movie) {
+    const enName = movie.original_title.replace('-', ' ')
+    const viName = movie.title.replace('-', ' ')
+    if (enName !== viName) {
+      return enName + ' - ' + viName
+    } else {
+      return enName
+    }
   }
+  return ''
 }
 
 export const getRankFromVoteAvg = (voteAvg) => {
