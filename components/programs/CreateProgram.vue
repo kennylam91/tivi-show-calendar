@@ -1,15 +1,14 @@
 <template>
   <div>
     <div class="bold mb-2">{{ title }}</div>
-    <el-form ref="programCreateForm" :model="programData" label-width="170px" size="small">
+    <el-form ref="programCreateForm" :model="programData" label-width="170px" size="small" @keyup.enter.prevent>
       <el-form-item :label="COMMON.NAME">
-        <el-input v-model="programData.name">
+        <el-input v-model="programData.name" @change="searchProgramOnTheMovieDb">
           <template slot="append">
             <el-button type="primary" @click="searchProgramOnTheMovieDb">Search</el-button>
-
           </template>
         </el-input>
-
+        {{ suggesstionMovieName }}
       </el-form-item>
       <el-form-item :label="COMMON.CHANNEL">
         <el-select
@@ -69,11 +68,17 @@
       <el-form-item label="Trailer">
         <el-input v-model="programData.trailer" />
       </el-form-item>
-      <img v-for="item in movieImages" :key="item" :src="item">
-      <el-form-item label="Logo">
-        <Upload :picture-prop="programData.logo" @uploaded="handleUploaded" />
-      </el-form-item>
 
+      <el-form-item label="Logo">
+        <div class="flex">
+          <Upload :picture-prop="programData.logo" @uploaded="handleUploaded" />
+          <el-button type="primary" @click="movieImagesDialogVisible = true">Choose Image</el-button>
+
+        </div>
+      </el-form-item>
+      <el-form-item>
+        <img :src="programData.logo">
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">{{ COMMON.SUBMIT }}</el-button>
         <el-button type="info" @click="handleCancelClick">{{ COMMON.CANCEL }}</el-button>
@@ -85,6 +90,31 @@
       :search-result-prop="searchProgramResult"
       @close="handleDialogClose"
     />
+    <el-dialog
+      title="Choose logo"
+      :visible.sync="movieImagesDialogVisible"
+      width="50%"
+      @close="handleImageDgClose"
+    >
+      <el-table
+        v-if="movieImages"
+        height="700"
+        :data="movieImages"
+        highlight-current-row
+        border
+        stripe
+        size="small"
+        @current-change="handleSelectImage"
+      >
+        <el-table-column label="Image">
+          <template slot-scope="{row}">
+            <img height="150" :src="row">
+          </template>
+        </el-table-column>
+
+      </el-table>
+    </el-dialog>
+
   </div>
 </template>
 <script>
@@ -110,7 +140,9 @@ export default {
       programRankOptions,
       searchProgramResult: null, // search from themoviedb
       searchResultDialog: false,
-      movieImages: null
+      movieImages: null,
+      movieImagesDialogVisible: false,
+      suggesstionMovieName: null
 
     }
   },
@@ -125,6 +157,7 @@ export default {
     ...mapGetters({
       channelList: 'channelList'
     })
+
   },
   watch: {
     programProp: {
@@ -138,6 +171,9 @@ export default {
 
   },
   methods: {
+    handleImageDgClose() {
+      this.movieImagesDialogVisible = false
+    },
     onSubmit() {
       if (!this.programData.id) {
         this.$store.dispatch('app/createProgram', this.programData).then(() => {
@@ -193,7 +229,7 @@ export default {
     },
     handleDialogClose(selectedMovie) {
       if (selectedMovie) {
-        this.programData.name = getProgramNameFromMovieTitle(selectedMovie)
+        this.suggesstionMovieName = getProgramNameFromMovieTitle(selectedMovie)
         this.programData.description = selectedMovie.overview
         this.programData.rank = getRankFromVoteAvg(selectedMovie.vote_average)
         this.programData.categories = mapGenre(selectedMovie.genre_ids)
@@ -205,7 +241,13 @@ export default {
           })
       }
       this.searchResultDialog = false
+    },
+    handleSelectImage(selectedImage) {
+      console.log(selectedImage)
+      this.programData.logo = selectedImage
     }
+
   }
+
 }
 </script>

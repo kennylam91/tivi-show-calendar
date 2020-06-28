@@ -15,11 +15,10 @@
         height="600px"
         :data="searchResult.results"
         highlight-current-row
-        @current-change="handleCurrentChange"
-      >
         border
         stripe
-        >
+        @current-change="handleCurrentChange"
+      >
         <el-table-column
           label="Title"
         >
