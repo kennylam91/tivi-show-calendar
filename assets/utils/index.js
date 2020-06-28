@@ -188,7 +188,14 @@ export const mapGenre = (genre) => {
     [28, 13], [12, 17], [16, 20], [35, 12], [80, 16], [99, 8], [10751, 31], [9648, 30],
     [10749, 21], [878, 14], [10770, 2], [10752, 19], [14, 14]
   ])
-  return genre.map(item => map.get(item))
+  const categories = []
+  for (const item of genre) {
+    const found = map.get(item)
+    if (found) {
+      categories.push(found)
+    }
+  }
+  return categories
 }
 
 export const getEmbedLinkFromYoutubeVideoId = (videoId) => {
