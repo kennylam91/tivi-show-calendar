@@ -101,6 +101,7 @@
       @close="handleDialogClose"
     />
     <el-dialog
+      :key="dialogKey"
       title="Choose logo"
       :visible.sync="movieImagesDialogVisible"
       width="50%"
@@ -125,12 +126,12 @@
     </el-dialog>
     <el-dialog
       v-if="trailerList"
+      :key="dialogKey"
       title="Choose trailer"
       :visible.sync="trailerDialogVisible"
       width="70%"
     >
       <el-table
-
         height="700"
         :data="trailerList"
         highlight-current-row
@@ -146,7 +147,7 @@
         </el-table-column>
         <el-table-column width="400">
           <template slot-scope="{row}">
-            <div class="embed-responsive embed-responsive-16by9">
+            <div v-if="row.id" class="embed-responsive embed-responsive-16by9">
               <span v-html="getEmbedLinkFromYoutubeVideoId(row.id.videoId)" />
             </div>
           </template>
@@ -185,7 +186,8 @@ export default {
       suggesstionMovieName: null,
       trailerList: null,
       trailerDialogVisible: false,
-      voteAvg: 0
+      voteAvg: 0,
+      dialogKey: 0
 
     }
   },
@@ -237,6 +239,7 @@ export default {
             categories: null,
             rank: 1
           }
+          this.dialogKey++
         }).catch(err => {
           console.log(err)
         })
@@ -249,6 +252,7 @@ export default {
             position: 'bottom-right'
           })
           this.$emit('saved')
+          this.dialogKey++
         }).catch(err => {
           console.log(err)
         })
