@@ -135,7 +135,7 @@ export const categoryMap = new Map([
   [12, 'Hài hước'],
   [13, 'Hành động'],
   [14, 'Viễn tưởng'],
-  [15, 'Thần thoại'],
+  [15, 'Lịch Sử'],
   [16, 'Hình sự'],
   [17, 'Phiên lưu'],
   [18, 'Cổ trang'],
@@ -155,7 +155,9 @@ export const categoryMap = new Map([
   [32, 'Talk show'],
   [33, 'Thể thao'],
   [34, 'Phim Sitcom'],
-  [35, 'Phim dài tập']
+  [35, 'Phim dài tập'],
+  [36, 'Chính kịch'],
+  [37, 'Gay cấn']
 ])
 
 export const categoryTagMap = new Map([
@@ -193,7 +195,10 @@ export const categoryTagMap = new Map([
   [32, 'primary'],
   [33, 'primary'],
   [34, 'primary'],
-  [35, 'primary']
+  [35, 'primary'],
+  [36, 'primary'],
+  [37, 'primary'],
+  [38, 'primary']
 ])
 
 export const CATEGORIES = [
@@ -212,7 +217,7 @@ export const CATEGORIES = [
   { value: 12, label: 'Hài hước', text: 'Hài hước' },
   { value: 13, label: 'Hành động', text: 'Hành động' },
   { value: 14, label: 'Viễn tưởng', text: 'Viễn tưởng' },
-  { value: 15, label: 'Thần thoại', text: 'Thần thoại' },
+  { value: 15, label: 'Lịch Sử', text: 'Lịch Sử' },
   { value: 16, label: 'Hình sự', text: 'Hình sự' },
   { value: 17, label: 'Phiên lưu', text: 'Phiên lưu' },
   { value: 20, label: 'Hoạt hình', text: 'Hoạt hình' },
@@ -231,7 +236,10 @@ export const CATEGORIES = [
   { value: 32, label: 'Talk show', text: 'Talk show' },
   { value: 33, label: 'Thể thao', text: 'Thể thao' },
   { value: 34, label: 'Phim Sitcom', text: 'Phim Sitcom' },
-  { value: 35, label: 'Phim dài tập', text: 'Phim dài tập' }
+  { value: 35, label: 'Phim dài tập', text: 'Phim dài tập' },
+  { value: 36, label: 'Chính kịch', text: 'Chính kịch' },
+  { value: 37, label: 'Giả tưởng', text: 'Giả tưởng' },
+  { value: 38, label: 'Gay cấn', text: 'Gay cấn' }
 ]
 
 export const THE_MOVIE_DB = {

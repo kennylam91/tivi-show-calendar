@@ -186,7 +186,8 @@ export const getRankFromVoteAvg = (voteAvg) => {
 export const mapGenre = (genre) => {
   const map = new Map([
     [28, 13], [12, 17], [16, 20], [35, 12], [80, 16], [99, 8], [10751, 31], [9648, 30],
-    [10749, 21], [878, 14], [10770, 2], [10752, 19], [14, 14]
+    [10749, 21], [878, 14], [10770, 2], [10752, 19], [14, 37], [18, 36], [36, 15],
+    [27, 11], [10402, 10], [53, 37]
   ])
   const categories = [1]
   for (const item of genre) {

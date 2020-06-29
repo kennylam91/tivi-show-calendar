@@ -3,7 +3,7 @@
     <div class="bold mb-2">{{ title }}</div>
     <el-form ref="programCreateForm" :model="programData" label-width="170px" size="small" @keyup.enter.prevent>
       <el-form-item :label="COMMON.NAME">
-        <el-input v-model="programData.name" @change="searchProgramOnTheMovieDb">
+        <el-input v-model="programData.name">
           <template slot="append">
             <el-button :disabled="!programData.name" type="primary" @click="searchProgramOnTheMovieDb">Search</el-button>
           </template>
@@ -124,12 +124,13 @@
       </el-table>
     </el-dialog>
     <el-dialog
+      v-if="trailerList"
       title="Choose trailer"
       :visible.sync="trailerDialogVisible"
       width="70%"
     >
       <el-table
-        v-if="trailerList"
+
         height="700"
         :data="trailerList"
         highlight-current-row
