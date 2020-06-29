@@ -66,6 +66,12 @@
         <el-divider direction="vertical" />
         <span class="color-primary">{{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}</span>
       </div>
+      <el-rate
+        v-model="program.rank"
+        disabled
+        text-color="#ff9900"
+        :max="4"
+      />
     </el-card>
   </div>
 </template>

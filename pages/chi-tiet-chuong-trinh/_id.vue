@@ -31,8 +31,15 @@
               <h5 class="programNameTitle">{{ program.name }}</h5>
               <div class="small-font-size">
                 <label class="bold label">{{ COMMON.RANK }} </label>
-                <el-tag :type="program.rank | getRankTagType" size="small" effect="dark">{{ program.rank | getRankText }}</el-tag>
-
+                <!-- <el-tag :type="program.rank | getRankTagType" size="small" effect="dark">
+                  {{ program.rank | getRankText }}</el-tag> -->
+                <el-rate
+                  v-model="program.rank"
+                  style="display: inline;"
+                  disabled
+                  text-color="#ff9900"
+                  :max="4"
+                />
               </div>
               <div class="small-font-size">
                 <label class="bold label">{{ COMMON.CATEGORY }} </label>

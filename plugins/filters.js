@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { categoryMap } from '@/assets/utils/constant'
-import { COMMON, programRankMap } from '../assets/utils/constant'
+import { programRankMap } from '../assets/utils/constant'
 
 Vue.filter('uppercaseAll', val => val.toUpperCase())
 Vue.filter('uppercaseFirst', string => {
@@ -12,7 +12,10 @@ Vue.filter('uppercaseFirst', string => {
 }
 )
 Vue.filter('lowercaseAll', val => val.toLowerCase())
-Vue.filter('getCategory', val => categoryMap.get(Number(val)))
+Vue.filter('getCategory', val => {
+  const found = categoryMap.get(Number(val))
+  return found || ''
+})
 Vue.filter('shortenName', val => {
   if (val) {
     const array = val.split('-')
