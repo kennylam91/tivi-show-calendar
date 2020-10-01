@@ -17,7 +17,7 @@
         />
       </el-form-item>
       <el-form-item label="Logo">
-        <Upload :picture-prop="channelData.logo" @uploaded="handleUploaded" />
+        <Upload :picture-prop="channelData.logoUrl" @uploaded="handleUploaded" />
       </el-form-item>
 
       <el-form-item>

@@ -4,6 +4,7 @@ import { Channel } from '@/assets/model/Channel'
 import { Schedule } from '@/assets/model/Schedule'
 import axios from 'axios'
 import { THE_MOVIE_DB } from '../assets/utils/constant'
+import { createChannel } from '@/api/channel'
 
 // import { ProgramSearchForm } from '@/assets/model/ProgramSearchForm'
 
@@ -283,14 +284,7 @@ export const actions = {
     })
   },
   createChannel({ commit }, channel) {
-    const query = FB.channelRef.add(trimObject(channel))
-    return new Promise((resolve, reject) => {
-      query.then(() => {
-        resolve()
-      }).catch(err => {
-        reject(err)
-      })
-    })
+    return createChannel(channel)
   },
   updateChannel({ commit }, channel) {
     const query = FB.channelRef.doc(channel.id).set(trimObject(channel))

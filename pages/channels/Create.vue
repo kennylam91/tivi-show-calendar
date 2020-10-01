@@ -22,9 +22,13 @@ export default {
   data() {
     return {
       newChannel: {
-        id: null,
+        channelId: null,
         name: '',
-        description: ''
+        description: '',
+        isVip: false,
+        logoUrl: '',
+        networkId: null
+
       }
     }
   },
