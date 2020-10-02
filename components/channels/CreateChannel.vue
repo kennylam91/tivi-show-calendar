@@ -68,31 +68,16 @@ export default {
   },
   methods: {
     onSubmit() {
-      if (!this.channelData.id) {
-        this.$store.dispatch('app/createChannel', this.channelData).then(() => {
-          this.$notify({
-            title: 'Channel Created',
-            type: 'success',
-            duration: '4500',
-            position: 'bottom-right'
-          })
-          this.$emit('saved')
-        }).catch(err => {
-          console.log(err)
+      this.$store.dispatch('app/createOrUpdateChannel', this.channelData).then(() => {
+        this.$notify({
+          title: this.channelData.id ? 'Channel Updated' : 'Channel Created',
+          type: 'success',
+          duration: '4500',
+          position: 'bottom-right'
         })
-      } else {
-        this.$store.dispatch('app/updateChannel', this.channelData).then(() => {
-          this.$notify({
-            title: 'Channel Updated',
-            type: 'success',
-            duration: '4500',
-            position: 'bottom-right'
-          })
-          this.$emit('saved')
-        }).catch(err => {
-          console.log(err)
-        })
-      }
+        this.$store.dispatch('app/fetchChannelList')
+        this.$emit('saved')
+      })
     },
     cancelClick() {
       this.$emit('cancel')

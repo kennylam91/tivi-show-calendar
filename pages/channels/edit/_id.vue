@@ -24,26 +24,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      channelList: 'channelList'
     })
   },
   watch: {
-    channelList: {
-      immediate: true,
-      handler() {
-        this.channelId = this.$route.params.id
-        if (this.channelList) {
-          this.channel = this.channelList.find(item => item.id === this.channelId)
-        } else {
-          this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
-            this.channel = channel
-          })
-        }
-      }
-    }
   },
   created() {
-
+    this.channelId = this.$route.params.id
+    this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(data => {
+      this.channel = data
+    })
   },
   methods: {
     handleSavedAction() {

@@ -21,7 +21,7 @@
             </el-link>
             <div v-if="isAdmin">
               <el-switch
-                v-model="channel.isVip"
+                v-model="channel.vip"
                 :active-text="COMMON.SHOW"
                 :inactive-text="COMMON.HIDE"
                 @change="handleVipChange(channel)"
@@ -143,16 +143,18 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('app/deleteChannel', { channelIds: [row.id] }).then(() => {
-          this.$message({
+          this.$notify({
+            title: 'Delete completed',
             type: 'success',
-            message: 'Delete completed'
+            duration: '4500',
+            position: 'bottom-right'
           })
-          this.$store.dispatch('app/fetchChannelList', { page: 1, limit: 20 })
+          this.$store.dispatch('app/fetchChannelList')
         })
       })
     },
     handleVipChange(channel) {
-      this.$store.dispatch('app/updateChannel', channel).then(() => {
+      this.$store.dispatch('app/createOrUpdateChannel', channel).then(() => {
         this.$store.dispatch('app/fetchChannelList')
       })
     },

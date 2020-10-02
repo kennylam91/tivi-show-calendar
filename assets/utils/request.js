@@ -8,7 +8,7 @@ import { trimObject } from '@/assets/utils'
 const service = axios.create({
   baseURL: 'https://truyenhinh24h-backend.herokuapp.com/rest/v1', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  timeout: 10000 // request timeout
 })
 
 // request interceptor
@@ -22,7 +22,7 @@ service.interceptors.request.use(
     // please modify it according to the actual situation
     // config.headers['X-Token'] = getToken()
     // }
-    // config.data = trimObject(config.data)
+    config.data = trimObject(config.data)
     return config
   },
   error => {

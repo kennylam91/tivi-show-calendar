@@ -147,11 +147,16 @@ export const actions = {
   setNextDaysProgramSearchForm({ commit }, value) {
     commit('SET_NEXTS_DAY_PROGRAM_SEARCH_FORM', value)
   },
-  fetchChannelList({ commit }, data) {
-    return request({
-      url: '/channels/get-all',
-      method: 'post',
-      data
+  fetchChannelList({ commit }) {
+    return new Promise((resolve, reject) => {
+      request({
+        url: '/channels/get-all',
+        method: 'post',
+        data: { page: 1, limit: 999999 }
+      }).then(res => {
+        commit('SET_CHANNEL_LIST', res.content)
+        resolve(res)
+      })
     })
   },
   // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
