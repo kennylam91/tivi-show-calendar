@@ -39,31 +39,20 @@ import ChannelTable from '@/components/channels/ChannelTable'
 export default {
   components: { ChannelTable },
   middleware: 'auth',
-  computed: {
-
-    // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
-    channelList() {
-      const list = this.$store.state.app.channelList
-      const result = []
-      if (list) {
-        list.forEach(item => {
-          result.push({ ...item })
-        })
-        return result
-      } else {
-        return null
-      }
+  data() {
+    return {
+      channelList: []
     }
   },
+  computed: {
+
+  },
   watch: {
-    channelList: {
-      immediate: true,
-      handler() {
-        if (!this.channelList) {
-          this.$store.dispatch('app/fetchChannelList')
-        }
-      }
-    }
+  },
+  created() {
+    this.$store.dispatch('app/fetchChannelList', { page: 1, limit: 20 }).then(data => {
+      this.channelList = data.content
+    })
   },
   methods: {
     handleCreateChannelClick() {

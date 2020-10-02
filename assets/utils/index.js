@@ -69,6 +69,9 @@ export function parseVNTime(time, vformat, pad, isFourDigitYear) {
  * @param {object} source
  */
 export function trimObject(source) {
+  if (!source) {
+    return null
+  }
   Object.keys(source).forEach(function(key) {
     source[key] = typeof source[key] === 'string' ? source[key].trim() : source[key]
   })

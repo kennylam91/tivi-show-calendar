@@ -142,12 +142,12 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('app/deleteChannel', { channelId: row.id }).then(() => {
+        this.$store.dispatch('app/deleteChannel', { channelIds: [row.id] }).then(() => {
           this.$message({
             type: 'success',
             message: 'Delete completed'
           })
-          this.$store.dispatch('app/fetchChannelList')
+          this.$store.dispatch('app/fetchChannelList', { page: 1, limit: 20 })
         })
       })
     },

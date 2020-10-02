@@ -1,15 +1,15 @@
 import { FB } from '@/assets/utils/constant'
 import { trimObject } from '../assets/utils'
-import { Channel } from '@/assets/model/Channel'
+// import { Channel } from '@/assets/model/Channel'
 import { Schedule } from '@/assets/model/Schedule'
 import axios from 'axios'
 import { THE_MOVIE_DB } from '../assets/utils/constant'
-import { createChannel } from '@/api/channel'
+import request from '@/assets/utils/request'
 
 // import { ProgramSearchForm } from '@/assets/model/ProgramSearchForm'
 
 export const state = () => ({
-  channelList: null,
+  channelList: [],
   scheduleList: null,
   programList: null,
   todayVipProgramList: null,
@@ -147,17 +147,11 @@ export const actions = {
   setNextDaysProgramSearchForm({ commit }, value) {
     commit('SET_NEXTS_DAY_PROGRAM_SEARCH_FORM', value)
   },
-  fetchChannelList({ commit }) {
-    return new Promise((resolve, reject) => {
-      FB.channelRef.orderBy('name', 'asc').get().then(list => {
-        const channelList = []
-        list.forEach((doc) => {
-          const channel = Channel.getInstanceFromDoc(doc)
-          channelList.push(channel)
-        })
-        commit('SET_CHANNEL_LIST', channelList)
-        resolve(channelList)
-      })
+  fetchChannelList({ commit }, data) {
+    return request({
+      url: '/channels/get-all',
+      method: 'post',
+      data
     })
   },
   // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
@@ -218,22 +212,18 @@ export const actions = {
     })
   },
   // request={channelId: }
-  fetchChannel({ commit }, request) {
-    return new Promise((resolve, reject) => {
-      let channel = null
-      FB.channelRef.doc(request.channelId).get().then(doc => {
-        channel = { ...doc.data(), id: doc.id }
-        resolve(channel)
-      })
+  fetchChannel({ commit }, data) {
+    return request({
+      url: '/channels/' + data.channelId,
+      method: 'get'
     })
   },
-  // request={channelId: }
-  deleteChannel({ commit }, request) {
-    return new Promise((resolve, reject) => {
-      const query = FB.channelRef.doc(request.channelId).delete()
-      query.then(() => {
-        resolve()
-      }).catch(err => reject(err))
+  // data={channelIds:[1,2] }
+  deleteChannel({ commit }, data) {
+    return request({
+      url: '/channels/delete-multi',
+      method: 'post',
+      data
     })
   },
   // request = {programId}
@@ -283,15 +273,11 @@ export const actions = {
       })
     })
   },
-  createChannel({ commit }, channel) {
-    return createChannel(channel)
-  },
-  updateChannel({ commit }, channel) {
-    const query = FB.channelRef.doc(channel.id).set(trimObject(channel))
-    return new Promise((resolve, reject) => {
-      query.then(() => {
-        resolve()
-      }).catch(err => reject(err))
+  createOrUpdateChannel({ commit }, channel) {
+    return request({
+      url: '/channels',
+      method: 'post',
+      data: channel
     })
   },
   // request: {scheduleId}

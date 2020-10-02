@@ -1,6 +1,6 @@
 export class Channel {
   constructor(id, name, desc, logoUrl, isVip, networkId) {
-    this.channelId = id
+    this.id = id
     this.name = name
     this.description = desc
     this.logoUrl = logoUrl
@@ -18,15 +18,15 @@ export class Channel {
   // setLogo(value) { this.logo = value }
   // setIsVip(value) { this.isVip = value }
 
-  // static getInstanceFromDoc(doc) {
-  //   return {
-  //     id: doc.id,
-  //     name: doc.data().name,
-  //     description: doc.data().description,
-  //     logo: doc.data().logo,
-  //     isVip: doc.data().isVip,
-  //     schedules: doc.data().schedules
-  //   }
-  // }
+  static getInstanceFromDoc(doc) {
+    return {
+      id: doc.id,
+      name: doc.data().name,
+      description: doc.data().description,
+      logoUrl: doc.data().logo,
+      isVip: doc.data().isVip,
+      schedules: doc.data().schedules
+    }
+  }
 }
 
