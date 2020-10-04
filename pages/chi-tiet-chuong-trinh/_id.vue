@@ -198,7 +198,7 @@ export default {
   methods: {
     fetchScheduleList() {
       const now = new Date()
-      this.$store.dispatch('app/fetchScheduleList',
+      this.$store.dispatch('app/searchSchedules',
         { programId: this.programId, startTime: now, orderBy: ['startTime', 'asc'] }).then(list => {
         list.forEach(schedule => {
           schedule.channel = this.channelList.find(item => item.id === schedule.channelId)

@@ -142,7 +142,7 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('app/deleteChannel', { channelIds: [row.id] }).then(() => {
+        this.$store.dispatch('app/deleteChannels', { channelIds: [row.id] }).then(() => {
           this.$notify({
             title: 'Delete completed',
             type: 'success',

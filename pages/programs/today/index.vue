@@ -95,7 +95,7 @@ export default {
     },
 
     handleTodayShowChange(program) {
-      this.$store.dispatch('app/updateProgram', program).then(() => {
+      this.$store.dispatch('app/createOrUpdateProgram', program).then(() => {
         this.$store.dispatch('app/fetchProgramList', {}).then(() => {
           this.fetchAllProgramByDate(new Date()).then(list => {
             this.$store.dispatch('app/setTodayProgramList', list)

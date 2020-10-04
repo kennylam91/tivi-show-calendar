@@ -83,7 +83,7 @@
           :page-sizes="[20, 50, 100]"
           :page-size.sync="pagination.limit"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="programsNumber"
+          :total="totalItems"
         />
       </div>
 
@@ -92,7 +92,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { FB } from '@/assets/utils/constant'
 import { programRankMap, programRankOptions } from '@/assets/utils/constant'
 import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
 
@@ -115,6 +114,7 @@ export default {
         limit: 20
       },
       tableData: null,
+      totalItems: 0,
       programListData: [],
       programList: null,
       programTableKey: 0,
@@ -127,10 +127,7 @@ export default {
       // programList: 'programList',
       programSearchQuery: 'programSearchQuery',
       fromTodayProgramList: 'fromTodayProgramList'
-    }),
-    programsNumber() {
-      return this.programListData.length
-    }
+    })
   },
   watch: {
     pagination: {
@@ -138,27 +135,28 @@ export default {
       handler() {
         this.handlePaginationChange()
       }
-    },
-    programList: {
-      deep: true,
-      handler() {
-        this.filterProgramList(this.programSearchQuery)
-      }
-    },
-    programListData: {
-      deep: true,
-      handler() {
-        this.handlePaginationChange()
-      }
     }
+    // programList: {
+    //   deep: true,
+    //   handler() {
+    //     this.filterProgramList(this.programSearchQuery)
+    //   }
+    // },
+    // programListData: {
+    //   deep: true,
+    //   handler() {
+    //     this.handlePaginationChange()
+    //   }
+    // }
   },
   created() {
-    this.programList = [...this.fromTodayProgramList]
-    const channelId = this.$route.query.channelId
-    if (channelId) {
-      this.fetchAllProgram({ channelId })
-    }
+    // this.programList = [...this.fromTodayProgramList]
+    // const channelId = Number(this.$route.query.channelId)
+    // if (channelId) {
+    //   this.fetchAllProgram({ channelId })
+    // }
     // this.listQuery.name = this.$route.query.q
+    this.fetchProgramList()
   },
   methods: {
     getRankTagType(value) {
@@ -181,7 +179,7 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('app/deleteProgram', { programId: row.id }).then(() => {
+        this.$store.dispatch('app/deletePrograms', { programIds: [row.id] }).then(() => {
           this.$message({
             type: 'success',
             message: 'Delete completed',
@@ -209,22 +207,10 @@ export default {
       const end = this.pagination.page * this.pagination.limit
       this.tableData = this.programListData.slice(start, end)
     },
-    fetchAllProgram(request) {
-      let programQuery = FB.programRef
-      if (request.channelId) {
-        programQuery = programQuery.where('channels', 'array-contains', request.channelId)
-      }
-      if (request.schedules) {
-        programQuery = programQuery.where('schedules', 'array-contains-any', request.schedules)
-      }
-
-      return programQuery.orderBy('name', 'asc').onSnapshot(snapShot => {
-        const list = []
-        snapShot.forEach(doc => {
-          const program = { ...doc.data(), id: doc.id }
-          list.push(program)
-        })
-        this.programList = [...list]
+    fetchProgramList() {
+      this.$store.dispatch('app/searchProgram', { page: 1, limit: 20 }).then(res => {
+        this.tableData = res.content
+        this.totalItems = res.totalElements
       })
     },
     handleClear() {

@@ -1,7 +1,7 @@
 import { FB } from '@/assets/utils/constant'
 import { trimObject } from '../assets/utils'
 // import { Channel } from '@/assets/model/Channel'
-import { Schedule } from '@/assets/model/Schedule'
+// import { Schedule } from '@/assets/model/Schedule'
 import axios from 'axios'
 import { THE_MOVIE_DB } from '../assets/utils/constant'
 import request from '@/assets/utils/request'
@@ -9,7 +9,7 @@ import request from '@/assets/utils/request'
 // import { ProgramSearchForm } from '@/assets/model/ProgramSearchForm'
 
 export const state = () => ({
-  channelList: [],
+  channelList: null,
   scheduleList: null,
   programList: null,
   todayVipProgramList: null,
@@ -160,61 +160,19 @@ export const actions = {
     })
   },
   // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
-  fetchScheduleList({ state, dispatch }, request) {
-    dispatch('setLoading', true)
-    let scheduleQuery = FB.scheduleRef
-    if (request.channelId) {
-      // fetch program list of this channel
-      scheduleQuery = scheduleQuery.where('channelId', '==', request.channelId)
-    }
-    if (request.programId) {
-      scheduleQuery = scheduleQuery.where('programId', '==', request.programId)
-    }
-    if (request.startTime) {
-      scheduleQuery = scheduleQuery.where('startTime', '>=', request.startTime)
-    }
-    if (request.endTime) {
-      scheduleQuery = scheduleQuery.where('startTime', '<', request.endTime)
-    }
-    if (request.orderBy) {
-      scheduleQuery = scheduleQuery.orderBy(request.orderBy[0], request.orderBy[1])
-    } else {
-      scheduleQuery = scheduleQuery.orderBy('startTime')
-    }
-    if (request.limit) {
-      scheduleQuery = scheduleQuery.limit(request.limit)
-    }
-
-    return new Promise((resolve, reject) => {
-      scheduleQuery.get().then((list) => {
-        const scheduleList = []
-        list.forEach((doc) => {
-          const schedule = Schedule.getInstanceFromDoc(doc)
-          // const schedule = { ...doc.data(), id: doc.id }
-          scheduleList.push(schedule)
-        })
-        dispatch('setLoading', false)
-        resolve(scheduleList)
-      })
+  searchSchedules({ state, dispatch }, data) {
+    return request({
+      url: '/schedules/search',
+      method: 'post',
+      data: data
     })
   },
-  createSchedule({ commit }, schedule) {
-    const query = FB.scheduleRef.add(trimObject(schedule))
-    return new Promise((resolve, reject) => {
-      query.then(() => {
-        resolve()
-      }).catch(err => {
-        reject(err)
-      })
-    })
-  },
-  updateSchedule({ commit }, schedule) {
-    const query = FB.scheduleRef.doc(schedule.id).set(trimObject(schedule))
-    return new Promise((resolve, reject) => {
-      query.then(() => {
-        resolve()
-      }).catch(err => reject(err))
-    })
+  createOrUpdateSchedule({ commit }, schedule) {
+    return request({
+      url: '/schedules',
+      method: 'post',
+      data: schedule
+    }) 
   },
   // request={channelId: }
   fetchChannel({ commit }, data) {
@@ -224,7 +182,7 @@ export const actions = {
     })
   },
   // data={channelIds:[1,2] }
-  deleteChannel({ commit }, data) {
+  deleteChannels({ commit }, data) {
     return request({
       url: '/channels/delete-multi',
       method: 'post',
@@ -232,50 +190,26 @@ export const actions = {
     })
   },
   // request = {programId}
-  fetchProgram({ commit }, request) {
-    const programQuery = FB.programRef.doc(request.programId)
-    return new Promise((resolve, reject) => {
-      programQuery.get().then(doc => {
-        const program = { ...doc.data(), id: doc.id }
-        resolve(program)
-      })
+  fetchProgram({ commit }, programId) {
+    return request({
+      url: '/programs/' + programId,
+      method: 'get'
     })
   },
   // request ={programId}
-  deleteProgram({ commit }, request) {
-    return new Promise((resolve, reject) => {
-      const query = FB.programRef.doc(request.programId).delete()
-      query.then(() => {
-        resolve()
-      }).catch(err => reject(err))
+  deletePrograms({ commit }, data) {
+    return request({
+      url: '/programs/delete-multi',
+      method: 'post',
+      data
     })
   },
   // request = {isTodayShow, isNextDaysShow, channelId}
-  fetchProgramList({ commit }, request) {
-    return new Promise((resolve, reject) => {
-      let programQuery = FB.programRef
-      if (request.isTodayShow) {
-        programQuery = programQuery.where('isTodayShow', '==', true)
-      }
-      if (request.isNextDaysShow) {
-        programQuery = programQuery.where('isNextDaysShow', '==', true)
-      }
-
-      if (request.channelId) {
-        programQuery = programQuery.where('channels', 'array-contains', request.channelId)
-      }
-      if (request.schedules) {
-        programQuery = programQuery.where('schedules', 'array-contains-any', request.schedules)
-      }
-
-      programQuery.orderBy('name', 'asc').get().then(doc => {
-        const programList = []
-        doc.forEach(program => {
-          programList.push({ ...program.data(), id: program.id })
-        })
-        // commit('SET_PROGRAM_LIST', programList)
-        resolve(programList)
-      })
+  searchProgram({ commit }, data) {
+    return request({
+      url: '/programs/search',
+      method: 'post',
+      data
     })
   },
   createOrUpdateChannel({ commit }, channel) {
@@ -286,41 +220,18 @@ export const actions = {
     })
   },
   // request: {scheduleId}
-  deleteSchedule({ commit }, request) {
-    return new Promise((resolve, reject) => {
-      const query = FB.scheduleRef.doc(request.scheduleId).delete()
-      query.then(() => {
-        resolve()
-      }).catch(err => reject(err))
+  deleteSchedules({ commit }, data) {
+    return request({
+      url: '/schedules/delete-multi',
+      method: 'post',
+      data
     })
   },
-  createProgram({ commit }, program) {
-    const query = FB.programRef.add(trimObject(program))
-    return new Promise((resolve, reject) => {
-      query.then(() => {
-        resolve()
-      }).catch(err => {
-        reject(err)
-      })
-    })
-  },
-  updateProgram({ commit }, program) {
-    // check if program.schedules has any value before now => remove it
-    const now = Date.parse(new Date()) - 60
-    const newArr = []
-    if (program.schedules) {
-      for (const time of program.schedules) {
-        if (time >= now) {
-          newArr.push(time)
-        }
-      }
-    }
-    program.schedules = newArr
-    const query = FB.programRef.doc(program.id).set(trimObject(program))
-    return new Promise((resolve, reject) => {
-      query.then(() => {
-        resolve()
-      }).catch(err => reject(err))
+  createOrUpdateProgram({ commit }, program) {
+    return request({
+      url: '/programs',
+      method: 'post',
+      data: program
     })
   },
   /*

@@ -30,22 +30,10 @@ export default {
     })
   },
   watch: {
-    programList: {
-      immediate: true,
-      handler() {
-        this.programId = this.$route.params.id
-        if (this.programList) {
-          this.program = this.programList.find(item => item.id === this.programId)
-        } else {
-          this.$store.dispatch('app/fetchProgram', { programId: this.programId }).then(data => {
-            this.program = data
-          })
-        }
-      }
-    }
   },
   created() {
-
+    this.programId = Number(this.$route.params.id)
+    this.fetchProgramDetail()
   },
   methods: {
     handleSavedAction() {
@@ -53,6 +41,11 @@ export default {
     },
     handleCancel() {
       this.$router.push({ path: '/programs' })
+    },
+    fetchProgramDetail() {
+      this.$store.dispatch('app/fetchProgram', this.programId).then(res => {
+        this.program = res
+      })
     }
   }
 }

@@ -150,7 +150,7 @@ export default {
     // end.setHours(23, 59, 59, 999)
     // const endTimestamp = FB.timestamp.fromDate(end)
 
-    // const promise0 = store.dispatch('app/fetchScheduleList',
+    // const promise0 = store.dispatch('app/searchSchedules',
     //   { channelId: channelId,
     //     startTime: startTimestamp,
     //     endTime: endTimestamp })

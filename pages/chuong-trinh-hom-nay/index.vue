@@ -110,7 +110,7 @@ export default {
         end = this.convertStringToTimestamp(endTime, today)
       }
       const endTimestamp = FB.timestamp.fromDate(end)
-      await this.$store.dispatch('app/fetchScheduleList',
+      await this.$store.dispatch('app/searchSchedules',
         { startTime: startTimestamp,
           endTime: endTimestamp }).then(scheduleList => {
         for (const schedule of scheduleList) {

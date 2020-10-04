@@ -209,7 +209,7 @@ export default {
       return this.$route.path
     },
     vipChannelList() {
-      return this.channelList.filter(channel => channel.isVip === true)
+      return this.channelList && this.channelList.filter(channel => channel.isVip === true) || []
     }
   },
   watch: {

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { COMMON, FB, CATEGORIES } from '@/assets/utils/constant'
+import { COMMON, CATEGORIES } from '@/assets/utils/constant'
 import { convertVNToEN } from '@/assets/utils'
 // import { firebase } from '@/MyFireBase'
 
@@ -55,17 +55,15 @@ Vue.mixin({
       return new Promise((resolve, reject) => {
         const start = date
         start.setHours(0, 0, 0, 0)
-        const startTimestamp = FB.timestamp.fromDate(start)
 
-        const end = date
+        const end = new Date(date.getTime())
         end.setHours(23, 59, 59, 999)
-        const endTimestamp = FB.timestamp.fromDate(end)
 
-        this.$store.dispatch('app/fetchScheduleList',
+        this.$store.dispatch('app/searchSchedules',
           { channelId: channelId,
-            startTime: startTimestamp,
-            endTime: endTimestamp }).then(scheduleList => {
-          resolve(scheduleList)
+            startTime: start,
+            endTime: end }).then(res => {
+          resolve(res)
         })
       })
     },

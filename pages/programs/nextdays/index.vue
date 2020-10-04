@@ -99,7 +99,7 @@ export default {
     },
 
     handleNextDaysShowChange(program) {
-      this.$store.dispatch('app/updateProgram', program).then(() => {
+      this.$store.dispatch('app/createOrUpdateProgram', program).then(() => {
         this.updateNextDaysProgramList()
       })
     }

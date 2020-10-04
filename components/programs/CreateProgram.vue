@@ -13,7 +13,7 @@
       <el-form-item label="Year">
         <el-input v-model="programData.year" />
       </el-form-item>
-      <el-form-item :label="COMMON.CHANNEL">
+      <!-- <el-form-item :label="COMMON.CHANNEL">
         <el-select
           v-model="programData.channels"
           multiple
@@ -27,7 +27,7 @@
           />
 
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="COMMON.CATEGORY">
         <el-select
           v-model="programData.categories"
@@ -221,7 +221,7 @@ export default {
     },
     onSubmit() {
       if (!this.programData.id) {
-        this.$store.dispatch('app/createProgram', this.programData).then(() => {
+        this.$store.dispatch('app/createOrUpdateProgram', this.programData).then(() => {
           this.$notify({
             title: 'Program Created',
             type: 'success',
@@ -244,7 +244,7 @@ export default {
           console.log(err)
         })
       } else {
-        this.$store.dispatch('app/updateProgram', this.programData).then(() => {
+        this.$store.dispatch('app/createOrUpdateProgram', this.programData).then(() => {
           this.$notify({
             title: 'Program Updated',
             type: 'success',

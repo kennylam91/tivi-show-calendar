@@ -75,7 +75,7 @@ export default {
     channelList: {
       immediate: true,
       handler() {
-        this.channelId = this.$route.params.id
+        this.channelId = Number(this.$route.params.id)
         if (this.channelList) {
           this.channel = this.channelList.find(item => item.id === this.channelId)
         } else {
@@ -101,8 +101,8 @@ export default {
     },
     getScheduleList() {
       return new Promise((resolve, reject) => {
-        this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
-          this.scheduleList = scheduleList
+        this.fetchScheduleList(this.channelId, this.selectedDate).then(res => {
+          this.scheduleList = res.content
           this.searchText = ''
           this.scheduleData = this.scheduleList
           resolve()

@@ -33,7 +33,7 @@ export const actions = {
     //   const nowInGMT7Timestamp = FB.timestamp.fromMillis(before30Mins)
     //   const startOfNextDayInGMT7 = startOfDateInGMT7 + milliSecondsOneDay
     //   const startOfNextDayInGMT7Timestamp = FB.timestamp.fromMillis(startOfNextDayInGMT7)
-    //   const fromtNowScheduleFetchPromise = dispatch('app/fetchScheduleList', {
+    //   const fromtNowScheduleFetchPromise = dispatch('app/searchSchedules', {
     //     startTime: nowInGMT7Timestamp,
     //     endTime: startOfNextDayInGMT7Timestamp
     //   })
