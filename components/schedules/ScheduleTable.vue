@@ -22,10 +22,12 @@
       >
         <template slot-scope="{row}">
           <el-link
+            v-if="row.programId"
             :underline="false"
             class="break-word"
             @click="moveToProgramDetail(row.programId)"
           >{{ row.programName }}</el-link>
+          <span v-else>{{ row.programName }}</span>
         </template>
       </el-table-column>
       <el-table-column

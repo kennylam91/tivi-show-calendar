@@ -1,6 +1,6 @@
 <template>
   <div>
-    <article class="pb-2 pt-4">
+    <!-- <article class="pb-2 pt-4">
       <h4 class="color-dark-blue">
         {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseFirst }}
       </h4>
@@ -81,7 +81,7 @@
           <Program :program="program" />
         </div>
       </div>
-    </article>
+    </article> -->
 
     <article class="py-2">
       <h4>
@@ -143,67 +143,67 @@ export default {
     }),
     vipChannels() {
       if (this.channelList) {
-        return this.channelList.filter(item => item.isVip).slice(0, this.COMMON.VIP_CHANNEL_MAX_NUM)
+        return this.channelList.filter(item => item.vip).slice(0, this.COMMON.VIP_CHANNEL_MAX_NUM)
       } else {
         return null
       }
     },
-    todayVipProgramList() {
-      if (this.todayProgramList) {
-        const clonedList = [...this.todayProgramList]
-        return clonedList.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
-      } else {
-        return []
-      }
-    },
-    broadCastingPrograms() {
-      const liveSchedules = this.fromNowInDayScheduleList.filter(this.liveProgramFilter)
-      const livePrograms = []
-      liveSchedules.forEach(schedule => {
-        const program = this.fromTodayProgramList.find(item => item.id === schedule.programId)
-        if (program && !livePrograms.some(pro => pro.id === program.id)) {
-          livePrograms.push({ ...program, schedule: schedule })
-        }
-      })
-      return this.getFourOrEightPrograms(livePrograms)
-    },
-    noonProgramList() {
-      const now = new Date()
-      if (now.getHours() > 12) {
-        return null
-      }
-      return this.getFourOrEightPrograms(this.getProgramListBetweenHours(11, 0, 13, 0))
-    },
-    eveningProgramList() {
-      const now = new Date()
-      if (now.getHours() > 22) {
-        return null
-      }
-      return this.getFourOrEightPrograms(this.getProgramListBetweenHours(20, 0, 23, 0))
-    }
+    // todayVipProgramList() {
+    //   if (this.todayProgramList) {
+    //     const clonedList = [...this.todayProgramList]
+    //     return clonedList.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+    //   } else {
+    //     return []
+    //   }
+    // },
+    // broadCastingPrograms() {
+    //   const liveSchedules = this.fromNowInDayScheduleList.filter(this.liveProgramFilter)
+    //   const livePrograms = []
+    //   liveSchedules.forEach(schedule => {
+    //     const program = this.fromTodayProgramList.find(item => item.id === schedule.programId)
+    //     if (program && !livePrograms.some(pro => pro.id === program.id)) {
+    //       livePrograms.push({ ...program, schedule: schedule })
+    //     }
+    //   })
+    //   return this.getFourOrEightPrograms(livePrograms)
+    // },
+    // noonProgramList() {
+    //   const now = new Date()
+    //   if (now.getHours() > 12) {
+    //     return null
+    //   }
+    //   return this.getFourOrEightPrograms(this.getProgramListBetweenHours(11, 0, 13, 0))
+    // },
+    // eveningProgramList() {
+    //   const now = new Date()
+    //   if (now.getHours() > 22) {
+    //     return null
+    //   }
+    //   return this.getFourOrEightPrograms(this.getProgramListBetweenHours(20, 0, 23, 0))
+    // }
 
   },
   watch: {
   },
   mounted() {
-    const list = []
-    for (const program of this.fromNowInDayProgramList) {
-      if (program) {
-        if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
-          list.push({ ...program })
-        }
-      }
-    }
-    this.onGoingTodayProgramList = list
-      .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
+    // const list = []
+    // for (const program of this.fromNowInDayProgramList) {
+    //   if (program) {
+    //     if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
+    //       list.push({ ...program })
+    //     }
+    //   }
+    // }
+    // this.onGoingTodayProgramList = list
+    //   .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
 
-    if (this.nextDaysProgramList) {
-      const clonedList = [...this.nextDaysProgramList]
-      this.nextDaysVipProgramList = clonedList
-        .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
-    } else {
-      this.nextDaysVipProgramList = []
-    }
+    // if (this.nextDaysProgramList) {
+    //   const clonedList = [...this.nextDaysProgramList]
+    //   this.nextDaysVipProgramList = clonedList
+    //     .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
+    // } else {
+    //   this.nextDaysVipProgramList = []
+    // }
   },
   methods: {
     liveProgramFilter(schedule) {

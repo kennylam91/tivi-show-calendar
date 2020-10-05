@@ -53,7 +53,7 @@
                 effect="dark"
                 type="info"
                 size="small"
-              >{{ item | getCategory }}</el-tag>
+              >{{ item.name }}</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -65,12 +65,12 @@
         >
           <template slot-scope="scope">
             <el-button
-              size="small"
+              size="mini"
               @click="handleProgramEditClick(scope.row)"
             >Edit</el-button>
             <el-button
               type="danger"
-              size="small"
+              size="mini"
               @click="handleProgramDeleteClick(scope.row)"
             >Delete</el-button>
           </template>

@@ -161,7 +161,21 @@ export default {
       }
       this.scheduleList = scheduleArr
     },
-    importScheduleList() {}
+    importScheduleList() {
+      this.$store.dispatch('app/setLoading', true)
+      this.$store.dispatch('app/importSchedules', this.scheduleList).then(res => {
+        this.$notify({
+          title: 'Import Success',
+          type: 'success',
+          duration: '4500',
+          position: 'bottom-right'
+        })
+        this.$store.dispatch('app/setLoading', false)
+        this.scheduleInput = ''
+        this.scheduleList = null
+        // this.moveToChannelManageView(this.channel)
+      })
+    }
   }
 }
 </script>

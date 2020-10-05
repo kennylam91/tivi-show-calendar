@@ -30,17 +30,17 @@
       </el-form-item> -->
       <el-form-item :label="COMMON.CATEGORY">
         <el-select
-          v-model="programData.categories"
+          v-model="programData.categoryIds"
           multiple
           class="w-100"
           :placeholder="COMMON.SELECT_CATEGORY"
           size="small"
         >
           <el-option
-            v-for="item in CATEGORIES"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in categoryOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
             class="small-font-size"
           />
         </el-select>
@@ -187,7 +187,8 @@ export default {
       trailerList: null,
       trailerDialogVisible: false,
       voteAvg: 0,
-      dialogKey: 0
+      dialogKey: 0,
+      categoryOptions: []
 
     }
   },
@@ -213,50 +214,35 @@ export default {
     }
   },
   created() {
-
+    this.$store.dispatch('app/fetchCategories', {}).then(res => {
+      this.categoryOptions = res
+    })
   },
   methods: {
     handleImageDgClose() {
       this.movieImagesDialogVisible = false
     },
     onSubmit() {
-      if (!this.programData.id) {
-        this.$store.dispatch('app/createOrUpdateProgram', this.programData).then(() => {
-          this.$notify({
-            title: 'Program Created',
-            type: 'success',
-            duration: '4500',
-            position: 'bottom-right'
-          })
-          this.$emit('saved')
-          this.programData = {
-            id: '',
-            name: '',
-            description: '',
-            logo: '',
-            isTodayShow: true,
-            isNextDaysShow: true,
-            categories: null,
-            rank: 1
-          }
-          this.dialogKey++
-        }).catch(err => {
-          console.log(err)
+      this.$store.dispatch('app/createOrUpdateProgram', this.programData).then(() => {
+        this.$notify({
+          title: 'Program Saved',
+          type: 'success',
+          duration: '4500',
+          position: 'bottom-right'
         })
-      } else {
-        this.$store.dispatch('app/createOrUpdateProgram', this.programData).then(() => {
-          this.$notify({
-            title: 'Program Updated',
-            type: 'success',
-            duration: '4500',
-            position: 'bottom-right'
-          })
-          this.$emit('saved')
-          this.dialogKey++
-        }).catch(err => {
-          console.log(err)
-        })
-      }
+        this.programData = {
+          id: '',
+          name: '',
+          description: '',
+          logo: '',
+          isTodayShow: true,
+          isNextDaysShow: true,
+          categories: null,
+          rank: 1
+        }
+        this.dialogKey++
+        this.$emit('saved')
+      })
     },
     handleCancelClick() {
       this.$emit('cancel')

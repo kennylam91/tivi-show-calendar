@@ -167,12 +167,19 @@ export const actions = {
       data: data
     })
   },
+  importSchedules({ state, dispatch }, data) {
+    return request({
+      url: '/schedules/import',
+      method: 'post',
+      data: data
+    })
+  },
   createOrUpdateSchedule({ commit }, schedule) {
     return request({
       url: '/schedules',
       method: 'post',
       data: schedule
-    }) 
+    })
   },
   // request={channelId: }
   fetchChannel({ commit }, data) {
@@ -232,6 +239,13 @@ export const actions = {
       url: '/programs',
       method: 'post',
       data: program
+    })
+  },
+  fetchCategories({ commit }, data) {
+    return request({
+      url: '/categories/get-all',
+      method: 'post',
+      data
     })
   },
   /*
