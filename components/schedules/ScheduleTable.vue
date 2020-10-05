@@ -6,7 +6,7 @@
         width="75"
       >
         <template slot-scope="{row}">
-          <div>{{ parseVNTime(row.startTime.seconds) }}</div>
+          <div>{{ parseVNTime(row.startTime) }}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -14,7 +14,7 @@
         width="75"
       >
         <template slot-scope="{row}">
-          <div>{{ parseVNTime(row.endTime.seconds) }}</div>
+          <div>{{ parseVNTime(row.endTime) }}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column
         align="center"
-        width="170"
+        width="220"
       >
         <template slot="header">
           <el-button
@@ -87,7 +87,6 @@
       @close="handleDialogClose"
     >
       <CreateSchedule
-        :channel-prop="channelProp"
         :schedule-prop="schedule"
         :draft="draft"
         @saved="handleSaved"
@@ -124,19 +123,14 @@ export default {
     return {
       createScheduleDialogVisibleProp: false,
       schedule: null,
-      // scheduleInit: {
-      //   startTime: null,
-      //   endTime: null,
-      //   programId: null,
-      //   channelId: null
-      // }
       scheduleInit: new Schedule()
     }
   },
   computed: {
   },
   created() {
-    this.scheduleInit.setChannelId(this.$route.params.id)
+    this.scheduleInit.channelId = Number(this.$route.params.id)
+    this.scheduleInit.channelName = this.channelProp.name
     this.schedule = { ...this.scheduleInit }
   },
   methods: {
@@ -162,7 +156,7 @@ export default {
           cancelButtonText: 'Cancel',
           type: 'error'
         }).then(() => {
-          this.$store.dispatch('app/deleteSchedule', { scheduleId: row.id }).then(() => {
+          this.$store.dispatch('app/deleteSchedules', { scheduleIds: [row.id] }).then(() => {
             this.$notify({
               title: 'Schedule Deleted',
               type: 'success',
