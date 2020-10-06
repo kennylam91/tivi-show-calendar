@@ -246,7 +246,20 @@ Vue.mixin({
       const min = arr[1]
       date.setHours(hour, min, 0, 0)
       return date
-    }
+    },
+    getStartEndOfToday() {
+      const startOfToday = new Date()
+      startOfToday.setHours(0, 0, 0, 0)
+      const endOfToday = new Date(startOfToday.getTime())
+      endOfToday.setHours(24, 0, 0, 0)
+      return {
+        startOfToday,
+        endOfToday
+      }
+    },
+    moveToProgramDetail(programId) {
+      this.$router.push(`/programs/edit/${programId}`)
+    },
 
   }
 })

@@ -4,6 +4,7 @@
       <el-table-column
         label="Start"
         width="75"
+        align="center"
       >
         <template slot-scope="{row}">
           <div>{{ parseVNTime(row.startTime) }}</div>
@@ -12,6 +13,7 @@
       <el-table-column
         label="End"
         width="75"
+        align="center"
       >
         <template slot-scope="{row}">
           <div>{{ parseVNTime(row.endTime) }}</div>
@@ -31,21 +33,12 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="Categories"
-        width="300"
+        label="Check"
+        width="100"
+        align="center"
       >
         <template slot-scope="{row}">
-          <el-tag
-            v-for="(item, index) in row.categories"
-            :key="index"
-            size="small"
-            effect="dark"
-            type="info"
-            style="margin: 2px;"
-          >
-            {{ item | getCategory }}
-          </el-tag>
-
+          <i v-if="row.programId" class="el-icon-check color-success large-font-size" />
         </template>
       </el-table-column>
       <el-table-column
@@ -86,6 +79,7 @@
       :title="schedule.id? 'Update Schedule': 'Create Schedule'"
       :visible.sync="createScheduleDialogVisibleProp"
       width="60%"
+      destroy-on-close
       @close="handleDialogClose"
     >
       <CreateSchedule
@@ -101,7 +95,6 @@
 <script>
 import CreateSchedule from '@/components/schedules/CreateSchedule'
 import { parseVNTime } from '@/assets/utils/index'
-import { FB } from '@/assets/utils/constant'
 import { Schedule } from '@/assets/model/Schedule'
 
 export default {
@@ -175,23 +168,14 @@ export default {
     handleDialogClose() {
       this.schedule = { ...this.scheduleInit }
     },
-    moveToProgramDetail(programId) {
-      this.$router.push(`/programs/edit/${programId}`)
-    },
+    
     handleImportSchedule() {
       this.$router.push(`/channels/manage/import/${this.$route.params.id}`)
     },
     handleConfirmData(schedule) {
       const foundIndex = this.scheduleList.findIndex(item =>
-        item.startTime.seconds === Date.parse(schedule.startTime) / 1000)
-      const found = this.scheduleList[foundIndex]
-      if (found) {
-        found.programName = schedule.programName
-        found.programId = schedule.programId
-        found.categories = schedule.categories
-        found.endTime = FB.timestamp.fromDate(schedule.endTime)
-      }
-      this.$set(this.scheduleList, foundIndex, { ...found })
+        item.startTime === schedule.startTime)
+      this.$set(this.scheduleList, foundIndex, { ...schedule })
       this.createScheduleDialogVisibleProp = false
     }
   }

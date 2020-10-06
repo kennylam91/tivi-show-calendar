@@ -25,11 +25,12 @@
           v-model="scheduleData.programName"
           size="normal"
           clearable
-          :disabled="scheduleData.programId"
+          :disabled="scheduleData.programId !== null"
         />
       </el-form-item>
       <el-form-item label="Program">
         <el-select
+          ref="programSelectRef"
           v-model="selectedProgram"
           style="width: 100%;"
           filterable
@@ -105,12 +106,23 @@ export default {
       deep: true,
       handler() {
         this.scheduleData = { ...this.scheduleProp }
+        // truong hop edit
         if (this.scheduleProp.programId) {
           this.$store.dispatch('app/fetchProgram', this.scheduleProp.programId)
             .then(res => {
               this.selectedProgram = res
               this.options = [res]
             })
+        // import schedule => click edit
+        } else if (this.scheduleProp.programName) {
+          const data = { searchName: this.scheduleProp.enName ? this.scheduleProp.enName
+            : this.scheduleProp.viName }
+          if (data.searchName) {
+            this.$store.dispatch('app/searchProgram', data).then(res => {
+              this.options = res.content
+              this.$refs.programSelectRef.focus()
+            })
+          }
         }
       }
     },
@@ -216,10 +228,8 @@ export default {
     handleConfirm() {
       this.scheduleData.programName = this.selectedProgram.name
       this.scheduleData.programId = this.selectedProgram.id
-      this.scheduleData.categories = this.selectedProgram.categories
       this.$emit('confirmed', this.scheduleData)
     }
-
   }
 }
 </script>

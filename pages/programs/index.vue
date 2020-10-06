@@ -22,6 +22,8 @@
         :data="tableData"
         border
         stripe
+        size="mini"
+        loading="loading"
       >
         <el-table-column
           prop="name"
@@ -34,7 +36,7 @@
           min-width="13"
         >
           <template slot-scope="{row}">
-            <el-tag v-if="row.rank" size="small" effect="dark" :type="getRankTagType(row.rank)">
+            <el-tag v-if="row.rank" size="mini" effect="dark" :type="getRankTagType(row.rank)">
               {{ row.rank | getRankLabel }}
             </el-tag>
 
@@ -118,7 +120,8 @@ export default {
       programListData: [],
       programList: null,
       programTableKey: 0,
-      programRankOptions
+      programRankOptions,
+      loading: false
 
     }
   },
@@ -156,7 +159,8 @@ export default {
     //   this.fetchAllProgram({ channelId })
     // }
     // this.listQuery.name = this.$route.query.q
-    this.fetchProgramList()
+    const query = { page: 1, limit: 20 }
+    this.fetchProgramList(query)
   },
   methods: {
     getRankTagType(value) {
@@ -190,27 +194,20 @@ export default {
       })
     },
     filterProgramList(searchForm) {
-      this.programListData = []
-      this.$store.dispatch('app/setProgramSearchQuery', searchForm)
-      if (this.programList) {
-        this.programListData = this.programList.filter(program => {
-          return this.filterByCategory(program, searchForm) &&
-        this.filterByChannel(program, searchForm) &&
-        this.filterByName(program, searchForm) &&
-        this.filterByRank(program, searchForm)
-        })
-        this.handlePaginationChange()
-      }
+      this.fetchProgramList(searchForm)
     },
     handlePaginationChange() {
       const start = (this.pagination.page - 1) * this.pagination.limit
       const end = this.pagination.page * this.pagination.limit
       this.tableData = this.programListData.slice(start, end)
     },
-    fetchProgramList() {
-      this.$store.dispatch('app/searchProgram', { page: 1, limit: 20 }).then(res => {
+    fetchProgramList(query) {
+      this.loading = true
+      this.$store.dispatch('app/searchProgram', query).then(res => {
         this.tableData = res.content
         this.totalItems = res.totalElements
+      }).finally(() => {
+        this.loading = false
       })
     },
     handleClear() {

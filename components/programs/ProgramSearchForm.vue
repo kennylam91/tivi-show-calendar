@@ -10,13 +10,13 @@
     >
       <el-form-item :label="COMMON.SEARCH">
         <el-input
-          v-model="programSearchForm.name"
+          v-model="programSearchForm.searchName"
           class="searchFormItem"
           :placeholder="COMMON.INPUT_PROGRAM_NAME"
           @change="searchProgram"
         />
       </el-form-item>
-      <el-form-item :label="COMMON.CHANNEL">
+      <!-- <el-form-item :label="COMMON.CHANNEL">
         <el-select
           v-model="programSearchForm.channels"
           multiple
@@ -32,7 +32,7 @@
             :value="channel.id"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="COMMON.RANK">
         <el-select
           v-model="programSearchForm.ranks"
@@ -52,7 +52,7 @@
       </el-form-item>
       <el-form-item :label="COMMON.CATEGORY">
         <el-select
-          v-model="programSearchForm.categories"
+          v-model="programSearchForm.categoryCodes"
           class="searchFormItem"
           multiple
           size="small"
@@ -60,10 +60,10 @@
           @change="searchProgram"
         >
           <el-option
-            v-for="item in CATEGORIES"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in categories"
+            :key="item.code"
+            :label="item.name"
+            :value="item.code"
           />
         </el-select>
       </el-form-item>
@@ -148,7 +148,8 @@ export default {
   computed: {
     ...mapGetters({
       todayProgramList: 'fromNowInDayProgramList',
-      channelList: 'channelList'
+      channelList: 'channelList',
+      categories: 'categories'
     }),
     clearBtnShow() {
       return this.isSearching && this.clear
@@ -184,6 +185,11 @@ export default {
     },
     endTime() {
       this.searchProgram()
+    }
+  },
+  created() {
+    if (!this.categories) {
+      this.$store.dispatch('app/fetchCategories', {})
     }
   },
   methods: {

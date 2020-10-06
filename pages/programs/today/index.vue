@@ -61,32 +61,43 @@ export default {
   middleware: 'auth',
   data() {
     return {
+      todayProgramList: null
     }
   },
   computed: {
     // cannot use mapGetters bz we need to change the value of object  => error cannot mutate vuex
 
-    todayProgramList() {
-      const list = this.$store.state.app.todayProgramList
-      const result = []
-      if (list) {
-        list.forEach(item => {
-          result.push({ ...item })
-        })
-        return result
-      } else {
-        return null
-      }
-    },
-    todayShowNum() {
-      if (this.todayProgramList) {
-        return this.todayProgramList.filter(item => item.isTodayShow).length
-      }
-      return 0
-    }
+    // todayProgramList() {
+    //   const list = this.$store.state.app.todayProgramList
+    //   const result = []
+    //   if (list) {
+    //     list.forEach(item => {
+    //       result.push({ ...item })
+    //     })
+    //     return result
+    //   } else {
+    //     return null
+    //   }
+    // },
+    // todayShowNum() {
+    //   if (this.todayProgramList) {
+    //     return this.todayProgramList.filter(item => item.isTodayShow).length
+    //   }
+    //   return 0
+    // }
   },
   watch: {
 
+  },
+  created() {
+    const time = this.getStartEndOfToday()
+    const data = {
+      startTime: time.startOfToday,
+      endTime: time.endOfToday
+    }
+    this.$store.dispatch('app/searchProgram', data).then(res => {
+      this.todayProgramList = res.content
+    })
   },
 
   methods: {

@@ -1,5 +1,4 @@
-import { FB } from '@/assets/utils/constant'
-import { trimObject } from '../assets/utils'
+// import { trimObject } from '../assets/utils'
 // import { Channel } from '@/assets/model/Channel'
 // import { Schedule } from '@/assets/model/Schedule'
 import axios from 'axios'
@@ -29,7 +28,8 @@ export const state = () => ({
   },
   loading: false,
   todayProgramSearchForm: null,
-  nextDaysProgramSearchForm: null
+  nextDaysProgramSearchForm: null,
+  categories: null
 })
 
 export const mutations = {
@@ -80,6 +80,9 @@ export const mutations = {
   },
   SET_NEXTS_DAY_PROGRAM_SEARCH_FORM: (state, value) => {
     state.nextDaysProgramSearchForm = value
+  },
+  SET_CATEGORIES: (state, value) => {
+    state.categories = value
   }
 
 }
@@ -211,7 +214,7 @@ export const actions = {
       data
     })
   },
-  // request = {isTodayShow, isNextDaysShow, channelId}
+  // request = {searchName}
   searchProgram({ commit }, data) {
     return request({
       url: '/programs/search',
@@ -242,10 +245,15 @@ export const actions = {
     })
   },
   fetchCategories({ commit }, data) {
-    return request({
-      url: '/categories/get-all',
-      method: 'post',
-      data
+    return new Promise((resolve, reject) => {
+      return request({
+        url: '/categories/get-all',
+        method: 'post',
+        data
+      }).then(res => {
+        commit('SET_CATEGORIES', res)
+        resolve(res)
+      })
     })
   },
   /*

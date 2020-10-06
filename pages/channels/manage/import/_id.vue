@@ -154,7 +154,9 @@ export default {
             programName: vi + (en ? (' - ' + en) : ''),
             channelId: this.channelId,
             channelName: this.channel.name,
-            programId: null
+            programId: null,
+            viName: vi,
+            enName: en
           }
           scheduleArr.push(newSchedule)
         }
