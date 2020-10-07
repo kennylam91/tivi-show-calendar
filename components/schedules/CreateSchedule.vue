@@ -42,7 +42,7 @@
           :loading="loading"
         >
           <el-option
-            v-for="item in options"
+            v-for="item in scheduleProp.programOptions"
             :key="item.id"
             :label="item.name"
             :value="item"
@@ -80,7 +80,6 @@ export default {
     return {
       scheduleData: null,
       channelId: null,
-      options: [],
       value: [],
       loading: false,
       programName: null,
@@ -111,19 +110,19 @@ export default {
           this.$store.dispatch('app/fetchProgram', this.scheduleProp.programId)
             .then(res => {
               this.selectedProgram = res
-              this.options = [res]
+              this.scheduleProp.programOptions = [res]
             })
         // import schedule => click edit
-        } else if (this.scheduleProp.programName) {
+        } else if (this.scheduleProp.programName && !this.scheduleProp.programOptions) {
           const data = { searchName: this.scheduleProp.enName ? this.scheduleProp.enName
             : this.scheduleProp.viName }
           if (data.searchName) {
             this.$store.dispatch('app/searchProgram', data).then(res => {
-              this.options = res.content
-              this.$refs.programSelectRef.focus()
+              this.scheduleProp.programOptions = res.content
             })
           }
         }
+        this.$refs.programSelectRef.focus()
       }
     },
     selectedProgram: {
@@ -155,11 +154,11 @@ export default {
       if (query !== '') {
         this.loading = true
         this.$store.dispatch('app/searchProgram', { searchName: query }).then(res => {
-          this.options = res.content
+          this.scheduleProp.programOptions = res.content
           this.loading = false
         })
       } else {
-        this.options = []
+        this.scheduleProp.programOptions = []
       }
     },
     validateSchedule(schedule) {

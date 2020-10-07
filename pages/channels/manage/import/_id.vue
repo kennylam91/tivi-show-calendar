@@ -27,6 +27,8 @@
         type="date"
         placeholder="Pick a day"
       />
+      <el-button :disabled="errorLines.length" type="primary" size="default" @click="convertData"> Convert</el-button>
+
     </div>
     <el-input
       v-model="scheduleInput"
@@ -34,8 +36,9 @@
       :autosize="{ minRows: 5, maxRows: 10 }"
       placeholder="Pick a date first"
       :disabled="scheduleInputDisabled"
-      @input="handleInputChange"
+      @input="validateInput"
     />
+    <div v-if="errorLines.length > 0" style="color: red;">Error at line: {{ errorLines }}</div>
 
     <ScheduleTable
       v-if="channel"
@@ -67,7 +70,8 @@ export default {
       pattern: null,
       patternOptions: [
         { value: 'en : vi', label: 'en : vi' }
-      ]
+      ],
+      errorLines: []
     }
   },
   computed: {
@@ -93,11 +97,19 @@ export default {
     getChannelId() {
       return Number(this.$route.params.id)
     },
-    handleInputChange() {
+    validateInput() {
+      const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
+      if (this.pattern === 'en : vi') {
+        dataArray.forEach((element, index) => {
+          if (((element + '').match(/:/g) || []).length > 3) {
+            this.errorLines.push(index + 1)
+          }
+        })
+      }
+    },
+    convertData() {
       // dataArray: du lieu copy vao textarea, se duoc split bang /n
-      const dataArray = this.scheduleInput.trim()
-        ? this.scheduleInput.trim().split('\n')
-        : []
+      const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
       const scheduleArr = []
       if (this.importDate) {
         for (const item of dataArray) {
@@ -162,6 +174,16 @@ export default {
         }
       }
       this.scheduleList = scheduleArr
+      this.scheduleList.forEach(schedule => {
+        this.$store.dispatch('app/searchProgram', { searchName: schedule.enName }).then(res => {
+          if (res.content && res.content.length === 1) {
+            schedule.programId = res.content[0].id
+          } else if (res.content && res.content.length > 1) {
+            schedule.programOptions = res.content
+            schedule.multiOptions = true
+          }
+        })
+      })
     },
     importScheduleList() {
       this.$store.dispatch('app/setLoading', true)

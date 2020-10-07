@@ -38,7 +38,10 @@
         align="center"
       >
         <template slot-scope="{row}">
-          <i v-if="row.programId" class="el-icon-check color-success large-font-size" />
+          <span>
+            <i v-if="row.programId" class="el-icon-check color-success large-font-size" />
+            <i v-if="row.programOptions" class="el-icon-question large-font-size" />
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -164,11 +167,10 @@ export default {
       } else {
         this.scheduleList.splice(index, 1)
       }
-    },
-    handleDialogClose() {
+    }, handleDialogClose() {
       this.schedule = { ...this.scheduleInit }
     },
-    
+
     handleImportSchedule() {
       this.$router.push(`/channels/manage/import/${this.$route.params.id}`)
     },
