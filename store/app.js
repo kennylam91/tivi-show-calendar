@@ -206,7 +206,7 @@ export const actions = {
       method: 'get'
     })
   },
-  // request ={programId}
+  // request ={programIds: []}
   deletePrograms({ commit }, data) {
     return request({
       url: '/programs/delete-multi',

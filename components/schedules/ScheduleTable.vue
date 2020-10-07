@@ -39,8 +39,8 @@
       >
         <template slot-scope="{row}">
           <span>
+            <i v-if="row.programOptions" class="el-icon-question large-font-size color-warning" />
             <i v-if="row.programId" class="el-icon-check color-success large-font-size" />
-            <i v-if="row.programOptions" class="el-icon-question large-font-size" />
           </span>
         </template>
       </el-table-column>
@@ -97,7 +97,6 @@
 </template>
 <script>
 import CreateSchedule from '@/components/schedules/CreateSchedule'
-import { parseVNTime } from '@/assets/utils/index'
 import { Schedule } from '@/assets/model/Schedule'
 
 export default {
@@ -134,9 +133,6 @@ export default {
   methods: {
     handleCreateSchedule() {
       this.createScheduleDialogVisibleProp = true
-    },
-    parseVNTime(time) {
-      return parseVNTime(time, '{H}:{i}', true, true)
     },
     handleSaved() {
       this.createScheduleDialogVisibleProp = false

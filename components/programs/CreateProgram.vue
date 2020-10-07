@@ -1,46 +1,37 @@
 <template>
   <div>
-    <div class="bold mb-2">{{ title }}</div>
+    <div class="justify-between-align-center mb-2">
+      <div class="bold ">{{ title }}</div>
+      <el-button type="primary" size="small" @click="onSubmit">{{ COMMON.SUBMIT }}</el-button>
+    </div>
     <el-form ref="programCreateForm" :model="programData" label-width="170px" size="small" @keyup.enter.prevent>
       <el-form-item :label="COMMON.NAME">
-        <el-input v-model="programData.name">
+        <el-input v-model="programData.name" />
+      </el-form-item>
+      <el-form-item label="EnName">
+        <el-input v-model="programData.enName">
           <template slot="append">
-            <el-button :disabled="!programData.name" type="primary" @click="searchProgramOnTheMovieDb">Search</el-button>
+            <el-button :disabled="!programData.enName" type="primary" @click="searchProgramOnTheMovieDb">Search</el-button>
           </template>
         </el-input>
-        {{ suggesstionMovieName }}
+        {{ programData.enName }}
       </el-form-item>
       <el-form-item label="Year">
         <el-input v-model="programData.year" />
       </el-form-item>
-      <!-- <el-form-item :label="COMMON.CHANNEL">
-        <el-select
-          v-model="programData.channels"
-          multiple
-          class="w-100"
-        >
-          <el-option
-            v-for="item in channelList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          />
-
-        </el-select>
-      </el-form-item> -->
       <el-form-item :label="COMMON.CATEGORY">
         <el-select
-          v-model="programData.categoryIds"
+          v-model="programData.categoryCodes"
           multiple
           class="w-100"
           :placeholder="COMMON.SELECT_CATEGORY"
           size="small"
         >
           <el-option
-            v-for="item in categoryOptions"
+            v-for="item in categories"
             :key="item.id"
             :label="item.name"
-            :value="item.id"
+            :value="item.code"
             class="small-font-size"
           />
         </el-select>
@@ -68,7 +59,7 @@
         <el-input
           v-model="programData.description"
           type="textarea"
-          :rows="5"
+          :rows="3"
         />
       </el-form-item>
       <el-form-item label="Trailer">
@@ -88,10 +79,6 @@
       </el-form-item>
       <el-form-item>
         <img :src="programData.logo">
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">{{ COMMON.SUBMIT }}</el-button>
-        <el-button type="info" @click="handleCancelClick">{{ COMMON.CANCEL }}</el-button>
       </el-form-item>
     </el-form>
     <ProgramSearchResultDialog
@@ -163,7 +150,7 @@ import { CATEGORIES } from '@/assets/utils/constant'
 import Upload from '@/components/upload/Upload'
 import { programRankOptions } from '@/assets/utils/constant'
 import { mapGetters } from 'vuex'
-import { getProgramEnTitle, getProgramNameFromMovieTitle, getRankFromVoteAvg, mapGenre, getEmbedLinkFromYoutubeVideoId } from '@/assets/utils/index'
+import { getProgramEnTitle, getRankFromVoteAvg, mapGenre, getEmbedLinkFromYoutubeVideoId } from '@/assets/utils/index'
 import ProgramSearchResultDialog from './ProgramSearchResultDialog'
 
 export default {
@@ -183,13 +170,10 @@ export default {
       searchResultDialog: false,
       movieImages: null,
       movieImagesDialogVisible: false,
-      suggesstionMovieName: null,
       trailerList: null,
       trailerDialogVisible: false,
       voteAvg: 0,
-      dialogKey: 0,
-      categoryOptions: []
-
+      dialogKey: 0
     }
   },
   computed: {
@@ -201,7 +185,8 @@ export default {
       }
     },
     ...mapGetters({
-      channelList: 'channelList'
+      channelList: 'channelList',
+      categories: 'categories'
     })
 
   },
@@ -214,9 +199,9 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('app/fetchCategories', {}).then(res => {
-      this.categoryOptions = res
-    })
+    if (!this.categories) {
+      this.$store.dispatch('app/fetchCategories', {})
+    }
   },
   methods: {
     handleImageDgClose() {
@@ -244,16 +229,14 @@ export default {
         this.$emit('saved')
       })
     },
-    handleCancelClick() {
-      this.$emit('cancel')
-    },
+
     handleUploaded(picture) {
       this.programData.logo = picture
     },
     searchProgramOnTheMovieDb() {
       console.log('searchProgramOnTheMovieDb')
       this.$store.dispatch('app/searchProgramOnTheMovieDb', {
-        movieTitle: getProgramEnTitle(this.programData.name)
+        movieTitle: getProgramEnTitle(this.programData.enName)
       }).then(res => {
         this.searchProgramResult = res
         this.searchResultDialog = true
@@ -261,13 +244,14 @@ export default {
     },
     handleDialogClose(selectedMovie) {
       if (selectedMovie) {
-        this.suggesstionMovieName = getProgramNameFromMovieTitle(selectedMovie)
         if (selectedMovie.overview) {
           this.programData.description = selectedMovie.overview
         }
+        this.programData.enName = selectedMovie.original_title.toUpperCase()
+        this.programData.name = (selectedMovie.title + '').toUpperCase()
         this.voteAvg = selectedMovie.vote_average
         this.programData.rank = getRankFromVoteAvg(selectedMovie.vote_average)
-        this.programData.categories = mapGenre(selectedMovie.genre_ids)
+        this.programData.categoryCodes = mapGenre(selectedMovie.genre_ids)
         this.programData.year = selectedMovie.release_date.split('-')[0]
         this.$store.dispatch('app/fetchImagesFromTheMovieDb', { movieId: selectedMovie.id })
           .then(data => {

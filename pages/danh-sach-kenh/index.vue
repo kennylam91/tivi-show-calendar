@@ -43,7 +43,7 @@ export default {
       channelList: 'channelList'
     }),
     vipChannelList() {
-      return this.channelList.filter(item => item.isVip)
+      return this.channelList.filter(item => item.vip)
     }
   },
   watch: {

@@ -57,7 +57,7 @@
         <table
           id="scheduleTable"
           v-loading="tableLoading"
-          class="table table-hover table-striped"
+          class="table table-hover"
         >
           <tr class="text-left color-dark-blue">
             <th scope="col">
@@ -76,15 +76,17 @@
               :class="{scheduleInShowing : isShowing(row)}"
             >
               <td style="">
-                <span>{{ parseTime(row.startTime.seconds) }}</span>
+                <span>{{ parseVNTime(row.startTime) }}</span>
               </td>
               <td>
                 <el-link
+                  v-if="row.programId"
                   :underline="false"
                   @click="viewProgramDetail(row)"
                 >
                   <span>{{ row.programName | uppercaseAll }}</span>
                 </el-link>
+                <span v-else>{{ row.programName | uppercaseAll }}</span>
               </td>
               <!-- <td class="categoryColumn">
               <el-tag
@@ -137,29 +139,8 @@ import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
   asyncData({ params, store }) {
-    const channelId = params.id.split('_').pop()
+    const channelId = Number(params.id.split('_').pop())
     const channel = store.state.app.channelList.find(item => item.id === channelId)
-
-    // const channelName = params.id.split('_')[0]
-    // let scheduleData
-    // const start = new Date()
-    // start.setHours(0, 0, 0, 0)
-    // const startTimestamp = FB.timestamp.fromDate(start)
-
-    // const end = new Date()
-    // end.setHours(23, 59, 59, 999)
-    // const endTimestamp = FB.timestamp.fromDate(end)
-
-    // const promise0 = store.dispatch('app/searchSchedules',
-    //   { channelId: channelId,
-    //     startTime: startTimestamp,
-    //     endTime: endTimestamp })
-
-    // const channel = store.state.app.channelList.find(item => item.id === channelId)
-    // return promise0.then(list => {
-    //   scheduleData = list
-    //   return { channel, scheduleData, channelId }
-    // })
     return { channelId, channel }
   },
   data() {
@@ -215,8 +196,8 @@ export default {
     },
     getScheduleList() {
       this.tableLoading = true
-      this.fetchScheduleList(this.channelId, this.selectedDate).then(scheduleList => {
-        this.scheduleList = scheduleList
+      this.fetchScheduleList(this.channelId, this.selectedDate).then(res => {
+        this.scheduleList = res.content
         this.searchText = ''
         this.scheduleData = this.scheduleList
         this.tableLoading = false

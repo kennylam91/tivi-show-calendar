@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import { COMMON, CATEGORIES } from '@/assets/utils/constant'
 import { convertVNToEN } from '@/assets/utils'
+import { parseVNTime } from '@/assets/utils/index'
+
 // import { firebase } from '@/MyFireBase'
 
 // const sortByName = (a, b) => {
@@ -26,6 +28,7 @@ Vue.mixin({
   },
   methods: {
     viewChannelDetail(channel) {
+      debugger
       const name = channel.name.split(' ').join('-').trim()
       this.$router.push({ path: `/lich-chieu/${name}_${channel.id}` })
       // this.$store.dispatch('app/setLoading', true)
@@ -260,6 +263,9 @@ Vue.mixin({
     moveToProgramDetail(programId) {
       this.$router.push(`/programs/edit/${programId}`)
     },
+    parseVNTime(time) {
+      return parseVNTime(time, '{H}:{i}', true, true)
+    }
 
   }
 })

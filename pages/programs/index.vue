@@ -15,16 +15,26 @@
       </div>
 
       <ProgramSearchForm :data-prop="programSearchQuery" @search="filterProgramList" @clear="handleClear" />
-
+      <el-button
+        v-if="selectedPrograms.length > 0"
+        type="danger"
+        size="mini"
+        class="mb-2"
+        @click="handleProgramDeleteClick"
+      >Delete</el-button>
       <el-table
         id="programTable"
-        :key="programTableKey"
+        v-loading="loading"
         :data="tableData"
         border
         stripe
-        size="mini"
-        loading="loading"
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column
+          align="center"
+          type="selection"
+          width="60"
+        />
         <el-table-column
           prop="name"
           :label="COMMON.PROGRAM_NAME"
@@ -36,7 +46,7 @@
           min-width="13"
         >
           <template slot-scope="{row}">
-            <el-tag v-if="row.rank" size="mini" effect="dark" :type="getRankTagType(row.rank)">
+            <el-tag v-if="row.rank" size="small" effect="dark" :type="getRankTagType(row.rank)">
               {{ row.rank | getRankLabel }}
             </el-tag>
 
@@ -63,29 +73,27 @@
         <el-table-column
           align="center"
           :label="COMMON.ACTION"
-          min-width="18"
+          min-width="10"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click="handleProgramEditClick(scope.row)"
             >Edit</el-button>
-            <el-button
-              type="danger"
-              size="mini"
-              @click="handleProgramDeleteClick(scope.row)"
-            >Delete</el-button>
+
           </template>
         </el-table-column>
 
       </el-table>
       <div>
         <el-pagination
-          :current-page.sync="pagination.page"
-          :page-sizes="[20, 50, 100]"
-          :page-size.sync="pagination.limit"
+          :current-page.sync="page"
+          :page-sizes="[10, 20, 50]"
+          :page-size.sync="limit"
           layout="total, sizes, prev, pager, next, jumper"
           :total="totalItems"
+          @size-change="onPaginationChange"
+          @current-change="onPaginationChange"
         />
       </div>
 
@@ -96,6 +104,7 @@
 import { mapGetters } from 'vuex'
 import { programRankMap, programRankOptions } from '@/assets/utils/constant'
 import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
+import paginationMixin from '@/components/mixins/pagination-mixin'
 
 export default {
   middleware: 'auth',
@@ -109,58 +118,33 @@ export default {
     }
 
   },
+  mixins: [paginationMixin],
   data() {
     return {
-      pagination: {
-        page: 1,
-        limit: 20
-      },
       tableData: null,
       totalItems: 0,
       programListData: [],
       programList: null,
       programTableKey: 0,
       programRankOptions,
-      loading: false
+      loading: false,
+      selectedPrograms: [],
+      searchForm: null
 
     }
   },
   computed: {
     ...mapGetters({
-      // programList: 'programList',
       programSearchQuery: 'programSearchQuery',
       fromTodayProgramList: 'fromTodayProgramList'
     })
   },
   watch: {
-    pagination: {
-      deep: true,
-      handler() {
-        this.handlePaginationChange()
-      }
-    }
-    // programList: {
-    //   deep: true,
-    //   handler() {
-    //     this.filterProgramList(this.programSearchQuery)
-    //   }
-    // },
-    // programListData: {
-    //   deep: true,
-    //   handler() {
-    //     this.handlePaginationChange()
-    //   }
-    // }
   },
   created() {
-    // this.programList = [...this.fromTodayProgramList]
-    // const channelId = Number(this.$route.query.channelId)
-    // if (channelId) {
-    //   this.fetchAllProgram({ channelId })
-    // }
     // this.listQuery.name = this.$route.query.q
-    const query = { page: 1, limit: 20 }
-    this.fetchProgramList(query)
+    this.searchForm = { page: this.page, limit: this.limit }
+    this.fetchProgramList()
   },
   methods: {
     getRankTagType(value) {
@@ -178,32 +162,36 @@ export default {
       this.$router.push({ path: `/programs/edit/${row.id}` })
     },
     handleProgramDeleteClick(row) {
-      this.$confirm('Delete this program?', 'Delete', {
+      this.$confirm('Delete all programs?', 'Delete', {
         confirmButtonText: 'Delete',
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('app/deletePrograms', { programIds: [row.id] }).then(() => {
+        const data = { programIds: this.selectedPrograms.map(pro => pro.id) }
+        this.$store.dispatch('app/deletePrograms', data).then(() => {
           this.$message({
             type: 'success',
             message: 'Delete completed',
             offset: 100
           })
-          this.programTableKey++
         })
+        this.page = 1
+        this.searchForm.page = 1
+        this.fetchProgramList()
       })
     },
-    filterProgramList(searchForm) {
-      this.fetchProgramList(searchForm)
+    filterProgramList(value) {
+      this.searchForm = value
+      this.fetchProgramList()
     },
-    handlePaginationChange() {
-      const start = (this.pagination.page - 1) * this.pagination.limit
-      const end = this.pagination.page * this.pagination.limit
-      this.tableData = this.programListData.slice(start, end)
+    onPaginationChange() {
+      this.searchForm.page = this.page
+      this.searchForm.limit = this.limit
+      this.fetchProgramList()
     },
-    fetchProgramList(query) {
+    fetchProgramList() {
       this.loading = true
-      this.$store.dispatch('app/searchProgram', query).then(res => {
+      this.$store.dispatch('app/searchProgram', this.searchForm).then(res => {
         this.tableData = res.content
         this.totalItems = res.totalElements
       }).finally(() => {
@@ -212,6 +200,9 @@ export default {
     },
     handleClear() {
       this.programListData = this.programList
+    },
+    handleSelectionChange(val) {
+      this.selectedPrograms = val
     }
 
   }

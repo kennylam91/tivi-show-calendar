@@ -122,7 +122,9 @@ export default {
             })
           }
         }
-        this.$refs.programSelectRef.focus()
+        setTimeout(() => {
+          this.$refs.programSelectRef.focus()
+        }, 200);
       }
     },
     selectedProgram: {

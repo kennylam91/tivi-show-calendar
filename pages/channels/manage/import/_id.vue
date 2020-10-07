@@ -27,7 +27,7 @@
         type="date"
         placeholder="Pick a day"
       />
-      <el-button :disabled="errorLines.length" type="primary" size="default" @click="convertData"> Convert</el-button>
+      <el-button :disabled="convertBtnDisabled" type="primary" size="default" @click="convertData"> Convert</el-button>
 
     </div>
     <el-input
@@ -87,6 +87,9 @@ export default {
     },
     scheduleInputDisabled() {
       return !this.importDate || !this.pattern
+    },
+    convertBtnDisabled() {
+      return (this.errorLines.length > 0) || !this.scheduleInput
     }
   },
   watch: {},
@@ -98,6 +101,7 @@ export default {
       return Number(this.$route.params.id)
     },
     validateInput() {
+      this.errorLines = []
       const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
       if (this.pattern === 'en : vi') {
         dataArray.forEach((element, index) => {
@@ -178,9 +182,9 @@ export default {
         this.$store.dispatch('app/searchProgram', { searchName: schedule.enName }).then(res => {
           if (res.content && res.content.length === 1) {
             schedule.programId = res.content[0].id
+            schedule.programName = res.content[0].name + ' - ' + res.content[0].enName
           } else if (res.content && res.content.length > 1) {
-            schedule.programOptions = res.content
-            schedule.multiOptions = true
+            this.$set(schedule, 'programOptions', res.content)
           }
         })
       })
