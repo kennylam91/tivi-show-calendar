@@ -239,7 +239,7 @@ export default {
         if (keyPath[1] === '2-1') {
           this.moveToChannelListView()
         } else {
-          const channel = this.channelList.find(item => item.id === key)
+          const channel = this.channelList.find(item => item.name === key)
           this.viewChannelDetail(channel)
         }
       }

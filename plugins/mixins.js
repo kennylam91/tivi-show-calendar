@@ -18,11 +18,6 @@ Vue.mixin({
     viewChannelDetail(channel) {
       const name = channel.name.split(' ').join('-').trim()
       this.$router.push({ path: `/lich-chieu/${name}_${channel.id}` })
-      // this.$store.dispatch('app/setLoading', true)
-      // setTimeout(() => {
-      //   this.$store.dispatch('app/setLoading', false)
-      // }, 500)
-      // this.$store.dispatch('app/setLoading', false)
     },
     viewProgramDetail(program) {
       let id
@@ -42,17 +37,18 @@ Vue.mixin({
       // this.$store.dispatch('app/setLoading', false)
     },
     fetchScheduleList(channelId, date) {
+      const start = date
+      start.setHours(0, 0, 0, 0)
+      const end = new Date(date.getTime())
+      end.setHours(24, 0, 0, 0)
       return new Promise((resolve, reject) => {
-        const start = date
-        start.setHours(0, 0, 0, 0)
-
-        const end = new Date(date.getTime())
-        end.setHours(23, 59, 59, 999)
-
         this.$store.dispatch('app/searchSchedules',
           { channelId: channelId,
             startTime: start,
-            endTime: end }).then(res => {
+            endTime: end,
+            page: 1,
+            limit: 99999
+          }).then(res => {
           resolve(res)
         })
       })
@@ -238,10 +234,8 @@ Vue.mixin({
       return date
     },
     getStartEndOfToday() {
-      const startOfToday = new Date()
-      startOfToday.setHours(0, 0, 0, 0)
-      const endOfToday = new Date(startOfToday.getTime())
-      endOfToday.setHours(24, 0, 0, 0)
+      const startOfToday = (new Date()).setHours(0, 0, 0, 0)
+      const endOfToday = (new Date()).setHours(24, 0, 0, 0)
       return {
         startOfToday,
         endOfToday
@@ -252,6 +246,12 @@ Vue.mixin({
     },
     parseVNTime(time) {
       return parseVNTime(time, '{H}:{i}', true, true)
+    },
+    endOfToday() {
+      return (new Date()).setHours(24, 0, 0, 0)
+    },
+    startOfToday() {
+      return (new Date()).setHours(0, 0, 0, 0)
     }
 
   }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <article class="pb-2 pt-4">
+    <article v-if="broadCastingPrograms" class="pb-2 pt-4">
       <h4 class="color-dark-blue">
         {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseFirst }}
       </h4>
@@ -47,7 +47,7 @@
       </article>
     </client-only>
 
-    <article class="py-2">
+    <!-- <article class="py-2">
       <h4>
         <nuxt-link to="/chuong-trinh-hom-nay" class="color-dark-blue">
           {{ COMMON.VIP_INCOMING_PROGRAM | uppercaseFirst }}
@@ -63,7 +63,7 @@
           <Program :program="program" />
         </div>
       </div>
-    </article>
+    </article> -->
 
     <article class="py-2">
       <h4>
@@ -81,7 +81,7 @@
           <Program :program="program" />
         </div>
       </div>
-    </article> -->
+    </article>
 
     <article class="py-2">
       <h4>
@@ -92,7 +92,7 @@
       <el-divider class="mt-4 mb-2" />
 
       <div class="row mt-2">
-        <div v-for="(channel) in vipChannels" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
+        <div v-for="(channel) in vipChannelList" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
           <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
             <el-link
               v-if="channel.logo"
@@ -122,93 +122,59 @@
 <script>
 import { mapGetters } from 'vuex'
 import Program from '@/components/programs/Program'
-import { sortByRankDesc } from '@/assets/utils/index'
 
 export default {
   components: { Program },
   data() {
     return {
       onGoingTodayProgramList: null,
-      nextDaysVipProgramList: null
+      nextDaysVipProgramList: null,
+      broadCastingPrograms: null,
+      noonProgramList: null,
+      eveningProgramList: null
     }
   },
   computed: {
     ...mapGetters({
-      todayProgramList: 'todayProgramList',
       channelList: 'channelList',
-      nextDaysProgramList: 'nextDaysProgramList',
-      fromTodayProgramList: 'fromTodayProgramList',
-      fromNowInDayProgramList: 'fromNowInDayProgramList',
-      fromNowInDayScheduleList: 'fromNowInDayScheduleList'
-    }),
-    vipChannels() {
-      if (this.channelList) {
-        return this.channelList.filter(item => item.vip).slice(0, this.COMMON.VIP_CHANNEL_MAX_NUM)
-      } else {
-        return null
-      }
-    },
-    // todayVipProgramList() {
-    //   if (this.todayProgramList) {
-    //     const clonedList = [...this.todayProgramList]
-    //     return clonedList.slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
-    //   } else {
-    //     return []
-    //   }
-    // },
-    // broadCastingPrograms() {
-    //   const liveSchedules = this.fromNowInDayScheduleList.filter(this.liveProgramFilter)
-    //   const livePrograms = []
-    //   liveSchedules.forEach(schedule => {
-    //     const program = this.fromTodayProgramList.find(item => item.id === schedule.programId)
-    //     if (program && !livePrograms.some(pro => pro.id === program.id)) {
-    //       livePrograms.push({ ...program, schedule: schedule })
-    //     }
-    //   })
-    //   return this.getFourOrEightPrograms(livePrograms)
-    // },
-    // noonProgramList() {
-    //   const now = new Date()
-    //   if (now.getHours() > 12) {
-    //     return null
-    //   }
-    //   return this.getFourOrEightPrograms(this.getProgramListBetweenHours(11, 0, 13, 0))
-    // },
-    // eveningProgramList() {
-    //   const now = new Date()
-    //   if (now.getHours() > 22) {
-    //     return null
-    //   }
-    //   return this.getFourOrEightPrograms(this.getProgramListBetweenHours(20, 0, 23, 0))
-    // }
-
+      vipChannelList: 'vipChannelList'
+    })
   },
   watch: {
   },
-  mounted() {
-    // const list = []
-    // for (const program of this.fromNowInDayProgramList) {
-    //   if (program) {
-    //     if (!this.broadCastingPrograms.some(item => item.id === program.id)) {
-    //       list.push({ ...program })
-    //     }
-    //   }
-    // }
-    // this.onGoingTodayProgramList = list
-    //   .slice(0, this.COMMON.TODAY_VIP_PROGRAM_MAX_NUM)
-
-    // if (this.nextDaysProgramList) {
-    //   const clonedList = [...this.nextDaysProgramList]
-    //   this.nextDaysVipProgramList = clonedList
-    //     .slice(0, this.COMMON.NEXT_DAY_VIP_PROGRAM_MAX_NUM)
-    // } else {
-    //   this.nextDaysVipProgramList = []
-    // }
+  created() {
+    const baseQuery = { limit: 8, page: 1, sortBy: 'rank', sortDirection: 'DESC' }
+    this.$store.dispatch('app/fetchTodayPrograms',
+      { isBroadCasting: true, ...baseQuery }).then(res => {
+      this.broadCastingPrograms = res.content
+    })
+    const now = new Date()
+    const time11h = (new Date()).setHours(11, 0, 0, 0)
+    const time13h = (new Date()).setHours(13, 0, 0, 0)
+    const time19h = (new Date()).setHours(19, 0, 0, 0)
+    const time22h = (new Date()).setHours(22, 0, 0, 0)
+    const time24h = (new Date()).setHours(24, 0, 0, 0)
+    const startNextDay = time24h
+    const endNextDay = time24h + 24 * 60 * 60 * 1000
+    if (now < time11h) {
+      this.$store.dispatch('app/fetchTodayPrograms',
+        { startTimeFrom: time11h, startTimeTo: time13h, ...baseQuery }).then(res => {
+        this.noonProgramList = res.content
+      })
+    }
+    if (now < time22h) {
+      this.$store.dispatch('app/fetchTodayPrograms',
+        { startTimeFrom: time19h, startTimeTo: time24h, ...baseQuery }).then(res => {
+        this.eveningProgramList = res.content
+      })
+    }
+    this.$store.dispatch('app/fetchTomorrowPrograms',
+      { ...baseQuery, startTimeFrom: startNextDay,
+        startTimeTo: endNextDay }).then(res => {
+      this.nextDaysVipProgramList = res.content
+    })
   },
   methods: {
-    liveProgramFilter(schedule) {
-      return schedule.startTime.seconds * 1000 < Date.parse(new Date()) + 30 * 60 * 1000
-    },
     getFourOrEightPrograms(programList) {
       if (!programList) {
         return null
@@ -218,23 +184,6 @@ export default {
       } else {
         return programList.slice(0, 4)
       }
-    },
-    getProgramListBetweenHours(startHour, startMin, endHour, endMin) {
-      const first = new Date()
-      const last = new Date()
-      first.setHours(startHour, startMin, 0, 0)
-      last.setHours(endHour, endMin, 0, 0)
-      const schedules = this.fromNowInDayScheduleList.filter(item => {
-        return item.startTime.seconds * 1000 >= first && item.startTime.seconds * 1000 <= last
-      })
-      const programs = []
-      schedules.forEach(schedule => {
-        const program = this.fromTodayProgramList.find(item => item.id === schedule.programId)
-        if (program && !programs.some(pro => pro.id === program.id)) {
-          programs.push({ ...program, schedule: schedule })
-        }
-      })
-      return programs.sort(sortByRankDesc)
     }
 
   }

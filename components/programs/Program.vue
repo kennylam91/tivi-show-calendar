@@ -31,7 +31,7 @@
         @click="viewProgramDetail(program)"
       >
         <el-tooltip
-          :content="program.name"
+          :content="program.enName"
           :open-delay="300"
           placement="bottom-start"
           effect="dark"
@@ -40,7 +40,7 @@
             class="bold smaller-font-size shorten-text hoverDarkBlue"
             style="color: #000000c2"
           >
-            {{ program.name | getVNTranslateName | uppercaseAll }}
+            {{ program.name }}
           </div>
         </el-tooltip>
 
@@ -52,7 +52,7 @@
           :key="index"
           class="smaller-font-size color-primary"
         >
-          {{ item | getCategory }}
+          {{ item.name }}
           <span v-show="isShowDivider(index,program)">
             <el-divider
               direction="vertical"
@@ -61,10 +61,13 @@
         </span>
 
       </div>
-      <div v-if="live" class="smaller-font-size mb-1">
-        <span class="color-success">{{ program.schedule.channelName }}</span>
+      <div v-if="live && program.schedules && program.schedules.length > 0" class="smaller-font-size mb-1">
+        <span class="color-success">
+          {{ program.schedules[0].channelName }}</span>
         <el-divider direction="vertical" />
-        <span class="color-primary">{{ parseTime(program.schedule.startTime.seconds) }}-{{ parseTime(program.schedule.endTime.seconds) }}</span>
+        <span class="color-danger">
+          {{ parseTime(program.schedules[0].startTime) }}-{{ parseTime(program.schedules[0].endTime) }}
+        </span>
       </div>
       <el-rate
         v-model="program.rank"
@@ -111,7 +114,7 @@ export default {
         if (categories.length <= 2) {
           return categories
         } else {
-          return categories.filter(item => ![1, 26, 23, 24, 25, 27, 34, 35].includes(item)
+          return categories.filter(item => ![1, 26, 23, 24, 25, 27, 34, 35].includes(item.code)
           ).slice(0, 2)
         }
       } else {

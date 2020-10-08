@@ -142,7 +142,7 @@ $--color-dark-blue:  #003a77;
   @extend .color-primary;
 }
 .scheduleInShowing{
-  background-color: $--color-warning!important;
+  background-color: gainsboro!important;
 }
 .categoryTag{
   // margin: 2px;
@@ -205,6 +205,9 @@ footer{
 }
 .hoverDarkBlue:hover{
   @extend .color-dark-blue;
+}
+.bell-icon-class{
+  @extend .font-lg, .pointer, .color-danger, .bold;
 }
 
 @media only screen and (min-width: 768px) { 
