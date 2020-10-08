@@ -3,18 +3,6 @@ import { COMMON, CATEGORIES } from '@/assets/utils/constant'
 import { convertVNToEN } from '@/assets/utils'
 import { parseVNTime } from '@/assets/utils/index'
 
-// import { firebase } from '@/MyFireBase'
-
-// const sortByName = (a, b) => {
-//   if (a.name > b.name) {
-//     return 1
-//   } else if (a.name < b.name) {
-//     return -1
-//   } else {
-//     return 0
-//   }
-// }
-
 Vue.mixin({
   data() {
     return {
@@ -28,7 +16,6 @@ Vue.mixin({
   },
   methods: {
     viewChannelDetail(channel) {
-      debugger
       const name = channel.name.split(' ').join('-').trim()
       this.$router.push({ path: `/lich-chieu/${name}_${channel.id}` })
       // this.$store.dispatch('app/setLoading', true)

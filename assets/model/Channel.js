@@ -1,10 +1,10 @@
 export class Channel {
-  constructor(id, name, desc, logoUrl, isVip, networkId) {
+  constructor(id, name, desc, logoUrl, vip, networkId) {
     this.id = id
     this.name = name
     this.description = desc
     this.logoUrl = logoUrl
-    this.isVip = isVip
+    this.vip = vip
     this.networkId = networkId
   }
   // getId() { return this.id }

@@ -43,7 +43,7 @@ export default {
       nextDaysProgramSearchForm: 'nextDaysProgramSearchForm'
     }),
     vipChannelList() {
-      return this.channelList.filter(channel => channel.isVip === true)
+      return this.channelList.filter(channel => channel.vip === true)
     },
     isSearching() {
       if (this.nextDaysProgramSearchForm) {

@@ -28,16 +28,16 @@ $--color-dark-blue:  #003a77;
 .flex {
   display: flex
 }
-.small-font-size{
+.small-font-size, .font-sm{
   font-size: 0.875rem !important;
 }
-.smaller-font-size{
+.smaller-font-size, .font-xs{
   font-size: 0.75rem !important;
 }
-.large-font-size{
+.large-font-size, .font-lg{
   font-size: 1.125rem;
 }
-.huge-font-size{
+.huge-font-size, .font-xl{
   font-size: 1.25rem;
 }
 .bold{

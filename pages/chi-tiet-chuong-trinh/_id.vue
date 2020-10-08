@@ -28,7 +28,7 @@
 
             </div>
             <div class="col-sm-8 col-md-9">
-              <h5 class="programNameTitle">{{ program.name }}</h5>
+              <h5 class="programNameTitle">{{ program.name }} - {{ program.enName }}</h5>
               <div class="small-font-size">
                 <label class="bold label">{{ COMMON.RANK }} </label>
                 <!-- <el-tag :type="program.rank | getRankTagType" size="small" effect="dark">
@@ -51,7 +51,7 @@
                   :type="categoryTagMap.get(item)"
                   style="margin: 2px;"
                 >
-                  {{ item | getCategory }}
+                  {{ item.name }}
                 </el-tag>
               </div>
               <div v-if="program.year" class="small-font-size">
@@ -66,7 +66,7 @@
           <div>
             <table
               v-loading="loading"
-              class="table table-hover small-font-size table-striped"
+              class="table table-hover small-font-size table-striped table-sm"
               style="width: 100%;"
             >
               <tr class="bold">
@@ -82,11 +82,11 @@
                       <span class="color-primary">{{ row.channelName }}</span>
                     </el-link>
                   </td>
-                  <td>
-                    {{ row.startTime.seconds | parseTime }}
+                  <td class="font-sm">
+                    {{ row.startTime | parseTime }}
                   </td>
-                  <td>
-                    {{ row.endTime.seconds | parseTime }}
+                  <td class="font-sm">
+                    {{ row.endTime | parseTime }}
                   </td>
                   <td>
                     <el-tooltip :content="COMMON.ADD_TO_GOOGLE_CAL" placement="top-start" effect="dark">
@@ -132,21 +132,21 @@
 <script>
 import { mapGetters } from 'vuex'
 import { parseVNTime } from '@/assets/utils/index'
-import { FB, COMMON } from '@/assets/utils/constant'
+import { COMMON } from '@/assets/utils/constant'
 import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
   filters: {
     parseTime(time) {
-      return parseVNTime(time, '{d}/{m}/{y} {H}:{i}', true, true)
+      return parseVNTime(time, '{d}/{m}/{y} {H}:{i}', true, false)
     }
   },
   asyncData({ params, store }) {
     console.log(params)
     const programId = params.id.split('_').pop().trim()
-    const program = store.state.app.fromTodayProgramList.find(item => item.id === programId)
+    const program = store.state.app.fromTodayProgramList && store.state.app.fromTodayProgramList.find(item => item.id === programId)
     if (!program) {
-      return store.dispatch('app/fetchProgram', { programId: programId }).then(program => {
+      return store.dispatch('app/fetchProgram', programId).then(program => {
         return { program, programId }
       })
     }
@@ -180,20 +180,23 @@ export default {
   },
   created() {
     const now = new Date()
-    const before30Mins = Date.parse(now) - 30 * 60 * 1000
-    const scheduleList = []
+    // const before30Mins = Date.parse(now) - 30 * 60 * 1000
     this.$store.dispatch('app/setLoading', true)
-    const schedulePromise = FB.scheduleRef.where('programId', '==', this.programId)
-      .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
-      .orderBy('startTime', 'asc').get()
-    schedulePromise.then(scheduleListDoc => {
-      scheduleListDoc.forEach(doc => {
-        const schedule = { ...doc.data(), id: doc.id }
-        scheduleList.push(schedule)
-      })
-      this.$store.dispatch('app/setLoading', false)
-      this.scheduleList = [...scheduleList]
-    })
+    // const schedulePromise = FB.scheduleRef.where('programId', '==', this.programId)
+    //   .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
+    //   .orderBy('startTime', 'asc').get()
+    // schedulePromise.then(scheduleListDoc => {
+    //   scheduleListDoc.forEach(doc => {
+    //     const schedule = { ...doc.data(), id: doc.id }
+    //     scheduleList.push(schedule)
+    //   })
+    //   this.$store.dispatch('app/setLoading', false)
+    //   this.scheduleList = [...scheduleList]
+    // })
+    const data = { startTime: now, programId: this.programId }
+    this.$store.dispatch('app/searchSchedules', data).then(res => {
+      this.scheduleList = res.content
+    }).finally(() => this.$store.dispatch('app/setLoading', false))
   },
   methods: {
     fetchScheduleList() {
@@ -208,7 +211,7 @@ export default {
     },
     isShowAddBtn(schedule) {
       const now = new Date()
-      return schedule.startTime.seconds * 1000 >= now && !this.isAddBtnDisabled(schedule)
+      return new Date(schedule.startTime) >= now && !this.isAddBtnDisabled(schedule)
     },
     isAddBtnDisabled(schedule) {
       return this.addedSchedule.some(item => item.id === schedule.id)

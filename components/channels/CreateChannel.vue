@@ -6,7 +6,7 @@
         <el-input v-model="channelData.name" />
       </el-form-item>
       <el-form-item label="VIP">
-        <el-switch v-model="channelData.isVip" />
+        <el-switch v-model="channelData.vip" />
         <span>{{ COMMON.VIP_CHANNEL_DESCRIPTION }}</span>
       </el-form-item>
       <el-form-item :label="COMMON.DESCRIPTION">

@@ -202,14 +202,11 @@ export default {
       fromNowInDayProgramList: 'fromNowInDayProgramList',
       fromNowInDayScheduleList: 'fromNowInDayScheduleList',
       fromTodayProgramList: 'fromTodayProgramList',
-      loading: 'loading'
-
+      loading: 'loading',
+      vipChannelList: 'vipChannelList'
     }),
     path() {
       return this.$route.path
-    },
-    vipChannelList() {
-      return this.channelList && this.channelList.filter(channel => channel.isVip === true) || []
     }
   },
   watch: {

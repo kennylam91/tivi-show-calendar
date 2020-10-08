@@ -25,7 +25,7 @@ export default {
         channelId: null,
         name: '',
         description: '',
-        isVip: false,
+        vip: false,
         logoUrl: '',
         networkId: null
 

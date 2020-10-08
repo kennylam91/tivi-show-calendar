@@ -155,7 +155,7 @@ export default {
       return this.isSearching && this.clear
     },
     vipChannelList() {
-      return this.channelList.filter(channel => channel.isVip === true)
+      return this.channelList.filter(channel => channel.vip === true)
     },
     isSearching() {
       return this.programSearchForm.name ||
