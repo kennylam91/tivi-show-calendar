@@ -27,7 +27,7 @@
                 <el-menu-item
                   v-for="(item, index) in vipChannelList"
                   :key="index"
-                  :index="item.id"
+                  :index="item.name"
                 >
                   <span v-text="item.name " />
                 </el-menu-item>
@@ -108,7 +108,7 @@
             <el-menu-item
               v-for="(item, index) in vipChannelList"
               :key="index"
-              :index="item.id"
+              :index="item.name"
             >{{ item.name }}</el-menu-item>
 
           </el-submenu>
