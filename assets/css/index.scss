@@ -1,6 +1,10 @@
 @import './element-variables.scss';
 $--color-dark-blue:  #003a77;
 
+html{
+  font-size: 100%;
+}
+
 .color-primary {
   color: $--color-primary !important;
 }
@@ -192,13 +196,14 @@ footer{
 .el-divider--vertical{
   margin: 0!important;
 }
-#scheduleTable td, th{
-  vertical-align: middle;
-  padding: 8px!important;
-}
-#scheduleTable a, span{
-  @extend .smaller-font-size;
-
+#scheduleTable {
+  &td, &th{
+    vertical-align: middle;
+    padding: 8px!important; 
+  }
+  &a, &span{
+    @extend .smaller-font-size; 
+  }
 }
 .categoryTitle{
   font-size: 1rem!important;
