@@ -37,7 +37,7 @@ export const COMMON = {
   DELETE: 'Xóa',
   CREATE_CHANNEL: 'Tạo kênh mới',
   ACTION: 'Thao tác',
-  DASHBOARD: 'Trang quản lý',
+  DASHBOARD: 'Dashboard',
   LOG_OUT: 'Đăng xuất',
   VIP_CHANNEL_DESCRIPTION: 'Kênh VIP sẽ được xuất hiện trên trang chủ.',
   VIP_CHANNEL: 'Kênh nổi bật',
@@ -97,15 +97,6 @@ export const COMMON = {
   WHAT_SEE_THIS_EVENING: 'Xem gì tối nay'
 
 }
-import { firebase } from '@/MyFireBase'
-export const FB = {
-  channelRef: firebase.firestore().collection('channels'),
-  scheduleRef: firebase.firestore().collection('schedules'),
-  programRef: firebase.firestore().collection('programs'),
-  timestamp: firebase.firestore.Timestamp,
-  db: firebase.firestore()
-}
-
 export const programRankOptions = [
   { label: 'Đặc biệt', value: 4, text: 'Đặc biệt' },
   { label: 'Tốt', value: 3, text: 'Tốt' },

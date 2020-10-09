@@ -27,7 +27,13 @@
         type="date"
         placeholder="Pick a day"
       />
-      <el-button :disabled="convertBtnDisabled" type="primary" size="default" @click="convertData"> Convert</el-button>
+      <el-button
+        :disabled="convertBtnDisabled"
+        type="primary"
+        size="default"
+        @click="convertData"
+      > Convert</el-button>
+      <el-button type="danger" size="medium" @click="reset">Reset</el-button>
 
     </div>
     <el-input
@@ -69,7 +75,9 @@ export default {
       scheduleList: [],
       pattern: null,
       patternOptions: [
-        { value: 'en : vi', label: 'en : vi' }
+        { value: 'en : vi', label: 'en : vi' },
+        { value: 'en - vi', label: 'en - vi' },
+        { value: '(en)vi', label: '(en)vi' }
       ],
       errorLines: []
     }
@@ -109,16 +117,27 @@ export default {
             this.errorLines.push(index + 1)
           }
         })
+      } else if (this.pattern === 'en - vi') {
+        dataArray.forEach((element, index) => {
+          if (((element + '').match(/-/g) || []).length > 1) {
+            this.errorLines.push(index + 1)
+          }
+        })
       }
     },
     convertData() {
       // dataArray: du lieu copy vao textarea, se duoc split bang /n
-      const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
+      if (!this.scheduleInput.trim()) {
+        return
+      }
+      const dataArray = this.scheduleInput.trim().split('\n')
       const scheduleArr = []
       if (this.importDate) {
-        for (const item of dataArray) {
+        for (const str of dataArray) {
           // schedule: '00:00	BIẾN ĐI, ÔNG ANH! (GO BROTHER)'
           // array: cac truong du lieu
+          const item = (str + '').substring(0, 6) +
+          (str + '').substring(6).replaceAll(/:/gi, ' : ').replaceAll(/-/gi, ' - ')
           const schedule = item
             .replace('Phim truyện :', '')
             .replace('Phim Sitcom : ', '')
@@ -133,11 +152,12 @@ export default {
             .replace('Phim Ukraina:', '')
             .replace('Phim ngắn:', '')
             .replace('Phim sitcom:', '')
+
           const array = schedule.split(/\s+/)
-          for (let index = 0; index < array.length; index++) {
-            const element = array[index]
-            array[index] = element.replace(/-.*/gi, '')
-          }
+          // for (let index = 0; index < array.length; index++) {
+          //   const element = array[index]
+          //   array[index] = element.replace(/-.*/gi, '')
+          // }
           const startTimeStr = array[0]
           const timeSplitArr = startTimeStr.split(':')
           const hour = Number(timeSplitArr[0])
@@ -151,17 +171,25 @@ export default {
           }
           let vi = ''
           let en = ''
+          let splitIndex
           if (this.pattern === 'en : vi') {
             // en = array[1] => :
             // vi = : => end
-            const splitIndex = array.indexOf(':')
-
-            if (splitIndex > -1) {
-              en = array.slice(1, splitIndex).join(' ')
-              vi = array.slice(splitIndex + 1).join(' ')
-            } else {
-              vi = array.slice(1).join(' ')
-            }
+            splitIndex = array.indexOf(':')
+          } else if (this.pattern === 'en - vi') {
+            splitIndex = array.indexOf('-')
+          }
+          if (splitIndex > -1) {
+            en = array.slice(1, splitIndex).join(' ')
+            vi = array.slice(splitIndex + 1).join(' ')
+          } else {
+            vi = array.slice(1).join(' ')
+          }
+          if (this.pattern === '(en)vi') {
+            const openChar = item.indexOf('(')
+            const closeChar = item.indexOf(')')
+            en = item.substring(openChar + 1, closeChar)
+            vi = item.substring(closeChar + 1)
           }
 
           const newSchedule = {
@@ -179,15 +207,22 @@ export default {
       }
       this.scheduleList = scheduleArr
       this.scheduleList.forEach(schedule => {
-        this.$store.dispatch('app/searchProgram', { searchName: schedule.enName }).then(res => {
-          if (res.content && res.content.length === 1) {
-            schedule.programId = res.content[0].id
-            schedule.programName = res.content[0].name + ' - ' + res.content[0].enName
-          } else if (res.content && res.content.length > 1) {
-            this.$set(schedule, 'programOptions', res.content)
-          }
-        })
+        if (schedule.enName) {
+          this.$store.dispatch('app/searchProgram', { searchName: schedule.enName }).then(res => {
+            if (res.content && res.content.length === 1) {
+              schedule.programId = res.content[0].id
+              schedule.programName = res.content[0].name + ' - ' + res.content[0].enName
+            } else if (res.content && res.content.length > 1) {
+              this.$set(schedule, 'programOptions', res.content)
+            }
+          })
+        }
       })
+    },
+    reset() {
+      this.scheduleInput = ''
+      this.importDate = null
+      this.scheduleList = []
     },
     importScheduleList() {
       this.$store.dispatch('app/setLoading', true)

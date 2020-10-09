@@ -79,7 +79,7 @@ export default {
         if (this.channelList) {
           this.channel = this.channelList.find(item => item.id === this.channelId)
         } else {
-          this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(channel => {
+          this.$store.dispatch('app/fetchChannel', this.channelId).then(channel => {
             this.channel = channel
           })
         }

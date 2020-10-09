@@ -92,6 +92,7 @@
       title="Choose logo"
       :visible.sync="movieImagesDialogVisible"
       width="50%"
+      destroy-on-close
     >
       <el-table
         v-if="movieImages"
@@ -117,6 +118,7 @@
       title="Choose trailer"
       :visible.sync="trailerDialogVisible"
       width="70%"
+      destroy-on-close
     >
       <el-table
         height="700"
@@ -286,7 +288,7 @@ export default {
               'snippet'
             ],
             'maxResults': 10,
-            'q': getProgramEnTitle(this.programData.name) + ' trailer'
+            'q': getProgramEnTitle(this.programData.enName) + ' trailer'
           }).then(({ result }) => {
             this.trailerList = result.items.map(item => item)
             this.trailerDialogVisible = true

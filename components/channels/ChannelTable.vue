@@ -16,7 +16,7 @@
           class="text-center"
         >
           <td>
-            <el-link class="mb-2" @click="handleNameClick(channel)">
+            <el-link class="mb-1" @click="handleNameClick(channel)">
               <h6 class="channelNameLink">{{ channel.name }}</h6>
             </el-link>
             <div v-if="isAdmin">
@@ -44,12 +44,18 @@
 
           <td v-if="isAdmin" align="center" width="300">
             <el-button-group class="mb-2 d-block">
-              <el-button
+              <!-- <el-button
                 type="success"
                 size="mini"
                 style="width: 120px;"
                 @click="moveToChannelManageView(channel)"
-              >{{ COMMON.SCHEDULE }}</el-button>
+              >Manage</el-button> -->
+              <el-button
+                type="success"
+                size="mini"
+                style="width: 100px;"
+                @click="handleImportSchedule(channel)"
+              >Import</el-button>
               <el-button
                 style="width: 70px;"
                 size="mini"
@@ -64,7 +70,7 @@
                 @click="handleChannelDeleteClick(channel)"
               >{{ COMMON.DELETE }}</el-button>
             </el-button-group>
-            <el-button-group class="d-block">
+            <!-- <el-button-group class="d-block">
               <el-button
                 size="mini"
                 type="warning"
@@ -74,13 +80,7 @@
                 Programs
               </el-button>
 
-              <el-button
-                type="primary"
-                size="mini"
-                style="width: 100px;"
-                @click="handleImportSchedule(channel)"
-              >Import</el-button>
-            </el-button-group>
+            </el-button-group> -->
 
           </td>
         </tr>
