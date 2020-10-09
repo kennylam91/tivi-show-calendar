@@ -3,7 +3,8 @@ const getters = {
   avatar: state => state.user.avatar,
   name: state => state.user.name,
   channelList: state => state.app.channelList,
-  vipChannelList: state => (state.app.channelList && state.app.channelList.filter(item => item.vip)) || [],
+  vipChannelList: state => (state.app.channelList &&
+    state.app.channelList.filter(item => item.vip).slice(0, 8)) || [],
   programList: state => state.app.programList,
   todayVipProgramList: state => state.app.todayVipProgramList,
   nextDaysVipProgramList: state => state.app.nextDaysVipProgramList,

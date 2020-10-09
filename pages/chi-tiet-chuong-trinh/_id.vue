@@ -48,7 +48,7 @@
                   :key="index"
                   size="small"
                   effect="light"
-                  :type="categoryTagMap.get(item)"
+                  :type="categoryTagMap.get(item.code)"
                   style="margin: 2px;"
                 >
                   {{ item.name }}
@@ -66,7 +66,7 @@
           <div>
             <table
               v-loading="loading"
-              class="table table-hover small-font-size table-striped table-sm"
+              class="table table-hover small-font-size table-striped"
               style="width: 100%;"
             >
               <tr class="bold">
@@ -78,7 +78,10 @@
               <tbody>
                 <tr v-for="row in scheduleList" :key="row.id">
                   <td>
-                    <el-link @click="viewChannelDetail({id: row.channelId, name: row.channelName})">
+                    <el-link
+                      style="vertical-align: baseline;"
+                      @click="viewChannelDetail({id: row.channelId, name: row.channelName})"
+                    >
                       <span class="color-primary">{{ row.channelName }}</span>
                     </el-link>
                   </td>
@@ -92,7 +95,7 @@
                     <el-tooltip :content="COMMON.ADD_TO_GOOGLE_CAL" placement="top-start" effect="dark">
                       <i
                         v-if="isShowAddBtn(row)"
-                        class="large-font-size el-icon-bell pointer color-success bold"
+                        class="el-icon-bell bell-icon-class"
                         @click="addScheduleToGGCal(row)"
                       />
                     </el-tooltip>
@@ -103,7 +106,7 @@
             <div v-if="scheduleList.length > 0" class="small-font-size">
               <span> Click</span>
               <i
-                class="large-font-size el-icon-bell pointer color-success bold"
+                class=" el-icon-bell bell-icon-class"
               />
               <span>{{ COMMON.TO_ADD_GG_CAL }}</span> <br>
               <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
@@ -144,13 +147,9 @@ export default {
   asyncData({ params, store }) {
     console.log(params)
     const programId = params.id.split('_').pop().trim()
-    const program = store.state.app.fromTodayProgramList && store.state.app.fromTodayProgramList.find(item => item.id === programId)
-    if (!program) {
-      return store.dispatch('app/fetchProgram', programId).then(program => {
-        return { program, programId }
-      })
-    }
-    return { program, programId }
+    return store.dispatch('app/fetchProgram', programId).then(program => {
+      return { program, programId }
+    })
   },
   data() {
     return {

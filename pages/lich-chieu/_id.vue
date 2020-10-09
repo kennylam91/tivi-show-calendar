@@ -1,7 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-undef */
-/* eslint-disable no-undef */
-/* eslint-disable no-undef */
 <template>
   <div v-if="channel">
     <div class="py-4 px-2">
@@ -104,11 +100,10 @@
                 <el-tooltip :content="COMMON.ADD_TO_GOOGLE_CAL" placement="top-start" effect="dark">
                   <i
                     v-if="isShowAddBtn(row)"
-                    class="large-font-size el-icon-bell pointer color-success bold"
+                    class="el-icon-bell bell-icon-class"
                     @click="addScheduleToGGCal(row)"
                   />
                 </el-tooltip>
-
               </td>
             </tr>
           </tbody>
@@ -120,7 +115,7 @@
         <div v-if="scheduleData.length > 0" class="small-font-size">
           <span> Click</span>
           <i
-            class="large-font-size el-icon-bell pointer color-success bold"
+            class="el-icon-bell bell-icon-class"
           />
           <span>{{ COMMON.TO_ADD_GG_CAL }}</span><br>
           <p v-text="COMMON.IF_NOT_WORKING_PLZ_CLEAR_CACHE" />
@@ -139,16 +134,15 @@ import { categoryTagMap } from '@/assets/utils/constant'
 
 export default {
   asyncData({ params, store }) {
-    const channelId = Number(params.id.split('_').pop())
-    const channel = store.state.app.channelList.find(item => item.id === channelId)
-    return { channelId, channel }
+    const channelId = params.id.split('_').pop()
+    return store.dispatch('app/fetchChannel', channelId).then(channel => {
+      return { channel, channelId }
+    })
   },
   data() {
     return {
       channelId: null,
       scheduleList: [],
-      program: null,
-      detailProgramDlgVisible: false,
       selectedDate: new Date(),
       searchText: '',
       scheduleData: null,
@@ -210,12 +204,11 @@ export default {
     },
     isShowing(schedule) {
       const now = new Date()
-      return (schedule.startTime.seconds * 1000 <= Date.parse(now) &&
-      schedule.endTime.seconds * 1000 >= Date.parse(now))
+      return (new Date(schedule.startTime) <= now && new Date(schedule.endTime) >= now)
     },
     isShowAddBtn(schedule) {
       const now = new Date()
-      return schedule.startTime.seconds * 1000 >= now && !this.isAddBtnDisabled(schedule)
+      return new Date(schedule.startTime) >= now && !this.isAddBtnDisabled(schedule)
     },
     isAddBtnDisabled(schedule) {
       return this.addedSchedule.some(item => item.id === schedule.id)

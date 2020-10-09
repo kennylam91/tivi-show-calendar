@@ -93,9 +93,11 @@ export default {
     const time = this.getStartEndOfToday()
     const data = {
       startTime: time.startOfToday,
-      endTime: time.endOfToday
+      endTime: time.endOfToday,
+      page: 1,
+      limit: 8
     }
-    this.$store.dispatch('app/searchProgram', data).then(res => {
+    this.$store.dispatch('app/fetchTodayPrograms', data).then(res => {
       this.todayProgramList = res.content
     })
   },

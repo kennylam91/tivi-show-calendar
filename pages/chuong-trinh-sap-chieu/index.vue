@@ -19,16 +19,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import Program from '@/components/programs/Program'
-import { FB, COMMON } from '@/assets/utils/constant'
-// import { sortByRankDesc } from '@/assets/utils/index'
+import { COMMON } from '@/assets/utils/constant'
 import ProgramListComplex from '@/components/programs/ProgramListComplex'
 
 export default {
   components: { ProgramListComplex },
   data() {
     return {
-      programData: null,
+      programData: [],
       dialogKey: 0,
       searchByDateProgramList: [],
       movieProgramList: null,
@@ -61,7 +59,18 @@ export default {
 
   },
   created() {
-    this.searchProgram(this.nextDaysProgramSearchForm)
+    this.$store.dispatch('app/searchProgram',
+      {
+        limit: 99999,
+        page: 1,
+        sortBy: 'rank',
+        sortDirection: 'DESC',
+        startTimeFrom: this.endOfToday(),
+        startTimeTo: this.endOfToday() + 24 * 60 * 60 * 1000
+      })
+      .then(res => {
+        this.programData = res.content
+      })
   },
   methods: {
     async searchProgram(searchForm) {
@@ -90,39 +99,6 @@ export default {
         this.filterByTime(program)
         })
       }
-    },
-    async fetchScheduleListByTime(startTime, endTime) {
-      let start, end
-      const list = []
-      const tomorrow = new Date()
-      tomorrow.setDate(tomorrow.getDate() + 1)
-
-      if (!startTime) {
-        start = this.convertStringToTimestamp('00:01', tomorrow)
-      } else {
-        start = this.convertStringToTimestamp(startTime, tomorrow)
-      }
-      const startTimestamp = FB.timestamp.fromDate(start)
-      if (!endTime) {
-        end = this.convertStringToTimestamp('23:59', tomorrow)
-      } else {
-        end = this.convertStringToTimestamp(endTime, tomorrow)
-      }
-      const endTimestamp = FB.timestamp.fromDate(end)
-      await this.$store.dispatch('app/searchSchedules',
-        { startTime: startTimestamp,
-          endTime: endTimestamp }).then(scheduleList => {
-        for (const schedule of scheduleList) {
-          if (!list.some(program => program.id === schedule.programId)) {
-            const found = this.nextDaysProgramList.find(program =>
-              program.id === schedule.programId)
-            if (found) {
-              list.push(found)
-            }
-          }
-        }
-        this.searchByDateProgramList = list
-      })
     },
     handleClearSearch() {
       this.programData = [...this.nextDaysProgramList]

@@ -185,9 +185,9 @@ export const actions = {
     })
   },
   // request={channelId: }
-  fetchChannel({ commit }, data) {
+  fetchChannel({ commit }, channelId) {
     return request({
-      url: '/channels/' + data.channelId,
+      url: '/channels/' + channelId,
       method: 'get'
     })
   },
@@ -218,6 +218,20 @@ export const actions = {
   searchProgram({ commit }, data) {
     return request({
       url: '/programs/search',
+      method: 'post',
+      data
+    })
+  },
+  fetchTodayPrograms({ commit }, data) {
+    return request({
+      url: '/programs/today',
+      method: 'post',
+      data
+    })
+  },
+  fetchTomorrowPrograms({ commit }, data) {
+    return request({
+      url: '/programs/tomorrow',
       method: 'post',
       data
     })

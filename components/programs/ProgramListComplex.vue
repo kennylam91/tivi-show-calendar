@@ -10,6 +10,7 @@
           <h4 class="pageTitle" v-text="title" />
           <el-button
             v-if="!isSearching"
+            disabled
             type="primary"
             size="small"
             icon="el-icon-search"
