@@ -41,18 +41,20 @@
                   :max="4"
                 />
               </div>
-              <div class="small-font-size">
+              <div class="small-font-size d-flex">
                 <label class="bold label">{{ COMMON.CATEGORY }} </label>
-                <el-tag
-                  v-for="(item, index) in program.categories"
-                  :key="index"
-                  size="small"
-                  effect="light"
-                  :type="categoryTagMap.get(item.code)"
-                  style="margin: 2px;"
-                >
-                  {{ item.name }}
-                </el-tag>
+                <div>
+                  <el-tag
+                    v-for="(item, index) in program.categories"
+                    :key="index"
+                    size="small"
+                    effect="light"
+                    :type="categoryTagMap.get(item.code)"
+                    style="margin: 2px;"
+                  >
+                    {{ item.name }}
+                  </el-tag>
+                </div>
               </div>
               <div v-if="program.year" class="small-font-size">
                 <label class="bold label">{{ COMMON.YEAR | uppercaseFirst }} </label>

@@ -157,7 +157,7 @@ export const actions = {
         method: 'post',
         data: { page: 1, limit: 999999 }
       }).then(res => {
-        commit('SET_CHANNEL_LIST', res.content)
+        commit('SET_CHANNEL_LIST', res)
         resolve(res)
       })
     })
@@ -214,7 +214,8 @@ export const actions = {
       data
     })
   },
-  // request = {searchName}
+  // request = {searchName, categoryCodes, ranks, isBroadCasting, getStartTimeFrom, getStartTimeTo,
+  // page, limit, sortBy, sortDirection(DESC, ASC)}
   searchProgram({ commit }, data) {
     return request({
       url: '/programs/search',

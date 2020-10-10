@@ -1,4 +1,5 @@
 @import './element-variables.scss';
+@import './bootstrap.min.css';
 $--color-dark-blue:  #003a77;
 
 .color-primary {
@@ -209,6 +210,9 @@ footer{
 .bell-icon-class{
   @extend .font-lg, .pointer, .color-danger, .bold;
 }
+.read-more p{
+  display: inline;
+}
 
 @media only screen and (min-width: 768px) { 
   .categoryColumn{
@@ -233,7 +237,7 @@ footer{
     font-size: 0.875rem !important;
   }
   #scheduleTable td, th{
-    padding: 12px!important;
+    padding: 10px!important;
   }
   
   

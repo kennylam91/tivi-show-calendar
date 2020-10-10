@@ -9,13 +9,23 @@
         <el-input v-model="programData.name" />
       </el-form-item>
       <el-form-item label="EnName">
-        <el-input v-model="programData.enName">
+        <el-input v-model="programData.enName" @blur="checkNameExist">
           <template slot="append">
-            <el-button :disabled="!programData.enName" type="primary" @click="searchProgramOnTheMovieDb">Search</el-button>
+            <el-button
+              :disabled="!programData.enName"
+              type="primary"
+              @click="searchProgramOnTheMovieDb"
+            >Search</el-button>
           </template>
         </el-input>
-        {{ programData.enName }}
+        <div v-if="foundPrograms">
+          <span v-for="(prog) in foundPrograms" :key="prog.id">
+            {{ prog.name }} - {{ prog.enName }}
+          </span>
+          <span v-if="foundPrograms.length === 0">Not found this name</span>
+        </div>
       </el-form-item>
+
       <el-form-item label="Year">
         <el-input v-model="programData.year" />
       </el-form-item>
@@ -175,7 +185,8 @@ export default {
       trailerList: null,
       trailerDialogVisible: false,
       voteAvg: 0,
-      dialogKey: 0
+      dialogKey: 0,
+      foundPrograms: null
     }
   },
   computed: {
@@ -228,6 +239,7 @@ export default {
           rank: 1
         }
         this.dialogKey++
+        this.foundPrograms = null
         this.$emit('saved')
       })
     },
@@ -267,6 +279,14 @@ export default {
     handleSelectImage(selectedImage) {
       console.log(selectedImage)
       this.programData.logo = selectedImage
+    },
+    checkNameExist() {
+      const data = { searchName: this.programData.enName, page: 1, limit: 999 }
+      if (this.programData.enName) {
+        this.$store.dispatch('app/searchProgram', data).then(res => {
+          this.foundPrograms = res.content
+        })
+      }
     },
     searchTrailer() {
       console.log('searchTrailer')

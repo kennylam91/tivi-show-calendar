@@ -12,7 +12,7 @@ export const actions = {
     const channelFetchPm = dispatch('app/fetchChannelList')
     return Promise.all([channelFetchPm])
       .then(results => {
-        dispatch('app/setChannelList', results[0].content)
+        dispatch('app/setChannelList', results[0])
       })
   }
   // user login

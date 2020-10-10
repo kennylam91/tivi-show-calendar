@@ -28,7 +28,15 @@
               />
             </div>
           </td>
-          <td v-if="!isAdmin">{{ channel.description }}</td>
+          <td v-if="!isAdmin" class="text-left">
+            <read-more
+              class="read-more"
+              more-str="Xem thêm"
+              :text="channel.description"
+              less-str="Ẩn bớt"
+              :max-chars="95"
+            />
+          </td>
           <td
             v-if="isAdmin"
             :class="getTextColorClass(isChannelScheduled(channel, today))"

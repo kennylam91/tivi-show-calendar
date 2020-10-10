@@ -17,11 +17,19 @@
           <img v-lazy="channel.logo" class="img-fluid" :alt="channel.name">
         </div>
         <div
-          class="col-sm-8 col-md-10 flex"
-          style="padding-left: 15px;padding-right: 15px; align-items: center "
+          class="col-sm-8 col-md-10"
+          style="padding-left: 15px;padding-right: 15px; "
         >
-          <p class="small-font-size">{{ channel.description }}</p>
+          <read-more
+            class="read-more"
+            more-str="Xem thêm"
+            :text="channel.description"
+            less-str="Ẩn bớt"
+            :max-chars="65"
+          />
+
         </div>
+
       </div>
       <el-divider class="my-2" />
       <h4 class="my-4 color-dark-blue">{{ COMMON.SCHEDULE + ' ' + channel.name + ' ' + COMMON.DATE + ' ' + selectedDateFormatted }}</h4>
