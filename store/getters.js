@@ -19,6 +19,7 @@ const getters = {
   loading: state => state.app.loading,
   todayProgramSearchForm: state => state.app.todayProgramSearchForm,
   nextDaysProgramSearchForm: state => state.app.nextDaysProgramSearchForm,
-  categories: state => state.app.categories
+  categories: state => state.app.categories,
+  scheduleStats: state => state.app.scheduleStats
 }
 export default getters

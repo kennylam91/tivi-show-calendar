@@ -14,7 +14,7 @@
 
     <div class="justify-between-align-center mb-2">
       <h5>Import {{ channel.name }} schedule</h5>
-      <el-select v-model="pattern" placeholder="Select pattern" clearable>
+      <el-select v-model="pattern" placeholder="Select pattern" clearable style="width: 135px;">
         <el-option
           v-for="item in patternOptions"
           :key="item.value"
@@ -26,14 +26,16 @@
         v-model="importDate"
         type="date"
         placeholder="Pick a day"
+        style="width: 170px;"
       />
+      <el-checkbox v-model="isSearchProgram" label="Search" :indeterminate="false" />
+
       <el-button
         :disabled="convertBtnDisabled"
         type="primary"
         size="default"
         @click="convertData"
       > Convert</el-button>
-      <el-button type="danger" size="medium" @click="reset">Reset</el-button>
 
     </div>
     <el-input
@@ -53,11 +55,14 @@
       :channel-prop="channel"
       :draft="true"
     />
-    <el-button
-      type="primary"
-      :disabled="importBtnDisabled"
-      @click="importScheduleList"
-    >Import All</el-button>
+    <div class="justify-between-align-cen">
+      <el-button
+        type="primary"
+        :disabled="importBtnDisabled"
+        @click="importScheduleList"
+      >Import All</el-button>
+      <el-button type="danger" size="medium" @click="reset">Reset</el-button>
+    </div>
   </div>
 </template>
 
@@ -79,7 +84,8 @@ export default {
         { value: 'en - vi', label: 'en - vi' },
         { value: '(en)vi', label: '(en)vi' }
       ],
-      errorLines: []
+      errorLines: [],
+      isSearchProgram: true
     }
   },
   computed: {
@@ -111,18 +117,20 @@ export default {
     validateInput() {
       this.errorLines = []
       const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
-      if (this.pattern === 'en : vi') {
-        dataArray.forEach((element, index) => {
-          if (((element + '').match(/:/g) || []).length > 3) {
-            this.errorLines.push(index + 1)
-          }
-        })
-      } else if (this.pattern === 'en - vi') {
-        dataArray.forEach((element, index) => {
-          if (((element + '').match(/-/g) || []).length > 1) {
-            this.errorLines.push(index + 1)
-          }
-        })
+      if (this.isSearchProgram) {
+        if (this.pattern === 'en : vi') {
+          dataArray.forEach((element, index) => {
+            if (((element + '').match(/:/g) || []).length > 3) {
+              this.errorLines.push(index + 1)
+            }
+          })
+        } else if (this.pattern === 'en - vi') {
+          dataArray.forEach((element, index) => {
+            if (((element + '').match(/-/g) || []).length > 1) {
+              this.errorLines.push(index + 1)
+            }
+          })
+        }
       }
     },
     convertData() {
@@ -206,18 +214,20 @@ export default {
         }
       }
       this.scheduleList = scheduleArr
-      this.scheduleList.forEach(schedule => {
-        if (schedule.enName) {
-          this.$store.dispatch('app/searchProgram', { searchName: schedule.enName }).then(res => {
-            if (res.content && res.content.length === 1) {
-              schedule.programId = res.content[0].id
-              schedule.programName = res.content[0].name + ' - ' + res.content[0].enName
-            } else if (res.content && res.content.length > 1) {
-              this.$set(schedule, 'programOptions', res.content)
-            }
-          })
-        }
-      })
+      if (this.isSearchProgram) {
+        this.scheduleList.forEach(schedule => {
+          if (schedule.enName) {
+            this.$store.dispatch('app/searchProgram', { searchName: schedule.enName }).then(res => {
+              if (res.content && res.content.length === 1) {
+                schedule.programId = res.content[0].id
+                schedule.programName = res.content[0].name + ' - ' + res.content[0].enName
+              } else if (res.content && res.content.length > 1) {
+                this.$set(schedule, 'programOptions', res.content)
+              }
+            })
+          }
+        })
+      }
     },
     reset() {
       this.scheduleInput = ''
