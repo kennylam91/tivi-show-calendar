@@ -82,7 +82,8 @@ export default {
       patternOptions: [
         { value: 'en : vi', label: 'en : vi' },
         { value: 'en - vi', label: 'en - vi' },
-        { value: '(en)vi', label: '(en)vi' }
+        { value: '(en)vi', label: '(en)vi' },
+        { value: 'h:mm:PM en', label: 'h:mm:PM en' }
       ],
       errorLines: [],
       isSearchProgram: true
@@ -138,7 +139,20 @@ export default {
       if (!this.scheduleInput.trim()) {
         return
       }
-      const dataArray = this.scheduleInput.trim().split('\n')
+      let dataArray = []
+      //       12:55AM
+      // Bad Boys II
+      this.scheduleInput = this.scheduleInput.replaceAll(/NOW SHOWING\s+/g, '')
+      if (this.pattern === 'h:mm:PM en') {
+        const arr = this.scheduleInput.trim().split('\n')
+        for (let i = 0; i < arr.length; i += 2) {
+          dataArray.push(arr[i] + ' ' + arr[i + 1])
+        }
+        this.scheduleInput = dataArray.join('\n')
+      } else {
+        dataArray = this.scheduleInput.trim().split('\n')
+      }
+
       const scheduleArr = []
       if (this.importDate) {
         for (const str of dataArray) {
@@ -147,19 +161,19 @@ export default {
           const item = (str + '').substring(0, 6) +
           (str + '').substring(6).replaceAll(/:/gi, ' : ').replaceAll(/-/gi, ' - ')
           const schedule = item
-            .replace('Phim truyện :', '')
-            .replace('Phim Sitcom : ', '')
-            .replace('Phim Việt Nam:', '')
-            .replace('Phim tài liệu:', '')
-            .replace('Phim hoạt hình:', '')
-            .replace('Ký sự truyền hình:', '')
-            .replace('Phim Ấn Độ:', '')
-            .replace('Phim Thổ Nhĩ Kỳ:', '')
-            .replace('Sitcom:', '')
-            .replace('Phim Đài Loan:', '')
-            .replace('Phim Ukraina:', '')
-            .replace('Phim ngắn:', '')
-            .replace('Phim sitcom:', '')
+          // .replace('Phim truyện :', '')
+          // .replace('Phim Sitcom : ', '')
+          // .replace('Phim Việt Nam:', '')
+          // .replace('Phim tài liệu:', '')
+          // .replace('Phim hoạt hình:', '')
+          // .replace('Ký sự truyền hình:', '')
+          // .replace('Phim Ấn Độ:', '')
+          // .replace('Phim Thổ Nhĩ Kỳ:', '')
+          // .replace('Sitcom:', '')
+          // .replace('Phim Đài Loan:', '')
+          // .replace('Phim Ukraina:', '')
+          // .replace('Phim ngắn:', '')
+          // .replace('Phim sitcom:', '')
 
           const array = schedule.split(/\s+/)
           // for (let index = 0; index < array.length; index++) {
@@ -168,8 +182,16 @@ export default {
           // }
           const startTimeStr = array[0]
           const timeSplitArr = startTimeStr.split(':')
-          const hour = Number(timeSplitArr[0])
-          const min = Number(timeSplitArr[1])
+          let hour = Number(timeSplitArr[0])
+          const min = Number(timeSplitArr[1].replaceAll(/[A-Z a-z]/g, ''))
+          const isAM = (startTimeStr + '').match(/AM/)
+          const isPM = (startTimeStr + '').match(/PM/)
+          if (hour >= 12 && isAM) {
+            hour -= 12
+          }
+          if (hour < 12 && isPM) {
+            hour += 12
+          }
           const startTime = this.importDate.setHours(hour, min, 0, 0)
           const endTime = new Date(startTime)
           endTime.setHours(24, 0, 0, 0)
@@ -199,6 +221,9 @@ export default {
             en = item.substring(openChar + 1, closeChar)
             vi = item.substring(closeChar + 1)
           }
+          if (this.pattern === 'h:mm:PM en') {
+            en = array.slice(1).join(' ')
+          }
 
           const newSchedule = {
             startTime,
@@ -217,7 +242,7 @@ export default {
       if (this.isSearchProgram) {
         this.scheduleList.forEach(schedule => {
           if (schedule.enName) {
-            this.$store.dispatch('app/searchProgram', { searchName: schedule.enName }).then(res => {
+            this.$store.dispatch('app/searchProgram', { searchName: schedule.enName.toUpperCase() }).then(res => {
               if (res.content && res.content.length === 1) {
                 schedule.programId = res.content[0].id
                 schedule.programName = res.content[0].name + ' - ' + res.content[0].enName

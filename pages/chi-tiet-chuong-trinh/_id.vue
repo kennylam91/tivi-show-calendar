@@ -147,11 +147,10 @@ export default {
     }
   },
   asyncData({ params, store }) {
-    console.log(params)
-    const programId = params.id.split('_').pop().trim()
-    return store.dispatch('app/fetchProgram', programId).then(program => {
-      return { program, programId }
-    })
+    // const programId = params.id.split('_').pop().trim()
+    // return store.dispatch('app/fetchProgram', programId).then(program => {
+    //   return { program, programId }
+    // })
   },
   data() {
     return {
@@ -181,19 +180,11 @@ export default {
   },
   created() {
     const now = new Date()
-    // const before30Mins = Date.parse(now) - 30 * 60 * 1000
     this.$store.dispatch('app/setLoading', true)
-    // const schedulePromise = FB.scheduleRef.where('programId', '==', this.programId)
-    //   .where('startTime', '>=', FB.timestamp.fromMillis(before30Mins))
-    //   .orderBy('startTime', 'asc').get()
-    // schedulePromise.then(scheduleListDoc => {
-    //   scheduleListDoc.forEach(doc => {
-    //     const schedule = { ...doc.data(), id: doc.id }
-    //     scheduleList.push(schedule)
-    //   })
-    //   this.$store.dispatch('app/setLoading', false)
-    //   this.scheduleList = [...scheduleList]
-    // })
+    this.programId = this.$route.params.id.split('_').pop().trim()
+    this.$store.dispatch('app/fetchProgram', this.programId).then(program => {
+      this.program = program
+    })
     const data = { startTime: now, programId: this.programId }
     this.$store.dispatch('app/searchSchedules', data).then(res => {
       this.scheduleList = res.content
@@ -263,10 +254,10 @@ export default {
   },
   head() {
     return {
-      title: `${this.program.name} : Chi tiết thông tin chương trình và lịch phát sóng`,
+      title: `Chi tiết thông tin chương trình ${(this.$route.params.id.split('_')[0] + '').replace(/-/gi, ' ')} và lịch phát sóng`,
       meta: [
         { hid: 'description', name: 'description',
-          content: this.program.description }
+          content: `Chi tiết thông tin chương trình ${(this.$route.params.id.split('_')[0] + '').replace(/-/gi, ' ')} và lịch phát sóng` }
       ]
     }
   }

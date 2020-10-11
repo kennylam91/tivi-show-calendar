@@ -283,7 +283,7 @@ export default {
       this.programData.logo = selectedImage
     },
     checkNameExist() {
-      const data = { searchName: this.programData.enName, page: 1, limit: 999 }
+      const data = { searchName: this.programData.enName.toUpperCase(), page: 1, limit: 999 }
       if (this.programData.enName) {
         this.$store.dispatch('app/searchProgram', data).then(res => {
           this.foundPrograms = res.content

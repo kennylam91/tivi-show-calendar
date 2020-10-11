@@ -183,7 +183,6 @@ export default {
       }
     },
     getChannelScheduleTotal(channel, date) {
-      debugger
       const dateStr = parseTime(date, '{Y}-{m}-{d}')
       const foundStat = this.scheduleStats.find(item => item.channelId === channel.id && item.date === dateStr)
       if (foundStat) {

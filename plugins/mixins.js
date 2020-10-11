@@ -27,7 +27,7 @@ Vue.mixin({
       } else {
         id = program.id
       }
-      const name = program.name.split(/[\s:]+/).join('-').trim()
+      const name = (program.name + ' ' + program.enName).split(/[\s:]+/).join('-').trim()
       const enConvertedName = convertVNToEN(name)
       this.$router.push({ path: `/chi-tiet-chuong-trinh/${enConvertedName}_${id}` })
       // this.$store.dispatch('app/setLoading', true)
