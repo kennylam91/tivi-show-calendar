@@ -172,7 +172,7 @@ export const actions = {
   // request: {startTimeFrom, startTimeTo}
   fetchScheduleStats({ commit }, data) {
     return request({
-      url: '/schedules/stats',
+      url: '/stats/channels/total-schedules-daily',
       method: 'post',
       data
     })

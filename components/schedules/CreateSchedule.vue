@@ -44,7 +44,7 @@
           <el-option
             v-for="item in scheduleProp.programOptions"
             :key="item.id"
-            :label="item.name"
+            :label="item.enName"
             :value="item"
           />
         </el-select>

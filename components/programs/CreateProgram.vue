@@ -81,6 +81,8 @@
       </el-form-item>
 
       <el-form-item label="Logo">
+        <el-input v-model="programData.logo" placeholder="Logo" />
+
         <div class="flex">
           <Upload :picture-prop="programData.logo" @uploaded="handleUploaded" />
           <el-button type="primary" @click="movieImagesDialogVisible = true">Choose Image</el-button>
