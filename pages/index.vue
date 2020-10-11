@@ -108,7 +108,8 @@
             <el-button
               class="my-2 w-100 py-2 px-1"
               size="small"
-              type="primary"
+              type="info"
+              plain
               @click="viewChannelDetail(channel)"
             >{{ COMMON.SCHEDULE }} {{ channel.name }}</el-button>
           </el-card>

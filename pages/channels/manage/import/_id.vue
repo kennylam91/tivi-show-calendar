@@ -83,7 +83,8 @@ export default {
         { value: 'en : vi', label: 'en : vi' },
         { value: 'en - vi', label: 'en - vi' },
         { value: '(en)vi', label: '(en)vi' },
-        { value: 'h:mm:PM en', label: 'h:mm:PM en' }
+        { value: 'h:mm:PM en', label: 'h:mm:PM en' },
+        { value: 'arr[t,vi,en]', label: 'arr[t,vi,en]' }
       ],
       errorLines: [],
       isSearchProgram: true
@@ -149,93 +150,107 @@ export default {
           dataArray.push(arr[i] + ' ' + arr[i + 1])
         }
         this.scheduleInput = dataArray.join('\n')
+      } else if (this.pattern === 'arr[t,vi,en]') {
+        dataArray = this.scheduleInput.replaceAll('"', '').split('],')
       } else {
         dataArray = this.scheduleInput.trim().split('\n')
       }
-
       const scheduleArr = []
       if (this.importDate) {
-        for (const str of dataArray) {
+        // ["00:20","Người Dưng","Unrelated"  ],
+        // ["02:15","Ngôi Nhà Lớn","Casa Grande"  ],
+        if (this.pattern === 'arr[t,vi,en]') {
+          for (const str of dataArray) {
+            const array = str.replaceAll('[', '').replaceAll(']', '').split(',')
+            const hour = array[0].split(':')[0]
+            const min = array[0].split(':')[1]
+            const en = array[2].trim() ? array[2].trim() : array[1].trim()
+            debugger
+            const vi = array[1].trim()
+            const startTime = this.importDate.setHours(hour, min, 0, 0)
+            const endTime = new Date(startTime)
+            endTime.setHours(24, 0, 0, 0)
+            if (scheduleArr.length > 0) {
+              scheduleArr[scheduleArr.length - 1].endTime = startTime
+            }
+            const newSchedule = {
+              startTime,
+              endTime,
+              programName: vi + ((en && en !== vi) ? (' - ' + en) : ''),
+              channelId: this.channelId,
+              channelName: this.channel.name,
+              programId: null,
+              viName: vi,
+              enName: en
+            }
+            scheduleArr.push(newSchedule)
+          }
+        } else {
+          for (const str of dataArray) {
           // schedule: '00:00	BIẾN ĐI, ÔNG ANH! (GO BROTHER)'
           // array: cac truong du lieu
-          const item = (str + '').substring(0, 6) +
+            const item = (str + '').substring(0, 6) +
           (str + '').substring(6).replaceAll(/:/gi, ' : ').replaceAll(/-/gi, ' - ')
-          const schedule = item
-          // .replace('Phim truyện :', '')
-          // .replace('Phim Sitcom : ', '')
-          // .replace('Phim Việt Nam:', '')
-          // .replace('Phim tài liệu:', '')
-          // .replace('Phim hoạt hình:', '')
-          // .replace('Ký sự truyền hình:', '')
-          // .replace('Phim Ấn Độ:', '')
-          // .replace('Phim Thổ Nhĩ Kỳ:', '')
-          // .replace('Sitcom:', '')
-          // .replace('Phim Đài Loan:', '')
-          // .replace('Phim Ukraina:', '')
-          // .replace('Phim ngắn:', '')
-          // .replace('Phim sitcom:', '')
+            const schedule = item
 
-          const array = schedule.split(/\s+/)
-          // for (let index = 0; index < array.length; index++) {
-          //   const element = array[index]
-          //   array[index] = element.replace(/-.*/gi, '')
-          // }
-          const startTimeStr = array[0]
-          const timeSplitArr = startTimeStr.split(':')
-          let hour = Number(timeSplitArr[0])
-          const min = Number(timeSplitArr[1].replaceAll(/[A-Z a-z]/g, ''))
-          const isAM = (startTimeStr + '').match(/AM/)
-          const isPM = (startTimeStr + '').match(/PM/)
-          if (hour >= 12 && isAM) {
-            hour -= 12
-          }
-          if (hour < 12 && isPM) {
-            hour += 12
-          }
-          const startTime = this.importDate.setHours(hour, min, 0, 0)
-          const endTime = new Date(startTime)
-          endTime.setHours(24, 0, 0, 0)
+            const array = schedule.split(/\s+/)
+            const startTimeStr = array[0]
+            const timeSplitArr = startTimeStr.split(':')
+            let hour = Number(timeSplitArr[0])
+            const min = Number(timeSplitArr[1].replaceAll(/[A-Z a-z]/g, ''))
+            const isAM = (startTimeStr + '').match(/AM/)
+            const isPM = (startTimeStr + '').match(/PM/)
+            if (hour >= 12 && isAM) {
+              hour -= 12
+            }
+            if (hour < 12 && isPM) {
+              hour += 12
+            }
+            const startTime = this.importDate.setHours(hour, min, 0, 0)
+            const endTime = new Date(startTime)
+            endTime.setHours(24, 0, 0, 0)
 
-          if (scheduleArr.length > 0) {
-            scheduleArr[scheduleArr.length - 1].endTime = startTime
-          }
-          let vi = ''
-          let en = ''
-          let splitIndex
-          if (this.pattern === 'en : vi') {
+            if (scheduleArr.length > 0) {
+              scheduleArr[scheduleArr.length - 1].endTime = startTime
+            }
+            let vi = ''
+            let en = ''
+            let splitIndex
+            if (this.pattern === 'en : vi') {
             // en = array[1] => :
             // vi = : => end
-            splitIndex = array.indexOf(':')
-          } else if (this.pattern === 'en - vi') {
-            splitIndex = array.indexOf('-')
-          }
-          if (splitIndex > -1) {
-            en = array.slice(1, splitIndex).join(' ')
-            vi = array.slice(splitIndex + 1).join(' ')
-          } else {
-            vi = array.slice(1).join(' ')
-          }
-          if (this.pattern === '(en)vi') {
-            const openChar = item.indexOf('(')
-            const closeChar = item.indexOf(')')
-            en = item.substring(openChar + 1, closeChar)
-            vi = item.substring(closeChar + 1)
-          }
-          if (this.pattern === 'h:mm:PM en') {
-            en = array.slice(1).join(' ')
-          }
+              splitIndex = array.indexOf(':')
+            } else if (this.pattern === 'en - vi') {
+              splitIndex = array.indexOf('-')
+            }
+            if (splitIndex > -1) {
+              en = array.slice(1, splitIndex).join(' ')
+              vi = array.slice(splitIndex + 1).join(' ')
+            } else {
+              vi = array.slice(1).join(' ')
+            }
+            if (this.pattern === '(en)vi') {
+              const openChar = item.indexOf('(')
+              const closeChar = item.indexOf(')')
+              en = item.substring(openChar + 1, closeChar)
+              vi = item.substring(closeChar + 1)
+            }
+            if (this.pattern === 'h:mm:PM en') {
+              en = array.slice(1).join(' ')
+            }
 
-          const newSchedule = {
-            startTime,
-            endTime,
-            programName: vi + (en ? (' - ' + en) : ''),
-            channelId: this.channelId,
-            channelName: this.channel.name,
-            programId: null,
-            viName: vi,
-            enName: en
+            const newSchedule = {
+              startTime,
+              endTime,
+              programName: vi + (en ? (' - ' + en) : ''),
+              channelId: this.channelId,
+              channelName: this.channel.name,
+              programId: null,
+              viName: vi,
+              enName: en
+            }
+            scheduleArr.push(newSchedule)
           }
-          scheduleArr.push(newSchedule)
         }
       }
       this.scheduleList = scheduleArr
