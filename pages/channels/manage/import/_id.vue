@@ -165,7 +165,6 @@ export default {
             const hour = array[0].split(':')[0]
             const min = array[0].split(':')[1]
             const en = array[2].trim() ? array[2].trim() : array[1].trim()
-            debugger
             const vi = array[1].trim()
             const startTime = this.importDate.setHours(hour, min, 0, 0)
             const endTime = new Date(startTime)
@@ -242,7 +241,7 @@ export default {
             const newSchedule = {
               startTime,
               endTime,
-              programName: vi + (en ? (' - ' + en) : ''),
+              programName: (vi + ((en && en !== vi) ? (' - ' + en) : '')),
               channelId: this.channelId,
               channelName: this.channel.name,
               programId: null,

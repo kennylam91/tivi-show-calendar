@@ -22,7 +22,7 @@
               <img
                 v-if="!program.logo"
                 class="img-fluid mb-2 "
-                src="~assets/images/400x225.png"
+                src="~assets/images/default-program-picture.png"
                 :alt="program.name"
               >
 

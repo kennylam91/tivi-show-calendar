@@ -23,7 +23,7 @@
             >
             <img
               v-else
-              src="~assets/images/400x225.png"
+              src="~assets/images/default-program-picture.png"
               class="img-fluid"
               :alt="program.name"
             >
