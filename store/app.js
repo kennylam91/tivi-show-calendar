@@ -232,7 +232,7 @@ export const actions = {
   // request = {searchName, categoryCodes, ranks, isBroadCasting, getStartTimeFrom, getStartTimeTo,
   // page, limit, sortBy, sortDirection(DESC, ASC)}
   searchProgram({ commit }, data) {
-    data.searchName = (data.searchName + '').toUpperCase()
+    data.searchName = (data.searchName || '' + '').toUpperCase()
     return request({
       url: '/programs/search',
       method: 'post',

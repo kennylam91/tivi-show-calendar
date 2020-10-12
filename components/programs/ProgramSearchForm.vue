@@ -134,7 +134,7 @@ export default {
   data() {
     return {
       programSearchForm: {
-        name: '',
+        searchName: '',
         channels: [],
         categories: [],
         ranks: [],
@@ -158,7 +158,7 @@ export default {
       return this.channelList.filter(channel => channel.vip === true)
     },
     isSearching() {
-      return this.programSearchForm.name ||
+      return this.programSearchForm.searchName ||
       this.programSearchForm.channels.length > 0 ||
       this.programSearchForm.categories.length > 0 ||
       this.programSearchForm.ranks.length > 0
@@ -197,7 +197,7 @@ export default {
       this.$emit('search', this.programSearchForm)
     },
     clearSearchingForm() {
-      this.programSearchForm.name = ''
+      this.programSearchForm.searchName = ''
       this.programSearchForm.channels = []
       this.programSearchForm.categories = []
       this.programSearchForm.ranks = []

@@ -159,13 +159,13 @@ export default {
     const endNextDay = time24h + 24 * 60 * 60 * 1000
     if (now < time11h) {
       this.$store.dispatch('app/fetchTodayPrograms',
-        { startTimeFrom: time11h, startTimeTo: time13h, ...baseQuery }).then(res => {
+        { startTimeFrom: now < time11h ? time11h : now, startTimeTo: time13h, ...baseQuery }).then(res => {
         this.noonProgramList = res.content
       })
     }
     if (now < time22h) {
       this.$store.dispatch('app/fetchTodayPrograms',
-        { startTimeFrom: time19h, startTimeTo: time24h, ...baseQuery }).then(res => {
+        { startTimeFrom: now < time19h ? time19h : now, startTimeTo: time24h, ...baseQuery }).then(res => {
         this.eveningProgramList = res.content
       })
     }
