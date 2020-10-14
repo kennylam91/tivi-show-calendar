@@ -5,24 +5,30 @@
       :body-style="{ padding: '5px','text-align':'center' }"
     >
       <div class="mb-2">
-        <el-link
-          :underline="false"
-          @click="viewProgramDetail(program)"
+        <el-tooltip
+          :content="program.enName"
+          :open-delay="300"
+          placement="top"
+          effect="dark"
         >
-          <img
-            v-if="program.logo"
-            v-lazy="program.logo"
-            class="img-fluid"
-            :alt="program.name"
+          <el-link
+            :underline="false"
+            @click="viewProgramDetail(program)"
           >
-          <img
-            v-else
-            src="~assets/images/400x225.png"
-            class="img-fluid"
-            :alt="program.name"
-          >
-        </el-link>
-
+            <img
+              v-if="program.logo"
+              v-lazy="program.logo"
+              class="img-fluid"
+              :alt="program.name"
+            >
+            <img
+              v-else
+              src="~assets/images/default-program-picture.png"
+              class="img-fluid"
+              :alt="program.name"
+            >
+          </el-link>
+        </el-tooltip>
       </div>
       <el-link
         class="mb-2 w-100"
@@ -66,7 +72,7 @@
           {{ program.schedules[0].channelName }}</span>
         <el-divider direction="vertical" />
         <span class="color-danger">
-          {{ parseTime(program.schedules[0].startTime) }}-{{ parseTime(program.schedules[0].endTime) }}
+          {{ parseTime(program.schedules[0].startTime) }}
         </span>
       </div>
       <el-rate

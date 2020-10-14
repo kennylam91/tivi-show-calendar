@@ -20,12 +20,11 @@
       :body-style="{ padding: '16px' }"
     >
       <div slot="header" class="justify-between-align-center">
-        <span class="bold">{{ COMMON.CHANNEL_LIST }}</span>
+        <h4 class="bold">{{ COMMON.CHANNEL_LIST }}</h4>
         <el-button
-          type="primary"
+          type="success"
           size="small"
-          plain
-          @click="handleCreateChannelClick"
+          @click="$router.push({ path: '/channels/create' })"
         >{{ COMMON.CREATE_CHANNEL }}</el-button>
       </div>
       <ChannelTable v-if="channelList" :channel-list="channelList" :is-admin="true" />
@@ -69,14 +68,10 @@ export default {
     }
   },
   created() {
-    // this.$store.dispatch('app/fetchChannelList').then(data => {
-    //   this.channelList = data.content
-    // })
+
   },
   methods: {
-    handleCreateChannelClick() {
-      this.$router.push({ path: '/channels/create' })
-    }
+
   }
 }
 </script>

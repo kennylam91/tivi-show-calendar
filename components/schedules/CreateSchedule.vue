@@ -44,7 +44,7 @@
           <el-option
             v-for="item in scheduleProp.programOptions"
             :key="item.id"
-            :label="item.name"
+            :label="item.enName"
             :value="item"
           />
         </el-select>
@@ -124,7 +124,7 @@ export default {
         }
         setTimeout(() => {
           this.$refs.programSelectRef.focus()
-        }, 200);
+        }, 200)
       }
     },
     selectedProgram: {
@@ -153,7 +153,7 @@ export default {
       })
     },
     remoteMethod(query) {
-      if (query !== '') {
+      if (query && query.length > 2) {
         this.loading = true
         this.$store.dispatch('app/searchProgram', { searchName: query }).then(res => {
           this.scheduleProp.programOptions = res.content

@@ -30,7 +30,7 @@ export default {
   },
   created() {
     this.channelId = this.$route.params.id
-    this.$store.dispatch('app/fetchChannel', { channelId: this.channelId }).then(data => {
+    this.$store.dispatch('app/fetchChannel', this.channelId).then(data => {
       this.channel = data
     })
   },

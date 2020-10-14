@@ -16,7 +16,7 @@
           class="text-center"
         >
           <td>
-            <el-link class="mb-2" @click="handleNameClick(channel)">
+            <el-link class="mb-1" @click="handleNameClick(channel)">
               <h6 class="channelNameLink">{{ channel.name }}</h6>
             </el-link>
             <div v-if="isAdmin">
@@ -28,28 +28,42 @@
               />
             </div>
           </td>
-          <td v-if="!isAdmin">{{ channel.description }}</td>
+          <td v-if="!isAdmin" class="text-left">
+            <read-more
+              class="read-more"
+              more-str="Xem thêm"
+              :text="channel.description"
+              less-str="Ẩn bớt"
+              :max-chars="95"
+            />
+          </td>
           <td
-            v-if="isAdmin"
-            :class="getTextColorClass(isChannelScheduled(channel, today))"
-          >{{ isChannelScheduled(channel, today) }}</td>
+            v-if="isAdmin && scheduleStats"
+            :class="getTextColorClass(getChannelScheduleTotal(channel, today))"
+          >{{ getChannelScheduleTotal(channel, today) }}</td>
           <td
-            v-if="isAdmin"
-            :class="getTextColorClass(isChannelScheduled(channel, tomorrow))"
-          >{{ isChannelScheduled(channel, tomorrow) }}</td>
+            v-if="isAdmin && scheduleStats"
+            :class="getTextColorClass(getChannelScheduleTotal(channel, tomorrow))"
+          >{{ getChannelScheduleTotal(channel, tomorrow) }}</td>
           <td
-            v-if="isAdmin"
-            :class="getTextColorClass(isChannelScheduled(channel, next2Days))"
-          >{{ isChannelScheduled(channel, next2Days) }}</td>
+            v-if="isAdmin && scheduleStats"
+            :class="getTextColorClass(getChannelScheduleTotal(channel, next2Days))"
+          >{{ getChannelScheduleTotal(channel, next2Days) }}</td>
 
           <td v-if="isAdmin" align="center" width="300">
             <el-button-group class="mb-2 d-block">
-              <el-button
+              <!-- <el-button
                 type="success"
                 size="mini"
                 style="width: 120px;"
                 @click="moveToChannelManageView(channel)"
-              >{{ COMMON.SCHEDULE }}</el-button>
+              >Manage</el-button> -->
+              <el-button
+                type="success"
+                size="mini"
+                style="width: 100px;"
+                @click="handleImportSchedule(channel)"
+              >Import</el-button>
               <el-button
                 style="width: 70px;"
                 size="mini"
@@ -64,23 +78,6 @@
                 @click="handleChannelDeleteClick(channel)"
               >{{ COMMON.DELETE }}</el-button>
             </el-button-group>
-            <el-button-group class="d-block">
-              <el-button
-                size="mini"
-                type="warning"
-                style="width: 100px;"
-                @click="$router.push({path: `/programs?channelId=${channel.id}`})"
-              >
-                Programs
-              </el-button>
-
-              <el-button
-                type="primary"
-                size="mini"
-                style="width: 100px;"
-                @click="handleImportSchedule(channel)"
-              >Import</el-button>
-            </el-button-group>
 
           </td>
         </tr>
@@ -90,10 +87,9 @@
   </div>
 </template>
 <script>
-import { parseVNTime } from '@/assets/utils/index'
-// import { getStartOfDate, getEndOfDate } from '@/assets/utils/index'
+import { parseVNTime, parseTime } from '@/assets/utils/index'
 import { getStartOfDayInGMT7 } from '@/assets/utils/index'
-// import { FB } from '@/assets/utils/constant'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -113,13 +109,15 @@ export default {
       channelData: null,
       tomorrow: new Date((new Date()).getTime() + (24 * 60 * 60 * 1000)),
       next2Days: new Date((new Date()).getTime() + (2 * 24 * 60 * 60 * 1000))
-
     }
   },
   computed: {
     startOfTodayInGMT7() {
       return getStartOfDayInGMT7(this.today)
-    }
+    },
+    ...mapGetters({
+      scheduleStats: 'scheduleStats'
+    })
   },
   watch: {
     channelList: {
@@ -131,6 +129,15 @@ export default {
     }
   },
   created() {
+    if (this.isAdmin && !this.scheduleStats) {
+      const data = {
+        startTimeFrom: this.startOfToday(),
+        startTimeTo: this.startOfToday() + 3 * 24 * 60 * 60 * 1000
+      }
+      this.$store.dispatch('app/fetchScheduleStats', data).then(res => {
+        this.$store.dispatch('app/setScheduleStats', res)
+      })
+    }
   },
   methods: {
     handleChannelEditClick(row) {
@@ -175,13 +182,13 @@ export default {
         return 'color-danger'
       }
     },
-    isChannelScheduled(channel, date) {
-      const schedules = channel.schedules
-      if (schedules) {
-        const startDateInGMT7 = getStartOfDayInGMT7(date)
-        return schedules.includes(startDateInGMT7)
+    getChannelScheduleTotal(channel, date) {
+      const dateStr = parseTime(date, '{Y}-{m}-{d}')
+      const foundStat = this.scheduleStats.find(item => item.channelId === channel.id && item.date === dateStr)
+      if (foundStat) {
+        return foundStat.total
       } else {
-        return false
+        return null
       }
     },
     handleImportSchedule(channel) {

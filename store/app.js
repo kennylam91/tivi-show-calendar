@@ -29,7 +29,8 @@ export const state = () => ({
   loading: false,
   todayProgramSearchForm: null,
   nextDaysProgramSearchForm: null,
-  categories: null
+  categories: null,
+  scheduleStats: null
 })
 
 export const mutations = {
@@ -83,6 +84,9 @@ export const mutations = {
   },
   SET_CATEGORIES: (state, value) => {
     state.categories = value
+  },
+  SET_SCHEDULE_STATS: (state, value) => {
+    state.scheduleStats = value
   }
 
 }
@@ -150,6 +154,9 @@ export const actions = {
   setNextDaysProgramSearchForm({ commit }, value) {
     commit('SET_NEXTS_DAY_PROGRAM_SEARCH_FORM', value)
   },
+  setScheduleStats({ commit }, value) {
+    commit('SET_SCHEDULE_STATS', value)
+  },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {
       request({
@@ -157,9 +164,17 @@ export const actions = {
         method: 'post',
         data: { page: 1, limit: 999999 }
       }).then(res => {
-        commit('SET_CHANNEL_LIST', res.content)
+        commit('SET_CHANNEL_LIST', res)
         resolve(res)
       })
+    })
+  },
+  // request: {startTimeFrom, startTimeTo}
+  fetchScheduleStats({ commit }, data) {
+    return request({
+      url: '/stats/channels/total-schedules-daily',
+      method: 'post',
+      data
     })
   },
   // request: {channelId, programId, startTime, endTime, orderBy:[field, order], limit}
@@ -214,8 +229,10 @@ export const actions = {
       data
     })
   },
-  // request = {searchName}
+  // request = {searchName, categoryCodes, ranks, isBroadCasting, getStartTimeFrom, getStartTimeTo,
+  // page, limit, sortBy, sortDirection(DESC, ASC)}
   searchProgram({ commit }, data) {
+    data.searchName = (data.searchName || '' + '').toUpperCase()
     return request({
       url: '/programs/search',
       method: 'post',

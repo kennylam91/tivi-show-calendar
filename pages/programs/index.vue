@@ -10,7 +10,7 @@
           type="primary"
           size="small"
           plain
-          @click="handleCreateProgramClick"
+          @click="$router.push({ path: '/programs/create' })"
         >Create Program</el-button>
       </div>
 
@@ -154,9 +154,6 @@ export default {
         [1, 'info']
       ])
       return map.get(value)
-    },
-    handleCreateProgramClick() {
-      this.$router.push({ path: '/programs/create' })
     },
     handleProgramEditClick(row) {
       this.$router.push({ path: `/programs/edit/${row.id}` })

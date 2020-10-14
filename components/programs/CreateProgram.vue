@@ -9,13 +9,23 @@
         <el-input v-model="programData.name" />
       </el-form-item>
       <el-form-item label="EnName">
-        <el-input v-model="programData.enName">
+        <el-input v-model="programData.enName" @blur="checkNameExist">
           <template slot="append">
-            <el-button :disabled="!programData.enName" type="primary" @click="searchProgramOnTheMovieDb">Search</el-button>
+            <el-button
+              :disabled="!programData.enName"
+              type="primary"
+              @click="searchProgramOnTheMovieDb"
+            >Search</el-button>
           </template>
         </el-input>
-        {{ programData.enName }}
+        <div v-if="foundPrograms">
+          <span v-for="(prog) in foundPrograms" :key="prog.id">
+            {{ prog.name }} - {{ prog.enName }}
+          </span>
+          <span v-if="foundPrograms.length === 0">Not found this name</span>
+        </div>
       </el-form-item>
+
       <el-form-item label="Year">
         <el-input v-model="programData.year" />
       </el-form-item>
@@ -71,6 +81,8 @@
       </el-form-item>
 
       <el-form-item label="Logo">
+        <el-input v-model="programData.logo" placeholder="Logo" />
+
         <div class="flex">
           <Upload :picture-prop="programData.logo" @uploaded="handleUploaded" />
           <el-button type="primary" @click="movieImagesDialogVisible = true">Choose Image</el-button>
@@ -92,6 +104,7 @@
       title="Choose logo"
       :visible.sync="movieImagesDialogVisible"
       width="50%"
+      destroy-on-close
     >
       <el-table
         v-if="movieImages"
@@ -117,6 +130,7 @@
       title="Choose trailer"
       :visible.sync="trailerDialogVisible"
       width="70%"
+      destroy-on-close
     >
       <el-table
         height="700"
@@ -173,7 +187,8 @@ export default {
       trailerList: null,
       trailerDialogVisible: false,
       voteAvg: 0,
-      dialogKey: 0
+      dialogKey: 0,
+      foundPrograms: null
     }
   },
   computed: {
@@ -226,6 +241,7 @@ export default {
           rank: 1
         }
         this.dialogKey++
+        this.foundPrograms = null
         this.$emit('saved')
       })
     },
@@ -266,6 +282,14 @@ export default {
       console.log(selectedImage)
       this.programData.logo = selectedImage
     },
+    checkNameExist() {
+      const data = { searchName: this.programData.enName.toUpperCase(), page: 1, limit: 999 }
+      if (this.programData.enName) {
+        this.$store.dispatch('app/searchProgram', data).then(res => {
+          this.foundPrograms = res.content
+        })
+      }
+    },
     searchTrailer() {
       console.log('searchTrailer')
       const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get()
@@ -286,7 +310,7 @@ export default {
               'snippet'
             ],
             'maxResults': 10,
-            'q': getProgramEnTitle(this.programData.name) + ' trailer'
+            'q': getProgramEnTitle(this.programData.enName) + ' trailer'
           }).then(({ result }) => {
             this.trailerList = result.items.map(item => item)
             this.trailerDialogVisible = true

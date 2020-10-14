@@ -14,7 +14,7 @@
 
     <div class="justify-between-align-center mb-2">
       <h5>Import {{ channel.name }} schedule</h5>
-      <el-select v-model="pattern" placeholder="Select pattern" clearable>
+      <el-select v-model="pattern" placeholder="Select pattern" clearable style="width: 135px;">
         <el-option
           v-for="item in patternOptions"
           :key="item.value"
@@ -26,8 +26,16 @@
         v-model="importDate"
         type="date"
         placeholder="Pick a day"
+        style="width: 170px;"
       />
-      <el-button :disabled="convertBtnDisabled" type="primary" size="default" @click="convertData"> Convert</el-button>
+      <el-checkbox v-model="isSearchProgram" label="Search" :indeterminate="false" />
+
+      <el-button
+        :disabled="convertBtnDisabled"
+        type="primary"
+        size="default"
+        @click="convertData"
+      > Convert</el-button>
 
     </div>
     <el-input
@@ -47,11 +55,14 @@
       :channel-prop="channel"
       :draft="true"
     />
-    <el-button
-      type="primary"
-      :disabled="importBtnDisabled"
-      @click="importScheduleList"
-    >Import All</el-button>
+    <div class="justify-between-align-cen">
+      <el-button
+        type="primary"
+        :disabled="importBtnDisabled"
+        @click="importScheduleList"
+      >Import All</el-button>
+      <el-button type="danger" size="medium" @click="reset">Reset</el-button>
+    </div>
   </div>
 </template>
 
@@ -69,9 +80,14 @@ export default {
       scheduleList: [],
       pattern: null,
       patternOptions: [
-        { value: 'en : vi', label: 'en : vi' }
+        { value: 'en : vi', label: 'en : vi' },
+        { value: 'en - vi', label: 'en - vi' },
+        { value: '(en)vi', label: '(en)vi' },
+        { value: 'h:mm:PM en', label: 'h:mm:PM en' },
+        { value: 'arr[t,vi,en]', label: 'arr[t,vi,en]' }
       ],
-      errorLines: []
+      errorLines: [],
+      isSearchProgram: true
     }
   },
   computed: {
@@ -103,91 +119,159 @@ export default {
     validateInput() {
       this.errorLines = []
       const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
-      if (this.pattern === 'en : vi') {
-        dataArray.forEach((element, index) => {
-          if (((element + '').match(/:/g) || []).length > 3) {
-            this.errorLines.push(index + 1)
-          }
-        })
+      if (this.isSearchProgram) {
+        if (this.pattern === 'en : vi') {
+          dataArray.forEach((element, index) => {
+            if (((element + '').match(/:/g) || []).length > 3) {
+              this.errorLines.push(index + 1)
+            }
+          })
+        } else if (this.pattern === 'en - vi') {
+          dataArray.forEach((element, index) => {
+            if (((element + '').match(/-/g) || []).length > 1) {
+              this.errorLines.push(index + 1)
+            }
+          })
+        }
       }
     },
     convertData() {
       // dataArray: du lieu copy vao textarea, se duoc split bang /n
-      const dataArray = this.scheduleInput.trim() ? this.scheduleInput.trim().split('\n') : []
+      if (!this.scheduleInput.trim()) {
+        return
+      }
+      let dataArray = []
+      //       12:55AM
+      // Bad Boys II
+      this.scheduleInput = this.scheduleInput.replaceAll(/NOW SHOWING\s+/g, '')
+      if (this.pattern === 'h:mm:PM en') {
+        const arr = this.scheduleInput.trim().split('\n')
+        for (let i = 0; i < arr.length; i += 2) {
+          dataArray.push(arr[i] + ' ' + arr[i + 1])
+        }
+        this.scheduleInput = dataArray.join('\n')
+      } else if (this.pattern === 'arr[t,vi,en]') {
+        dataArray = this.scheduleInput.replaceAll('"', '').split('],')
+      } else {
+        dataArray = this.scheduleInput.trim().split('\n')
+      }
       const scheduleArr = []
       if (this.importDate) {
-        for (const item of dataArray) {
+        // ["00:20","Người Dưng","Unrelated"  ],
+        // ["02:15","Ngôi Nhà Lớn","Casa Grande"  ],
+        if (this.pattern === 'arr[t,vi,en]') {
+          for (const str of dataArray) {
+            const array = str.replaceAll('[', '').replaceAll(']', '').split(',')
+            const hour = array[0].split(':')[0]
+            const min = array[0].split(':')[1]
+            const en = array[2].trim() ? array[2].trim() : array[1].trim()
+            const vi = array[1].trim()
+            const startTime = this.importDate.setHours(hour, min, 0, 0)
+            const endTime = new Date(startTime)
+            endTime.setHours(24, 0, 0, 0)
+            if (scheduleArr.length > 0) {
+              scheduleArr[scheduleArr.length - 1].endTime = startTime
+            }
+            const newSchedule = {
+              startTime,
+              endTime,
+              programName: vi + ((en && en !== vi) ? (' - ' + en) : ''),
+              channelId: this.channelId,
+              channelName: this.channel.name,
+              programId: null,
+              viName: vi,
+              enName: en
+            }
+            scheduleArr.push(newSchedule)
+          }
+        } else {
+          for (const str of dataArray) {
           // schedule: '00:00	BIẾN ĐI, ÔNG ANH! (GO BROTHER)'
           // array: cac truong du lieu
-          const schedule = item
-            .replace('Phim truyện :', '')
-            .replace('Phim Sitcom : ', '')
-            .replace('Phim Việt Nam:', '')
-            .replace('Phim tài liệu:', '')
-            .replace('Phim hoạt hình:', '')
-            .replace('Ký sự truyền hình:', '')
-            .replace('Phim Ấn Độ:', '')
-            .replace('Phim Thổ Nhĩ Kỳ:', '')
-            .replace('Sitcom:', '')
-            .replace('Phim Đài Loan:', '')
-            .replace('Phim Ukraina:', '')
-            .replace('Phim ngắn:', '')
-            .replace('Phim sitcom:', '')
-          const array = schedule.split(/\s+/)
-          for (let index = 0; index < array.length; index++) {
-            const element = array[index]
-            array[index] = element.replace(/-.*/gi, '')
-          }
-          const startTimeStr = array[0]
-          const timeSplitArr = startTimeStr.split(':')
-          const hour = Number(timeSplitArr[0])
-          const min = Number(timeSplitArr[1])
-          const startTime = this.importDate.setHours(hour, min, 0, 0)
-          const endTime = new Date(startTime)
-          endTime.setHours(24, 0, 0, 0)
+            const item = (str + '').substring(0, 6) +
+          (str + '').substring(6).replaceAll(/:/gi, ' : ').replaceAll(/-/gi, ' - ')
+            const schedule = item
 
-          if (scheduleArr.length > 0) {
-            scheduleArr[scheduleArr.length - 1].endTime = startTime
-          }
-          let vi = ''
-          let en = ''
-          if (this.pattern === 'en : vi') {
+            const array = schedule.split(/\s+/)
+            const startTimeStr = array[0]
+            const timeSplitArr = startTimeStr.split(':')
+            let hour = Number(timeSplitArr[0])
+            const min = Number(timeSplitArr[1].replaceAll(/[A-Z a-z]/g, ''))
+            const isAM = (startTimeStr + '').match(/AM/)
+            const isPM = (startTimeStr + '').match(/PM/)
+            if (hour >= 12 && isAM) {
+              hour -= 12
+            }
+            if (hour < 12 && isPM) {
+              hour += 12
+            }
+            const startTime = this.importDate.setHours(hour, min, 0, 0)
+            const endTime = new Date(startTime)
+            endTime.setHours(24, 0, 0, 0)
+
+            if (scheduleArr.length > 0) {
+              scheduleArr[scheduleArr.length - 1].endTime = startTime
+            }
+            let vi = ''
+            let en = ''
+            let splitIndex
+            if (this.pattern === 'en : vi') {
             // en = array[1] => :
             // vi = : => end
-            const splitIndex = array.indexOf(':')
-
+              splitIndex = array.indexOf(':')
+            } else if (this.pattern === 'en - vi') {
+              splitIndex = array.indexOf('-')
+            }
             if (splitIndex > -1) {
               en = array.slice(1, splitIndex).join(' ')
               vi = array.slice(splitIndex + 1).join(' ')
             } else {
               vi = array.slice(1).join(' ')
             }
-          }
+            if (this.pattern === '(en)vi') {
+              const openChar = item.indexOf('(')
+              const closeChar = item.indexOf(')')
+              en = item.substring(openChar + 1, closeChar)
+              vi = item.substring(closeChar + 1)
+            }
+            if (this.pattern === 'h:mm:PM en') {
+              en = array.slice(1).join(' ')
+            }
 
-          const newSchedule = {
-            startTime,
-            endTime,
-            programName: vi + (en ? (' - ' + en) : ''),
-            channelId: this.channelId,
-            channelName: this.channel.name,
-            programId: null,
-            viName: vi,
-            enName: en
+            const newSchedule = {
+              startTime,
+              endTime,
+              programName: (vi + ((en && en !== vi) ? (' - ' + en) : '')),
+              channelId: this.channelId,
+              channelName: this.channel.name,
+              programId: null,
+              viName: vi,
+              enName: en
+            }
+            scheduleArr.push(newSchedule)
           }
-          scheduleArr.push(newSchedule)
         }
       }
       this.scheduleList = scheduleArr
-      this.scheduleList.forEach(schedule => {
-        this.$store.dispatch('app/searchProgram', { searchName: schedule.enName }).then(res => {
-          if (res.content && res.content.length === 1) {
-            schedule.programId = res.content[0].id
-            schedule.programName = res.content[0].name + ' - ' + res.content[0].enName
-          } else if (res.content && res.content.length > 1) {
-            this.$set(schedule, 'programOptions', res.content)
+      if (this.isSearchProgram) {
+        this.scheduleList.forEach(schedule => {
+          if (schedule.enName) {
+            this.$store.dispatch('app/searchProgram', { searchName: schedule.enName.toUpperCase() }).then(res => {
+              if (res.content && res.content.length === 1) {
+                schedule.programId = res.content[0].id
+                schedule.programName = res.content[0].name + ' - ' + res.content[0].enName
+              } else if (res.content && res.content.length > 1) {
+                this.$set(schedule, 'programOptions', res.content)
+              }
+            })
           }
         })
-      })
+      }
+    },
+    reset() {
+      this.scheduleInput = ''
+      this.importDate = null
+      this.scheduleList = []
     },
     importScheduleList() {
       this.$store.dispatch('app/setLoading', true)

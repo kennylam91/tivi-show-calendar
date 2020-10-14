@@ -43,6 +43,7 @@ export default {
     '@/plugins/filters',
     '@/plugins/mixins',
     { src: '@/plugins/vue-lazyload', mode: 'client' },
+    { src: '@/plugins/read-more', mode: 'client' },
     { src: '@/plugins/gg-calendar', mode: 'client' }
   ],
   /*
@@ -54,7 +55,6 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    'bootstrap-vue/nuxt'
   ],
   /*
   ** Build configuon
