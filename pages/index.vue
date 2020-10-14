@@ -18,12 +18,12 @@
 
     <client-only>
 
-      <article v-if="noonProgramList" class="py-2">
+      <article v-if="todayNoonProgramData" class="py-2">
         <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_NOON }}      </h4>
         <el-divider class="mt-4 mb-2" />
         <div class="row mt-2">
           <div
-            v-for="program in noonProgramList"
+            v-for="program in todayNoonProgramData"
             :key="program.id"
             class="col-md-3 col-6 px-1 my-2"
           >
@@ -32,12 +32,12 @@
         </div>
       </article>
 
-      <article v-if="eveningProgramList" class="py-2">
+      <article v-if="tonightProgramData" class="py-2">
         <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_EVENING }}      </h4>
         <el-divider class="mt-4 mb-2" />
         <div class="row mt-2">
           <div
-            v-for="program in eveningProgramList"
+            v-for="program in tonightProgramData"
             :key="program.id"
             class="col-md-3 col-6 px-1 my-2"
           >
@@ -56,7 +56,7 @@
       </h4>
       <div class="row mt-2">
         <div
-          v-for="program in onGoingTodayProgramList"
+          v-for="program in broadCastingProgramData"
           :key="program.id"
           class="col-md-3 col-6 my-2 px-1"
         >
@@ -74,7 +74,7 @@
       <el-divider class="mt-4 mb-2" />
       <div class="row mt-2">
         <div
-          v-for="program in nextDaysVipProgramList"
+          v-for="program in nextDayProgramData"
           :key="program.id"
           class="col-md-3 col-6 px-1 my-2"
         >
@@ -128,27 +128,37 @@ export default {
   components: { Program },
   data() {
     return {
-      onGoingTodayProgramList: null,
-      nextDaysVipProgramList: null,
+      broadCastingProgramData: null,
+      nextDayProgramData: null,
       broadCastingPrograms: null,
-      noonProgramList: null,
-      eveningProgramList: null
+      todayNoonProgramData: null,
+      tonightProgramData: null
     }
   },
   computed: {
     ...mapGetters({
       channelList: 'channelList',
-      vipChannelList: 'vipChannelList'
+      vipChannelList: 'vipChannelList',
+      todayNoonProgramList: 'todayNoonProgramList',
+      toNightProgramList: 'toNightProgramList',
+      nextDaysVipProgramList: 'nextDaysVipProgramList',
+      broadCastingProgramList: 'broadCastingProgramList'
     })
   },
   watch: {
   },
   created() {
     const baseQuery = { limit: 8, page: 1, sortBy: 'rank', sortDirection: 'DESC' }
-    this.$store.dispatch('app/fetchTodayPrograms',
-      { isBroadCasting: true, ...baseQuery }).then(res => {
-      this.broadCastingPrograms = res.content
-    })
+    if (this.broadCastingProgramList) {
+      this.broadCastingProgramData = this.broadCastingProgramList
+    } else {
+      this.$store.dispatch('app/fetchTodayPrograms',
+        { isBroadCasting: true, ...baseQuery }).then(res => {
+        this.broadCastingPrograms = res
+        this.$store.dispatch('app/setBroadCastingProgramList', res)
+      })
+    }
+
     const now = new Date()
     const time11h = (new Date()).setHours(11, 0, 0, 0)
     const time13h = (new Date()).setHours(13, 0, 0, 0)
@@ -158,22 +168,37 @@ export default {
     const startNextDay = time24h
     const endNextDay = time24h + 24 * 60 * 60 * 1000
     if (now < time11h) {
-      this.$store.dispatch('app/fetchTodayPrograms',
-        { startTimeFrom: now < time11h ? time11h : now, startTimeTo: time13h, ...baseQuery }).then(res => {
-        this.noonProgramList = res.content
-      })
+      if (this.todayNoonProgramList) {
+        this.todayNoonProgramData = this.todayNoonProgramList
+      } else {
+        this.$store.dispatch('app/fetchTodayPrograms',
+          { startTimeFrom: now < time11h ? time11h : now, startTimeTo: time13h }).then(res => {
+          this.todayNoonProgramData = res
+          this.$store.dispatch('app/setTodayNoonProgramList', res)
+        })
+      }
     }
     if (now < time22h) {
-      this.$store.dispatch('app/fetchTodayPrograms',
-        { startTimeFrom: now < time19h ? time19h : now, startTimeTo: time24h, ...baseQuery }).then(res => {
-        this.eveningProgramList = res.content
+      if (this.toNightProgramList) {
+        this.tonightProgramData = this.toNightProgramList
+      } else {
+        this.$store.dispatch('app/fetchTodayPrograms',
+          { startTimeFrom: now < time19h ? time19h : now, startTimeTo: time24h }).then(res => {
+          this.tonightProgramData = res
+          this.$store.dispatch('app/setTonightProgramList', res)
+        })
+      }
+    }
+    if (this.nextDaysVipProgramList) {
+      this.nextDayProgramData = this.nextDaysVipProgramList
+    } else {
+      this.$store.dispatch('app/fetchTomorrowPrograms',
+        { ...baseQuery, startTimeFrom: startNextDay,
+          startTimeTo: endNextDay }).then(res => {
+        this.nextDayProgramData = res
+        this.$store.dispatch('app/setNextDaysVipProgramList', res)
       })
     }
-    this.$store.dispatch('app/fetchTomorrowPrograms',
-      { ...baseQuery, startTimeFrom: startNextDay,
-        startTimeTo: endNextDay }).then(res => {
-      this.nextDaysVipProgramList = res.content
-    })
   },
   methods: {
     getFourOrEightPrograms(programList) {

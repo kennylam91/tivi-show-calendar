@@ -11,8 +11,10 @@ export const state = () => ({
   channelList: null,
   scheduleList: null,
   programList: null,
-  todayVipProgramList: null,
+  todayNoonProgramList: null,
+  toNightProgramList: null,
   todayProgramList: null,
+  broadCastingProgramList: null,
   nextDaysVipProgramList: null,
   nextDaysProgramList: null,
   todayScheduleList: null,
@@ -43,11 +45,17 @@ export const mutations = {
   SET_PROGRAM_LIST: (state, value) => {
     state.programList = value
   },
-  SET_TODAY_VIP_PROGRAM_LIST: (state, value) => {
-    state.todayVipProgramList = value
+  SET_TODAY_NOON_PROGRAM_LIST: (state, value) => {
+    state.todayNoonProgramList = value
+  },
+  SET_TONIGHT_PROGRAM_LIST: (state, value) => {
+    state.toNightProgramList = value
   },
   SET_NEXT_DAYS_VIP_PROGRAM_LIST: (state, value) => {
     state.nextDaysVipProgramList = value
+  },
+  SET_BROAD_CASTING_PROGRAM_LIST: (state, value) => {
+    state.broadCastingProgramList = value
   },
   SET_TODAY_PROGRAM_LIST: (state, value) => {
     state.todayProgramList = value
@@ -115,11 +123,17 @@ export const actions = {
   setProgramList({ commit }, value) {
     commit('SET_PROGRAM_LIST', value)
   },
-  setTodayVipProgramList({ commit }, value) {
-    commit('SET_TODAY_VIP_PROGRAM_LIST', value)
+  setTodayNoonProgramList({ commit }, value) {
+    commit('SET_TODAY_NOON_PROGRAM_LIST', value)
+  },
+  setTonightProgramList({ commit }, value) {
+    commit('SET_TONIGHT_PROGRAM_LIST', value)
   },
   setNextDaysVipProgramList({ commit }, value) {
     commit('SET_NEXT_DAYS_VIP_PROGRAM_LIST', value)
+  },
+  setBroadCastingProgramList({ commit }, value) {
+    commit('SET_BROAD_CASTING_PROGRAM_LIST', value)
   },
   setTodayProgramList({ commit }, value) {
     commit('SET_TODAY_PROGRAM_LIST', value)
