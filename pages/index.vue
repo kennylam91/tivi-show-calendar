@@ -147,7 +147,7 @@ export default {
   },
   watch: {
   },
-  created() {
+  mounted() {
     const baseQuery = { limit: 8, page: 1, sortBy: 'rank', sortDirection: 'DESC' }
     if (this.broadCastingProgramList) {
       this.broadCastingProgramData = this.broadCastingProgramList
