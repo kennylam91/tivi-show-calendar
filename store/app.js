@@ -301,6 +301,12 @@ export const actions = {
       })
     })
   },
+  logHomepage({ commit }) {
+    return request({
+      url: '/homepage',
+      method: 'get'
+    })
+  },
   /*
   @params: query:{movieTitle, }
   */

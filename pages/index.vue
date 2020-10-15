@@ -199,6 +199,9 @@ export default {
         this.$store.dispatch('app/setNextDaysVipProgramList', res)
       })
     }
+    setTimeout(() => {
+      this.$store.dispatch('app/logHomepage')
+    }, 2000)
   },
   methods: {
     getFourOrEightPrograms(programList) {
