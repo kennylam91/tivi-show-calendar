@@ -6,7 +6,7 @@ import { trimObject } from '@/assets/utils'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: 'https://truyenhinh24h-backend.herokuapp.com/rest/v1', // url = base url + request url
+  baseURL: process.env.BASE_URL || 'https://truyenhinh24h-backend.herokuapp.com/rest/v1', // url = base url + request url
   // baseURL: 'http://localhost:8080/rest/v1',
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 20000 // request timeout
