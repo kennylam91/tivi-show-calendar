@@ -14,7 +14,13 @@
         >Create Program</el-button>
       </div>
 
-      <ProgramSearchForm :data-prop="programSearchQuery" @search="filterProgramList" @clear="handleClear" />
+      <ProgramSearchForm
+        :data-prop="programSearchQuery"
+        :is-show-search-by-time="false"
+        :clear="true"
+        @search="filterProgramList"
+        @clear="handleClear"
+      />
       <el-button
         v-if="selectedPrograms.length > 0"
         type="danger"
@@ -28,6 +34,7 @@
         :data="tableData"
         border
         stripe
+        size="small"
         @selection-change="handleSelectionChange"
       >
         <el-table-column
@@ -38,7 +45,7 @@
         <el-table-column
           prop="name"
           :label="COMMON.PROGRAM_NAME"
-          min-width="40"
+          min-width="35"
         />
         <el-table-column
           :label="COMMON.RANK"
@@ -54,7 +61,7 @@
         </el-table-column>
         <el-table-column
           :label="COMMON.CATEGORY"
-          min-width="27"
+          min-width="32"
         >
           <template slot-scope="{row}">
             <div v-if="row.categories">

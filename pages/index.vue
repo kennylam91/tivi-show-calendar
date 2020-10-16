@@ -45,9 +45,8 @@
           </div>
         </div>
       </article>
-    </client-only>
 
-    <!-- <article class="py-2">
+      <!-- <article class="py-2">
       <h4>
         <nuxt-link to="/chuong-trinh-hom-nay" class="color-dark-blue">
           {{ COMMON.VIP_INCOMING_PROGRAM | uppercaseFirst }}
@@ -65,23 +64,24 @@
       </div>
     </article> -->
 
-    <article class="py-2">
-      <h4>
-        <nuxt-link to="/chuong-trinh-sap-chieu" class="color-dark-blue">
-          {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseFirst }}
-        </nuxt-link>
-      </h4>
-      <el-divider class="mt-4 mb-2" />
-      <div class="row mt-2">
-        <div
-          v-for="program in nextDayProgramData"
-          :key="program.id"
-          class="col-md-3 col-6 px-1 my-2"
-        >
-          <Program :program="program" />
+      <article class="py-2">
+        <h4>
+          <nuxt-link to="/chuong-trinh-sap-chieu" class="color-dark-blue">
+            {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseFirst }}
+          </nuxt-link>
+        </h4>
+        <el-divider class="mt-4 mb-2" />
+        <div class="row mt-2">
+          <div
+            v-for="program in nextDayProgramData"
+            :key="program.id"
+            class="col-md-3 col-6 px-1 my-2"
+          >
+            <Program :program="program" />
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </client-only>
 
     <article class="py-2">
       <h4>
@@ -147,7 +147,7 @@ export default {
   },
   watch: {
   },
-  created() {
+  mounted() {
     const baseQuery = { limit: 8, page: 1, sortBy: 'rank', sortDirection: 'DESC' }
     if (this.broadCastingProgramList) {
       this.broadCastingProgramData = this.broadCastingProgramList
@@ -198,6 +198,9 @@ export default {
         this.nextDayProgramData = res
         this.$store.dispatch('app/setNextDaysVipProgramList', res)
       })
+      setTimeout(() => {
+        this.$store.dispatch('app/logHomepage')
+      }, 2000)
     }
   },
   methods: {

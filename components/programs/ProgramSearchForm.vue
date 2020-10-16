@@ -3,10 +3,9 @@
     <el-form
       ref="programSearchForm"
       size="small"
-      :inline="true"
       :model="programSearchForm"
-      class="m-2"
-      label-width="80px"
+      class="m-2 d-flex"
+      label-width="75px"
     >
       <el-form-item :label="COMMON.SEARCH">
         <el-input
@@ -16,23 +15,6 @@
           @change="searchProgram"
         />
       </el-form-item>
-      <!-- <el-form-item :label="COMMON.CHANNEL">
-        <el-select
-          v-model="programSearchForm.channels"
-          multiple
-          class="searchFormItem"
-          size="small"
-          :placeholder="COMMON.SELECT_CHANNEL"
-          @change="searchProgram"
-        >
-          <el-option
-            v-for="channel in vipChannelList"
-            :key="channel.id"
-            :label="channel.name"
-            :value="channel.id"
-          />
-        </el-select>
-      </el-form-item> -->
       <el-form-item :label="COMMON.RANK">
         <el-select
           v-model="programSearchForm.ranks"
@@ -67,7 +49,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="COMMON.TIME">
+      <!-- <el-form-item v-if="isShowSearchByTime" :label="COMMON.TIME">
         <el-time-select
           v-model="programSearchForm.startTime"
           :placeholder="COMMON.START"
@@ -90,7 +72,7 @@
           }"
         />
 
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item v-if="clearBtnShow">
         <el-tooltip
           slot="label"
@@ -129,6 +111,11 @@ export default {
       required: false,
       type: Object,
       default: () => null
+    },
+    isShowSearchByTime: {
+      required: false,
+      type: Boolean,
+      default: () => true
     }
   },
   data() {
@@ -159,9 +146,8 @@ export default {
     },
     isSearching() {
       return this.programSearchForm.searchName ||
-      this.programSearchForm.channels.length > 0 ||
-      this.programSearchForm.categories.length > 0 ||
-      this.programSearchForm.ranks.length > 0
+      this.programSearchForm.categoryCodes && this.programSearchForm.categoryCodes.length > 0 ||
+      this.programSearchForm.ranks && this.programSearchForm.ranks.length > 0
     },
     startTime() {
       return this.programSearchForm.startTime
