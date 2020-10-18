@@ -1,24 +1,29 @@
 <template>
   <div>
     <el-form
+      id="programSearchForm"
       ref="programSearchForm"
       size="small"
       :model="programSearchForm"
-      class="m-2 d-flex"
+      class="m-2 w-90"
+      :class="{'d-flex': isAdmin}"
       label-width="75px"
+      align="left"
     >
       <el-form-item :label="COMMON.SEARCH">
         <el-input
+          ref="searchName"
           v-model="programSearchForm.searchName"
-          class="searchFormItem"
+          class=""
           :placeholder="COMMON.INPUT_PROGRAM_NAME"
+          clearable
           @change="searchProgram"
         />
       </el-form-item>
       <el-form-item :label="COMMON.RANK">
         <el-select
           v-model="programSearchForm.ranks"
-          class="searchFormItem"
+          class="w-100"
           multiple
           size="small"
           :placeholder="COMMON.RANK"
@@ -35,14 +40,14 @@
       <el-form-item :label="COMMON.CATEGORY">
         <el-select
           v-model="programSearchForm.categoryCodes"
-          class="searchFormItem"
+          class="w-100"
           multiple
           size="small"
           :placeholder="COMMON.SELECT_CATEGORY"
           @change="searchProgram"
         >
           <el-option
-            v-for="item in categories"
+            v-for="item in categoryOptions"
             :key="item.code"
             :label="item.name"
             :value="item.code"
@@ -98,6 +103,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { ProgramSearchForm } from '@/assets/utils/index'
 import { programRankOptions } from '@/assets/utils/constant'
 
 export default {
@@ -108,28 +114,24 @@ export default {
       default: () => true
     },
     dataProp: {
-      required: false,
-      type: Object,
-      default: () => null
+      required: true,
+      type: Object
     },
     isShowSearchByTime: {
       required: false,
       type: Boolean,
       default: () => true
+    },
+    isAdmin: {
+      required: false,
+      type: Boolean,
+      default: () => false
     }
   },
   data() {
     return {
-      programSearchForm: {
-        searchName: '',
-        channels: [],
-        categories: [],
-        ranks: [],
-        startTime: null,
-        endTime: null
-      },
+      programSearchForm: null,
       programRankOptions
-
     }
   },
   computed: {
@@ -146,15 +148,20 @@ export default {
     },
     isSearching() {
       return this.programSearchForm.searchName ||
-      this.programSearchForm.categoryCodes && this.programSearchForm.categoryCodes.length > 0 ||
-      this.programSearchForm.ranks && this.programSearchForm.ranks.length > 0
+      this.programSearchForm.categoryCodes.length > 0 ||
+      this.programSearchForm.ranks.length > 0
     },
-    startTime() {
-      return this.programSearchForm.startTime
-    },
-    endTime() {
-      return this.programSearchForm.endTime
+    categoryOptions() {
+      return this.categories &&
+        this.categories.filter(i => [1, 11, 12, 13, 14, 16, 17, 22, 36].includes(i.code)) || []
     }
+
+    // startTime() {
+    //   return this.programSearchForm.startTime
+    // },
+    // endTime() {
+    //   return this.programSearchForm.endTime
+    // }
   },
   watch: {
     dataProp: {
@@ -162,7 +169,10 @@ export default {
       deep: true,
       handler() {
         if (this.dataProp) {
-          this.programSearchForm = { ...this.dataProp }
+          this.programSearchForm = new ProgramSearchForm()
+          this.programSearchForm.searchName = this.dataProp.searchName
+          this.programSearchForm.categoryCodes = [...this.dataProp.categoryCodes]
+          this.programSearchForm.ranks = [...this.dataProp.ranks]
         }
       }
     },
@@ -178,8 +188,14 @@ export default {
       this.$store.dispatch('app/fetchCategories', {})
     }
   },
+  mounted() {
+    setTimeout(() => {
+      this.$refs.searchName.focus()
+    }, 200)
+  },
   methods: {
     searchProgram() {
+      debugger
       this.$emit('search', this.programSearchForm)
     },
     clearSearchingForm() {
@@ -193,3 +209,8 @@ export default {
   }
 }
 </script>
+<style>
+#programSearchForm .el-select__tags{
+  max-width: 100% !important;
+}
+</style>

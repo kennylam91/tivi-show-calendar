@@ -151,58 +151,9 @@ Vue.mixin({
       }
       return finalArr
     },
-    filterByCategory(program, programSearchForm) {
-      if (programSearchForm) {
-        if (programSearchForm.categories.length > 0) {
-          return this.isTwoArrayHaveSameElement(program.categories, programSearchForm.categories)
-        }
-      }
-      return true
-    },
-    filterByChannel(program, programSearchForm) {
-      if (programSearchForm) {
-        if (programSearchForm.channels.length > 0) {
-          return this.isTwoArrayHaveSameElement(program.channels, programSearchForm.channels)
-        }
-      }
-      return true
-    },
-    filterByRank(program, programSearchForm) {
-      if (programSearchForm) {
-        if (programSearchForm.ranks.length > 0) {
-          return this.isTwoArrayHaveSameElement([program.rank], programSearchForm.ranks)
-        }
-      }
-      return true
-    },
-    filterByName(program, programSearchForm) {
-      if (programSearchForm) {
-        if (programSearchForm.name) {
-          return program.name.toLowerCase().includes(programSearchForm.name.toLowerCase())
-        }
-      }
-      return true
-    },
-    isTwoArrayHaveSameElement(first, second) {
-      if (!first || !second) {
-        return false
-      } else {
-        if (!first.length || !second.length) {
-          return false
-        } else {
-          for (const i of first) {
-            for (const j of second) {
-              if (i === j) {
-                return true
-              }
-            }
-          }
-          return false
-        }
-      }
-    },
+
     isMovie(program) {
-      const cats = program.categories
+      const cats = program.categoryCodes
       if (!cats) {
         return false
       }
@@ -210,7 +161,7 @@ Vue.mixin({
       cats.includes(25) || cats.includes(26) || cats.includes(27)
     },
     isSciExp(program) {
-      const cats = program.categories
+      const cats = program.categoryCodes
       if (!cats) {
         return false
       }

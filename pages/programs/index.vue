@@ -14,11 +14,12 @@
         >Create Program</el-button>
       </div>
 
-      <ProgramSearchForm
+      <ProgramSearchFormComp
         :data-prop="programSearchQuery"
         :is-show-search-by-time="false"
         :clear="true"
-        @search="filterProgramList"
+        :is-admin="true"
+        @search="fetchProgramList"
         @clear="handleClear"
       />
       <el-button
@@ -43,14 +44,17 @@
           width="60"
         />
         <el-table-column
-          prop="name"
           :label="COMMON.PROGRAM_NAME"
-          min-width="35"
-        />
+          min-width="38"
+        >
+          <template slot-scope="{row}">
+            {{ row.name }} - {{ row.enName }}
+          </template>
+        </el-table-column>
         <el-table-column
           :label="COMMON.RANK"
           align="center"
-          min-width="13"
+          min-width="10"
         >
           <template slot-scope="{row}">
             <el-tag v-if="row.rank" size="small" effect="dark" :type="getRankTagType(row.rank)">
@@ -110,12 +114,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import { programRankMap, programRankOptions } from '@/assets/utils/constant'
-import ProgramSearchForm from '@/components/programs/ProgramSearchForm'
+import ProgramSearchFormComp from '@/components/programs/ProgramSearchForm'
 import paginationMixin from '@/components/mixins/pagination-mixin'
+import { ProgramSearchForm } from '@/assets/utils/index'
 
 export default {
   middleware: 'auth',
-  components: { ProgramSearchForm },
+  components: { ProgramSearchFormComp },
   filters: {
     getRankLabel(value) {
       if (value) {
@@ -135,9 +140,7 @@ export default {
       programTableKey: 0,
       programRankOptions,
       loading: false,
-      selectedPrograms: [],
-      searchForm: null
-
+      selectedPrograms: []
     }
   },
   computed: {
@@ -150,7 +153,6 @@ export default {
   },
   created() {
     // this.listQuery.name = this.$route.query.q
-    this.searchForm = { page: this.page, limit: this.limit }
     this.fetchProgramList()
   },
   methods: {
@@ -184,18 +186,19 @@ export default {
         this.fetchProgramList()
       })
     },
-    filterProgramList(value) {
-      this.searchForm = value
-      this.fetchProgramList()
-    },
     onPaginationChange() {
       this.searchForm.page = this.page
       this.searchForm.limit = this.limit
       this.fetchProgramList()
     },
-    fetchProgramList() {
+    fetchProgramList(form) {
+      debugger
       this.loading = true
-      this.$store.dispatch('app/searchProgram', this.searchForm).then(res => {
+      if (form) {
+        this.$store.dispatch('app/setProgramSearchQuery', form)
+      }
+
+      this.$store.dispatch('app/searchProgram', this.programSearchQuery).then(res => {
         this.tableData = res.content
         this.totalItems = res.totalElements
       }).finally(() => {
@@ -203,7 +206,7 @@ export default {
       })
     },
     handleClear() {
-      this.programListData = this.programList
+      this.$store.dispatch('app/setProgramSearchQuery', new ProgramSearchForm())
     },
     handleSelectionChange(val) {
       this.selectedPrograms = val

@@ -67,7 +67,7 @@ export const COMMON = {
   NEXT_DAYS_SHOW_NUM: 3,
   PAGE_TITLE: 'Truyền hình 24h',
   PROGRAM_SCHEDULE_NEXT_DAYS: 'Lịch phát sóng thời gian tới',
-  CLEAR_SEARCH: 'Hủy tìm kiếm',
+  CLEAR_SEARCH: 'Hủy',
   PROGRAM_LIST: 'Danh sách chương trình',
   ALL_CHANNEL: 'Tất cả kênh',
   ALL: 'Tất cả',
@@ -98,17 +98,19 @@ export const COMMON = {
 
 }
 export const programRankOptions = [
-  { label: 'Đặc biệt', value: 4, text: 'Đặc biệt' },
-  { label: 'Tốt', value: 3, text: 'Tốt' },
-  { label: 'Khá', value: 2, text: 'Khá' },
-  { label: 'Bình thường', value: 1, text: 'Bình thường' }
+  { label: '5 Sao', value: 5, text: '5 Sao' },
+  { label: '4 Sao', value: 4, text: '4 Sao' },
+  { label: '3 Sao', value: 3, text: '3 Sao' },
+  { label: '2 Sao', value: 2, text: '2 Sao' },
+  { label: '1 Sao', value: 1, text: '1 Sao' }
 ]
 
 export const programRankMap = new Map([
-  [1, 'Bình thường'],
-  [2, 'Khá'],
-  [3, 'Tốt'],
-  [4, 'Đặc biệt']
+  [1, '1 Sao'],
+  [2, '2 Sao'],
+  [3, '3 Sao'],
+  [4, '4 Sao'],
+  [5, '5 Sao']
 ])
 
 export const categoryMap = new Map([

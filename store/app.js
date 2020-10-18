@@ -4,8 +4,7 @@
 import axios from 'axios'
 import { THE_MOVIE_DB } from '../assets/utils/constant'
 import request from '@/assets/utils/request'
-
-// import { ProgramSearchForm } from '@/assets/model/ProgramSearchForm'
+import { ProgramSearchForm } from '@/assets/utils/index'
 
 export const state = () => ({
   channelList: null,
@@ -22,15 +21,10 @@ export const state = () => ({
   fromTodayProgramList: null,
   fromNowInDayProgramList: null,
   fromNowInDayScheduleList: null,
-  programSearchQuery: {
-    name: '',
-    channels: [],
-    categories: [],
-    ranks: []
-  },
+  programSearchQuery: new ProgramSearchForm(),
   loading: false,
-  todayProgramSearchForm: null,
-  nextDaysProgramSearchForm: null,
+  todayProgramSearchForm: new ProgramSearchForm(),
+  nextDaysProgramSearchForm: new ProgramSearchForm(),
   categories: null,
   scheduleStats: null
 })
@@ -203,7 +197,8 @@ export const actions = {
     return request({
       url: '/schedules/import',
       method: 'post',
-      data: data
+      data: data,
+      timeout: 30000
     })
   },
   createOrUpdateSchedule({ commit }, schedule) {
@@ -246,11 +241,11 @@ export const actions = {
   // request = {searchName, categoryCodes, ranks, isBroadCasting, getStartTimeFrom, getStartTimeTo,
   // page, limit, sortBy, sortDirection(DESC, ASC)}
   searchProgram({ commit }, data) {
-    data.searchName = (data.searchName || '' + '').toUpperCase()
+    const formattedData = { ...data, searchName: (data.searchName || '' + '').toUpperCase() }
     return request({
       url: '/programs/search',
       method: 'post',
-      data
+      data: formattedData
     })
   },
   fetchTodayPrograms({ commit }, data) {

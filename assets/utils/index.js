@@ -1,4 +1,4 @@
-import { COMMON } from './constant.js'
+import { COMMON, programRankMap, categoryMap } from './constant.js'
 
 /**
  * Parse Time to any format
@@ -241,11 +241,13 @@ export const getProgramNameFromMovieTitle = (movie) => {
 }
 
 export const getRankFromVoteAvg = (voteAvg) => {
-  if (voteAvg >= 8.5) {
-    return 4
+  if (voteAvg >= 8) {
+    return 5
   } else if (voteAvg >= 7) {
+    return 4
+  } else if (voteAvg >= 6) {
     return 3
-  } else if (voteAvg >= 5.5) {
+  } else if (voteAvg >= 5) {
     return 2
   } else {
     return 1
@@ -271,3 +273,128 @@ export const mapGenre = (genre) => {
 export const getEmbedLinkFromYoutubeVideoId = (videoId) => {
   return `<iframe width="1280" height="720" src="https://www.youtube.com/embed/` + videoId + `" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
 }
+
+/**
+* @param {Program} program
+* @param  {ProgramSearchForm } programSearchForm
+*/
+export function filterByName(program, programSearchForm) {
+  if (programSearchForm && programSearchForm.searchName) {
+    return program.name.includes(programSearchForm.searchName.toUpperCase()) ||
+     program.enName.includes(programSearchForm.searchName.toUpperCase())
+  }
+  return true
+}
+/**
+* @param {Program} program
+* @param  {ProgramSearchForm } programSearchForm
+*/
+export function filterByCategory(program, programSearchForm) {
+  if (programSearchForm && programSearchForm.categoryCodes.length > 0) {
+    return isTwoArrayHaveSameElement(program.categoryCodes, programSearchForm.categoryCodes)
+  }
+  return true
+}
+/**
+* @param {Program} program
+* @param  {ProgramSearchForm } programSearchForm
+*/
+export function filterByRank(program, programSearchForm) {
+  if (programSearchForm && programSearchForm.ranks.length > 0) {
+    return isTwoArrayHaveSameElement([program.rank], programSearchForm.ranks)
+  }
+  return true
+}
+
+/**
+ * convert to String Filter
+ * @param {ProgramSearchForm} searchForm
+ * @returns {string[]}
+ */
+export function getFilterDesc(searchForm) {
+  if (!searchForm) {
+    return []
+  }
+  const resultArr = []
+  const fields = Object.keys(searchForm)
+  fields.forEach(field => {
+    const fieldValue = searchForm[field]
+    if (field === 'searchName' && fieldValue) {
+      resultArr.push(new ProgramFilter(field, fieldValue, 'Tên: ' + fieldValue))
+    } else if (field === 'ranks' && fieldValue && fieldValue.length > 0) {
+      fieldValue.forEach(rank => {
+        resultArr.push(new ProgramFilter(field, rank, 'Đánh giá: ' + programRankMap.get(rank)))
+      })
+    } else if (field === 'categoryCodes' && fieldValue && fieldValue.length > 0) {
+      fieldValue.forEach(cat => {
+        resultArr.push(new ProgramFilter(field, cat, 'Thể loại: ' + categoryMap.get(cat)))
+      })
+    }
+  })
+  return resultArr
+}
+
+class ProgramFilter {
+  constructor(field, fieldValue, tagName) {
+    this.field = field
+    this.fieldValue = fieldValue
+    this.tagName = tagName
+  }
+}
+
+function isTwoArrayHaveSameElement(first, second) {
+  if (!first || !second) {
+    return false
+  } else {
+    if (!first.length || !second.length) {
+      return false
+    } else {
+      for (const i of first) {
+        for (const j of second) {
+          if (i === j) {
+            return true
+          }
+        }
+      }
+      return false
+    }
+  }
+}
+
+export class ProgramSearchForm {
+  constructor() {
+    this.searchName = ''
+    this.categoryCodes = []
+    this.ranks = []
+    this.startTime = null
+    this.endTime = null
+  }
+}
+export class Program {
+  constructor() {
+    this.id = null
+    this.name = null
+    this.description = null
+    this.channels = []
+    this.categories = []
+    this.logo = null
+    this.rank = 1
+    this.schedules = []
+    this.year = null
+  }
+  // get instance object from firebase document
+  static getInstanceFromDoc(doc) {
+    return {
+      id: doc.id,
+      name: doc.data().name,
+      description: doc.data().description,
+      channels: doc.data().channels,
+      categories: doc.data().categories,
+      logo: doc.data().logo,
+      rank: doc.data().rank,
+      schedules: doc.data().schedules,
+      year: doc.data().year
+    }
+  }
+}
+
