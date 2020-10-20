@@ -397,4 +397,175 @@ export class Program {
     }
   }
 }
+export class ScheduleModel {
+  constructor() {
+    this.startTime = new Date()
+    this.endTime = new Date()
+    this.programName = ''
+    this.channelId = 0
+    this.channelName = ''
+    this.viName = ''
+    this.enName = ''
+  }
+}
+/**
+ *
+ * @param {string} pattern
+ * @param {string} scheduleInput
+ * @param {Object} importDate
+ * @param {Object} channel
+ * @returns {ScheduleModel}
+ */
+export function getScheduleArray(pattern, scheduleInput, importDate, channel) {
+  let dataArray = []
+  scheduleInput = scheduleInput.replaceAll(/NOW SHOWING\s+/g, '')
+  if (pattern === 'h:mm:PM en') {
+    const arr = scheduleInput.trim().split('\n')
+    for (let i = 0; i < arr.length; i += 2) {
+      dataArray.push(arr[i] + ' ' + arr[i + 1])
+    }
+    scheduleInput = dataArray.join('\n')
+  } else if (pattern === 'arr[t,vi,en]') {
+    dataArray = scheduleInput.replaceAll('"', '').split('],')
+  } else {
+    dataArray = scheduleInput.trim().split('\n')
+  }
+  const scheduleArr = []
+  // ["02:15","Ngôi Nhà Lớn","Casa Grande"  ],
+  if (pattern === 'arr[t,vi,en]') {
+    for (const str of dataArray) {
+      const array = str.replaceAll('[', '').replaceAll(']', '').split(',')
+      const hour = array[0].split(':')[0]
+      const min = array[0].split(':')[1]
+      const en = array[2].trim() ? array[2].trim() : array[1].trim()
+      const vi = array[1].trim()
+      const startTime = importDate.setHours(hour, min, 0, 0)
+      const endTime = new Date(startTime)
+      endTime.setHours(24, 0, 0, 0)
+      if (scheduleArr.length > 0) {
+        scheduleArr[scheduleArr.length - 1].endTime = startTime
+      }
+      const newSchedule = {
+        startTime, endTime, programName: vi + ((en && en !== vi) ? (' - ' + en) : ''),
+        channelId: channel.id, channelName: channel.name, programId: null,
+        viName: vi, enName: en
+      }
+      scheduleArr.push(newSchedule)
+    }
+  } else if (pattern === 'vtv html') {
+    const doc = new DOMParser().parseFromString(scheduleInput, 'text/xml')
+    const docTimes = doc.getElementsByClassName('time')
+    const docPrograms = doc.getElementsByTagName('p')
+    const timeArr = Array.from(docTimes).map(item => item.innerHTML)
+    const programArr = Array.from(docPrograms).map(item => {
+      const childArr = item.childNodes
+      let program
+      if (childArr[1].textContent.trim().replaceAll(/[\s]{2,}/g, ' ')) {
+        program = childArr[0].textContent + ' : ' + childArr[1].textContent
+      } else {
+        program = childArr[0].textContent
+      }
+      return program.trim().replaceAll(/[\s]{2,}/g, ' ')
+    })
+    for (let i = 0; i < timeArr.length; i++) {
+      const time = timeArr[i]
+      const { hour, min } = getStartTimeFromString(time)
+      const startTime = importDate.setHours(hour, min, 0, 0)
+      const endTime = new Date(startTime)
+      endTime.setHours(24, 0, 0, 0)
+      if (scheduleArr.length > 0) {
+        scheduleArr[scheduleArr.length - 1].endTime = startTime
+      }
+      const en = ''
+      const vi = programArr[i]
+      const newSchedule = {
+        startTime, endTime,
+        programName: (vi + ((en && en !== vi) ? (' - ' + en) : '')),
+        channelId: channel.id, channelName: channel.name,
+        programId: null, viName: vi, enName: en
+      }
+      scheduleArr.push(newSchedule)
+    }
+  } else {
+    for (const str of dataArray) {
+      // schedule: '00:00	BIẾN ĐI, ÔNG ANH! (GO BROTHER)'
+      const item = str.substring(0, 6) + str.substring(6).replaceAll(/:/gi, ' : ').replaceAll(/-/gi, ' - ')
+      const array = item.split(/\s+/)
+      const startTimeStr = array[0]
+      const { hour, min } = getStartTimeFromString(startTimeStr)
+      const startTime = importDate.setHours(hour, min, 0, 0)
+      const endTime = new Date(startTime)
+      endTime.setHours(24, 0, 0, 0)
+
+      if (scheduleArr.length > 0) {
+        scheduleArr[scheduleArr.length - 1].endTime = startTime
+      }
+      const { vi, en } = getNamesFromString(pattern, item)
+      const newSchedule = {
+        startTime, endTime,
+        programName: (vi + ((en && en !== vi) ? (' - ' + en) : '')),
+        channelId: channel.id, channelName: channel.name,
+        programId: null, viName: vi, enName: en
+      }
+      scheduleArr.push(newSchedule)
+    }
+  }
+  return scheduleArr
+}
+
+/**
+ * @param {string} startTimeStr
+ * @returns {{min: number, hour: number}}
+ */
+function getStartTimeFromString(startTimeStr) {
+  const timeSplitArr = startTimeStr.split(':')
+  let hour = Number(timeSplitArr[0])
+  const min = Number(timeSplitArr[1].replaceAll(/[A-Z a-z]/g, ''))
+  const isAM = (startTimeStr + '').match(/AM/)
+  const isPM = (startTimeStr + '').match(/PM/)
+  if (hour >= 12 && isAM) {
+    hour -= 12
+  }
+  if (hour < 12 && isPM) {
+    hour += 12
+  }
+  return { min, hour }
+}
+
+/**
+ *
+ * @param {string} pattern
+ * @param {string[]} array
+ * @param {string} item
+ * @return {vi: {string}, en: {string}}
+ */
+function getNamesFromString(pattern, item) {
+  let vi = ''
+  let en = ''
+  let splitIndex
+  const array = item.split(/\s+/)
+  if (pattern === 'en : vi') {
+    // en = array[1] => :
+    // vi = : => end
+    splitIndex = array.indexOf(':')
+  } else if (pattern === 'en - vi') {
+    splitIndex = array.indexOf('-')
+  }
+  if (splitIndex > -1) {
+    en = array.slice(1, splitIndex).join(' ')
+    vi = array.slice(splitIndex + 1).join(' ')
+  } else {
+    vi = array.slice(1).join(' ')
+  }
+  if (pattern === '(en)vi') {
+    const openChar = item.indexOf('(')
+    const closeChar = item.indexOf(')')
+    en = item.substring(openChar + 1, closeChar)
+    vi = item.substring(closeChar + 1)
+  }
+  if (pattern === 'h:mm:PM en') {
+    en = array.slice(1).join(' ')
+  }
+  return { vi, en }
+}
 
