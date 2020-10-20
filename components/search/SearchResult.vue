@@ -5,20 +5,25 @@
         v-if="result.logo"
         v-lazy="result.logo"
         class="img-fluid "
-        alt="image"
+        :alt="result.name"
         :width="width"
       >
       <img
         v-else
-        :width="width"
-        alt="image"
+        src="~assets/images/default-program-picture.png"
         class="img-fluid"
-        src="https://via.placeholder.com/80x45"
+        :alt="result.name"
       >
       <div
+        v-if="!result.enName || (result.enName && result.enName === result.name)"
         class="break-word smaller-font-size color-warning searchResultName"
         style="margin: 0 0 7px 10px;"
       >{{ result.name }}</div>
+      <div
+        v-else
+        class="break-word smaller-font-size color-warning searchResultName"
+        style="margin: 0 0 7px 10px;"
+      >{{ result.name }} - {{ result.enName }}</div>
     </div>
   </el-link>
 </template>

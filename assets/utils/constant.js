@@ -40,10 +40,10 @@ export const COMMON = {
   DASHBOARD: 'Dashboard',
   LOG_OUT: 'Đăng xuất',
   VIP_CHANNEL_DESCRIPTION: 'Kênh VIP sẽ được xuất hiện trên trang chủ.',
-  VIP_CHANNEL: 'Kênh nổi bật',
+  VIP_CHANNEL: 'KÊNH NỔI BẬT',
   TODAY: 'Hôm nay',
   VIP_TODAY_PROGRAM: 'Chương trình nổi bật hôm nay',
-  ON_BROADCASTING_PROGRAMS: 'Xem ngay',
+  ON_BROADCASTING_PROGRAMS: 'ĐANG CHIẾU',
   TODAY_PROGRAM: 'Chương trình hôm nay',
   NEXT_THREE_DAY_PROGRAM: 'Chương trình trong 3 ngày tới',
   NEXT_DAY: 'Ngày mai',
@@ -58,7 +58,7 @@ export const COMMON = {
   SELECT_CHANNEL: 'Chọn kênh',
   INPUT_PROGRAM_NAME: 'Nhập tên chương trình',
   VIP_INCOMING_PROGRAM: 'Nổi bật hôm nay',
-  VIP_TOMORROW_PROGRAM: 'Nổi bật ngày mai',
+  VIP_TOMORROW_PROGRAM: 'ĐẶC BIỆT NGÀY MAI',
   SHOW_ON_HOMEPAGE: 'Hiển thị trên trang chủ',
   NO_MORE_THAN_TWO: 'Không chọn nhiều hơn 2 thể loại',
   VIP_CHANNEL_MAX_NUM: 8,
@@ -67,7 +67,7 @@ export const COMMON = {
   NEXT_DAYS_SHOW_NUM: 3,
   PAGE_TITLE: 'Truyền hình 24h',
   PROGRAM_SCHEDULE_NEXT_DAYS: 'Lịch phát sóng thời gian tới',
-  CLEAR_SEARCH: 'Hủy tìm kiếm',
+  CLEAR_SEARCH: 'Hủy',
   PROGRAM_LIST: 'Danh sách chương trình',
   ALL_CHANNEL: 'Tất cả kênh',
   ALL: 'Tất cả',
@@ -94,21 +94,23 @@ export const COMMON = {
   VIEW_LESS: 'Ẩn bớt',
   UPDATING: 'Đang cập nhật!!!',
   WHAT_SEE_THIS_NOON: 'Xem gì trưa nay',
-  WHAT_SEE_THIS_EVENING: 'Xem gì tối nay'
+  WHAT_SEE_THIS_EVENING: 'ĐẶC BIỆT TỐI NAY '
 
 }
 export const programRankOptions = [
-  { label: 'Đặc biệt', value: 4, text: 'Đặc biệt' },
-  { label: 'Tốt', value: 3, text: 'Tốt' },
-  { label: 'Khá', value: 2, text: 'Khá' },
-  { label: 'Bình thường', value: 1, text: 'Bình thường' }
+  { label: '5 Sao', value: 5, text: '5 Sao' },
+  { label: '4 Sao', value: 4, text: '4 Sao' },
+  { label: '3 Sao', value: 3, text: '3 Sao' },
+  { label: '2 Sao', value: 2, text: '2 Sao' },
+  { label: '1 Sao', value: 1, text: '1 Sao' }
 ]
 
 export const programRankMap = new Map([
-  [1, 'Bình thường'],
-  [2, 'Khá'],
-  [3, 'Tốt'],
-  [4, 'Đặc biệt']
+  [1, '1 Sao'],
+  [2, '2 Sao'],
+  [3, '3 Sao'],
+  [4, '4 Sao'],
+  [5, '5 Sao']
 ])
 
 export const categoryMap = new Map([

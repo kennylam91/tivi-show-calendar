@@ -38,7 +38,7 @@
                   style="display: inline;"
                   disabled
                   text-color="#ff9900"
-                  :max="4"
+                  :max="5"
                 />
               </div>
               <div class="small-font-size d-flex">

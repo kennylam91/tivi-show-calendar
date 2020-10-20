@@ -2,9 +2,9 @@
   <div>
     <article v-if="broadCastingPrograms" class="pb-2 pt-4">
       <h4 class="color-dark-blue">
-        {{ COMMON.ON_BROADCASTING_PROGRAMS | uppercaseFirst }}
+        {{ COMMON.ON_BROADCASTING_PROGRAMS }}
       </h4>
-      <el-divider class="mt-4 mb-2" />
+      <el-divider class="mt-2 mb-0" />
       <div class="row">
         <div
           v-for="program in broadCastingPrograms"
@@ -20,7 +20,7 @@
 
       <article v-if="todayNoonProgramData" class="py-2">
         <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_NOON }}      </h4>
-        <el-divider class="mt-4 mb-2" />
+        <el-divider class="mt-2 mb-0" />
         <div class="row mt-2">
           <div
             v-for="program in todayNoonProgramData"
@@ -34,7 +34,7 @@
 
       <article v-if="tonightProgramData" class="py-2">
         <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_EVENING }}      </h4>
-        <el-divider class="mt-4 mb-2" />
+        <el-divider class="mt-2 mb-0" />
         <div class="row mt-2">
           <div
             v-for="program in tonightProgramData"
@@ -67,10 +67,10 @@
       <article class="py-2">
         <h4>
           <nuxt-link to="/chuong-trinh-sap-chieu" class="color-dark-blue">
-            {{ COMMON.VIP_TOMORROW_PROGRAM | uppercaseFirst }}
+            {{ COMMON.VIP_TOMORROW_PROGRAM }}
           </nuxt-link>
         </h4>
-        <el-divider class="mt-4 mb-2" />
+        <el-divider class="mt-2 mb-0" />
         <div class="row mt-2">
           <div
             v-for="program in nextDayProgramData"
@@ -86,7 +86,7 @@
     <article class="py-2">
       <h4>
         <nuxt-link to="/danh-sach-kenh" class="color-dark-blue">
-          {{ COMMON.VIP_CHANNEL | uppercaseFirst }}
+          {{ COMMON.VIP_CHANNEL }}
         </nuxt-link>
       </h4>
       <el-divider class="mt-4 mb-2" />
@@ -172,7 +172,7 @@ export default {
         this.todayNoonProgramData = this.todayNoonProgramList
       } else {
         this.$store.dispatch('app/fetchTodayPrograms',
-          { startTimeFrom: now < time11h ? time11h : now, startTimeTo: time13h }).then(res => {
+          { startTimeFrom: now < time11h ? time11h : now, startTimeTo: time13h, ...baseQuery }).then(res => {
           this.todayNoonProgramData = res
           this.$store.dispatch('app/setTodayNoonProgramList', res)
         })
@@ -183,7 +183,7 @@ export default {
         this.tonightProgramData = this.toNightProgramList
       } else {
         this.$store.dispatch('app/fetchTodayPrograms',
-          { startTimeFrom: now < time19h ? time19h : now, startTimeTo: time24h }).then(res => {
+          { startTimeFrom: now < time19h ? time19h : now, startTimeTo: time24h, ...baseQuery }).then(res => {
           this.tonightProgramData = res
           this.$store.dispatch('app/setTonightProgramList', res)
         })

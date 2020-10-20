@@ -6,11 +6,32 @@
     >
       <div class="mb-2">
         <el-tooltip
-          :content="program.enName"
           :open-delay="300"
           placement="top"
           effect="dark"
         >
+          <div slot="content">
+            <p class="mb-2">{{ program.name }}</p>
+            <p class="mb-2">{{ program.enName }}</p>
+            <div class="mb-2">
+              <el-tag
+                v-for="(item, index) in program.categories.filter(c => c.code !== 1).slice(0,3)"
+                :key="index"
+                size="mini"
+                effect="dark"
+                style="margin: 2px;"
+                type="success"
+              >
+                {{ item.name }}
+              </el-tag>
+            </div>
+            <el-rate
+              v-model="program.rank"
+              disabled
+              text-color="#ff9900"
+              :max="5"
+            />
+          </div>
           <el-link
             :underline="false"
             @click="viewProgramDetail(program)"
@@ -31,56 +52,30 @@
         </el-tooltip>
       </div>
       <el-link
-        class="mb-2 w-100"
+        class="mb-1 w-100"
         type="primary"
         :underline="false"
         @click="viewProgramDetail(program)"
       >
-        <el-tooltip
-          :content="program.enName"
-          :open-delay="300"
-          placement="bottom-start"
-          effect="dark"
+        <div
+          class="bold smaller-font-size shorten-text hoverDarkBlue"
+          style="color: #000000c2"
         >
-          <div
-            class="bold smaller-font-size shorten-text hoverDarkBlue"
-            style="color: #000000c2"
-          >
-            {{ program.name }}
-          </div>
-        </el-tooltip>
+          {{ program.name }}
+        </div>
 
       </el-link>
 
-      <div>
-        <span
-          v-for="(item, index) in getCategoryList(program)"
-          :key="index"
-          class="smaller-font-size color-primary"
-        >
-          {{ item.name }}
-          <span v-show="isShowDivider(index,program)">
-            <el-divider
-              direction="vertical"
-            />
-          </span>
+      <div v-if="live && program.schedules && program.schedules.length > 0" class="smaller-font-size mb-1 shorten-text">
+        <span class="color-danger">
+          {{ parseTime(program.schedules[0].startTime) }}~{{ parseTime(program.schedules[0].endTime) }}
+          <el-divider direction="vertical" />
         </span>
-
-      </div>
-      <div v-if="live && program.schedules && program.schedules.length > 0" class="smaller-font-size mb-1">
         <span class="color-success">
           {{ program.schedules[0].channelName }}</span>
-        <el-divider direction="vertical" />
-        <span class="color-danger">
-          {{ parseTime(program.schedules[0].startTime) }}
-        </span>
+
       </div>
-      <el-rate
-        v-model="program.rank"
-        disabled
-        text-color="#ff9900"
-        :max="4"
-      />
+
     </el-card>
   </div>
 </template>
@@ -131,7 +126,7 @@ export default {
       return parseVNTime(time, '{H}:{i}', true, true)
     },
     isShowDivider(index, program) {
-      return index === 0 && this.getCategoryList(program).length >= 2
+      return index < this.program.categoryCodes.length - 1
     }
     // getTagType(item){
     //   const tagTypeMap = new Map([

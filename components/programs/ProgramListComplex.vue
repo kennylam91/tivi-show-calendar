@@ -8,23 +8,36 @@
       >
         <div class="justify-between-align-center mb-2">
           <h4 class="pageTitle" v-text="title" />
-          <el-button
-            v-if="!isSearching"
-            disabled
-            type="primary"
-            size="small"
-            icon="el-icon-search"
-            @click="searchDialogVisible = true"
-          >{{ COMMON.SEARCH }}</el-button>
-          <el-button
-            v-if="isSearching"
-            type="danger"
-            size="small"
-            icon="el-icon-close"
-            @click="handleClearSearch"
-          >{{ COMMON.CLEAR_SEARCH }}</el-button>
+          <div>
+            <el-button
+              type="primary"
+              size="small"
+              icon="el-icon-search"
+              @click="searchDialogVisible = true"
+            >{{ COMMON.SEARCH }}</el-button>
+            <el-button
+              v-if="isSearching"
+              type="danger"
+              size="small"
+              icon="el-icon-close"
+              @click="handleClearSearch"
+            >{{ COMMON.CLEAR_SEARCH }}</el-button>
+          </div>
         </div>
-        <el-divider />
+        <el-divider class="my-3" />
+        <div>
+          <el-tag
+            v-for="filter in filters"
+            :key="filter.tagName"
+            :type="getFilterType(filter.tagName)"
+            size="small"
+            effect="dark"
+            class="mr-1 mb-1"
+            closable
+            @close="onTagFilterClose(filter)"
+          >{{ filter.tagName }}</el-tag>
+
+        </div>
         <div v-if="movieProgramList.length">
           <ProgramListContainer
             :title="COMMON.MOVIE"
@@ -46,10 +59,15 @@
     </article>
     <el-dialog
       :key="dialogKey"
-      :visible.sync="searchDialogVisible"
+      :visible="searchDialogVisible"
       custom-class="dialogClass"
+      center
+      destroy-on-close
+      @close="searchDialogVisible = false"
     >
       <ProgramSearchFormComp
+        v-if="searchDialogVisible"
+        class="p-3"
         :clear="false"
         :data-prop="searchFormProp"
         @search="searchProgram"
@@ -62,6 +80,7 @@
 import { mapGetters } from 'vuex'
 import ProgramListContainer from '@/components/programs/ProgramListContainer'
 import ProgramSearchFormComp from '@/components/programs/ProgramSearchForm'
+import { getFilterDesc } from '@/assets/utils'
 // import { sortByRankDesc, sortByName } from '@/assets/utils/index'
 export default {
   components: { ProgramSearchFormComp, ProgramListContainer },
@@ -78,11 +97,6 @@ export default {
     title: {
       required: true,
       type: String
-    },
-    isSearching: {
-      required: false,
-      type: Boolean,
-      default: () => false
     }
   },
   data() {
@@ -94,14 +108,16 @@ export default {
       movieProgramList: [],
       sciExpProgramList: [],
       othersProgramList: [],
-      programList: []
-      // searchFormData: null
+      programList: [],
+      isSearching: false,
+      filters: []
     }
   },
   computed: {
     ...mapGetters({
       loading: 'loading'
     })
+
   },
   watch: {
     programListProp: {
@@ -114,6 +130,19 @@ export default {
         }
       }
 
+    },
+    searchFormProp: {
+      immediate: true,
+      deep: true,
+      handler() {
+        if (this.searchFormProp) {
+          this.isSearching = this.searchFormProp.categoryCodes.length > 0 || this.searchFormProp.searchName ||
+          this.searchFormProp.ranks.length > 0
+          this.filters = getFilterDesc(this.searchFormProp)
+        } else {
+          this.isSearching = false
+        }
+      }
     }
   },
 
@@ -131,6 +160,18 @@ export default {
       this.othersProgramList = this.programList.filter(program => {
         return !this.isMovie(program) && !this.isSciExp(program)
       })
+    },
+    getFilterType(filter) {
+      if (filter.includes('Tên:')) {
+        return 'primary'
+      } else if (filter.includes('Đánh giá:')) {
+        return 'success'
+      } else if (filter.includes('Thể loại:')) {
+        return 'warning'
+      }
+    },
+    onTagFilterClose(filter) {
+      this.$emit('remove-filter-tag', filter)
     }
   }
 }

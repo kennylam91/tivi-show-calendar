@@ -81,6 +81,7 @@ export default {
       pattern: null,
       patternOptions: [
         { value: 'en : vi', label: 'en : vi' },
+        { value: 'vtv html', label: 'vtv html' },
         { value: 'en - vi', label: 'en - vi' },
         { value: '(en)vi', label: '(en)vi' },
         { value: 'h:mm:PM en', label: 'h:mm:PM en' },
@@ -141,6 +142,24 @@ export default {
         return
       }
       let dataArray = []
+      if (this.pattern === 'vtv html') {
+        const doc = new DOMParser().parseFromString(this.scheduleInput, 'text/xml')
+        const docTimes = doc.getElementsByClassName('time')
+        const docPrograms = doc.getElementsByTagName('p')
+        const timeArr = Array.from(docTimes).map(item => item.innerHTML)
+        const programArr = Array.from(docPrograms).map(item => {
+          const childArr = item.childNodes
+          let program
+          if (childArr[1].textContent.trim().replaceAll(/[\s]{2,}/g, ' ')) {
+            program = childArr[0].textContent + ' : ' + childArr[1].textContent
+          } else {
+            program = childArr[0].textContent
+          }
+          return program.trim().replaceAll(/[\s]{2,}/g, ' ')
+        })
+        debugger
+        return
+      }
       //       12:55AM
       // Bad Boys II
       this.scheduleInput = this.scheduleInput.replaceAll(/NOW SHOWING\s+/g, '')

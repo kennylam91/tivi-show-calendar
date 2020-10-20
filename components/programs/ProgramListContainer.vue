@@ -1,8 +1,8 @@
 <template>
   <div>
-    <article class="mt-4">
+    <article class="mt-3">
       <div class="justify-between-align-center">
-        <h5 class="categoryTitle" style="margin-bottom: 0;">{{ title }}</h5>
+        <h5 class="categoryTitle" style="margin-bottom: 4px;">{{ title }}</h5>
 
       </div>
       <el-card :body-style="{ padding: '0px' }" shadow="never">

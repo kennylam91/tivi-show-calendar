@@ -276,13 +276,9 @@ export default {
         })
 
         this.searchAllResults = this.searchAllResults.concat(channelSearchResult)
-
-        const allProgramList = this.concatTwoProgramList(this.todayProgramList, this.nextDaysProgramList)
-        const programSearchResult = allProgramList.filter(program => {
-          return program.name.toLowerCase().includes(lowerCaseSearchText)
+        this.$store.dispatch('app/searchProgram', { searchName: this.searchText, page: 1, limit: 8 }).then(res => {
+          this.searchAllResults = this.searchAllResults.concat(res.content)
         })
-        this.searchAllResults = this.searchAllResults.concat(programSearchResult)
-
         this.visible = true
       }
     }

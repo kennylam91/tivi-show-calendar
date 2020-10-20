@@ -10,9 +10,9 @@
       :title="COMMON.TODAY_PROGRAM"
       :program-list-prop="programData"
       :search-form-prop="todayProgramSearchForm"
-      :is-searching="isSearching"
       @search="searchProgram"
       @clear="handleClearSearch"
+      @remove-filter-tag="onFilterTagRemove"
     />
     <!-- <Tags :tags="tags" /> -->
 
@@ -24,6 +24,8 @@ import { mapGetters } from 'vuex'
 import { COMMON } from '@/assets/utils/constant'
 // import { sortByRankDesc } from '@/assets/utils/index'
 import ProgramListComplex from '@/components/programs/ProgramListComplex'
+import { filterByName, filterByRank, filterByCategory } from '@/assets/utils/index'
+import { ProgramSearchForm } from '@/assets/utils/index'
 
 export default {
   components: { ProgramListComplex },
@@ -42,89 +44,60 @@ export default {
       todayProgramList: 'fromNowInDayProgramList',
       channelList: 'channelList',
       todayProgramSearchForm: 'todayProgramSearchForm'
-    }),
-    isSearching() {
-      if (this.todayProgramSearchForm) {
-        return this.todayProgramSearchForm.categories.length > 0 ||
-      this.todayProgramSearchForm.channels.length > 0 ||
-      this.todayProgramSearchForm.endTime ||
-      this.todayProgramSearchForm.startTime ||
-      this.todayProgramSearchForm.name ||
-      this.todayProgramSearchForm.ranks.length > 0
-      }
-      return false
-    }
+    })
+
   },
   watch: {
   },
   created() {
-    this.$store.dispatch('app/searchProgram',
-      {
-        limit: 99999,
-        page: 1,
-        sortBy: 'rank',
-        sortDirection: 'DESC',
-        startTimeFrom: this.startOfToday(),
-        startTimeTo: this.endOfToday()
-      })
-      .then(res => {
-        this.programData = res.content
-      })
-  },
-  methods: {
-    async searchProgram(searchForm) {
-      this.$store.dispatch('app/setTodayProgramSearchForm', searchForm)
-      this.$store.dispatch('app/searchProgram',
-        { startTime: searchForm.startTime,
-          endTime: searchForm.endTime,
+    if (!this.todayProgramList) {
+      this.$store.dispatch('app/fetchTodayPrograms',
+        {
           limit: 99999,
           page: 1,
-          sortBy: 'rank',
-          sortDirection: 'DESC',
-          searchName: searchForm.searchName,
-          getCategoryCodes: searchForm.categoryCodes
+          startTimeFrom: new Date(),
+          startTimeTo: this.endOfToday()
         })
         .then(res => {
-          this.programData = res.content
+          this.$store.dispatch('app/setFromNowInDayProgramList', res)
+          this.searchProgram(this.todayProgramSearchForm)
         })
+    } else {
+      this.searchProgram(this.todayProgramSearchForm)
+    }
+  },
+  methods: {
+    searchProgram(searchForm) {
+      this.$store.dispatch('app/setTodayProgramSearchForm', searchForm)
+      this.programData = this.todayProgramList.filter(item => {
+        return filterByRank(item, searchForm) && filterByName(item, searchForm) && filterByCategory(item, searchForm)
+      })
     },
     handleClearSearch() {
       this.programData = this.todayProgramList
-      this.$store.dispatch('app/setTodayProgramSearchForm', null)
+      this.$store.dispatch('app/setTodayProgramSearchForm', new ProgramSearchForm())
     },
-
-    // async fetchScheduleListByTime(startTime, endTime) {
-    //   let start, end
-    //   const today = new Date()
-    //   if (!startTime) {
-    //     start = this.convertStringToTimestamp('00:01', today)
-    //   } else {
-    //     start = this.convertStringToTimestamp(startTime, today)
-    //   }
-    //   const startTimestamp = start
-    //   if (!endTime) {
-    //     end = this.convertStringToTimestamp('23:59', today)
-    //   } else {
-    //     end = this.convertStringToTimestamp(endTime, today)
-    //   }
-    //   const endTimestamp = end
-    //   await this.$store.dispatch('app/searchPrograms',
-    //     { startTime: startTimestamp,
-    //       endTime: endTimestamp,
-    //       limit: 99999,
-    //       page: 1,
-    //       sortBy: 'rank',
-    //       sortDirection: 'DESC' })
-    //     .then(res => {
-    //       this.searchByDateProgramList = res.content
-    //     })
-    // },
     getProgramListForContainer() {
       this.movieProgramList = this.programData.filter(this.isMovie)
       this.sciExpProgramList = this.programData.filter(this.isSciExp)
       this.othersProgramList = this.programData.filter(program => {
         return !this.isMovie(program) && !this.isSciExp(program)
       })
+    },
+    onFilterTagRemove(filter) {
+      let newForm
+      if (filter.field === 'searchName') {
+        newForm = { ...this.todayProgramSearchForm, searchName: '' }
+      } else if (filter.field === 'ranks') {
+        newForm = { ...this.todayProgramSearchForm,
+          ranks: this.todayProgramSearchForm.ranks.filter(r => r !== filter.fieldValue) }
+      } else if (filter.field === 'categoryCodes') {
+        newForm = { ...this.todayProgramSearchForm,
+          categoryCodes: this.todayProgramSearchForm.categoryCodes.filter(c => c !== filter.fieldValue) }
+      }
+
+      this.$store.dispatch('app/setTodayProgramSearchForm', newForm)
+      this.searchProgram(this.todayProgramSearchForm)
     }
 
   },
