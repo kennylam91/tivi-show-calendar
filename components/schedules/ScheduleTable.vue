@@ -1,6 +1,41 @@
 <template>
   <div>
-    <el-table :data="scheduleList" border stripe style="width: 100%" size="small">
+    <div class="mb-2 d-flex justify-between-align-center">
+      <el-button
+        v-show="!draft && selectedSchedules.length > 0"
+        type="danger"
+        size="mini"
+        @click="handleScheduleDeleteClick"
+      >Delete</el-button>
+      <div>
+        <el-button
+          v-if="!draft"
+          type="primary"
+          plain
+          size="small"
+          @click="handleCreateSchedule"
+        >Create</el-button>
+        <el-button
+          v-if="!draft"
+          type="success"
+          size="small"
+          @click="handleImportSchedule"
+        >Import</el-button>
+      </div>
+    </div>
+    <el-table
+      :data="scheduleList"
+      border
+      stripe
+      style="width: 100%"
+      size="small"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column
+        align="center"
+        type="selection"
+        width="60"
+      />
       <el-table-column
         label="Start"
         width="75"
@@ -48,22 +83,6 @@
         align="center"
         width="220"
       >
-        <template slot="header">
-          <el-button
-            v-if="!draft"
-            type="primary"
-            plain
-            size="small"
-            @click="handleCreateSchedule"
-          >Create</el-button>
-          <el-button
-            v-if="!draft"
-            type="success"
-            size="small"
-            @click="handleImportSchedule"
-          >Import</el-button>
-
-        </template>
         <template slot-scope="scope">
           <el-button
             size="small"
@@ -120,7 +139,8 @@ export default {
     return {
       createScheduleDialogVisibleProp: false,
       schedule: null,
-      scheduleInit: new Schedule()
+      scheduleInit: new Schedule(),
+      selectedSchedules: []
     }
   },
   computed: {
@@ -159,7 +179,7 @@ export default {
             })
             this.$emit('changed')
           })
-        })
+        }).catch(() => {})
       } else {
         this.scheduleList.splice(index, 1)
       }
@@ -175,6 +195,9 @@ export default {
         item.startTime === schedule.startTime)
       this.$set(this.scheduleList, foundIndex, { ...schedule })
       this.createScheduleDialogVisibleProp = false
+    },
+    handleSelectionChange(val) {
+      this.selectedSchedules = val
     }
   }
 }
