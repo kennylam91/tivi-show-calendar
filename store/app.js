@@ -302,6 +302,12 @@ export const actions = {
       method: 'get'
     })
   },
+  clearScheduleCache({ commit }) {
+    return request({
+      url: '/schedules/clear-cache',
+      method: 'post'
+    })
+  },
   /*
   @params: query:{movieTitle, }
   */

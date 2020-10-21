@@ -21,6 +21,7 @@
     >
       <div slot="header" class="justify-between-align-center">
         <h4 class="bold">{{ COMMON.CHANNEL_LIST }}</h4>
+        <el-button type="danger" size="small" @click="clearScheduleCache">Clear Schedule Cache</el-button>
         <el-button
           type="success"
           size="small"
@@ -71,6 +72,16 @@ export default {
 
   },
   methods: {
+    clearScheduleCache() {
+      this.$store.dispatch('app/clearScheduleCache').then(res => {
+        this.$notify({
+          title: 'Clear cache successfully',
+          type: 'success',
+          duration: '4500',
+          position: 'bottom-right'
+        })
+      })
+    }
 
   }
 }
