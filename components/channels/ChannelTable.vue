@@ -40,15 +40,31 @@
           <td
             v-if="isAdmin && scheduleStats"
             :class="getTextColorClass(getChannelScheduleTotal(channel, today))"
-          >{{ getChannelScheduleTotal(channel, today) }}</td>
+          >
+            <span v-if="getChannelScheduleTotal(channel, today) > 0">{{ getChannelScheduleTotal(channel, today) }}</span>
+            <span v-else>
+              <el-button v-if="channel.name.includes('THVL')" type="warning" size="small" @click="autoImport(channel, today)">Fetch</el-button>
+            </span>
+
+          </td>
           <td
             v-if="isAdmin && scheduleStats"
             :class="getTextColorClass(getChannelScheduleTotal(channel, tomorrow))"
-          >{{ getChannelScheduleTotal(channel, tomorrow) }}</td>
+          >
+            <span v-if="getChannelScheduleTotal(channel, tomorrow)">{{ getChannelScheduleTotal(channel, tomorrow) }}</span>
+            <span v-else>
+              <el-button v-if="channel.name.includes('THVL')" type="warning" size="small" @click="autoImport(channel, tomorrow)">Fetch</el-button>
+            </span>
+          </td>
           <td
             v-if="isAdmin && scheduleStats"
             :class="getTextColorClass(getChannelScheduleTotal(channel, next2Days))"
-          >{{ getChannelScheduleTotal(channel, next2Days) }}</td>
+          >
+            <span v-if="getChannelScheduleTotal(channel, next2Days) ">{{ getChannelScheduleTotal(channel, next2Days) }}</span>
+            <span v-else>
+              <el-button v-if="channel.name.includes('THVL')" type="warning" size="small" @click="autoImport(channel, next2Days)">Fetch</el-button>
+            </span>
+          </td>
 
           <td v-if="isAdmin" align="center" width="300">
             <el-button-group class="mb-2 d-block">
@@ -193,6 +209,18 @@ export default {
     },
     handleImportSchedule(channel) {
       this.$router.push(`/channels/manage/import/${channel.id}`)
+    },
+    autoImport(channel, date) {
+      console.log('autoImport' + channel + ' ' + date)
+      const data = { channelName: channel.name, updateDate: parseTime(date, '{Y}-{m}-{d}') }
+      this.$store.dispatch('app/autoUpdateSchedule', data).then(res => {
+        this.$notify({
+          title: 'Update schedule completed',
+          type: 'success',
+          duration: '4500',
+          position: 'bottom-right'
+        })
+      })
     }
   }
 }

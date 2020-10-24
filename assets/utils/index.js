@@ -452,6 +452,27 @@ export function getScheduleArray(pattern, scheduleInput, importDate, channel) {
       }
       scheduleArr.push(newSchedule)
     }
+  } else if (pattern === 'htv') {
+    dataArray = scheduleInput.split('\n')
+    for (let i = 0; i < dataArray.length; i += 2) {
+      const time = dataArray[i]
+      const { hour, min } = getStartTimeFromString(time)
+      const startTime = importDate.setHours(hour, min, 0, 0)
+      const endTime = new Date(startTime)
+      endTime.setHours(24, 0, 0, 0)
+      if (scheduleArr.length > 0) {
+        scheduleArr[scheduleArr.length - 1].endTime = startTime
+      }
+      const en = ''
+      const vi = dataArray[i + 1]
+      const newSchedule = {
+        startTime, endTime,
+        programName: (vi + ((en && en !== vi) ? (' - ' + en) : '')),
+        channelId: channel.id, channelName: channel.name,
+        programId: null, viName: vi, enName: en
+      }
+      scheduleArr.push(newSchedule)
+    }
   } else if (pattern === 'vtv html') {
     const doc = new DOMParser().parseFromString(scheduleInput, 'text/xml')
     const docTimes = doc.getElementsByClassName('time')

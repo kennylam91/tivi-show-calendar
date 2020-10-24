@@ -83,13 +83,14 @@ export default {
       patternOptions: [
         { value: 'en : vi', label: 'en : vi' },
         { value: 'vtv html', label: 'vtv html' },
+        { value: 'htv', label: 'htv' },
         { value: 'en - vi', label: 'en - vi' },
         { value: '(en)vi', label: '(en)vi' },
         { value: 'h:mm:PM en', label: 'h:mm:PM en' },
         { value: 'arr[t,vi,en]', label: 'arr[t,vi,en]' }
       ],
       errorLines: [],
-      isSearchProgram: true
+      isSearchProgram: false
     }
   },
   computed: {

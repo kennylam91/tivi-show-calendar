@@ -1,3 +1,4 @@
+/** @class */
 export class Channel {
   constructor(id, name, desc, logoUrl, vip, networkId) {
     this.id = id
@@ -17,16 +18,5 @@ export class Channel {
   // setDescription(value) { this.description = value }
   // setLogo(value) { this.logo = value }
   // setIsVip(value) { this.isVip = value }
-
-  static getInstanceFromDoc(doc) {
-    return {
-      id: doc.id,
-      name: doc.data().name,
-      description: doc.data().description,
-      logoUrl: doc.data().logo,
-      isVip: doc.data().isVip,
-      schedules: doc.data().schedules
-    }
-  }
 }
 

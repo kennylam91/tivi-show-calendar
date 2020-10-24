@@ -9,7 +9,7 @@ const service = axios.create({
   baseURL: process.env.BASE_URL || 'https://truyenhinh24h-backend.herokuapp.com/rest/v1', // url = base url + request url
   // baseURL: 'http://localhost:8080/rest/v1',
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 10000 // request timeout
+  timeout: 20000 // request timeout
 })
 
 // request interceptor

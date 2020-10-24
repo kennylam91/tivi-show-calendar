@@ -308,6 +308,13 @@ export const actions = {
       method: 'post'
     })
   },
+  autoUpdateSchedule({ commit }, data) {
+    return request({
+      url: '/schedules/auto-update',
+      method: 'post',
+      data
+    })
+  },
   /*
   @params: query:{movieTitle, }
   */
