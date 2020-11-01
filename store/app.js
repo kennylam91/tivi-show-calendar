@@ -5,6 +5,7 @@ import axios from 'axios'
 import { THE_MOVIE_DB } from '../assets/utils/constant'
 import request from '@/assets/utils/request'
 import { ProgramSearchForm } from '@/assets/utils/index'
+import { ScheduleStats } from '../assets/model/model'
 
 export const state = () => ({
   channelList: null,
@@ -89,6 +90,16 @@ export const mutations = {
   },
   SET_SCHEDULE_STATS: (state, value) => {
     state.scheduleStats = value
+  },
+  UPDATE_SCHEDULE_STATS: (state, value) => {
+    /** @type ScheduleStats[] */
+    const scheduleStats = state.scheduleStats
+    const found = scheduleStats.find(s => s.channelId === value.channelId && s.date === value.date)
+    if (found) {
+      found.total = value.total
+    } else {
+      scheduleStats.push(value)
+    }
   }
 
 }
@@ -164,6 +175,9 @@ export const actions = {
   },
   setScheduleStats({ commit }, value) {
     commit('SET_SCHEDULE_STATS', value)
+  },
+  updateScheduleStats({ commit, state }, /** @type ScheduleStats */ value) {
+    commit('UPDATE_SCHEDULE_STATS', value)
   },
   fetchChannelList({ commit }) {
     return new Promise((resolve, reject) => {
