@@ -7,6 +7,8 @@ export class Channel {
     this.logoUrl = ''
     this.vip = false
     this.networkId = null
+    this.hasAutoImport = false
+    this.networkName = ''
   }
 }
 

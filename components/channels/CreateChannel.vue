@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="bold mb-2">{{ title }}</div>
-    <el-form ref="channelCreateForm" :model="channelData" label-width="100px">
+    <el-form ref="channelCreateForm" :model="channelData" label-width="120px" size="small">
       <el-form-item :label="COMMON.NAME">
         <el-input v-model="channelData.name" />
       </el-form-item>
@@ -9,15 +9,23 @@
         <el-switch v-model="channelData.vip" />
         <span>{{ COMMON.VIP_CHANNEL_DESCRIPTION }}</span>
       </el-form-item>
+      <el-form-item label="Auto import">
+        <el-switch v-model="channelData.hasAutoImport" />
+      </el-form-item>
+      <el-form-item label="Network name" size="small">
+        <el-input v-model="channelData.networkName" clearable />
+
+      </el-form-item>
+
       <el-form-item :label="COMMON.DESCRIPTION">
         <el-input
           v-model="channelData.description"
           type="textarea"
-          :rows="4"
+          :rows="5"
         />
       </el-form-item>
       <el-form-item label="Logo">
-        <Upload :picture-prop="channelData.logoUrl" @uploaded="handleUploaded" />
+        <Upload :picture-prop="channelData.logo" @uploaded="handleUploaded" />
       </el-form-item>
 
       <el-form-item>

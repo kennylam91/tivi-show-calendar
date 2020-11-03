@@ -9,7 +9,7 @@
               :default-active="activeIndex"
               mode="horizontal"
               active-text-color="#003a77"
-              menu-trigger="hover"
+              menu-trigger="click"
               @select="handleSelect"
             >
               <el-menu-item index="1">
@@ -24,13 +24,23 @@
                 <el-menu-item index="2-1">
                   <span v-text="COMMON.CHANNEL_LIST" />
                 </el-menu-item>
-                <el-menu-item
+                <!-- <el-menu-item
                   v-for="(item, index) in vipChannelList"
                   :key="index"
                   :index="item.name"
                 >
                   <span v-text="item.name " />
-                </el-menu-item>
+                </el-menu-item> -->
+                <span :key="navbarKey">
+                  <el-submenu v-for="(value, name) in networkObj" :key="name" :index="value">
+                    <template slot="title">{{ name }}</template>
+                    <el-menu-item
+                      v-for="channel in value"
+                      :key="channel.id"
+                      :index="channel.id"
+                    >{{ channel.name }}</el-menu-item>
+                  </el-submenu>
+                </span>
               </el-submenu>
               <el-submenu index="3">
                 <template slot="title">
@@ -190,7 +200,9 @@ export default {
       isShowVerticalMenu: false,
       searchText: '',
       visible: false,
-      searchAllResults: null
+      searchAllResults: null,
+      networkObj: {},
+      navbarKey: 0
 
     }
   },
@@ -222,12 +234,20 @@ export default {
 
   },
   mounted() {
-    for (const channel of this.vipChannelList) {
+    for (const channel of this.channelList) {
       const name = channel.name.split(' ').join('-').trim()
       const channelPath = `/lich-chieu/${name}-${channel.id}`
       const index = channel.id
       this.pathIndexMatrix.push([channelPath, index])
+      if (channel.networkName) {
+        if (this.networkObj[channel.networkName] === undefined) {
+          this.networkObj[channel.networkName] = [channel]
+        } else {
+          this.networkObj[channel.networkName].push(channel)
+        }
+      }
     }
+    this.navbarKey++
     this.pathIndexMap = new Map(this.pathIndexMatrix)
   },
   methods: {

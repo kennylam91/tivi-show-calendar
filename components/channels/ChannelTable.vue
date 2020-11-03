@@ -7,6 +7,7 @@
         <th v-if="isAdmin">{{ parseToDate(today) }}</th>
         <th v-if="isAdmin">{{ parseToDate(tomorrow) }}</th>
         <th v-if="isAdmin">{{ parseToDate(next2Days) }}</th>
+        <th v-if="isAdmin">{{ parseToDate(next3Days) }}</th>
         <th v-if="isAdmin">{{ COMMON.ACTION }}</th>
       </tr>
       <tbody>
@@ -42,7 +43,8 @@
             v-if="isAdmin && scheduleStats"
             :class="getTextColorClass(getChannelScheduleTotal(channel, today))"
           >
-            <span v-if="getChannelScheduleTotal(channel, today) > 0">{{ getChannelScheduleTotal(channel, today) }}</span>
+            <span v-if="getChannelScheduleTotal(channel, today) || !channel.hasAutoImport">
+              {{ getChannelScheduleTotal(channel, today) }}</span>
             <span v-else>
               <el-button
                 :id="`${channel.name}-${+today}`"
@@ -57,7 +59,8 @@
             v-if="isAdmin && scheduleStats"
             :class="getTextColorClass(getChannelScheduleTotal(channel, tomorrow))"
           >
-            <span v-if="getChannelScheduleTotal(channel, tomorrow)">{{ getChannelScheduleTotal(channel, tomorrow) }}</span>
+            <span v-if="getChannelScheduleTotal(channel, tomorrow) || !channel.hasAutoImport">
+              {{ getChannelScheduleTotal(channel, tomorrow) }}</span>
             <span v-else>
               <el-button
                 :id="`${channel.name}-${+tomorrow}`"
@@ -69,9 +72,10 @@
           </td>
           <td
             v-if="isAdmin && scheduleStats"
-            :class="getTextColorClass(getChannelScheduleTotal(channel, next2Days))"
+            :class="getTextColorClass(getChannelScheduleTotal(channel, next2Days)) "
           >
-            <span v-if="getChannelScheduleTotal(channel, next2Days) ">{{ getChannelScheduleTotal(channel, next2Days) }}</span>
+            <span v-if="getChannelScheduleTotal(channel, next2Days) || !channel.hasAutoImport">
+              {{ getChannelScheduleTotal(channel, next2Days) }}</span>
             <span v-else>
               <el-button
                 :id="`${channel.name}-${+next2Days}`"
@@ -82,8 +86,24 @@
             </span>
           </td>
 
-          <td v-if="isAdmin" align="center" width="300">
-            <el-button-group class="mb-0 d-block">
+          <td
+            v-if="isAdmin && scheduleStats"
+            :class="getTextColorClass(getChannelScheduleTotal(channel, next3Days)) "
+          >
+            <span v-if="getChannelScheduleTotal(channel, next3Days) || !channel.hasAutoImport">
+              {{ getChannelScheduleTotal(channel, next3Days) }}</span>
+            <span v-else>
+              <el-button
+                :id="`${channel.name}-${+next3Days}`"
+                type="warning"
+                size="small"
+                @click="autoImport(channel, next3Days)"
+              >Fetch</el-button>
+            </span>
+          </td>
+
+          <td v-if="isAdmin" class="text-center" align="center">
+            <el-button-group class="mb-0">
               <!-- <el-button
                 type="success"
                 size="mini"
@@ -140,8 +160,9 @@ export default {
     return {
       today: new Date(),
       channelData: null,
-      tomorrow: new Date((new Date()).getTime() + (24 * 60 * 60 * 1000)),
-      next2Days: new Date((new Date()).getTime() + (2 * 24 * 60 * 60 * 1000)),
+      tomorrow: new Date((+new Date()) + (24 * 60 * 60 * 1000)),
+      next2Days: new Date(+new Date() + (2 * 24 * 60 * 60 * 1000)),
+      next3Days: new Date(+new Date() + (3 * 24 * 60 * 60 * 1000)),
       loading: false,
       key: 0
     }
@@ -167,7 +188,7 @@ export default {
     if (this.isAdmin && !this.scheduleStats) {
       const data = {
         startTimeFrom: this.startOfToday(),
-        startTimeTo: this.startOfToday() + 3 * 24 * 60 * 60 * 1000
+        startTimeTo: this.startOfToday() + 4 * 24 * 60 * 60 * 1000
       }
       this.$store.dispatch('app/fetchScheduleStats', data).then(res => {
         this.$store.dispatch('app/setScheduleStats', res)

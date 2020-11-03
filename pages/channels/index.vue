@@ -16,8 +16,8 @@
 
     <el-card
       shadow="never"
-      class="my-2"
-      :body-style="{ padding: '16px' }"
+      class="my-1"
+      :body-style="{ padding: '8px' }"
     >
       <div slot="header" class="justify-between-align-center">
         <h4 class="bold">{{ COMMON.CHANNEL_LIST }}</h4>

@@ -13,6 +13,16 @@ export class AutoUpdateForm {
     this.channelName = channelName
     this.channelId = channelId
     this.importDate = importDate
-    this.apiSource = ([1, 2, 4, 5, 6, 20].includes(channelId)) ? 'SCTV' : 'VTV'
+    this.apiSource = this.getApiSource()
+  }
+
+  getApiSource() {
+    if ([1, 2, 4, 5, 6, 20].includes(this.channelId)) {
+      return 'SCTV'
+    } else if ([11, 12, 13, 18, 19].includes(this.channelId)) {
+      return 'VTV'
+    } else {
+      return null
+    }
   }
 }
