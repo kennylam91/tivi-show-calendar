@@ -1,9 +1,9 @@
 <template>
   <div>
-    <article v-if="broadCastingPrograms" class="pb-2 pt-4">
-      <h4 class="color-dark-blue">
+    <article v-if="broadCastingPrograms" class="pb-2 pt-4" style="">
+      <h5 class="color-dark-blue">
         {{ COMMON.ON_BROADCASTING_PROGRAMS }}
-      </h4>
+      </h5>
       <el-divider class="mt-2 mb-0" />
       <div class="row">
         <div
@@ -19,7 +19,7 @@
     <client-only>
 
       <article v-if="todayNoonProgramData" class="py-2">
-        <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_NOON }}      </h4>
+        <h5 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_NOON }}      </h5>
         <el-divider class="mt-2 mb-0" />
         <div class="row mt-2">
           <div
@@ -33,7 +33,7 @@
       </article>
 
       <article v-if="tonightProgramData" class="py-2">
-        <h4 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_EVENING }}      </h4>
+        <h5 class="color-dark-blue">{{ COMMON.WHAT_SEE_THIS_EVENING }}      </h5>
         <el-divider class="mt-2 mb-0" />
         <div class="row mt-2">
           <div
@@ -65,11 +65,11 @@
     </article> -->
 
       <article class="py-2">
-        <h4>
+        <h5>
           <nuxt-link to="/chuong-trinh-sap-chieu" class="color-dark-blue">
             {{ COMMON.VIP_TOMORROW_PROGRAM }}
           </nuxt-link>
-        </h4>
+        </h5>
         <el-divider class="mt-2 mb-0" />
         <div class="row mt-2">
           <div
@@ -84,15 +84,15 @@
     </client-only>
 
     <article class="py-2">
-      <h4>
+      <h5>
         <nuxt-link to="/danh-sach-kenh" class="color-dark-blue">
           {{ COMMON.VIP_CHANNEL }}
         </nuxt-link>
-      </h4>
-      <el-divider class="mt-4 mb-2" />
+      </h5>
+      <el-divider class="mt-2 mb-2" />
 
       <div class="row mt-2">
-        <div v-for="(channel) in vipChannelList" :key="channel.id" class="col-md-3 col-6 my-2 px-1">
+        <div v-for="(channel) in vipChannelList" :key="channel.id" class="col-md-2 col-3 my-2 px-1">
           <el-card shadow="hover" :body-style="{ padding: '5px','text-align':'center' }">
             <el-link
               v-if="channel.logo"
@@ -106,10 +106,9 @@
               >
             </el-link>
             <el-button
-              class="my-2 w-100 py-2 px-1"
+              class="my-2 w-100 py-2 px-1 font-xs"
               size="small"
-              type="info"
-              plain
+              type="primary"
               @click="viewChannelDetail(channel)"
             >{{ COMMON.SCHEDULE }} {{ channel.name }}</el-button>
           </el-card>

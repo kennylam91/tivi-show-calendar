@@ -16,6 +16,10 @@ export default {
         content: 'Trang web tổng hợp các chương trình, phim truyện hay nhất trên các kênh truyền hình nổi tiếng( HBO, Cinemax, AXN, Fox Movies, Red By HBO, Discovery, VTV, THVL, TodayTV, ...)' }
     ],
     link: [
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Roboto&display=swap'
+      }
     ],
     script: [
       { src: 'https://apis.google.com/js/api.js' }

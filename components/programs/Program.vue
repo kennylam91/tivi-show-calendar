@@ -5,51 +5,23 @@
       :body-style="{ padding: '5px','text-align':'center' }"
     >
       <div class="mb-2">
-        <el-tooltip
-          :open-delay="300"
-          placement="top"
-          effect="dark"
+        <el-link
+          :underline="false"
+          @click="viewProgramDetail(program)"
         >
-          <div slot="content">
-            <p class="mb-2">{{ program.name }}</p>
-            <p class="mb-2">{{ program.enName }}</p>
-            <div class="mb-2">
-              <el-tag
-                v-for="(item, index) in program.categories.filter(c => c.code !== 1).slice(0,3)"
-                :key="index"
-                size="mini"
-                effect="dark"
-                style="margin: 2px;"
-                type="success"
-              >
-                {{ item.name }}
-              </el-tag>
-            </div>
-            <el-rate
-              v-model="program.rank"
-              disabled
-              text-color="#ff9900"
-              :max="5"
-            />
-          </div>
-          <el-link
-            :underline="false"
-            @click="viewProgramDetail(program)"
+          <img
+            v-if="program.logo"
+            v-lazy="program.logo"
+            class="img-fluid"
+            :alt="program.name"
           >
-            <img
-              v-if="program.logo"
-              v-lazy="program.logo"
-              class="img-fluid"
-              :alt="program.name"
-            >
-            <img
-              v-else
-              src="~assets/images/default-program-picture.png"
-              class="img-fluid"
-              :alt="program.name"
-            >
-          </el-link>
-        </el-tooltip>
+          <img
+            v-else
+            src="~assets/images/default-program-picture.png"
+            class="img-fluid"
+            :alt="program.name"
+          >
+        </el-link>
       </div>
       <el-link
         class="mb-1 w-100"
@@ -58,7 +30,7 @@
         @click="viewProgramDetail(program)"
       >
         <div
-          class="bold smaller-font-size shorten-text hoverDarkBlue"
+          class="bold small-font-size shorten-text hoverDarkBlue"
           style="color: #000000c2"
         >
           {{ program.name }}
@@ -75,7 +47,18 @@
           {{ program.schedules[0].channelName }}</span>
 
       </div>
-
+      <div class="mb-0">
+        <el-tag
+          v-for="(item, index) in program.categories.filter(c => c.code !== 1).slice(0,2)"
+          :key="index"
+          size="small"
+          effect="dark"
+          style="margin: 2px;"
+          type="info"
+        >
+          {{ item.name }}
+        </el-tag>
+      </div>
     </el-card>
   </div>
 </template>
