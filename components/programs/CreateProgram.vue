@@ -209,7 +209,9 @@ export default {
     programProp: {
       immediate: true,
       handler() {
-        this.programData = { ...this.programProp }
+        this.programData = { ...this.programProp,
+          name: this.programProp.name.toUpperCase(),
+          enName: this.programProp.enName.toUpperCase() }
       }
     }
   },

@@ -195,7 +195,6 @@ export default {
   },
   methods: {
     searchProgram() {
-      debugger
       this.$emit('search', this.programSearchForm)
     },
     clearSearchingForm() {

@@ -192,7 +192,6 @@ export default {
       this.fetchProgramList()
     },
     fetchProgramList(form) {
-      debugger
       this.loading = true
       if (form) {
         this.$store.dispatch('app/setProgramSearchQuery', form)
