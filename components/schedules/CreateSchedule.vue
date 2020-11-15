@@ -155,6 +155,8 @@ export default {
     remoteMethod(query) {
       if (query && query.length > 2) {
         this.loading = true
+        query = (query + '').replace(/[!@#$%^&*()_+~;',./<>?:-=]/g, '')
+          .replace(/[\s]+/g, ' ')
         this.$store.dispatch('app/searchProgram', { searchName: query }).then(res => {
           this.scheduleProp.programOptions = res.content
           this.loading = false
