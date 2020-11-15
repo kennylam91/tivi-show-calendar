@@ -146,15 +146,18 @@ export default {
       }
       if (this.isSearchProgram) {
         this.scheduleList.forEach(schedule => {
-          const rqBody = { searchName: (schedule.enName.toUpperCase() || schedule.viName.toUpperCase()) }
-          this.$store.dispatch('app/searchProgram', rqBody).then(res => {
-            if (res.content && res.content.length === 1) {
-              schedule.programId = res.content[0].id
-              schedule.programName = res.content[0].name + ' - ' + res.content[0].enName
-            } else if (res.content && res.content.length > 1) {
-              this.$set(schedule, 'programOptions', res.content)
-            }
-          })
+          const startTime = new Date(schedule.startTime)
+          if (startTime.getHours() >= 5) {
+            const rqBody = { searchName: (schedule.enName.toUpperCase() || schedule.viName.toUpperCase()) }
+            this.$store.dispatch('app/searchProgram', rqBody).then(res => {
+              if (res.content && res.content.length === 1) {
+                schedule.programId = res.content[0].id
+                schedule.programName = res.content[0].name + ' - ' + res.content[0].enName
+              } else if (res.content && res.content.length > 1) {
+                this.$set(schedule, 'programOptions', res.content)
+              }
+            })
+          }
         })
       }
     },
