@@ -18,6 +18,7 @@ export default {
       newProgram: {
         id: '',
         name: '',
+        enName: '',
         description: '',
         logo: '',
         isTodayShow: true,

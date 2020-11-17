@@ -25,6 +25,11 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="SctvChannelCode">
+        <el-input v-model="channelData.sctvChannelCode" />
+
+      </el-form-item>
+
       <el-form-item :label="COMMON.DESCRIPTION">
         <el-input
           v-model="channelData.description"
