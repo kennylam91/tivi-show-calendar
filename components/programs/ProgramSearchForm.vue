@@ -103,7 +103,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { ProgramSearchForm } from '@/assets/utils/index'
+import { ProgramSearchForm, getProgramSearchName } from '@/assets/utils/index'
 import { programRankOptions } from '@/assets/utils/constant'
 
 export default {

@@ -116,7 +116,7 @@ import { mapGetters } from 'vuex'
 import { programRankMap, programRankOptions } from '@/assets/utils/constant'
 import ProgramSearchFormComp from '@/components/programs/ProgramSearchForm'
 import paginationMixin from '@/components/mixins/pagination-mixin'
-import { ProgramSearchForm } from '@/assets/utils/index'
+import { ProgramSearchForm, getProgramSearchName } from '@/assets/utils/index'
 
 export default {
   middleware: 'auth',
@@ -194,6 +194,7 @@ export default {
     fetchProgramList(form) {
       this.loading = true
       if (form) {
+        form.searchName = getProgramSearchName(form.searchName)
         this.$store.dispatch('app/setProgramSearchQuery', form)
       }
 

@@ -164,7 +164,7 @@ import { CATEGORIES } from '@/assets/utils/constant'
 import Upload from '@/components/upload/Upload'
 import { programRankOptions } from '@/assets/utils/constant'
 import { mapGetters } from 'vuex'
-import { getProgramEnTitle, getRankFromVoteAvg, mapGenre, getEmbedLinkFromYoutubeVideoId } from '@/assets/utils/index'
+import { getProgramEnTitle, getRankFromVoteAvg, mapGenre, getEmbedLinkFromYoutubeVideoId, getProgramSearchName } from '@/assets/utils/index'
 import ProgramSearchResultDialog from './ProgramSearchResultDialog'
 
 export default {
@@ -285,7 +285,7 @@ export default {
       this.programData.logo = selectedImage
     },
     checkNameExist() {
-      const data = { searchName: this.programData.enName.toUpperCase(), page: 1, limit: 999 }
+      const data = { searchName: getProgramSearchName(this.programData.enName), page: 1, limit: 999 }
       if (this.programData.enName) {
         this.$store.dispatch('app/searchProgram', data).then(res => {
           this.foundPrograms = res.content

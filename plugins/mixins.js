@@ -99,16 +99,16 @@ Vue.mixin({
     //     })
     //   })
     // },
-    updateTodayProgramList() {
-      this.fetchAllProgramByDate(new Date()).then(list => {
-        this.$store.dispatch('app/setTodayProgramList', list)
-      })
-    },
-    updateNextDaysProgramList() {
-      this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
-        this.$store.dispatch('app/setNextDaysProgramList', list)
-      })
-    },
+    // updateTodayProgramList() {
+    //   this.fetchAllProgramByDate(new Date()).then(list => {
+    //     this.$store.dispatch('app/setTodayProgramList', list)
+    //   })
+    // },
+    // updateNextDaysProgramList() {
+    //   this.fetchAllProgramNextDays(this.COMMON.NEXT_DAYS_SHOW_NUM).then(list => {
+    //     this.$store.dispatch('app/setNextDaysProgramList', list)
+    //   })
+    // },
     getTodayProgramView() {
       this.$router.push({ path: `/chuong-trinh-hom-nay` })
     },

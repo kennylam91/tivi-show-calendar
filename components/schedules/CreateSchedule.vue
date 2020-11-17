@@ -61,7 +61,7 @@
   </div>
 </template>
 <script>
-// import { getStartOfDayInGMT7 } from '@/assets/utils/index'
+import { getProgramSearchName } from '@/assets/utils'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -123,7 +123,9 @@ export default {
           }
         }
         setTimeout(() => {
-          this.$refs.programSelectRef.focus()
+          if (this.$refs.programSelectRef) {
+            this.$refs.programSelectRef.focus()
+          }
         }, 200)
       }
     },
@@ -155,8 +157,7 @@ export default {
     remoteMethod(query) {
       if (query && query.length > 2) {
         this.loading = true
-        query = (query + '').replace(/[!@#$%^&*()_+~;',./<>?:-=]/g, '')
-          .replace(/[\s]+/g, ' ')
+        query = getProgramSearchName(query)
         this.$store.dispatch('app/searchProgram', { searchName: query }).then(res => {
           this.scheduleProp.programOptions = res.content
           this.loading = false
