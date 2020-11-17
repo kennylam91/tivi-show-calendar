@@ -9,6 +9,8 @@ export class Channel {
     this.networkId = null
     this.hasAutoImport = false
     this.networkName = ''
+    this.importSource = ''
+    this.category = ''
   }
 }
 

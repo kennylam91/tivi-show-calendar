@@ -12,11 +12,19 @@
       <el-form-item label="Auto import">
         <el-switch v-model="channelData.hasAutoImport" />
       </el-form-item>
-      <el-form-item label="Network name" size="small">
-        <el-input v-model="channelData.networkName" clearable />
-
+      <el-form-item label="Category" size="small">
+        <el-input v-model="channelData.category" />
       </el-form-item>
-
+      <el-form-item label="Import source" size="small">
+        <el-select v-model="channelData.importSource" :disabled="!channelData.hasAutoImport">
+          <el-option
+            v-for="item in ['SCTV', 'VTV', 'THVL']"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item :label="COMMON.DESCRIPTION">
         <el-input
           v-model="channelData.description"
