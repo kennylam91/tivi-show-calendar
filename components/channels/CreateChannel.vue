@@ -7,16 +7,13 @@
       </el-form-item>
       <el-form-item label="VIP">
         <el-switch v-model="channelData.vip" />
-        <span>{{ COMMON.VIP_CHANNEL_DESCRIPTION }}</span>
-      </el-form-item>
-      <el-form-item label="Auto import">
-        <el-switch v-model="channelData.hasAutoImport" />
+        <span class="d-inline-block mr-5">{{ COMMON.VIP_CHANNEL_DESCRIPTION }}</span>
       </el-form-item>
       <el-form-item label="Category" size="small">
         <el-input v-model="channelData.category" />
       </el-form-item>
       <el-form-item label="Import source" size="small">
-        <el-select v-model="channelData.importSource" :disabled="!channelData.hasAutoImport">
+        <el-select v-model="channelData.importSource" :disabled="!channelData.hasAutoImport" class="mr-5">
           <el-option
             v-for="item in ['SCTV', 'VTV', 'THVL']"
             :key="item"
@@ -24,10 +21,14 @@
             :value="item"
           />
         </el-select>
+
+        <span>Auto import</span>
+        <el-switch v-model="channelData.hasAutoImport" class="mr-5" />
+        <span>Program Auto Search</span>
+        <el-switch v-model="channelData.isProgramAutoSearch" />
       </el-form-item>
       <el-form-item label="SctvChannelCode">
         <el-input v-model="channelData.sctvChannelCode" />
-
       </el-form-item>
 
       <el-form-item :label="COMMON.DESCRIPTION">
