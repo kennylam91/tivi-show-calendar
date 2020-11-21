@@ -252,6 +252,7 @@ export default {
     },
     autoImport(channel, date) {
       const rqBody = new AutoUpdateForm(channel.name, channel.id, parseTime(date, '{Y}-{m}-{d}'))
+      rqBody.apiSource = channel.importSource
       this.loading = true
       this.$store.dispatch('app/autoUpdateSchedule', rqBody).then(res => {
         this.$notify({

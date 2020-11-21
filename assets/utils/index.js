@@ -591,7 +591,8 @@ function getNamesFromString(pattern, item) {
 }
 
 export function getProgramSearchName(name) {
-  return name.replace(/[&:-\\)\\(]/g, '')
+  const regex = /[-!$%^&*()_+|~=`{}\[\]:\/;<>?,.@#]/g
+  return name.replace(regex, '')
     .replace(/[\s]+/g, ' ').toUpperCase()
 }
 
