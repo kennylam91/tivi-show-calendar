@@ -40,6 +40,7 @@
           placeholder="Please enter a keyword"
           :remote-method="remoteMethod"
           :loading="loading"
+          @change="onSelectChange"
         >
           <el-option
             v-for="item in scheduleProp.programOptions"
@@ -61,7 +62,6 @@
   </div>
 </template>
 <script>
-import { getProgramSearchName } from '@/assets/utils'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -128,14 +128,15 @@ export default {
           }
         }, 200)
       }
-    },
-    selectedProgram: {
-      deep: true,
-      handler() {
-        this.scheduleData.programId = this.selectedProgram.id
-        this.scheduleData.programName = this.selectedProgram.name
-      }
     }
+    // selectedProgram: {
+    //   deep: true,
+    //   handler() {
+    //     debugger
+    //     this.scheduleData.programId = this.selectedProgram.id
+    //     this.scheduleData.programName = this.selectedProgram.name
+    //   }
+    // }
   },
   created() {
   },
@@ -155,9 +156,8 @@ export default {
       })
     },
     remoteMethod(query) {
-      if (query && query.length > 2) {
+      if (query && query.length > 1) {
         this.loading = true
-        query = getProgramSearchName(query)
         this.$store.dispatch('app/searchProgram', { searchName: query }).then(res => {
           this.scheduleProp.programOptions = res.content
           this.loading = false
@@ -178,6 +178,10 @@ export default {
       this.scheduleData.programName = this.selectedProgram.name
       this.scheduleData.programId = this.selectedProgram.id
       this.$emit('confirmed', this.scheduleData)
+    },
+    onSelectChange() {
+      this.scheduleData.programId = this.selectedProgram.id
+      this.scheduleData.programName = this.selectedProgram.name
     }
   }
 }

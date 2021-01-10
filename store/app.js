@@ -6,6 +6,7 @@ import { THE_MOVIE_DB } from '../assets/utils/constant'
 import request from '@/assets/utils/request'
 import { ProgramSearchForm } from '@/assets/utils/index'
 import { ScheduleStats } from '../assets/model/model'
+import { getProgramSearchName } from '@/assets/utils'
 
 export const state = () => ({
   channelList: null,
@@ -255,7 +256,7 @@ export const actions = {
   // request = {searchName, categoryCodes, ranks, isBroadCasting, getStartTimeFrom, getStartTimeTo,
   // page, limit, sortBy, sortDirection(DESC, ASC)}
   searchProgram({ commit }, data) {
-    const formattedData = { ...data, searchName: (data.searchName || '' + '').toUpperCase() }
+    const formattedData = { ...data, searchName: getProgramSearchName(data.searchName) }
     return request({
       url: '/programs/search',
       method: 'post',
